@@ -18,32 +18,36 @@
     --popover-foreground: 220 13% 9%;
 
     /* Fashion-forward color palette */
-    --primary: 340 82% 52%;
+    --primary: 338 83% 60%;
     --primary-foreground: 0 0% 100%;
-    --primary-muted: 340 82% 96%;
+    --primary-muted: 338 83% 97%;
 
-    --secondary: 45 93% 47%;
-    --secondary-foreground: 220 13% 9%;
-    --secondary-muted: 45 93% 95%;
+    --secondary: 280 78% 68%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-muted: 280 78% 96%;
 
-    --accent: 280 65% 60%;
-    --accent-foreground: 0 0% 100%;
-    --accent-muted: 280 65% 96%;
+    --accent: 200 100% 70%;
+    --accent-foreground: 220 13% 9%;
+    --accent-muted: 200 100% 96%;
 
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
+    --muted: 240 5% 97%;
+    --muted-foreground: 240 4% 50%;
 
     /* Fashion gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(340 82% 52%), hsl(280 65% 60%));
-    --gradient-secondary: linear-gradient(135deg, hsl(45 93% 47%), hsl(340 82% 52%));
-    --gradient-accent: linear-gradient(135deg, hsl(280 65% 60%), hsl(240 73% 65%));
-    --gradient-hero: linear-gradient(135deg, hsl(340 82% 52%) 0%, hsl(280 65% 60%) 50%, hsl(240 73% 65%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(338 83% 60%), hsl(280 78% 68%));
+    --gradient-secondary: linear-gradient(135deg, hsl(280 78% 68%), hsl(200 100% 70%));
+    --gradient-accent: linear-gradient(135deg, hsl(200 100% 70%), hsl(338 83% 60%));
+    --gradient-hero: linear-gradient(135deg, hsl(338 83% 60%) 0%, hsl(280 78% 68%) 50%, hsl(200 100% 70%) 100%);
+    --gradient-soft: linear-gradient(145deg, hsl(240 5% 99%) 0%, hsl(240 10% 96%) 100%);
+    --gradient-glass: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
 
-    /* Shadows */
-    --shadow-soft: 0 2px 8px hsl(240 5% 5% / 0.06);
-    --shadow-medium: 0 4px 16px hsl(240 5% 5% / 0.08);
-    --shadow-strong: 0 8px 32px hsl(240 5% 5% / 0.12);
-    --shadow-colored: 0 8px 32px hsl(340 82% 52% / 0.15);
+    /* Enhanced shadows with fashion aesthetics */
+    --shadow-soft: 0 2px 12px hsl(240 5% 5% / 0.03);
+    --shadow-medium: 0 8px 25px hsl(240 5% 5% / 0.06);
+    --shadow-strong: 0 16px 40px hsl(240 5% 5% / 0.10);
+    --shadow-colored: 0 12px 35px hsl(338 83% 60% / 0.12);
+    --shadow-glow: 0 0 30px hsl(338 83% 60% / 0.15);
+    --shadow-elegant: 0 4px 20px hsl(240 10% 20% / 0.08);
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -130,17 +134,21 @@
 }
 
 @layer components {
-  /* Animation utilities */
+  /* Enhanced animation utilities */
   .animate-fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
+    animation: fadeIn 0.8s ease-out forwards;
   }
 
   .animate-slide-up {
-    animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
   .animate-scale-in {
-    animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
   }
 
   .hover-lift {
@@ -148,11 +156,17 @@
   }
 
   .hover-lift:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-medium);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-elegant);
   }
 
-  /* Fashion-specific components */
+  .hover-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+    transition: all 0.3s ease;
+  }
+
+  /* Enhanced fashion-specific components */
   .gradient-primary {
     background: var(--gradient-primary);
   }
@@ -163,6 +177,10 @@
 
   .gradient-hero {
     background: var(--gradient-hero);
+  }
+
+  .gradient-soft {
+    background: var(--gradient-soft);
   }
 
   .shadow-soft {
@@ -177,11 +195,49 @@
     box-shadow: var(--shadow-colored);
   }
 
-  /* Glass morphism effects */
+  .shadow-elegant {
+    box-shadow: var(--shadow-elegant);
+  }
+
+  /* Enhanced glass morphism effects */
   .glass {
+    backdrop-filter: blur(16px) saturate(180%);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .glass-dark {
+    backdrop-filter: blur(16px) saturate(180%);
+    background: rgba(17, 25, 40, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+  }
+
+  /* Fashion card effects */
+  .fashion-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.8) 100%);
     backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: var(--shadow-elegant);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .fashion-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-colored);
+  }
+
+  /* Story ring gradient */
+  .story-gradient {
+    background: conic-gradient(from 0deg, hsl(338 83% 60%), hsl(280 78% 68%), hsl(200 100% 70%), hsl(338 83% 60%));
+    padding: 3px;
+    border-radius: 50%;
+  }
+
+  /* Shimmer effect */
+  .shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
   }
 }
 
@@ -215,5 +271,23 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }

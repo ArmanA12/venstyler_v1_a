@@ -65,45 +65,47 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 bg-background/80 backdrop-blur-md border-b border-border z-50">
-        <div className="max-w-6xl mx-auto px-4 py-3">
+      {/* Enhanced Header with glass effect */}
+      <header className="sticky top-0 glass border-b border-border/50 z-50 shadow-elegant">
+        <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-8">
-              <h1 className="text-2xl font-bold gradient-text bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-float">
                 FashionConnect
               </h1>
               <div className="relative hidden md:block">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input 
                   placeholder="Search designers, collections..." 
-                  className="pl-10 w-80 bg-muted/50"
+                  className="pl-10 w-80 bg-muted/30 border-muted/50 backdrop-blur-sm shadow-soft hover:shadow-medium transition-all duration-300"
                 />
               </div>
             </div>
             
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon">
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" size="icon" className="hover-glow">
                 <Home className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon">
-                <Search className="w-5 h-5 md:hidden" />
+              <Button variant="ghost" size="icon" className="md:hidden hover-glow">
+                <Search className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="relative">
+              <Button variant="ghost" size="icon" className="relative hover-glow">
                 <MessageCircle className="w-5 h-5" />
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full animate-pulse"></div>
               </Button>
-              <Button variant="ghost" size="icon" className="relative">
+              <Button variant="ghost" size="icon" className="relative hover-glow">
                 <Bell className="w-5 h-5" />
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full animate-pulse"></div>
               </Button>
-              <Button variant="gradient" size="icon">
+              <Button variant="gradient" size="icon" className="shadow-colored hover:shadow-glow">
                 <PlusCircle className="w-5 h-5" />
               </Button>
-              <Avatar className="w-8 h-8">
-                <AvatarImage src={designerAvatar} />
-                <AvatarFallback>U</AvatarFallback>
-              </Avatar>
+              <div className="story-gradient">
+                <Avatar className="w-9 h-9">
+                  <AvatarImage src={designerAvatar} />
+                  <AvatarFallback>U</AvatarFallback>
+                </Avatar>
+              </div>
             </div>
           </div>
         </div>
@@ -111,293 +113,289 @@ const Index = () => {
 
       <div className="max-w-6xl mx-auto px-4 py-6">
         <div className="grid grid-cols-12 gap-6">
-          {/* Left Sidebar */}
+          {/* Enhanced Left Sidebar */}
           <div className="col-span-3 hidden lg:block">
-            <div className="sticky top-24 space-y-6">
+            <div className="sticky top-28 space-y-6">
               {/* Navigation */}
-              <Card>
-                <CardContent className="p-6">
-                  <nav className="space-y-2">
-                    <Button variant="ghost" className="w-full justify-start gap-3">
-                      <Home className="w-5 h-5" />
-                      Home
-                    </Button>
-                    <Button variant="ghost" className="w-full justify-start gap-3">
-                      <Search className="w-5 h-5" />
-                      Explore
-                    </Button>
-                    <Button variant="ghost" className="w-full justify-start gap-3">
-                      <Heart className="w-5 h-5" />
-                      Liked Designs
-                    </Button>
-                    <Button variant="ghost" className="w-full justify-start gap-3">
-                      <Bookmark className="w-5 h-5" />
-                      Saved
-                    </Button>
-                    <Button variant="ghost" className="w-full justify-start gap-3">
-                      <User className="w-5 h-5" />
-                      Profile
-                    </Button>
-                    <Button variant="ghost" className="w-full justify-start gap-3">
-                      <Settings className="w-5 h-5" />
-                      Settings
-                    </Button>
-                  </nav>
-                </CardContent>
-              </Card>
+              <div className="fashion-card p-6 animate-fade-in">
+                <nav className="space-y-3">
+                  <Button variant="ghost" className="w-full justify-start gap-4 h-12 text-left hover-lift bg-primary/10 text-primary">
+                    <Home className="w-5 h-5" />
+                    <span className="font-medium">Home</span>
+                  </Button>
+                  <Button variant="ghost" className="w-full justify-start gap-4 h-12 text-left hover-lift">
+                    <Search className="w-5 h-5" />
+                    <span className="font-medium">Explore</span>
+                  </Button>
+                  <Button variant="ghost" className="w-full justify-start gap-4 h-12 text-left hover-lift">
+                    <Heart className="w-5 h-5" />
+                    <span className="font-medium">Liked Designs</span>
+                  </Button>
+                  <Button variant="ghost" className="w-full justify-start gap-4 h-12 text-left hover-lift">
+                    <Bookmark className="w-5 h-5" />
+                    <span className="font-medium">Saved</span>
+                  </Button>
+                  <Button variant="ghost" className="w-full justify-start gap-4 h-12 text-left hover-lift">
+                    <User className="w-5 h-5" />
+                    <span className="font-medium">Profile</span>
+                  </Button>
+                  <Button variant="ghost" className="w-full justify-start gap-4 h-12 text-left hover-lift">
+                    <Settings className="w-5 h-5" />
+                    <span className="font-medium">Settings</span>
+                  </Button>
+                </nav>
+              </div>
 
-              {/* Quick Actions */}
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-4">Quick Actions</h3>
-                  <div className="space-y-2">
-                    <Button variant="outline" className="w-full justify-start gap-3">
-                      <Camera className="w-4 h-4" />
-                      Upload Design
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start gap-3">
-                      <Video className="w-4 h-4" />
-                      Create Story
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start gap-3">
-                      <MessageCircle className="w-4 h-4" />
-                      Start Chat
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Enhanced Quick Actions */}
+              <div className="fashion-card p-6 animate-fade-in">
+                <h3 className="font-semibold mb-5 text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Quick Actions</h3>
+                <div className="space-y-3">
+                  <Button variant="outline" className="w-full justify-start gap-4 h-12 hover-glow border-primary/20 hover:border-primary/40">
+                    <Camera className="w-5 h-5" />
+                    <span className="font-medium">Upload Design</span>
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start gap-4 h-12 hover-glow border-secondary/20 hover:border-secondary/40">
+                    <Video className="w-5 h-5" />
+                    <span className="font-medium">Create Story</span>
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start gap-4 h-12 hover-glow border-accent/20 hover:border-accent/40">
+                    <MessageCircle className="w-5 h-5" />
+                    <span className="font-medium">Start Chat</span>
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Main Feed */}
           <div className="col-span-12 lg:col-span-6 space-y-6">
-            {/* Stories */}
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex gap-4 overflow-x-auto pb-2">
-                  {stories.map((story) => (
-                    <div key={story.id} className="flex flex-col items-center gap-2 min-w-[80px]">
-                      <div className={`relative ${story.hasStory ? 'p-1 bg-gradient-to-r from-pink-500 to-violet-500 rounded-full' : ''}`}>
-                        <Avatar className="w-16 h-16">
-                          <AvatarImage src={story.avatar} />
-                          <AvatarFallback>{story.name[0]}</AvatarFallback>
-                        </Avatar>
-                        {!story.hasStory && (
-                          <div className="absolute bottom-0 right-0 w-5 h-5 bg-primary rounded-full border-2 border-background flex items-center justify-center">
-                            <PlusCircle className="w-3 h-3 text-white" />
-                          </div>
-                        )}
-                      </div>
-                      <span className="text-xs text-center">{story.name}</span>
+            {/* Enhanced Stories */}
+            <div className="fashion-card p-6 animate-slide-up">
+              <div className="flex gap-5 overflow-x-auto pb-2 scrollbar-hide">
+                {stories.map((story, index) => (
+                  <div key={story.id} className="flex flex-col items-center gap-3 min-w-[85px] animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                    <div className={`relative ${story.hasStory ? 'story-gradient' : ''} hover-lift cursor-pointer`}>
+                      <Avatar className="w-18 h-18">
+                        <AvatarImage src={story.avatar} className="object-cover" />
+                        <AvatarFallback className="text-lg font-semibold bg-gradient-to-br from-primary/20 to-secondary/20">{story.name[0]}</AvatarFallback>
+                      </Avatar>
+                      {!story.hasStory && (
+                        <div className="absolute bottom-0 right-0 w-6 h-6 bg-gradient-to-r from-primary to-secondary rounded-full border-2 border-background flex items-center justify-center shadow-colored">
+                          <PlusCircle className="w-4 h-4 text-white" />
+                        </div>
+                      )}
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    <span className="text-sm text-center font-medium text-muted-foreground">{story.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-            {/* Create Post */}
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex gap-4">
-                  <Avatar>
+            {/* Enhanced Create Post */}
+            <div className="fashion-card p-6 animate-slide-up">
+              <div className="flex gap-4">
+                <div className="story-gradient">
+                  <Avatar className="w-12 h-12">
                     <AvatarImage src={designerAvatar} />
                     <AvatarFallback>U</AvatarFallback>
                   </Avatar>
-                  <div className="flex-1">
-                    <Input 
-                      placeholder="Share your latest design or inspiration..." 
-                      className="mb-4"
-                    />
-                    <div className="flex justify-between items-center">
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="sm" className="gap-2">
-                          <ImageIcon className="w-4 h-4" />
-                          Photo
-                        </Button>
-                        <Button variant="ghost" size="sm" className="gap-2">
-                          <Video className="w-4 h-4" />
-                          Video
-                        </Button>
-                        <Button variant="ghost" size="sm" className="gap-2">
-                          <Camera className="w-4 h-4" />
-                          Collection
-                        </Button>
-                      </div>
-                      <Button variant="gradient" size="sm">Share</Button>
+                </div>
+                <div className="flex-1">
+                  <Input 
+                    placeholder="Share your latest design or inspiration..." 
+                    className="mb-4 bg-muted/30 border-muted/50 backdrop-blur-sm focus:ring-2 focus:ring-primary/20 transition-all duration-300"
+                  />
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="sm" className="gap-2 hover-glow text-primary hover:text-primary">
+                        <ImageIcon className="w-4 h-4" />
+                        Photo
+                      </Button>
+                      <Button variant="ghost" size="sm" className="gap-2 hover-glow text-secondary hover:text-secondary">
+                        <Video className="w-4 h-4" />
+                        Video
+                      </Button>
+                      <Button variant="ghost" size="sm" className="gap-2 hover-glow text-accent hover:text-accent">
+                        <Camera className="w-4 h-4" />
+                        Collection
+                      </Button>
                     </div>
+                    <Button variant="gradient" size="sm" className="shadow-colored hover:shadow-glow px-6">Share</Button>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            {/* Design Feed */}
-            <div className="space-y-6">
-              {sampleDesigns.map((design) => (
-                <Card key={design.id} className="overflow-hidden">
-                  <CardContent className="p-0">
-                    {/* Post Header */}
-                    <div className="p-4 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Avatar>
+            {/* Enhanced Design Feed */}
+            <div className="space-y-8">
+              {sampleDesigns.map((design, index) => (
+                <div key={design.id} className="fashion-card overflow-hidden animate-fade-in" style={{ animationDelay: `${index * 0.2}s` }}>
+                  {/* Enhanced Post Header */}
+                  <div className="p-6 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="story-gradient">
+                        <Avatar className="w-12 h-12">
                           <AvatarImage src={design.designerAvatar} />
                           <AvatarFallback>{design.designer[0]}</AvatarFallback>
                         </Avatar>
-                        <div>
-                          <h4 className="font-semibold">{design.designer}</h4>
-                          <p className="text-sm text-muted-foreground">2 hours ago</p>
-                        </div>
                       </div>
-                      <Button variant="ghost" size="icon">
-                        <Settings className="w-4 h-4" />
-                      </Button>
+                      <div>
+                        <h4 className="font-semibold text-lg">{design.designer}</h4>
+                        <p className="text-sm text-muted-foreground">2 hours ago • Mumbai</p>
+                      </div>
                     </div>
-                    
-                    {/* Design Image */}
-                    <div className="relative">
-                      <img 
-                        src={design.imageUrl} 
-                        alt={design.title}
-                        className="w-full aspect-square object-cover"
-                      />
-                    </div>
-                    
-                    {/* Post Actions */}
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex gap-4">
-                          <Button variant="ghost" size="icon" className={design.isLiked ? "text-red-500" : ""}>
-                            <Heart className={`w-5 h-5 ${design.isLiked ? "fill-current" : ""}`} />
-                          </Button>
-                          <Button variant="ghost" size="icon">
-                            <MessageCircle className="w-5 h-5" />
-                          </Button>
-                        </div>
-                        <Button variant="ghost" size="icon">
-                          <Bookmark className="w-5 h-5" />
+                    <Button variant="ghost" size="icon" className="hover-glow">
+                      <Settings className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  
+                  {/* Enhanced Design Image */}
+                  <div className="relative overflow-hidden">
+                    <img 
+                      src={design.imageUrl} 
+                      alt={design.title}
+                      className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                  
+                  {/* Enhanced Post Actions */}
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex gap-5">
+                        <Button variant="ghost" size="icon" className={`hover-glow ${design.isLiked ? "text-red-500" : ""}`}>
+                          <Heart className={`w-6 h-6 ${design.isLiked ? "fill-current animate-pulse" : ""}`} />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="hover-glow">
+                          <MessageCircle className="w-6 h-6" />
                         </Button>
                       </div>
-                      
-                      <p className="font-semibold mb-1">{design.likes} likes</p>
-                      <h3 className="font-semibold">{design.title}</h3>
-                      <p className="text-sm text-muted-foreground mb-2">#{design.category}</p>
-                      <Button variant="ghost" size="sm" className="text-muted-foreground p-0 h-auto">
-                        View all {design.comments} comments
+                      <Button variant="ghost" size="icon" className="hover-glow">
+                        <Bookmark className="w-6 h-6" />
                       </Button>
                     </div>
-                  </CardContent>
-                </Card>
+                    
+                    <p className="font-semibold mb-2 text-lg">{design.likes.toLocaleString()} likes</p>
+                    <h3 className="font-semibold text-xl mb-2 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">{design.title}</h3>
+                    <p className="text-sm text-primary mb-3 font-medium">#{design.category}</p>
+                    <Button variant="ghost" size="sm" className="text-muted-foreground p-0 h-auto hover:text-foreground transition-colors">
+                      View all {design.comments} comments
+                    </Button>
+                  </div>
+                </div>
               ))}
               
-              {/* Repeat designs for more content */}
-              {sampleDesigns.map((design) => (
-                <Card key={`${design.id}-duplicate`} className="overflow-hidden">
-                  <CardContent className="p-0">
-                    {/* Post Header */}
-                    <div className="p-4 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Avatar>
+              {/* More enhanced feed content */}
+              {sampleDesigns.map((design, index) => (
+                <div key={`${design.id}-duplicate`} className="fashion-card overflow-hidden animate-fade-in" style={{ animationDelay: `${(index + 2) * 0.2}s` }}>
+                  {/* Enhanced Post Header */}
+                  <div className="p-6 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="story-gradient">
+                        <Avatar className="w-12 h-12">
                           <AvatarImage src={design.designerAvatar} />
                           <AvatarFallback>{design.designer[0]}</AvatarFallback>
                         </Avatar>
-                        <div>
-                          <h4 className="font-semibold">{design.designer}</h4>
-                          <p className="text-sm text-muted-foreground">5 hours ago</p>
-                        </div>
                       </div>
-                      <Button variant="ghost" size="icon">
-                        <Settings className="w-4 h-4" />
-                      </Button>
+                      <div>
+                        <h4 className="font-semibold text-lg">{design.designer}</h4>
+                        <p className="text-sm text-muted-foreground">5 hours ago • Delhi</p>
+                      </div>
                     </div>
-                    
-                    <div className="relative">
-                      <img 
-                        src={design.imageUrl} 
-                        alt={design.title}
-                        className="w-full aspect-square object-cover"
-                      />
-                    </div>
-                    
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex gap-4">
-                          <Button variant="ghost" size="icon">
-                            <Heart className="w-5 h-5" />
-                          </Button>
-                          <Button variant="ghost" size="icon">
-                            <MessageCircle className="w-5 h-5" />
-                          </Button>
-                        </div>
-                        <Button variant="ghost" size="icon">
-                          <Bookmark className="w-5 h-5" />
+                    <Button variant="ghost" size="icon" className="hover-glow">
+                      <Settings className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  
+                  <div className="relative overflow-hidden">
+                    <img 
+                      src={design.imageUrl} 
+                      alt={design.title}
+                      className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                  
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex gap-5">
+                        <Button variant="ghost" size="icon" className="hover-glow">
+                          <Heart className="w-6 h-6" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="hover-glow">
+                          <MessageCircle className="w-6 h-6" />
                         </Button>
                       </div>
-                      
-                      <p className="font-semibold mb-1">{design.likes + 50} likes</p>
-                      <h3 className="font-semibold">{design.title}</h3>
-                      <p className="text-sm text-muted-foreground mb-2">#{design.category}</p>
-                      <Button variant="ghost" size="sm" className="text-muted-foreground p-0 h-auto">
-                        View all {design.comments + 5} comments
+                      <Button variant="ghost" size="icon" className="hover-glow">
+                        <Bookmark className="w-6 h-6" />
                       </Button>
                     </div>
-                  </CardContent>
-                </Card>
+                    
+                    <p className="font-semibold mb-2 text-lg">{(design.likes + 50).toLocaleString()} likes</p>
+                    <h3 className="font-semibold text-xl mb-2 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">{design.title}</h3>
+                    <p className="text-sm text-primary mb-3 font-medium">#{design.category}</p>
+                    <Button variant="ghost" size="sm" className="text-muted-foreground p-0 h-auto hover:text-foreground transition-colors">
+                      View all {design.comments + 5} comments
+                    </Button>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
 
-          {/* Right Sidebar */}
+          {/* Enhanced Right Sidebar */}
           <div className="col-span-3 hidden lg:block">
-            <div className="sticky top-24 space-y-6">
-              {/* Suggestions */}
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold">Suggestions for you</h3>
-                    <Button variant="ghost" size="sm">See All</Button>
-                  </div>
-                  <div className="space-y-3">
-                    {sidebarSuggestions.map((suggestion, index) => (
-                      <div key={index} className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <Avatar className="w-10 h-10">
+            <div className="sticky top-28 space-y-6">
+              {/* Enhanced Suggestions */}
+              <div className="fashion-card p-6 animate-fade-in">
+                <div className="flex items-center justify-between mb-5">
+                  <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Suggestions for you</h3>
+                  <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">See All</Button>
+                </div>
+                <div className="space-y-4">
+                  {sidebarSuggestions.map((suggestion, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 rounded-xl hover:bg-muted/30 transition-all duration-300 hover-lift">
+                      <div className="flex items-center gap-3">
+                        <div className="story-gradient">
+                          <Avatar className="w-11 h-11">
                             <AvatarImage src={designerAvatar} />
-                            <AvatarFallback>{suggestion.name[0]}</AvatarFallback>
+                            <AvatarFallback className="bg-gradient-to-br from-primary/20 to-secondary/20">{suggestion.name[0]}</AvatarFallback>
                           </Avatar>
-                          <div>
-                            <p className="font-medium text-sm">{suggestion.name}</p>
-                            <p className="text-xs text-muted-foreground">{suggestion.followers} followers</p>
-                          </div>
                         </div>
-                        <Button variant="outline" size="sm">Follow</Button>
+                        <div>
+                          <p className="font-medium text-sm">{suggestion.name}</p>
+                          <p className="text-xs text-muted-foreground">{suggestion.followers} followers</p>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                      <Button variant="outline" size="sm" className="hover-glow border-primary/20 hover:border-primary/40 hover:bg-primary/5">Follow</Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-              {/* Trending */}
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <TrendingUp className="w-4 h-4" />
-                    <h3 className="font-semibold">Trending</h3>
+              {/* Enhanced Trending */}
+              <div className="fashion-card p-6 animate-fade-in">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="p-2 rounded-lg bg-gradient-to-r from-primary/20 to-secondary/20">
+                    <TrendingUp className="w-5 h-5 text-primary" />
                   </div>
-                  <div className="space-y-3">
-                    <div className="p-3 rounded-lg bg-muted/50">
-                      <p className="font-medium text-sm">#SustainableFashion</p>
-                      <p className="text-xs text-muted-foreground">1.2k posts</p>
-                    </div>
-                    <div className="p-3 rounded-lg bg-muted/50">
-                      <p className="font-medium text-sm">#IndianTextiles</p>
-                      <p className="text-xs text-muted-foreground">890 posts</p>
-                    </div>
-                    <div className="p-3 rounded-lg bg-muted/50">
-                      <p className="font-medium text-sm">#HandmadeDesigns</p>
-                      <p className="text-xs text-muted-foreground">756 posts</p>
-                    </div>
+                  <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Trending</h3>
+                </div>
+                <div className="space-y-3">
+                  <div className="p-4 rounded-xl bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/10 hover-lift cursor-pointer">
+                    <p className="font-medium text-sm text-primary">#SustainableFashion</p>
+                    <p className="text-xs text-muted-foreground">1.2k posts today</p>
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="p-4 rounded-xl bg-gradient-to-r from-secondary/5 to-accent/5 border border-secondary/10 hover-lift cursor-pointer">
+                    <p className="font-medium text-sm text-secondary">#IndianTextiles</p>
+                    <p className="text-xs text-muted-foreground">890 posts today</p>
+                  </div>
+                  <div className="p-4 rounded-xl bg-gradient-to-r from-accent/5 to-primary/5 border border-accent/10 hover-lift cursor-pointer">
+                    <p className="font-medium text-sm text-accent">#HandmadeDesigns</p>
+                    <p className="text-xs text-muted-foreground">756 posts today</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
