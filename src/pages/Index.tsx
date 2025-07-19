@@ -1,37 +1,29 @@
-import { Header } from "@/components/Header";
-import { UserTypeCard } from "@/components/UserTypeCard";
 import { DesignCard } from "@/components/DesignCard";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
 import { 
-  Palette, 
-  Users, 
-  Hammer, 
-  TrendingUp, 
-  Star,
-  ArrowRight,
-  CheckCircle
+  Home,
+  Search,
+  Heart,
+  MessageCircle,
+  PlusCircle,
+  User,
+  Bookmark,
+  Settings,
+  Camera,
+  Video,
+  Image as ImageIcon,
+  Bell,
+  Globe,
+  TrendingUp
 } from "lucide-react";
-import heroImage from "@/assets/hero-fashion.jpg";
 import design1 from "@/assets/design-1.jpg";
 import design2 from "@/assets/design-2.jpg";
 import designerAvatar from "@/assets/designer-avatar-1.jpg";
 
 const Index = () => {
-  const stats = [
-    { label: "Active Designers", value: "2,500+" },
-    { label: "Artisans Connected", value: "1,200+" },
-    { label: "Designs Showcased", value: "15,000+" },
-    { label: "Orders Completed", value: "5,000+" }
-  ];
-
-  const features = [
-    "Portfolio showcase with high-quality image uploads",
-    "Direct customer communication and order management", 
-    "Connect with skilled artisans and craftspeople",
-    "Social networking within the fashion community"
-  ];
-
   const sampleDesigns = [
     {
       id: "1",
@@ -57,210 +49,359 @@ const Index = () => {
     }
   ];
 
+  const stories = [
+    { id: 1, name: "Your Story", avatar: designerAvatar, hasStory: false },
+    { id: 2, name: "Priya", avatar: designerAvatar, hasStory: true },
+    { id: 3, name: "Arjun", avatar: designerAvatar, hasStory: true },
+    { id: 4, name: "Meera", avatar: designerAvatar, hasStory: true },
+    { id: 5, name: "Raj", avatar: designerAvatar, hasStory: true },
+  ];
+
+  const sidebarSuggestions = [
+    { name: "Fashion Week Updates", category: "Event", followers: "2.1k" },
+    { name: "Textile Artisans Guild", category: "Community", followers: "1.8k" },
+    { name: "Sustainable Fashion", category: "Movement", followers: "3.2k" },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-      
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img 
-            src={heroImage}
-            alt="Fashion Design Community"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
-        </div>
-        
-        <div className="relative container mx-auto px-4 py-24 lg:py-32">
-          <div className="max-w-2xl">
-            <Badge className="mb-6 bg-white/10 text-white border-white/20">
-              🇮🇳 Made for Indian Fashion Ecosystem
-            </Badge>
+      {/* Header */}
+      <header className="sticky top-0 bg-background/80 backdrop-blur-md border-b border-border z-50">
+        <div className="max-w-6xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-8">
+              <h1 className="text-2xl font-bold gradient-text bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                FashionConnect
+              </h1>
+              <div className="relative hidden md:block">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input 
+                  placeholder="Search designers, collections..." 
+                  className="pl-10 w-80 bg-muted/50"
+                />
+              </div>
+            </div>
             
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
-              Where Fashion
-              <span className="block gradient-text bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text text-transparent">
-                Dreams Connect
-              </span>
-            </h1>
-            
-            <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed animate-slide-up">
-              Join India's premier social platform connecting fashion designers, customers, 
-              and skilled artisans. Showcase your creativity, discover unique designs, 
-              and collaborate with the finest craftspeople.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 animate-slide-up">
-              <Button variant="hero" size="lg" className="gap-2">
-                Join the Community <ArrowRight className="w-5 h-5" />
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="icon">
+                <Home className="w-5 h-5" />
               </Button>
-              <Button variant="outline" size="lg" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
-                Explore Designs
+              <Button variant="ghost" size="icon">
+                <Search className="w-5 h-5 md:hidden" />
               </Button>
+              <Button variant="ghost" size="icon" className="relative">
+                <MessageCircle className="w-5 h-5" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+              </Button>
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="w-5 h-5" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+              </Button>
+              <Button variant="gradient" size="icon">
+                <PlusCircle className="w-5 h-5" />
+              </Button>
+              <Avatar className="w-8 h-8">
+                <AvatarImage src={designerAvatar} />
+                <AvatarFallback>U</AvatarFallback>
+              </Avatar>
             </div>
           </div>
         </div>
-      </section>
+      </header>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="text-2xl md:text-3xl font-bold text-primary mb-2">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <div className="max-w-6xl mx-auto px-4 py-6">
+        <div className="grid grid-cols-12 gap-6">
+          {/* Left Sidebar */}
+          <div className="col-span-3 hidden lg:block">
+            <div className="sticky top-24 space-y-6">
+              {/* Navigation */}
+              <Card>
+                <CardContent className="p-6">
+                  <nav className="space-y-2">
+                    <Button variant="ghost" className="w-full justify-start gap-3">
+                      <Home className="w-5 h-5" />
+                      Home
+                    </Button>
+                    <Button variant="ghost" className="w-full justify-start gap-3">
+                      <Search className="w-5 h-5" />
+                      Explore
+                    </Button>
+                    <Button variant="ghost" className="w-full justify-start gap-3">
+                      <Heart className="w-5 h-5" />
+                      Liked Designs
+                    </Button>
+                    <Button variant="ghost" className="w-full justify-start gap-3">
+                      <Bookmark className="w-5 h-5" />
+                      Saved
+                    </Button>
+                    <Button variant="ghost" className="w-full justify-start gap-3">
+                      <User className="w-5 h-5" />
+                      Profile
+                    </Button>
+                    <Button variant="ghost" className="w-full justify-start gap-3">
+                      <Settings className="w-5 h-5" />
+                      Settings
+                    </Button>
+                  </nav>
+                </CardContent>
+              </Card>
 
-      {/* User Types Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Choose Your Journey</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Whether you're a creative designer, style-conscious customer, or skilled artisan, 
-              there's a perfect place for you in our community.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <UserTypeCard
-              title="Designer"
-              description="Showcase your creative vision and connect with customers seeking unique fashion pieces."
-              icon={Palette}
-              primary={true}
-              features={[
-                "Portfolio showcase with unlimited uploads",
-                "Direct customer messaging & orders",
-                "Collaborate with expert artisans",
-                "Analytics and business insights"
-              ]}
-              onClick={() => console.log("Designer signup")}
-            />
-            
-            <UserTypeCard
-              title="Customer"
-              description="Discover exclusive designs and connect directly with talented fashion designers."
-              icon={Users}
-              features={[
-                "Browse curated designer collections",
-                "Custom order placements",
-                "Direct designer communication",
-                "Style inspiration and trends"
-              ]}
-              onClick={() => console.log("Customer signup")}
-            />
-            
-            <UserTypeCard
-              title="Artisan"
-              description="Offer your specialized skills to designers and be part of creating beautiful fashion."
-              icon={Hammer}
-              features={[
-                "Showcase your craft expertise",
-                "Connect with designer clients",
-                "Flexible project-based work",
-                "Build your professional network"
-              ]}
-              onClick={() => console.log("Artisan signup")}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Designs */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Trending Designs</h2>
-            <p className="text-lg text-muted-foreground">
-              Discover the latest creations from our talented designer community
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            {sampleDesigns.map((design) => (
-              <DesignCard key={design.id} {...design} />
-            ))}
-            {/* Repeat for more cards */}
-            {sampleDesigns.map((design) => (
-              <DesignCard 
-                key={`${design.id}-2`} 
-                {...design}
-                id={`${design.id}-2`}
-                likes={design.likes + 50}
-              />
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg">
-              View All Designs <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Why Choose FashionConnect?
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8">
-                We're building more than just a platform - we're nurturing the entire 
-                Indian fashion ecosystem with tools designed for modern creators.
-              </p>
-              
-              <div className="space-y-4">
-                {features.map((feature, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                    <span className="text-muted-foreground">{feature}</span>
+              {/* Quick Actions */}
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="font-semibold mb-4">Quick Actions</h3>
+                  <div className="space-y-2">
+                    <Button variant="outline" className="w-full justify-start gap-3">
+                      <Camera className="w-4 h-4" />
+                      Upload Design
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start gap-3">
+                      <Video className="w-4 h-4" />
+                      Create Story
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start gap-3">
+                      <MessageCircle className="w-4 h-4" />
+                      Start Chat
+                    </Button>
                   </div>
-                ))}
-              </div>
-
-              <Button variant="gradient" size="lg" className="mt-8">
-                Get Started Today
-              </Button>
+                </CardContent>
+              </Card>
             </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <div className="bg-primary-muted rounded-2xl p-6 animate-fade-in">
-                  <TrendingUp className="w-8 h-8 text-primary mb-4" />
-                  <h3 className="font-semibold mb-2">Growing Network</h3>
-                  <p className="text-sm text-muted-foreground">Connect with thousands of fashion professionals</p>
+          </div>
+
+          {/* Main Feed */}
+          <div className="col-span-12 lg:col-span-6 space-y-6">
+            {/* Stories */}
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex gap-4 overflow-x-auto pb-2">
+                  {stories.map((story) => (
+                    <div key={story.id} className="flex flex-col items-center gap-2 min-w-[80px]">
+                      <div className={`relative ${story.hasStory ? 'p-1 bg-gradient-to-r from-pink-500 to-violet-500 rounded-full' : ''}`}>
+                        <Avatar className="w-16 h-16">
+                          <AvatarImage src={story.avatar} />
+                          <AvatarFallback>{story.name[0]}</AvatarFallback>
+                        </Avatar>
+                        {!story.hasStory && (
+                          <div className="absolute bottom-0 right-0 w-5 h-5 bg-primary rounded-full border-2 border-background flex items-center justify-center">
+                            <PlusCircle className="w-3 h-3 text-white" />
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-xs text-center">{story.name}</span>
+                    </div>
+                  ))}
                 </div>
-                <div className="bg-secondary-muted rounded-2xl p-6 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-                  <Star className="w-8 h-8 text-secondary mb-4" />
-                  <h3 className="font-semibold mb-2">Quality Focus</h3>
-                  <p className="text-sm text-muted-foreground">Curated community of verified professionals</p>
+              </CardContent>
+            </Card>
+
+            {/* Create Post */}
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex gap-4">
+                  <Avatar>
+                    <AvatarImage src={designerAvatar} />
+                    <AvatarFallback>U</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <Input 
+                      placeholder="Share your latest design or inspiration..." 
+                      className="mb-4"
+                    />
+                    <div className="flex justify-between items-center">
+                      <div className="flex gap-2">
+                        <Button variant="ghost" size="sm" className="gap-2">
+                          <ImageIcon className="w-4 h-4" />
+                          Photo
+                        </Button>
+                        <Button variant="ghost" size="sm" className="gap-2">
+                          <Video className="w-4 h-4" />
+                          Video
+                        </Button>
+                        <Button variant="ghost" size="sm" className="gap-2">
+                          <Camera className="w-4 h-4" />
+                          Collection
+                        </Button>
+                      </div>
+                      <Button variant="gradient" size="sm">Share</Button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="space-y-4 mt-8">
-                <div className="bg-accent-muted rounded-2xl p-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
-                  <Palette className="w-8 h-8 text-accent mb-4" />
-                  <h3 className="font-semibold mb-2">Creative Tools</h3>
-                  <p className="text-sm text-muted-foreground">Professional portfolio and showcase features</p>
-                </div>
-                <div className="bg-muted rounded-2xl p-6 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-                  <Users className="w-8 h-8 text-primary mb-4" />
-                  <h3 className="font-semibold mb-2">Community</h3>
-                  <p className="text-sm text-muted-foreground">Supportive ecosystem for growth and collaboration</p>
-                </div>
-              </div>
+              </CardContent>
+            </Card>
+
+            {/* Design Feed */}
+            <div className="space-y-6">
+              {sampleDesigns.map((design) => (
+                <Card key={design.id} className="overflow-hidden">
+                  <CardContent className="p-0">
+                    {/* Post Header */}
+                    <div className="p-4 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarImage src={design.designerAvatar} />
+                          <AvatarFallback>{design.designer[0]}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <h4 className="font-semibold">{design.designer}</h4>
+                          <p className="text-sm text-muted-foreground">2 hours ago</p>
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="icon">
+                        <Settings className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    
+                    {/* Design Image */}
+                    <div className="relative">
+                      <img 
+                        src={design.imageUrl} 
+                        alt={design.title}
+                        className="w-full aspect-square object-cover"
+                      />
+                    </div>
+                    
+                    {/* Post Actions */}
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex gap-4">
+                          <Button variant="ghost" size="icon" className={design.isLiked ? "text-red-500" : ""}>
+                            <Heart className={`w-5 h-5 ${design.isLiked ? "fill-current" : ""}`} />
+                          </Button>
+                          <Button variant="ghost" size="icon">
+                            <MessageCircle className="w-5 h-5" />
+                          </Button>
+                        </div>
+                        <Button variant="ghost" size="icon">
+                          <Bookmark className="w-5 h-5" />
+                        </Button>
+                      </div>
+                      
+                      <p className="font-semibold mb-1">{design.likes} likes</p>
+                      <h3 className="font-semibold">{design.title}</h3>
+                      <p className="text-sm text-muted-foreground mb-2">#{design.category}</p>
+                      <Button variant="ghost" size="sm" className="text-muted-foreground p-0 h-auto">
+                        View all {design.comments} comments
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              
+              {/* Repeat designs for more content */}
+              {sampleDesigns.map((design) => (
+                <Card key={`${design.id}-duplicate`} className="overflow-hidden">
+                  <CardContent className="p-0">
+                    {/* Post Header */}
+                    <div className="p-4 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarImage src={design.designerAvatar} />
+                          <AvatarFallback>{design.designer[0]}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <h4 className="font-semibold">{design.designer}</h4>
+                          <p className="text-sm text-muted-foreground">5 hours ago</p>
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="icon">
+                        <Settings className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    
+                    <div className="relative">
+                      <img 
+                        src={design.imageUrl} 
+                        alt={design.title}
+                        className="w-full aspect-square object-cover"
+                      />
+                    </div>
+                    
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex gap-4">
+                          <Button variant="ghost" size="icon">
+                            <Heart className="w-5 h-5" />
+                          </Button>
+                          <Button variant="ghost" size="icon">
+                            <MessageCircle className="w-5 h-5" />
+                          </Button>
+                        </div>
+                        <Button variant="ghost" size="icon">
+                          <Bookmark className="w-5 h-5" />
+                        </Button>
+                      </div>
+                      
+                      <p className="font-semibold mb-1">{design.likes + 50} likes</p>
+                      <h3 className="font-semibold">{design.title}</h3>
+                      <p className="text-sm text-muted-foreground mb-2">#{design.category}</p>
+                      <Button variant="ghost" size="sm" className="text-muted-foreground p-0 h-auto">
+                        View all {design.comments + 5} comments
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Sidebar */}
+          <div className="col-span-3 hidden lg:block">
+            <div className="sticky top-24 space-y-6">
+              {/* Suggestions */}
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-semibold">Suggestions for you</h3>
+                    <Button variant="ghost" size="sm">See All</Button>
+                  </div>
+                  <div className="space-y-3">
+                    {sidebarSuggestions.map((suggestion, index) => (
+                      <div key={index} className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Avatar className="w-10 h-10">
+                            <AvatarImage src={designerAvatar} />
+                            <AvatarFallback>{suggestion.name[0]}</AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="font-medium text-sm">{suggestion.name}</p>
+                            <p className="text-xs text-muted-foreground">{suggestion.followers} followers</p>
+                          </div>
+                        </div>
+                        <Button variant="outline" size="sm">Follow</Button>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Trending */}
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <TrendingUp className="w-4 h-4" />
+                    <h3 className="font-semibold">Trending</h3>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="p-3 rounded-lg bg-muted/50">
+                      <p className="font-medium text-sm">#SustainableFashion</p>
+                      <p className="text-xs text-muted-foreground">1.2k posts</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-muted/50">
+                      <p className="font-medium text-sm">#IndianTextiles</p>
+                      <p className="text-xs text-muted-foreground">890 posts</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-muted/50">
+                      <p className="font-medium text-sm">#HandmadeDesigns</p>
+                      <p className="text-xs text-muted-foreground">756 posts</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 };
