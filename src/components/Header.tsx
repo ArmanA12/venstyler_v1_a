@@ -32,7 +32,7 @@ export const Header = () => {
             <span className="text-lg font-bold text-primary-foreground">F</span>
           </div>
           <span className="font-playfair text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            FashionConnect
+            FashionConnectD
           </span>
         </Link>
 

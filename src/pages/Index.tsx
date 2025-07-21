@@ -34,7 +34,7 @@ const Index = () => {
       category: "Traditional",
       likes: 234,
       comments: 18,
-      isLiked: false
+      isLiked: true
     },
     {
       id: "2", 
@@ -66,7 +66,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Enhanced Header with glass effect */}
-      <header className="sticky top-0 glass border-b border-border/50 z-50 shadow-elegant">
+      <header className="sticky top-0 glass border-b border-border/50 z-50 ">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-8">
@@ -77,7 +77,7 @@ const Index = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input 
                   placeholder="Search designers, collections..." 
-                  className="pl-10 w-80 bg-muted/30 border-muted/50 backdrop-blur-sm shadow-soft hover:shadow-medium transition-all duration-300"
+                  className="pl-10 w-80 bg-muted/50 border-muted/50 backdrop-blur-sm shadow-soft hover:shadow-medium transition-all duration-300"
                 />
               </div>
             </div>
@@ -111,11 +111,11 @@ const Index = () => {
         </div>
       </header>
 
-      <div className="w-4/5 mx-auto px-4 py-6">
+      <div className="w-5/6 mx-auto px-4  ">
         <div className="grid grid-cols-12 gap-0">
           {/* Enhanced Left Sidebar */}
           <div className="col-span-3 hidden lg:block">
-            <div className="sticky top-28 space-y-6">
+            <div className="sticky top-18  border-l border-border/30">
               {/* Navigation */}
               <div className="fashion-card p-6 animate-fade-in">
                 <nav className="space-y-3">
@@ -147,12 +147,15 @@ const Index = () => {
               </div>
 
               {/* Enhanced Quick Actions */}
-              <div className="fashion-card p-6 animate-fade-in">
+              <div className="fashion-card p-6 animate-fade-in border-t border-border/50">
                 <h3 className="font-semibold mb-5 text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Quick Actions</h3>
                 <div className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start gap-4 h-12 hover-glow border-primary/20 hover:border-primary/40">
+                  <Button variant="outline" className="w-full  justify-start gap-4 h-12  hover-glow border-primary/20 hover:border-primary/40 -z-10 relative overflow-hidden">
                     <Camera className="w-5 h-5" />
                     <span className="font-medium">Upload Design</span>
+                    {/* <div className="absolute -bottom-4  w-44 border-b border-b-gray-300 h-3 bg-[#ee4482] blur-xl">
+
+                    </div> */}
                   </Button>
                   <Button variant="outline" className="w-full justify-start gap-4 h-12 hover-glow border-secondary/20 hover:border-secondary/40">
                     <Video className="w-5 h-5" />
@@ -168,9 +171,9 @@ const Index = () => {
           </div>
 
           {/* Main Feed */}
-          <div className="col-span-12 lg:col-span-6 space-y-6 border-l border-r border-border/30 px-4">
+          <div className="col-span-12 lg:col-span-6  border-l border-r border-border/30 ">
             {/* Enhanced Stories */}
-            <div className="fashion-card p-6 animate-slide-up">
+            {/* <div className="fashion-card p-6 animate-slide-up">
               <div className="flex gap-5 overflow-x-auto pb-2 scrollbar-hide">
                 {stories.map((story, index) => (
                   <div key={story.id} className="flex flex-col items-center gap-3 min-w-[85px] animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
@@ -189,24 +192,24 @@ const Index = () => {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
 
             {/* Enhanced Create Post */}
-            <div className="fashion-card p-6 animate-slide-up">
+            <div className="fashion-card p-6 animate-slide-up border-b border-border/30">
               <div className="flex gap-4">
-                <div className="story-gradient">
-                  <Avatar className="w-12 h-12">
-                    <AvatarImage src={designerAvatar} />
+                <div className="">
+                  <Avatar className="w-12 h-12 story-gradient rounded-full">
+                    <AvatarImage className="rounded-full" src={designerAvatar} />
                     <AvatarFallback>U</AvatarFallback>
                   </Avatar>
                 </div>
                 <div className="flex-1">
                   <Input 
                     placeholder="Share your latest design or inspiration..." 
-                    className="mb-4 bg-muted/30 border-muted/50 backdrop-blur-sm focus:ring-2 focus:ring-primary/20 transition-all duration-300"
+                    className="mb-4 bg-muted/50 border-muted/80 backdrop-blur-sm focus:ring-2 focus:ring-primary/20 transition-all duration-300"
                   />
-                  <div className="flex justify-between items-center">
-                    <div className="flex gap-2">
+                  <div className="flex   justify-center items-center">
+                    <div className="flex gap-2 -ml-2">
                       <Button variant="ghost" size="sm" className="gap-2 hover-glow text-primary hover:text-primary">
                         <ImageIcon className="w-4 h-4" />
                         Photo
@@ -227,9 +230,9 @@ const Index = () => {
             </div>
 
             {/* Enhanced Design Feed */}
-            <div className="space-y-8">
+            <div >
               {sampleDesigns.map((design, index) => (
-                <div key={design.id} className="fashion-card overflow-hidden animate-fade-in" style={{ animationDelay: `${index * 0.2}s` }}>
+                <div key={design.id} className="fashion-card border-b border-border/30 overflow-hidden animate-fade-in" style={{ animationDelay: `${index * 0.2}s` }}>
                   {/* Enhanced Post Header */}
                   <div className="p-6 flex items-center justify-between">
                     <div className="flex items-center gap-4">
@@ -287,7 +290,7 @@ const Index = () => {
               
               {/* More enhanced feed content */}
               {sampleDesigns.map((design, index) => (
-                <div key={`${design.id}-duplicate`} className="fashion-card overflow-hidden animate-fade-in" style={{ animationDelay: `${(index + 2) * 0.2}s` }}>
+                <div key={`${design.id}-duplicate`} className="border-b border-border/30 fashion-card overflow-hidden animate-fade-in" style={{ animationDelay: `${(index + 2) * 0.2}s` }}>
                   {/* Enhanced Post Header */}
                   <div className="p-6 flex items-center justify-between">
                     <div className="flex items-center gap-4">
@@ -307,11 +310,11 @@ const Index = () => {
                     </Button>
                   </div>
                   
-                  <div className="relative overflow-hidden">
+                  <div className="relative overflow-hidden border-3 border-red-500">
                     <img 
                       src={design.imageUrl} 
                       alt={design.title}
-                      className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-500"
+                      className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-500 "
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
@@ -344,8 +347,8 @@ const Index = () => {
           </div>
 
           {/* Enhanced Right Sidebar */}
-          <div className="col-span-3 hidden lg:block">
-            <div className="sticky top-28 space-y-6">
+          <div className="col-span-3 hidden lg:block w-[300px]">
+            <div className="sticky top-18 border-r border-border/50">
               {/* Enhanced Suggestions */}
               <div className="fashion-card p-6 animate-fade-in">
                 <div className="flex items-center justify-between mb-5">
@@ -374,7 +377,7 @@ const Index = () => {
               </div>
 
               {/* Enhanced Trending */}
-              <div className="fashion-card p-6 animate-fade-in">
+              <div className="fashion-card p-6 animate-fade-in border-t border-border/50">
                 <div className="flex items-center gap-3 mb-5">
                   <div className="p-2 rounded-lg bg-gradient-to-r from-primary/20 to-secondary/20">
                     <TrendingUp className="w-5 h-5 text-primary" />
@@ -382,15 +385,15 @@ const Index = () => {
                   <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Trending</h3>
                 </div>
                 <div className="space-y-3">
-                  <div className="p-4 rounded-xl bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/10 hover-lift cursor-pointer">
+                  <div className="p-4 rounded-xl bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/10 hover-lift cursor-pointer bg-image">
                     <p className="font-medium text-sm text-primary">#SustainableFashion</p>
                     <p className="text-xs text-muted-foreground">1.2k posts today</p>
                   </div>
-                  <div className="p-4 rounded-xl bg-gradient-to-r from-secondary/5 to-accent/5 border border-secondary/10 hover-lift cursor-pointer">
+                  <div className="p-4 rounded-xl bg-gradient-to-r from-secondary/5 to-accent/5 border border-secondary/10 hover-lift cursor-pointer bg-image">
                     <p className="font-medium text-sm text-secondary">#IndianTextiles</p>
                     <p className="text-xs text-muted-foreground">890 posts today</p>
                   </div>
-                  <div className="p-4 rounded-xl bg-gradient-to-r from-accent/5 to-primary/5 border border-accent/10 hover-lift cursor-pointer">
+                  <div className="p-4 rounded-xl bg-gradient-to-r from-accent/5 to-primary/5 border border-accent/10 hover-lift cursor-pointer bg-image">
                     <p className="font-medium text-sm text-accent">#HandmadeDesigns</p>
                     <p className="text-xs text-muted-foreground">756 posts today</p>
                   </div>
