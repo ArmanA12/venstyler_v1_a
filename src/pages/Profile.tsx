@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Header } from "@/components/Header";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 import { 
   ArrowLeft, 
   Camera, 
@@ -23,6 +25,9 @@ import {
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("personal");
+  const { user, signOut } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
   const sidebarItems = [
     { id: "personal", label: "Personal Info", icon: User },
@@ -61,15 +66,15 @@ const Profile = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" defaultValue="John" className="fashion-input" />
+                  <Input id="firstName" defaultValue={user?.firstName || "John"} className="fashion-input" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" defaultValue="Doe" className="fashion-input" />
+                  <Input id="lastName" defaultValue={user?.lastName || "Doe"} className="fashion-input" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" defaultValue="john@example.com" className="fashion-input" />
+                  <Input id="email" type="email" defaultValue={user?.email || "john@example.com"} className="fashion-input" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone</Label>
@@ -259,7 +264,17 @@ const Profile = () => {
                 Settings
               </button>
               
-              <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors">
+              <button 
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
+                onClick={() => {
+                  signOut();
+                  navigate("/");
+                  toast({
+                    title: "Signed out",
+                    description: "You have been successfully signed out.",
+                  });
+                }}
+              >
                 <LogOut className="w-5 h-5" />
                 Log Out
               </button>

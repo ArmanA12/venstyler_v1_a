@@ -1,10 +1,50 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Shield } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 const VerifyOTP = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const { verifyOTP } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const otpCode = otp.join("");
+    
+    if (otpCode.length !== 6) {
+      toast({
+        title: "Error",
+        description: "Please enter the complete 6-digit code.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      await verifyOTP(otpCode);
+      toast({
+        title: "Email verified!",
+        description: "Your email has been successfully verified.",
+      });
+      navigate("/signin");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Invalid verification code. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleOtpChange = (index: number, value: string) => {
     if (value.length <= 1) {
@@ -49,7 +89,7 @@ const VerifyOTP = () => {
           </p>
         </div>
 
-        <form className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <label className="block text-sm font-medium text-center">Enter verification code</label>
             <div className="flex gap-3 justify-center">
@@ -68,8 +108,8 @@ const VerifyOTP = () => {
             </div>
           </div>
 
-          <Button className="w-full fashion-button">
-            Verify Code
+          <Button type="submit" className="w-full fashion-button" disabled={isLoading}>
+            {isLoading ? "Verifying..." : "Verify Code"}
           </Button>
         </form>
 
