@@ -114,7 +114,7 @@ const Index = () => {
       <div className="w-4/5 mx-auto px-4 py-6">
         <div className="grid grid-cols-12 gap-0">
           {/* Enhanced Left Sidebar */}
-          <div className="col-span-3 hidden lg:block pr-6">
+          <div className="col-span-3 hidden lg:block">
             <div className="sticky top-28 space-y-6">
               {/* Navigation */}
               <div className="fashion-card p-6 animate-fade-in">
@@ -168,7 +168,7 @@ const Index = () => {
           </div>
 
           {/* Main Feed */}
-          <div className="col-span-12 lg:col-span-6 space-y-6 border-l border-r border-border/30 px-6">
+          <div className="col-span-12 lg:col-span-6 space-y-6 border-l border-r border-border/30 px-4">
             {/* Enhanced Stories */}
             <div className="fashion-card p-6 animate-slide-up">
               <div className="flex gap-5 overflow-x-auto pb-2 scrollbar-hide">
@@ -344,7 +344,7 @@ const Index = () => {
           </div>
 
           {/* Enhanced Right Sidebar */}
-          <div className="col-span-3 hidden lg:block pl-6">
+          <div className="col-span-3 hidden lg:block">
             <div className="sticky top-28 space-y-6">
               {/* Enhanced Suggestions */}
               <div className="fashion-card p-6 animate-fade-in">
