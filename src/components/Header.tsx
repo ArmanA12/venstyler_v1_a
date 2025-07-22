@@ -3,14 +3,17 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
-import { 
-  Search, 
-  Bell, 
-  MessageCircle, 
-  Plus, 
+import {
+  Search,
+  Bell,
+  MessageCircle,
+  Plus,
   User,
   Settings,
-  LogOut
+  LogOut,
+  Home,
+  PlusCircle,
+
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -19,6 +22,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 
 export const Header = () => {
   const { isAuthenticated, signOut, user } = useAuth();
@@ -32,7 +37,7 @@ export const Header = () => {
             <span className="text-lg font-bold text-primary-foreground">F</span>
           </div>
           <span className="font-playfair text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            FashionConnectD
+            FashionConnect
           </span>
         </Link>
 
@@ -51,36 +56,32 @@ export const Header = () => {
         <div className="flex items-center space-x-4">
           {isAuthenticated ? (
             <>
-              {/* Create Button */}
-              <Button variant="ghost" size="sm" className="hidden md:flex" asChild>
-                <Link to="/upload-product">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create
-                </Link>
+              <Button variant="ghost" size="icon" className="hover-glow">
+                <Home className="w-5 h-5" />
               </Button>
-
-              {/* Notifications */}
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full text-[10px] text-primary-foreground flex items-center justify-center">
-                  3
-                </span>
+              <Button variant="ghost" size="icon" className="md:hidden hover-glow">
+                <Search className="w-5 h-5" />
               </Button>
-
-              {/* Messages */}
-              <Button variant="ghost" size="icon" className="relative">
+              <Button variant="ghost" size="icon" className="relative hover-glow">
                 <MessageCircle className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full text-[10px] text-primary-foreground flex items-center justify-center">
-                  2
-                </span>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full animate-pulse"></div>
               </Button>
+              <Button variant="ghost" size="icon" className="relative hover-glow">
+                <Bell className="w-5 h-5" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full animate-pulse"></div>
+              </Button>
+              <Button variant="gradient" size="icon" className="shadow-colored hover:shadow-glow">
+                <PlusCircle className="w-5 h-5" />
+                
+              </Button>
+             
 
               {/* Profile Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full">
-                    <div className="w-8 h-8 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-primary" />
+                  <Button variant="ghost" size="icon" className="rounded-full border-2 border-pink-500">
+                    <div className="w-8 h-8 bg-gradient-to-br border-3 border-gray-400 from-primary/20 to-accent/20 rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-primary" />
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
@@ -101,7 +102,7 @@ export const Header = () => {
                     Settings
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem 
+                  <DropdownMenuItem
                     className="text-destructive focus:text-destructive"
                     onClick={signOut}
                   >
