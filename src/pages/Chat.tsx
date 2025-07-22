@@ -12,7 +12,9 @@ import {
   Phone, 
   Video,
   MoreVertical,
-  Smile
+  Smile,
+  Trash,
+  Mic
 } from "lucide-react";
 
 interface Message {
@@ -20,15 +22,20 @@ interface Message {
   text: string;
   sender: 'me' | 'other';
   timestamp: string;
-  type: 'text' | 'image';
+  type: 'text' | 'image' | 'audio';
   imageUrl?: string;
+  audioUrl?: string;
 }
+
+const emojiList = ["😀", "😍", "😂", "👍", "🎉", "🙏", "❤️", "😎"];
 
 const Chat = () => {
   const { userId } = useParams();
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const audioInputRef = useRef<HTMLInputElement>(null);
+
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -65,16 +72,20 @@ const Chat = () => {
       sender: 'other',
       timestamp: '10:38 AM',
       type: 'image',
-      imageUrl: '/api/placeholder/300/200'
+      imageUrl: 'https://picsum.photos/seed/chatimg1/300/200'
     }
   ]);
 
   const [isTyping, setIsTyping] = useState(false);
+  const [showEmoji, setShowEmoji] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
 
   // Mock user data
   const chatUser = {
     name: userId === 'me' ? 'You' : (userId || 'Sarah Johnson'),
-    avatar: '/api/placeholder/40/40',
+    avatar: 'https://picsum.photos/seed/chatavatar/40/40',
     isOnline: true,
     lastSeen: 'Active now'
   };
@@ -87,6 +98,13 @@ const Chat = () => {
     scrollToBottom();
   }, [messages]);
 
+  // Delete message
+  const handleDeleteMessage = (id: number) => {
+    setMessages(prev => prev.filter(msg => msg.id !== id));
+    toast({ title: "Message deleted" });
+  };
+
+  // Send text message
   const handleSendMessage = () => {
     if (!message.trim()) return;
 
@@ -100,6 +118,7 @@ const Chat = () => {
 
     setMessages(prev => [...prev, newMessage]);
     setMessage("");
+    setShowEmoji(false);
 
     // Simulate typing indicator
     setIsTyping(true);
@@ -132,11 +151,80 @@ const Chat = () => {
     }
   };
 
-  const handleImageUpload = () => {
-    toast({
-      title: "Feature coming soon",
-      description: "Image upload will be available soon!",
-    });
+  // Image upload logic
+  const handleImageUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setMessages(prev => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          text: "Image",
+          sender: "me",
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          type: "image",
+          imageUrl: ev.target?.result as string
+        }
+      ]);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
+  // Emoji picker logic
+  const handleEmojiClick = (emoji: string) => {
+    setMessage((prev) => prev + emoji);
+    setShowEmoji(false);
+  };
+
+  // Voice recording logic
+  const handleVoiceRecord = async () => {
+    if (recording) {
+      mediaRecorder?.stop();
+      setRecording(false);
+      return;
+    }
+    if (!navigator.mediaDevices?.getUserMedia) {
+      toast({ title: "Voice not supported in this browser" });
+      return;
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const recorder = new MediaRecorder(stream);
+    setMediaRecorder(recorder);
+    setAudioChunks([]);
+    recorder.start();
+    setRecording(true);
+
+    recorder.ondataavailable = (e) => {
+      setAudioChunks((prev) => [...prev, e.data]);
+    };
+    recorder.onstop = () => {
+      const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          text: "Voice message",
+          sender: "me",
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          type: "audio",
+          audioUrl
+        }
+      ]);
+      setAudioChunks([]);
+    };
+  };
+
+  // Video call using daily.co
+  const handleVideoCall = () => {
+    window.open("https://your-daily-room.daily.co/room", "_blank", "width=900,height=600");
   };
 
   return (
@@ -171,11 +259,11 @@ const Chat = () => {
             </div>
 
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm">
-                <Phone className="w-4 h-4" />
+              <Button variant="ghost" size="sm" onClick={handleVideoCall}>
+                <Video className="w-4 h-4" />
               </Button>
               <Button variant="ghost" size="sm">
-                <Video className="w-4 h-4" />
+                <Phone className="w-4 h-4" />
               </Button>
               <Button variant="ghost" size="sm">
                 <MoreVertical className="w-4 h-4" />
@@ -203,7 +291,7 @@ const Chat = () => {
                     />
                   )}
                   
-                  <div className="space-y-1">
+                  <div className="space-y-1 relative">
                     <div
                       className={`px-4 py-2 rounded-2xl ${
                         msg.sender === 'me'
@@ -213,7 +301,7 @@ const Chat = () => {
                     >
                       {msg.type === 'text' ? (
                         <p className="text-sm">{msg.text}</p>
-                      ) : (
+                      ) : msg.type === 'image' ? (
                         <div className="space-y-2">
                           <p className="text-sm">{msg.text}</p>
                           <img
@@ -222,11 +310,25 @@ const Chat = () => {
                             className="max-w-full rounded-lg"
                           />
                         </div>
-                      )}
+                      ) : msg.type === 'audio' ? (
+                        <div className="space-y-2">
+                          <p className="text-sm">{msg.text}</p>
+                          <audio controls src={msg.audioUrl} className="w-full" />
+                        </div>
+                      ) : null}
                     </div>
                     <p className={`text-xs text-muted-foreground ${msg.sender === 'me' ? 'text-right' : 'text-left'}`}>
                       {msg.timestamp}
                     </p>
+                    {msg.sender === 'me' && (
+                      <button
+                        className="absolute -top-2 -right-8 text-muted-foreground hover:text-destructive"
+                        onClick={() => handleDeleteMessage(msg.id)}
+                        title="Delete"
+                      >
+                        <Trash className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -261,11 +363,28 @@ const Chat = () => {
       <div className="border-t bg-background/80 backdrop-blur-sm">
         <div className="w-4/5 mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={handleImageUpload}>
+            <Button variant="ghost" size="sm" onClick={handleImageUploadClick}>
               <Paperclip className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="sm" onClick={handleImageUpload}>
+            <Button variant="ghost" size="sm" onClick={handleImageUploadClick}>
               <ImageIcon className="w-4 h-4" />
+            </Button>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+
+            {/* Voice recording button */}
+            <Button
+              variant={recording ? "destructive" : "ghost"}
+              size="sm"
+              onClick={handleVoiceRecord}
+              title={recording ? "Stop Recording" : "Record Voice"}
+            >
+              <Mic className="w-4 h-4" />
             </Button>
             
             <div className="flex-1 relative">
@@ -280,9 +399,25 @@ const Chat = () => {
                 variant="ghost"
                 size="sm"
                 className="absolute right-2 top-1/2 -translate-y-1/2"
+                type="button"
+                onClick={() => setShowEmoji((v) => !v)}
               >
                 <Smile className="w-4 h-4" />
               </Button>
+              {showEmoji && (
+                <div className="absolute bottom-10 right-0 bg-white border rounded shadow p-2 flex flex-wrap gap-1 z-10">
+                  {emojiList.map((emoji) => (
+                    <button
+                      key={emoji}
+                      className="text-xl hover:bg-muted rounded"
+                      type="button"
+                      onClick={() => handleEmojiClick(emoji)}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             
             <Button 

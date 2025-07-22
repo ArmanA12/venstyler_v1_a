@@ -10,7 +10,10 @@ import {
   ThumbsUp, 
   Flag, 
   MessageCircle,
-  Image as ImageIcon
+  Image as ImageIcon,
+  X,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 
 const ProductReviews = () => {
@@ -18,21 +21,26 @@ const ProductReviews = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Mock reviews data
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalImages, setModalImages] = useState<string[]>([]);
+  const [modalIndex, setModalIndex] = useState(0);
+
+  // Mock reviews data with working dummy images
   const reviews = [
     {
       id: 1,
       user: {
         name: "Sarah Johnson",
-        avatar: "/api/placeholder/40/40",
+        avatar: "https://picsum.photos/seed/reviewuser1/40/40",
         verified: true
       },
       rating: 5,
       date: "2 days ago",
       review: "Absolutely love this dress! The quality is exceptional and it fits perfectly. The embroidery work is beautiful and the fabric feels premium. Will definitely order more from this designer.",
       images: [
-        "/api/placeholder/150/150",
-        "/api/placeholder/150/150"
+        "https://picsum.photos/seed/reviewimg1a/600/600",
+        "https://picsum.photos/seed/reviewimg1b/600/600"
       ],
       helpful: 12,
       reported: false
@@ -41,14 +49,14 @@ const ProductReviews = () => {
       id: 2,
       user: {
         name: "Emma Wilson",
-        avatar: "/api/placeholder/40/40",
+        avatar: "https://picsum.photos/seed/reviewuser2/40/40",
         verified: false
       },
       rating: 4,
       date: "1 week ago",
       review: "Great dress overall! The design is exactly as shown in the pictures. Only reason for 4 stars is that it took a bit longer to arrive than expected, but the quality makes up for it.",
       images: [
-        "/api/placeholder/150/150"
+        "https://picsum.photos/seed/reviewimg2a/600/600"
       ],
       helpful: 8,
       reported: false
@@ -57,7 +65,7 @@ const ProductReviews = () => {
       id: 3,
       user: {
         name: "Maria Garcia",
-        avatar: "/api/placeholder/40/40",
+        avatar: "https://picsum.photos/seed/reviewuser3/40/40",
         verified: true
       },
       rating: 5,
@@ -71,14 +79,14 @@ const ProductReviews = () => {
       id: 4,
       user: {
         name: "Lisa Chen",
-        avatar: "/api/placeholder/40/40",
+        avatar: "https://picsum.photos/seed/reviewuser4/40/40",
         verified: false
       },
       rating: 3,
       date: "3 weeks ago",
       review: "The dress is nice but the color was slightly different from what I expected. The quality is good though and the customer service was helpful when I reached out.",
       images: [
-        "/api/placeholder/150/150"
+        "https://picsum.photos/seed/reviewimg4a/600/600"
       ],
       helpful: 3,
       reported: false
@@ -104,6 +112,26 @@ const ProductReviews = () => {
       title: "Review reported",
       description: "Thank you for reporting. We'll review this content.",
     });
+  };
+
+  const openModal = (images: string[], index: number) => {
+    setModalImages(images);
+    setModalIndex(index);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalImages([]);
+    setModalIndex(0);
+  };
+
+  const prevImage = () => {
+    setModalIndex((prev) => (prev === 0 ? modalImages.length - 1 : prev - 1));
+  };
+
+  const nextImage = () => {
+    setModalIndex((prev) => (prev === modalImages.length - 1 ? 0 : prev + 1));
   };
 
   const averageRating = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
@@ -224,7 +252,11 @@ const ProductReviews = () => {
                     {review.images.length > 0 && (
                       <div className="flex gap-2 mb-4">
                         {review.images.map((image, index) => (
-                          <div key={index} className="relative group cursor-pointer">
+                          <div
+                            key={index}
+                            className="relative group cursor-pointer"
+                            onClick={() => openModal(review.images, index)}
+                          >
                             <img
                               src={image}
                               alt={`Review image ${index + 1}`}
@@ -274,6 +306,44 @@ const ProductReviews = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal for review images */}
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="relative bg-white rounded-lg shadow-lg max-w-lg w-full p-4 flex flex-col items-center">
+            <button
+              className="absolute top-2 right-2 text-muted-foreground hover:text-destructive"
+              onClick={closeModal}
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div className="relative w-full flex items-center justify-center">
+              <button
+                className="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/70 hover:bg-white"
+                onClick={prevImage}
+                aria-label="Previous image"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <img
+                src={modalImages[modalIndex]}
+                alt={`Review modal image ${modalIndex + 1}`}
+                className="max-h-[60vh] max-w-full rounded-lg mx-auto"
+              />
+              <button
+                className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/70 hover:bg-white"
+                onClick={nextImage}
+                aria-label="Next image"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="mt-2 text-sm text-muted-foreground">
+              {modalIndex + 1} / {modalImages.length}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

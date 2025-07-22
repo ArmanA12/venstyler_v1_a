@@ -26,7 +26,7 @@ const ProductDetails = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  // Mock product data
+  // Mock product data with working dummy images
   const product = {
     id: id,
     title: "Elegant Summer Dress",
@@ -39,16 +39,17 @@ const ProductDetails = () => {
     totalLikes: 156,
     totalSaves: 89,
     images: [
-      "/api/placeholder/600/600",
-      "/api/placeholder/600/600",
-      "/api/placeholder/600/600",
-      "/api/placeholder/600/600"
+      "https://picsum.photos/seed/1/600/600",
+      "https://picsum.photos/seed/2/600/600",
+      "https://picsum.photos/seed/3/600/600",
+      "https://picsum.photos/seed/4/600/600"
     ],
     category: "Women's Fashion",
     designer: {
       name: "Sarah Johnson",
-      avatar: "/api/placeholder/40/40",
-      verified: true
+      avatar: "https://picsum.photos/seed/avatar1/40/40",
+      verified: true,
+      email: "sarah.johnson@email.com"
     },
     completionTime: "5-7 business days",
     inStock: true
@@ -181,6 +182,7 @@ const ProductDetails = () => {
                   {product.designer.verified && (
                     <Badge variant="secondary" className="ml-2 text-xs">Verified</Badge>
                   )}
+                  <span className="ml-2 text-xs text-muted-foreground">{product.designer.email}</span>
                 </span>
               </div>
             </div>
@@ -288,7 +290,7 @@ const ProductDetails = () => {
                 {[1, 2].map((review) => (
                   <div key={review} className="flex gap-3 p-4 bg-muted/30 rounded-lg">
                     <img
-                      src="/api/placeholder/40/40"
+                      src={`https://picsum.photos/seed/review${review}/40/40`}
                       alt="User"
                       className="w-10 h-10 rounded-full"
                     />
