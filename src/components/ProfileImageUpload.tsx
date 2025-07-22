@@ -76,8 +76,8 @@ export const ProfileImageUpload = ({ isOpen, onClose, onImageUpload }: ProfileIm
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px] fashion-card">
+    <Dialog open={isOpen} onOpenChange={open => { if (!open) handleClose(); }}>
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-playfair font-semibold text-primary">
             Upload Profile Picture

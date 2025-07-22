@@ -281,7 +281,7 @@ const Index = () => {
                     <p className="font-semibold mb-2 text-lg">{design.likes.toLocaleString()} likes</p>
                     <h3 className="font-semibold text-xl mb-2 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">{design.title}</h3>
                     <p className="text-sm text-primary mb-3 font-medium">#{design.category}</p>
-                    <Button variant="ghost" size="sm" className="text-muted-foreground p-0 h-auto hover:text-foreground transition-colors">
+                    <Button variant="ghost" size="sm" className="text-muted-foreground p-0 hover:p-1 h-auto hover:text-foreground transition-colors">
                       View all {design.comments} comments
                     </Button>
                   </div>
