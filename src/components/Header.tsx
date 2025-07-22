@@ -52,9 +52,11 @@ export const Header = () => {
           {isAuthenticated ? (
             <>
               {/* Create Button */}
-              <Button variant="ghost" size="sm" className="hidden md:flex">
-                <Plus className="w-4 h-4 mr-2" />
-                Create
+              <Button variant="ghost" size="sm" className="hidden md:flex" asChild>
+                <Link to="/upload-product">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create
+                </Link>
               </Button>
 
               {/* Notifications */}

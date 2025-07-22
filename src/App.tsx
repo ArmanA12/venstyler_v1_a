@@ -10,6 +10,11 @@ import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyOTP from "./pages/VerifyOTP";
 import Profile from "./pages/Profile";
+import ProductUpload from "./pages/ProductUpload";
+import ProductDetails from "./pages/ProductDetails";
+import ProductReviews from "./pages/ProductReviews";
+import WriteReview from "./pages/WriteReview";
+import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +33,11 @@ const App = () => (
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/verify-otp" element={<VerifyOTP />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/upload-product" element={<ProductUpload />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/product/:id/reviews" element={<ProductReviews />} />
+            <Route path="/product/:id/write-review" element={<WriteReview />} />
+            <Route path="/chat/:userId" element={<Chat />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

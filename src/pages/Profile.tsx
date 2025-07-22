@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Header } from "@/components/Header";
+import { ProfileImageUpload } from "@/components/ProfileImageUpload";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -23,11 +29,57 @@ import {
   ShoppingBag
 } from "lucide-react";
 
+const personalInfoSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  address: z.string().min(1, "Address is required"),
+  city: z.string().min(1, "City is required"),
+  state: z.string().min(1, "State is required"),
+  pincode: z.string().min(5, "Pincode must be at least 5 digits"),
+  country: z.string().min(1, "Country is required"),
+  profession: z.string().min(1, "Profession is required"),
+  numberOfEmployees: z.string().optional(),
+  bio: z.string().optional(),
+  googleMapLink: z.string().url().optional().or(z.literal("")),
+});
+
+type PersonalInfoForm = z.infer<typeof personalInfoSchema>;
+
+const professions = [
+  "Fashion Designer",
+  "Textile Designer", 
+  "Costume Designer",
+  "Fashion Merchandiser"
+];
+
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("personal");
+  const [isImageUploadOpen, setIsImageUploadOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm<PersonalInfoForm>({
+    resolver: zodResolver(personalInfoSchema),
+    defaultValues: {
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      phone: "",
+      address: "",
+      city: "",
+      state: "",
+      pincode: "",
+      country: "",
+      profession: "",
+      numberOfEmployees: "",
+      bio: "",
+      googleMapLink: "",
+    }
+  });
 
   const sidebarItems = [
     { id: "personal", label: "Personal Info", icon: User },
@@ -38,6 +90,17 @@ const Profile = () => {
     { id: "liked", label: "Liked Designs", icon: Heart },
   ];
 
+  const onSubmitPersonalInfo = async (data: PersonalInfoForm) => {
+    toast({
+      title: "Profile updated",
+      description: "Your personal information has been saved successfully.",
+    });
+  };
+
+  const handleImageUpload = (imageUrl: string) => {
+    setProfileImage(imageUrl);
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case "personal":
@@ -47,51 +110,178 @@ const Profile = () => {
               <h3 className="text-xl font-playfair font-semibold mb-4">Profile Picture</h3>
               <div className="flex items-center gap-6">
                 <div className="relative">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                    <User className="w-10 h-10 text-primary" />
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center overflow-hidden">
+                    {profileImage ? (
+                      <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <User className="w-10 h-10 text-primary" />
+                    )}
                   </div>
-                  <button className="absolute -bottom-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground hover:bg-primary/90 transition-colors">
+                  <button 
+                    onClick={() => setIsImageUploadOpen(true)}
+                    className="absolute -bottom-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground hover:bg-primary/90 transition-colors"
+                  >
                     <Camera className="w-4 h-4" />
                   </button>
                 </div>
                 <div>
-                  <Button variant="outline" className="mr-3">Upload Photo</Button>
-                  <Button variant="ghost" className="text-destructive">Remove</Button>
+                  <Button 
+                    variant="outline" 
+                    className="mr-3"
+                    onClick={() => setIsImageUploadOpen(true)}
+                  >
+                    Upload Photo
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="text-destructive"
+                    onClick={() => setProfileImage(null)}
+                  >
+                    Remove
+                  </Button>
                 </div>
               </div>
             </div>
 
-            <div className="fashion-card p-6">
-              <h3 className="text-xl font-playfair font-semibold mb-4">Personal Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" defaultValue={user?.firstName || "John"} className="fashion-input" />
+            <form onSubmit={handleSubmit(onSubmitPersonalInfo)}>
+              <div className="fashion-card p-6">
+                <h3 className="text-xl font-playfair font-semibold mb-4">Personal Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name *</Label>
+                    <Input 
+                      id="firstName" 
+                      {...register("firstName")}
+                      className="fashion-input" 
+                    />
+                    {errors.firstName && <p className="text-destructive text-sm">{errors.firstName.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name *</Label>
+                    <Input 
+                      id="lastName" 
+                      {...register("lastName")}
+                      className="fashion-input" 
+                    />
+                    {errors.lastName && <p className="text-destructive text-sm">{errors.lastName.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email *</Label>
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      {...register("email")}
+                      className="fashion-input" 
+                    />
+                    {errors.email && <p className="text-destructive text-sm">{errors.email.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Mobile Number *</Label>
+                    <Input 
+                      id="phone" 
+                      {...register("phone")}
+                      className="fashion-input" 
+                      placeholder="+1 (555) 123-4567"
+                    />
+                    {errors.phone && <p className="text-destructive text-sm">{errors.phone.message}</p>}
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="address">Address *</Label>
+                    <Input 
+                      id="address" 
+                      {...register("address")}
+                      className="fashion-input" 
+                      placeholder="Street address"
+                    />
+                    {errors.address && <p className="text-destructive text-sm">{errors.address.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="city">City *</Label>
+                    <Input 
+                      id="city" 
+                      {...register("city")}
+                      className="fashion-input" 
+                    />
+                    {errors.city && <p className="text-destructive text-sm">{errors.city.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="state">State *</Label>
+                    <Input 
+                      id="state" 
+                      {...register("state")}
+                      className="fashion-input" 
+                    />
+                    {errors.state && <p className="text-destructive text-sm">{errors.state.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="pincode">Pincode *</Label>
+                    <Input 
+                      id="pincode" 
+                      {...register("pincode")}
+                      className="fashion-input" 
+                    />
+                    {errors.pincode && <p className="text-destructive text-sm">{errors.pincode.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="country">Country *</Label>
+                    <Input 
+                      id="country" 
+                      {...register("country")}
+                      className="fashion-input" 
+                    />
+                    {errors.country && <p className="text-destructive text-sm">{errors.country.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Profession *</Label>
+                    <Select onValueChange={(value) => setValue("profession", value)}>
+                      <SelectTrigger className="fashion-input">
+                        <SelectValue placeholder="Select profession" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {professions.map((profession) => (
+                          <SelectItem key={profession} value={profession}>
+                            {profession}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.profession && <p className="text-destructive text-sm">{errors.profession.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="numberOfEmployees">Number of Employees</Label>
+                    <Input 
+                      id="numberOfEmployees" 
+                      type="number"
+                      {...register("numberOfEmployees")}
+                      className="fashion-input" 
+                      placeholder="Optional"
+                    />
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="bio">Bio (Optional)</Label>
+                    <Textarea 
+                      id="bio" 
+                      rows={4}
+                      {...register("bio")}
+                      className="fashion-input resize-none"
+                      placeholder="Tell us about yourself..."
+                    />
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="googleMapLink">Google Map Link (Optional)</Label>
+                    <Input 
+                      id="googleMapLink" 
+                      type="url"
+                      {...register("googleMapLink")}
+                      className="fashion-input" 
+                      placeholder="https://maps.google.com/..."
+                    />
+                    {errors.googleMapLink && <p className="text-destructive text-sm">{errors.googleMapLink.message}</p>}
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" defaultValue={user?.lastName || "Doe"} className="fashion-input" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" defaultValue={user?.email || "john@example.com"} className="fashion-input" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone</Label>
-                  <Input id="phone" defaultValue="+1 (555) 123-4567" className="fashion-input" />
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                  <Label htmlFor="bio">Bio</Label>
-                  <textarea 
-                    id="bio" 
-                    rows={4}
-                    defaultValue="Fashion designer passionate about sustainable and innovative designs."
-                    className="w-full px-3 py-2 border border-border rounded-md bg-background/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                  />
-                </div>
+                <Button type="submit" className="mt-4 fashion-button">Save Changes</Button>
               </div>
-              <Button className="mt-4 fashion-button">Save Changes</Button>
-            </div>
+            </form>
           </div>
         );
 
@@ -226,6 +416,12 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20">
       <Header />
+      
+      <ProfileImageUpload 
+        isOpen={isImageUploadOpen}
+        onClose={() => setIsImageUploadOpen(false)}
+        onImageUpload={handleImageUpload}
+      />
       
       <div className="w-4/5 mx-auto px-4 py-6">
         <div className="mb-6">
