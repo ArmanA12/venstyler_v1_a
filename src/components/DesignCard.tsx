@@ -36,8 +36,8 @@ export function DesignCard({
   };
 
   return (
-    <Card className="overflow-hidden hover-lift shadow-soft hover:shadow-medium transition-all duration-300">
-      <div className="relative group">
+    <Card className="overflow-hidden hover-lift shadow-soft hover:shadow-medium transition-all duration-300 group">
+      <div className="relative">
         <img 
           src={imageUrl} 
           alt={title}
