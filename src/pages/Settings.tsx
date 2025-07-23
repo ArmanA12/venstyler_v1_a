@@ -27,12 +27,14 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useToast } from "@/hooks/use-toast";
 import designerAvatar from "@/assets/designer-avatar-1.jpg";
 
 const Settings = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { theme, setTheme } = useTheme();
   const { toast } = useToast();
   
   const [notifications, setNotifications] = useState({
@@ -51,7 +53,6 @@ const Settings = () => {
     showContactInfo: false,
   });
 
-  const [theme, setTheme] = useState("system");
   const [language, setLanguage] = useState("en");
 
   const handleSaveSettings = () => {
@@ -412,7 +413,7 @@ const Settings = () => {
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <Label>Theme</Label>
-                  <Select value={theme} onValueChange={setTheme}>
+                  <Select value={theme} onValueChange={(value: any) => setTheme(value)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>

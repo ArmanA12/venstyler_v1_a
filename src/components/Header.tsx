@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useTheme } from "@/contexts/ThemeContext";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   Search,
+  Moon,
+  Sun,
   Bell,
   MessageCircle,
   Plus,
@@ -13,7 +16,6 @@ import {
   LogOut,
   Home,
   PlusCircle,
-
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -24,9 +26,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-
 export const Header = () => {
   const { isAuthenticated, signOut, user } = useAuth();
+  const { theme, setTheme, actualTheme } = useTheme();
+  const navigate = useNavigate();
+
+  const toggleTheme = () => {
+    if (theme === 'light') {
+      setTheme('dark');
+    } else if (theme === 'dark') {
+      setTheme('system');
+    } else {
+      setTheme('light');
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full backdrop-blur-lg bg-background/80 border-b border-border/50">
@@ -70,11 +83,12 @@ export const Header = () => {
                 <Bell className="w-5 h-5" />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full animate-pulse"></div>
               </Button>
-              <Button variant="gradient" size="icon" className="shadow-colored hover:shadow-glow">
-                <PlusCircle className="w-5 h-5" />
-                
+              <Button variant="ghost" size="icon" className="hover-glow" onClick={toggleTheme}>
+                {actualTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </Button>
-             
+              <Button variant="gradient" size="icon" className="shadow-colored hover:shadow-glow" onClick={() => navigate('/upload-product')}>
+                <PlusCircle className="w-5 h-5" />
+              </Button>
 
               {/* Profile Dropdown */}
               <DropdownMenu>
@@ -116,6 +130,9 @@ export const Header = () => {
             </>
           ) : (
             <>
+              <Button variant="ghost" size="icon" className="hover-glow" onClick={toggleTheme}>
+                {actualTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </Button>
               <Button variant="ghost" asChild>
                 <Link to="/signin">Sign In</Link>
               </Button>

@@ -89,17 +89,21 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Enhanced dark mode fashion colors */
+    --primary: 338 83% 65%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --primary-muted: 338 83% 8%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 280 78% 72%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --secondary-muted: 280 78% 8%;
+
+    --accent: 200 100% 75%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --accent-muted: 200 100% 8%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
@@ -107,6 +111,23 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* Dark mode gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(338 83% 65%), hsl(280 78% 72%));
+    --gradient-secondary: linear-gradient(135deg, hsl(280, 78%, 72%), hsl(200 100% 75%));
+    --gradient-accent: linear-gradient(135deg, hsl(200 100% 75%), hsl(338 83% 65%));
+    --gradient-hero: linear-gradient(135deg, hsl(338 83% 65%) 0%, hsl(280 78% 72%) 50%, hsl(200 100% 75%) 100%);
+    --gradient-soft: linear-gradient(145deg, hsl(222.2 84% 6%) 0%, hsl(217.2 32.6% 20%) 100%);
+    --gradient-glass: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+
+    /* Dark mode shadows */
+    --shadow-soft: 0 2px 12px hsl(0 0% 0% / 0.15);
+    --shadow-medium: 0 8px 25px hsl(0 0% 0% / 0.25);
+    --shadow-strong: 0 16px 40px hsl(0 0% 0% / 0.35);
+    --shadow-colored: 0 12px 35px hsl(338 83% 65% / 0.25);
+    --shadow-glow: 0 0 30px hsl(338 83% 65% / 0.25);
+    --shadow-elegant: 0 4px 20px hsl(0 0% 0% / 0.25);
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -206,6 +227,11 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
   }
 
+  .dark .glass {
+    background: rgba(17, 25, 40, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+  }
+
   .glass-dark {
     backdrop-filter: blur(16px) saturate(180%);
     background: rgba(17, 25, 40, 0.75);
@@ -221,23 +247,36 @@
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  /* Fashion-specific component styles */
+  .fashion-button {
+    @apply bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:from-primary/90 hover:to-secondary/90 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02];
+  }
+
+  .fashion-input {
+    @apply bg-background/50 border-border/80 backdrop-blur-sm focus:ring-2 focus:ring-primary/20 transition-all duration-300;
+  }
+
   .fashion-card:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: var(--shadow-colored);
   }
 
-  /* Story ring gradient */
+  /* Story ring gradient - supports both themes */
   .story-gradient {
-    background: conic-gradient(from 0deg, hsl(338 83% 60%), hsl(280 78% 68%), hsl(200 100% 70%), hsl(338 83% 60%));
+    background: conic-gradient(from 0deg, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--accent)), hsl(var(--primary)));
     padding: 3px;
     border-radius: 50%;
   }
 
-  /* Shimmer effect */
+  /* Dark mode shimmer effect */
   .shimmer {
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
     background-size: 200% 100%;
     animation: shimmer 2s infinite;
+  }
+
+  .dark .shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
   }
 }
 
