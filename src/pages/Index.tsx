@@ -139,7 +139,7 @@ const Index = () => {
                     <User className="w-5 h-5" />
                     <span className="font-medium">Profile</span>
                   </Button>
-                  <Button variant="ghost" className="w-full justify-start gap-4 h-12 text-left hover-lift">
+                  <Button variant="ghost" className="w-full justify-start gap-4 h-12 text-left hover-lift" onClick={() => window.location.href = '/settings'}>
                     <Settings className="w-5 h-5" />
                     <span className="font-medium">Settings</span>
                   </Button>
