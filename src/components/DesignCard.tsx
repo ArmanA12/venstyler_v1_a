@@ -85,6 +85,24 @@ export function DesignCard({
             <Share2 className="w-4 h-4" />
           </Button>
         </div>
+        
+        {/* Product Details Section - Hidden by default, visible on hover */}
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-3 border-t border-border mt-3 space-y-2">
+          <div>
+            <h4 className="text-sm font-medium text-foreground mb-1">Product Details</h4>
+            <p className="text-xs text-muted-foreground">Premium quality fashion design with modern styling</p>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-foreground">₹2,999</p>
+              <p className="text-xs text-muted-foreground line-through">₹3,999</p>
+            </div>
+            <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
+              25% OFF
+            </Badge>
+          </div>
+        </div>
       </div>
     </Card>
   );
