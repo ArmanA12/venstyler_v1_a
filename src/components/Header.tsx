@@ -16,6 +16,7 @@ import {
   LogOut,
   Home,
   PlusCircle,
+  Shield,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -115,6 +116,12 @@ export const Header = () => {
                     <Link to="/settings" className="cursor-pointer">
                       <Settings className="w-4 h-4 mr-2" />
                       Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/admin" className="cursor-pointer">
+                      <Shield className="w-4 h-4 mr-2" />
+                      Admin Dashboard
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />

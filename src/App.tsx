@@ -17,6 +17,7 @@ import ProductReviews from "./pages/ProductReviews";
 import WriteReview from "./pages/WriteReview";
 import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +43,7 @@ const App = () => (
             <Route path="/product/:id/write-review" element={<WriteReview />} />
             <Route path="/chat/:userId" element={<Chat />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/admin" element={<AdminDashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
