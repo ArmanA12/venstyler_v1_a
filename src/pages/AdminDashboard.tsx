@@ -20,8 +20,12 @@ import {
 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
+import { Header } from "@/components/Header";
+import { useNavigate } from "react-router-dom";
+
 export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   // Mock data
   const stats = [
@@ -67,6 +71,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Header />
       <div className="border-b bg-card">
         <div className="flex h-16 items-center px-6">
           <h1 className="text-2xl font-bold">Admin Dashboard</h1>
@@ -155,11 +160,11 @@ export default function AdminDashboard() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => navigate(`/admin/products/${product.id}`)}>
                                 <Eye className="mr-2 h-4 w-4" />
                                 View
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => navigate(`/admin/products/${product.id}/edit`)}>
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
                               </DropdownMenuItem>
@@ -217,11 +222,11 @@ export default function AdminDashboard() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => navigate(`/admin/users/${user.id}`)}>
                                 <Eye className="mr-2 h-4 w-4" />
                                 View Profile
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => navigate(`/admin/users/${user.id}/edit`)}>
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit User
                               </DropdownMenuItem>
@@ -277,15 +282,15 @@ export default function AdminDashboard() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => navigate(`/admin/orders/${order.id}`)}>
                                 <Eye className="mr-2 h-4 w-4" />
                                 View Order
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => navigate(`/admin/orders/${order.id}`)}>
                                 <Edit className="mr-2 h-4 w-4" />
                                 Update Status
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => navigate(`/admin/orders/${order.id}`)}>
                                 <Package className="mr-2 h-4 w-4" />
                                 Track Shipment
                               </DropdownMenuItem>

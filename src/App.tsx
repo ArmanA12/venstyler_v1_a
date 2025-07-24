@@ -18,6 +18,11 @@ import WriteReview from "./pages/WriteReview";
 import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
 import AdminDashboard from "./pages/AdminDashboard";
+import UserProfile from "./pages/admin/UserProfile";
+import EditUser from "./pages/admin/EditUser";
+import ProductView from "./pages/admin/ProductView";
+import EditProduct from "./pages/admin/EditProduct";
+import OrderView from "./pages/admin/OrderView";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +49,11 @@ const App = () => (
             <Route path="/chat/:userId" element={<Chat />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/users/:userId" element={<UserProfile />} />
+            <Route path="/admin/users/:userId/edit" element={<EditUser />} />
+            <Route path="/admin/products/:productId" element={<ProductView />} />
+            <Route path="/admin/products/:productId/edit" element={<EditProduct />} />
+            <Route path="/admin/orders/:orderId" element={<OrderView />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
