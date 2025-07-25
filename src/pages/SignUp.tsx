@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,12 +18,22 @@ const SignUp = () => {
     confirmPassword: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
   
   const { signUp } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Real-time password matching validation
+  useEffect(() => {
+    if (formData.password && formData.confirmPassword) {
+      setPasswordMatchError(formData.password !== formData.confirmPassword);
+    } else {
+      setPasswordMatchError(false);
+    }
+  }, [formData.password, formData.confirmPassword]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
@@ -70,25 +80,14 @@ const SignUp = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
+              <Label htmlFor="firstName">Name</Label>
               <Input
                 id="firstName"
                 value={formData.firstName}
                 onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                 placeholder="John"
-                className="fashion-input"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input
-                id="lastName"
-                value={formData.lastName}
-                onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                placeholder="Doe"
                 className="fashion-input"
                 required
               />
@@ -117,7 +116,7 @@ const SignUp = () => {
                 value={formData.password}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
                 placeholder="Create a password"
-                className="fashion-input pr-10"
+                className={`fashion-input pr-10 ${passwordMatchError ? 'border-red-500' : ''}`}
                 required
               />
               <button
@@ -139,7 +138,7 @@ const SignUp = () => {
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                 placeholder="Confirm your password"
-                className="fashion-input pr-10"
+                className={`fashion-input pr-10 ${passwordMatchError ? 'border-red-500' : ''}`}
                 required
               />
               <button
@@ -150,10 +149,13 @@ const SignUp = () => {
                 {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
+            {passwordMatchError && (
+              <p className="text-sm text-red-500 mt-1">Passwords do not match</p>
+            )}
           </div>
 
           <div className="flex items-center space-x-2">
-            <input type="checkbox" id="terms" className="rounded border-border" />
+            <input type="checkbox" id="terms" className="rounded border-border" required />
             <label htmlFor="terms" className="text-sm text-muted-foreground">
               I agree to the{" "}
               <Link to="/terms" className="text-primary hover:underline">
@@ -166,7 +168,11 @@ const SignUp = () => {
             </label>
           </div>
 
-          <Button type="submit" className="w-full fashion-button" disabled={isLoading}>
+          <Button 
+            type="submit" 
+            className="w-full fashion-button" 
+            disabled={isLoading || passwordMatchError}
+          >
             {isLoading ? "Creating Account..." : "Create Account"}
           </Button>
         </form>
