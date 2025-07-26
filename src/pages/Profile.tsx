@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Header } from "@/components/Header";
 import { ProfileImageUpload } from "@/components/ProfileImageUpload";
+import { ProfileProgress } from "@/components/ProfileProgress";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -62,7 +63,7 @@ const Profile = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm<PersonalInfoForm>({
+  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<PersonalInfoForm>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
       firstName: user?.firstName || "",
@@ -80,6 +81,8 @@ const Profile = () => {
       googleMapLink: "",
     }
   });
+
+  const watchedValues = watch();
 
   const sidebarItems = [
     { id: "personal", label: "Personal Info", icon: User },
@@ -106,6 +109,13 @@ const Profile = () => {
       case "personal":
         return (
           <div className="space-y-6">
+            <ProfileProgress 
+              profileData={{
+                ...watchedValues,
+                profileImage: profileImage
+              }}
+            />
+            
             <div className="fashion-card p-6">
               <h3 className="text-xl font-playfair font-semibold mb-4">Profile Picture</h3>
               <div className="flex items-center gap-6">
