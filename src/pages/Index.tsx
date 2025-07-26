@@ -65,16 +65,20 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Enhanced Header with glass effect */}
-     <div>
+
+    <div>
+       <div>
       <Header />
      </div>
 
+   
+    <div className="min-h-screen bg-background">
+      {/* Enhanced Header with glass effect */}
+    
       <div className="w-full px-0 lg:w-5/6 lg:px-4 mx-auto">
         <div className="grid grid-cols-12 gap-0">
           <div className="col-span-3 hidden lg:block">
-            {/* <div className="sticky top-18  border-l border-border/30">
+            <div className="sticky top-18  border-l border-border/30">
               <div className="fashion-card p-6 animate-fade-in">
                 <nav className="space-y-3">
                   <Button variant="ghost" className="w-full justify-start gap-4 h-12 text-left hover-lift bg-primary/10 text-primary">
@@ -122,7 +126,7 @@ const Index = () => {
                   </Button>
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
 
           {/* Main Feed */}
@@ -360,6 +364,7 @@ const Index = () => {
         </div>
       </div>
     </div>
+     </div>
   );
 };
 
