@@ -5,41 +5,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-  Search,
-  Moon,
-  Sun,
-  Bell,
-  MessageCircle,
-  Plus,
-  User,
-  Settings,
-  LogOut,
-  Home,
-  PlusCircle,
-  Shield,
+  Search, Moon, Sun, Bell, MessageCircle,
+  PlusCircle, User, Settings, LogOut, Home,
+  Menu, X, Shield
 } from "lucide-react";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const Header = () => {
   const { isAuthenticated, signOut, user } = useAuth();
   const { theme, setTheme, actualTheme } = useTheme();
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleTheme = () => {
-    if (theme === 'light') {
-      setTheme('dark');
-    } else if (theme === 'dark') {
-      setTheme('system');
-    } else {
-      setTheme('light');
-    }
+    setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light');
   };
 
   return (
@@ -55,8 +37,109 @@ export const Header = () => {
           </span>
         </Link>
 
-        {/* Search Bar */}
-        <div className="flex-1 max-w-md mx-8">
+        {/* Desktop Search Bar */}
+        {isAuthenticated && (
+          <div className="hidden md:flex flex-1 max-w-md mx-8">
+            <div className="relative w-full">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Input
+                placeholder="Search designs, designers..."
+                className="pl-10 fashion-input"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Right Side Icons */}
+        <div className="flex items-center space-x-3">
+          {/* Chat Icon */}
+          {isAuthenticated && (
+            <Link to={`/chat/${user?.id}`}>
+              <Button variant="ghost" size="icon" className="hover-glow hidden md:inline-flex">
+                <MessageCircle className="w-5 h-5" />
+              </Button>
+            </Link>
+          )}
+
+          {/* Upload Button */}
+          {isAuthenticated && (
+            <Button
+              variant="gradient"
+              size="icon"
+              className="shadow-colored hover:shadow-glow hidden md:inline-flex"
+              onClick={() => navigate("/upload-product")}
+            >
+              <PlusCircle className="w-5 h-5" />
+            </Button>
+          )}
+
+          {/* Notification */}
+          {isAuthenticated && (
+            <Button variant="ghost" size="icon" className="relative hover-glow">
+              <Bell className="w-5 h-5" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full animate-pulse"></div>
+            </Button>
+          )}
+
+          {/* Theme Toggle */}
+          <Button variant="ghost" size="icon" className="hover-glow" onClick={toggleTheme}>
+            {actualTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </Button>
+
+          {/* Profile Dropdown */}
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full border-2 border-pink-500">
+                  <div className="w-8 h-8 bg-gradient-to-br border-3 border-gray-400 from-primary/20 to-accent/20 rounded-full flex items-center justify-center">
+                    <User className="w-5 h-5 text-primary" />
+                  </div>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 fashion-card border-0">
+                <div className="px-2 py-1.5">
+                  <p className="text-sm font-medium">{user?.firstName} {user?.lastName}</p>
+                  <p className="text-xs text-muted-foreground">{user?.email}</p>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/profile"><User className="w-4 h-4 mr-2" /> Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/settings"><Settings className="w-4 h-4 mr-2" /> Settings</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/admin"><Shield className="w-4 h-4 mr-2" /> Admin Dashboard</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={signOut} className="text-destructive focus:text-destructive">
+                  <LogOut className="w-4 h-4 mr-2" /> Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button variant="ghost" asChild><Link to="/signin">Sign In</Link></Button>
+              <Button asChild className="fashion-button"><Link to="/signup">Sign Up</Link></Button>
+            </>
+          )}
+
+          {/* Hamburger Toggle (Mobile Only) */}
+          {isAuthenticated && (
+            <button
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile Dropdown */}
+      {isAuthenticated && mobileMenuOpen && (
+        <div className="md:hidden bg-background px-4 py-4 border-t border-border/50 space-y-4">
+          {/* Mobile Search Bar */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
@@ -64,92 +147,32 @@ export const Header = () => {
               className="pl-10 fashion-input"
             />
           </div>
-        </div>
 
-        {/* Navigation */}
-        <div className="flex items-center space-x-4">
-          {isAuthenticated ? (
-            <>
-              <Button variant="ghost" size="icon" className="hover-glow">
-                <Home className="w-5 h-5" />
-              </Button>
-              <Button variant="ghost" size="icon" className="md:hidden hover-glow">
-                <Search className="w-5 h-5" />
-              </Button>
-              <Button variant="ghost" size="icon" className="relative hover-glow">
-                <MessageCircle className="w-5 h-5" />
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full animate-pulse"></div>
-              </Button>
-              <Button variant="ghost" size="icon" className="relative hover-glow">
-                <Bell className="w-5 h-5" />
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full animate-pulse"></div>
-              </Button>
-              <Button variant="ghost" size="icon" className="hover-glow" onClick={toggleTheme}>
-                {actualTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </Button>
-              <Button variant="gradient" size="icon" className="shadow-colored hover:shadow-glow" onClick={() => navigate('/upload-product')}>
-                <PlusCircle className="w-5 h-5" />
-              </Button>
+          {/* Mobile Chat + Upload + Home */}
+          <div className="flex flex-col space-y-3">
+            <Link to={`/chat/${user?.id}`} className="flex items-center gap-2">
+              <MessageCircle className="w-5 h-5" />
+              Chat
+            </Link>
 
-              {/* Profile Dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full border-2 border-pink-500">
-                    <div className="w-8 h-8 bg-gradient-to-br border-3 border-gray-400 from-primary/20 to-accent/20 rounded-full flex items-center justify-center">
-                      <User className="w-5 h-5 text-primary" />
-                    </div>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 fashion-card border-0">
-                  <div className="px-2 py-1.5">
-                    <p className="text-sm font-medium">{user?.firstName} {user?.lastName}</p>
-                    <p className="text-xs text-muted-foreground">{user?.email}</p>
-                  </div>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/profile" className="cursor-pointer">
-                      <User className="w-4 h-4 mr-2" />
-                      Profile
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/settings" className="cursor-pointer">
-                      <Settings className="w-4 h-4 mr-2" />
-                      Settings
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/admin" className="cursor-pointer">
-                      <Shield className="w-4 h-4 mr-2" />
-                      Admin Dashboard
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    className="text-destructive focus:text-destructive"
-                    onClick={signOut}
-                  >
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </>
-          ) : (
-            <>
-              <Button variant="ghost" size="icon" className="hover-glow" onClick={toggleTheme}>
-                {actualTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </Button>
-              <Button variant="ghost" asChild>
-                <Link to="/signin">Sign In</Link>
-              </Button>
-              <Button asChild className="fashion-button">
-                <Link to="/signup">Sign Up</Link>
-              </Button>
-            </>
-          )}
+            <button
+              onClick={() => {
+                navigate('/upload-product');
+                setMobileMenuOpen(false);
+              }}
+              className="flex items-center gap-2"
+            >
+              <PlusCircle className="w-5 h-5" />
+              Upload Product
+            </button>
+
+            <Link to="/" className="flex items-center gap-2">
+              <Home className="w-5 h-5" />
+              Home
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 };

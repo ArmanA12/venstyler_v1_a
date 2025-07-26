@@ -22,6 +22,7 @@ import {
 import design1 from "@/assets/design-1.jpg";
 import design2 from "@/assets/design-2.jpg";
 import designerAvatar from "@/assets/designer-avatar-1.jpg";
+import { Header } from "@/components/Header";
 
 const Index = () => {
   const sampleDesigns = [
@@ -66,57 +67,14 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Enhanced Header with glass effect */}
-      <header className="sticky top-0 glass border-b border-border/50 z-50 ">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-8">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-float">
-                FashionConnect
-              </h1>
-              <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input 
-                  placeholder="Search designers, collections..." 
-                  className="pl-10 w-80 bg-muted/50 border-muted/50 backdrop-blur-sm shadow-soft hover:shadow-medium transition-all duration-300"
-                />
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" className="hover-glow">
-                <Home className="w-5 h-5" />
-              </Button>
-              <Button variant="ghost" size="icon" className="md:hidden hover-glow">
-                <Search className="w-5 h-5" />
-              </Button>
-              <Button variant="ghost" size="icon" className="relative hover-glow">
-                <MessageCircle className="w-5 h-5" />
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full animate-pulse"></div>
-              </Button>
-              <Button variant="ghost" size="icon" className="relative hover-glow">
-                <Bell className="w-5 h-5" />
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full animate-pulse"></div>
-              </Button>
-              <Button variant="gradient" size="icon" className="shadow-colored hover:shadow-glow">
-                <PlusCircle className="w-5 h-5" />
-              </Button>
-              <div className="story-gradient">
-                <Avatar className="w-9 h-9">
-                  <AvatarImage src={designerAvatar} />
-                  <AvatarFallback>U</AvatarFallback>
-                </Avatar>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+     <div>
+      <Header />
+     </div>
 
-      <div className="w-5/6 mx-auto px-4  ">
+      <div className="w-full px-0 lg:w-5/6 lg:px-4 mx-auto">
         <div className="grid grid-cols-12 gap-0">
-          {/* Enhanced Left Sidebar */}
           <div className="col-span-3 hidden lg:block">
-            <div className="sticky top-18  border-l border-border/30">
-              {/* Navigation */}
+            {/* <div className="sticky top-18  border-l border-border/30">
               <div className="fashion-card p-6 animate-fade-in">
                 <nav className="space-y-3">
                   <Button variant="ghost" className="w-full justify-start gap-4 h-12 text-left hover-lift bg-primary/10 text-primary">
@@ -146,16 +104,13 @@ const Index = () => {
                 </nav>
               </div>
 
-              {/* Enhanced Quick Actions */}
               <div className="fashion-card p-6 animate-fade-in border-t border-border/50">
                 <h3 className="font-semibold mb-5 text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Quick Actions</h3>
                 <div className="space-y-3">
                   <Button variant="outline" className="w-full  justify-start gap-4 h-12  hover-glow border-primary/20 hover:border-primary/40 -z-10 relative overflow-hidden">
                     <Camera className="w-5 h-5" />
                     <span className="font-medium">Upload Design</span>
-                    {/* <div className="absolute -bottom-4  w-44 border-b border-b-gray-300 h-3 bg-[#ee4482] blur-xl">
-
-                    </div> */}
+                 
                   </Button>
                   <Button variant="outline" className="w-full justify-start gap-4 h-12 hover-glow border-secondary/20 hover:border-secondary/40">
                     <Video className="w-5 h-5" />
@@ -167,7 +122,7 @@ const Index = () => {
                   </Button>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Main Feed */}
@@ -208,23 +163,24 @@ const Index = () => {
                     placeholder="Share your latest design or inspiration..." 
                     className="mb-4 bg-muted/50 border-muted/80 backdrop-blur-sm focus:ring-2 focus:ring-primary/20 transition-all duration-300"
                   />
-                  <div className="flex   justify-center items-center">
-                    <div className="flex gap-2 -ml-2">
-                      <Button variant="ghost" size="sm" className="gap-2 hover-glow text-primary hover:text-primary">
-                        <ImageIcon className="w-4 h-4" />
-                        Photo
-                      </Button>
-                      <Button variant="ghost" size="sm" className="gap-2 hover-glow text-secondary hover:text-secondary">
-                        <Video className="w-4 h-4" />
-                        Video
-                      </Button>
-                      <Button variant="ghost" size="sm" className="gap-2 hover-glow text-accent hover:text-accent">
-                        <Camera className="w-4 h-4" />
-                        Collection
-                      </Button>
-                    </div>
-                    <Button variant="gradient" size="sm" className="shadow-colored hover:shadow-glow px-6">Share</Button>
-                  </div>
+                 <div className="grid grid-cols-2 gap-3 mt-2">
+  <Button variant="ghost" size="sm" className="gap-2 hover-glow text-primary justify-start">
+    <ImageIcon className="w-4 h-4" />
+    Photo
+  </Button>
+  <Button variant="ghost" size="sm" className="gap-2 hover-glow text-secondary justify-start">
+    <Video className="w-4 h-4" />
+    Video
+  </Button>
+  <Button variant="ghost" size="sm" className="gap-2 hover-glow text-accent justify-start">
+    <Camera className="w-4 h-4" />
+    Collection
+  </Button>
+  <Button variant="gradient" size="sm" className="shadow-colored hover:shadow-glow px-6 justify-center">
+    Share
+  </Button>
+</div>
+
                 </div>
               </div>
             </div>
