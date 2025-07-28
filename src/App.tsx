@@ -24,6 +24,7 @@ import ProductView from "./pages/admin/ProductView";
 import EditProduct from "./pages/admin/EditProduct";
 import OrderView from "./pages/admin/OrderView";
 import NotFound from "./pages/NotFound";
+import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/verify-otp" element={<VerifyOTP />} />
+            <Route path="/ResetPassword" element={<ResetPassword />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/upload-product" element={<ProductUpload />} />
             <Route path="/product/:id" element={<ProductDetails />} />

@@ -3,8 +3,7 @@ import { CheckCircle2, Circle } from "lucide-react";
 
 interface ProfileProgressProps {
   profileData: {
-    firstName?: string;
-    lastName?: string;
+    name?: string;
     email?: string;
     phone?: string;
     address?: string;
@@ -20,8 +19,7 @@ interface ProfileProgressProps {
 
 export function ProfileProgress({ profileData }: ProfileProgressProps) {
   const requiredFields = [
-    { key: 'firstName', label: 'First Name' },
-    { key: 'lastName', label: 'Last Name' },
+    { key: 'name', label: 'Name' },
     { key: 'email', label: 'Email' },
     { key: 'phone', label: 'Phone' },
     { key: 'address', label: 'Address' },
@@ -86,7 +84,7 @@ export function ProfileProgress({ profileData }: ProfileProgressProps) {
         </div>
 
         {/* Field Status Grid */}
-        <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-border">
+        {/* <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-border">
           <div>
             <h4 className="text-sm font-medium mb-2 text-foreground">Required</h4>
             <div className="space-y-1">
@@ -128,7 +126,7 @@ export function ProfileProgress({ profileData }: ProfileProgressProps) {
               })}
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Completion Message */}
         {progressPercentage === 100 ? (

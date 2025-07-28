@@ -31,8 +31,8 @@ import {
 } from "lucide-react";
 
 const personalInfoSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  name: z.string().min(1, "First name is required"),
+
   email: z.string().email("Invalid email address"),
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
   address: z.string().min(1, "Address is required"),
@@ -66,8 +66,7 @@ const Profile = () => {
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<PersonalInfoForm>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
+      name: user?.name || "",
       email: user?.email || "",
       phone: "",
       address: "",
@@ -161,20 +160,12 @@ const Profile = () => {
                     <Label htmlFor="firstName">First Name *</Label>
                     <Input 
                       id="firstName" 
-                      {...register("firstName")}
+                      {...register("name")}
                       className="fashion-input" 
                     />
-                    {errors.firstName && <p className="text-destructive text-sm">{errors.firstName.message}</p>}
+                    {errors.name && <p className="text-destructive text-sm">{errors.name.message}</p>}
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName">Last Name *</Label>
-                    <Input 
-                      id="lastName" 
-                      {...register("lastName")}
-                      className="fashion-input" 
-                    />
-                    {errors.lastName && <p className="text-destructive text-sm">{errors.lastName.message}</p>}
-                  </div>
+               
                   <div className="space-y-2">
                     <Label htmlFor="email">Email *</Label>
                     <Input 
