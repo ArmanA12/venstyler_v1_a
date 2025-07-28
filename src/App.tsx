@@ -55,7 +55,6 @@ const App = () => (
             <Route path="/admin/products/:productId/edit" element={<EditProduct />} />
             <Route path="/admin/orders/:orderId" element={<OrderView />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
