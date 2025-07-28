@@ -17,12 +17,15 @@ import {
   Image as ImageIcon,
   Bell,
   Globe,
-  TrendingUp
+  TrendingUp,
+  Share
 } from "lucide-react";
 import design1 from "@/assets/design-1.jpg";
 import design2 from "@/assets/design-2.jpg";
 import designerAvatar from "@/assets/designer-avatar-1.jpg";
-import { Header } from "@/components/Header";
+import { Header } from "@/components/navbar/Header";
+import { BottomNav } from "@/components/navbar/bottomNav";
+// import { Header } from "@/components/Header";
 
 const Index = () => {
   const sampleDesigns = [
@@ -154,7 +157,8 @@ const Index = () => {
             </div> */}
 
             {/* Enhanced Create Post */}
-            <div className="fashion-card p-6 animate-slide-up border-b border-border/30">
+            <div className="hidden md:block">
+              <div className="fashion-card p-6 animate-slide-up border-b border-border/30">
               <div className="flex gap-4">
                 <div className="">
                   <Avatar className="w-12 h-12 story-gradient rounded-full">
@@ -188,6 +192,8 @@ const Index = () => {
                 </div>
               </div>
             </div>
+            </div>
+            
 
             {/* Enhanced Design Feed */}
             <div >
@@ -224,27 +230,66 @@ const Index = () => {
                   
                   {/* Enhanced Post Actions */}
                   <div className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex gap-5">
-                        <Button variant="ghost" size="icon" className={`hover-glow ${design.isLiked ? "text-red-500" : ""}`}>
-                          <Heart className={`w-6 h-6 ${design.isLiked ? "fill-current animate-pulse" : ""}`} />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="hover-glow">
-                          <MessageCircle className="w-6 h-6" />
-                        </Button>
-                      </div>
-                      <Button variant="ghost" size="icon" className="hover-glow">
-                        <Bookmark className="w-6 h-6" />
-                      </Button>
-                    </div>
-                    
-                    <p className="font-semibold mb-2 text-lg">{design.likes.toLocaleString()} likes</p>
-                    <h3 className="font-semibold text-xl mb-2 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">{design.title}</h3>
-                    <p className="text-sm text-primary mb-3 font-medium">#{design.category}</p>
-                    <Button variant="ghost" size="sm" className="text-muted-foreground p-0 hover:p-1 h-auto hover:text-foreground transition-colors">
-                      View all {design.comments} comments
-                    </Button>
-                  </div>
+  <div className="flex items-center justify-between mb-4">
+    <div className="flex gap-5">
+      {/* Like */}
+      <Button variant="ghost" size="icon" className={`hover-glow ${design.isLiked ? "text-red-500" : ""}`}>
+        <Heart className={`w-6 h-6 ${design.isLiked ? "fill-current animate-pulse" : ""}`} />
+      </Button>
+
+      {/* Comment */}
+      <Button variant="ghost" size="icon" className="hover-glow">
+        <MessageCircle className="w-6 h-6" />
+      </Button>
+
+      {/* Share */}
+      <Button variant="ghost" size="icon" className="hover-glow">
+        <Share className="w-6 h-6" />
+      </Button>
+    </div>
+
+    {/* Bookmark */}
+    <Button variant="ghost" size="icon" className="hover-glow">
+      <Bookmark className="w-6 h-6" />
+    </Button>
+  </div>
+
+  {/* Likes */}
+  <p className="font-semibold mb-2 text-lg">{design.likes.toLocaleString()} likes</p>
+
+  {/* Title */}
+  <h3 className="font-semibold text-xl mb-2 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+    {design.title}
+  </h3>
+
+  {/* Category */}
+  <p className="text-sm text-primary mb-3 font-medium">#{design.category}</p>
+
+  {/* View Comments */}
+  <Button variant="ghost" size="sm" className="text-muted-foreground p-0 hover:p-1 h-auto hover:text-foreground transition-colors">
+    View all {design.comments} comments
+  </Button>
+
+  {/* View Details + Price Section */}
+  <div className="flex items-center justify-between mt-4">
+    {/* View Details */}
+    <Button variant="outline" size="sm" className="text-sm font-medium hover-glow">
+      View Details
+    </Button>
+
+    {/* Price Info */}
+    <div className="text-right">
+  <p className="text-muted-foreground text-sm line-through">
+    {/* ₹{design.originalPrice ?? 1299} */}₹ 1299
+  </p>
+  <p className="text-primary font-semibold text-lg">
+    {/* ₹{design.discountedPrice ?? 999} */} ₹ 999
+  </p>
+</div>
+
+  </div>
+</div>
+
                 </div>
               ))}
               
@@ -363,6 +408,9 @@ const Index = () => {
           </div>
         </div>
       </div>
+    </div>
+    <div>
+      <BottomNav/>
     </div>
      </div>
   );
