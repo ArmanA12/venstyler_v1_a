@@ -72,7 +72,7 @@ export const Header = () => {
       )}
 
       {/* Theme + Notification (Always Visible) */}
-      {isAuthenticated && (
+      {/* {isAuthenticated && (
         <div className="flex items-center space-x-0">
           <Button variant="ghost" size="icon" className="relative hover-glow">
             <Bell className="w-5 h-5" />
@@ -82,7 +82,20 @@ export const Header = () => {
             {actualTheme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </Button>
         </div>
-      )}
+      )} */}
+
+
+      {/* Theme + Notification (Always Visible) */}
+<div className="flex items-center space-x-0">
+  <Button variant="ghost" size="icon" className="relative hover-glow">
+    <Bell className="w-5 h-5" />
+    <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full animate-pulse"></div>
+  </Button>
+  <Button variant="ghost" size="icon" className="hover-glow" onClick={toggleTheme}>
+    {actualTheme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+  </Button>
+</div>
+
 
       {/* Profile Dropdown (Desktop Only) */}
       {isAuthenticated ? (
@@ -103,7 +116,7 @@ export const Header = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild><Link to="/profile"><User className="w-4 h-4 mr-2" /> Profile</Link></DropdownMenuItem>
               <DropdownMenuItem asChild><Link to="/settings"><Settings className="w-4 h-4 mr-2" /> Settings</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/admin"><Shield className="w-4 h-4 mr-2" /> Admin Dashboard</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/admin"><Shield className="w-4 h-4 mr-2" /> User Dashboard</Link></DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={signOut} className="text-destructive focus:text-destructive">
                 <LogOut className="w-4 h-4 mr-2" /> Log out
@@ -144,7 +157,7 @@ export const Header = () => {
         <Link to="/" className="flex items-center gap-2"><Home className="w-5 h-5" /> Home</Link>
         {/* <Link to="/profile" className="flex items-center gap-2"><User className="w-5 h-5" /> Profile</Link> */}
         <Link to="/settings" className="flex items-center gap-2"><Settings className="w-5 h-5" /> Settings</Link>
-        <Link to="/admin" className="flex items-center gap-2"><Shield className="w-5 h-5" /> Admin Dashboard</Link>
+        <Link to="/admin" className="flex items-center gap-2"><Shield className="w-5 h-5" /> User Dashboard</Link>
         <button onClick={() => { signOut(); setMobileMenuOpen(false); }} className="flex items-center gap-2 text-destructive">
           <LogOut className="w-5 h-5" /> Log out
         </button>

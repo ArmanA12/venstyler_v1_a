@@ -25,6 +25,7 @@ import design2 from "@/assets/design-2.jpg";
 import designerAvatar from "@/assets/designer-avatar-1.jpg";
 import { Header } from "@/components/navbar/Header";
 import { BottomNav } from "@/components/navbar/bottomNav";
+import { Link } from "react-router-dom";
 // import { Header } from "@/components/Header";
 
 const Index = () => {
@@ -272,12 +273,12 @@ const Index = () => {
 
   {/* View Details + Price Section */}
   <div className="flex items-center justify-between mt-4">
-    {/* View Details */}
-    <Button variant="outline" size="sm" className="text-sm font-medium hover-glow">
-      View Details
-    </Button>
+     <Link to={`/product/${design.id}`}>
+        <Button variant="outline" size="sm" className="text-sm font-medium hover-glow">
+          View Details
+        </Button>
+      </Link>
 
-    {/* Price Info */}
     <div className="text-right">
   <p className="text-muted-foreground text-sm line-through">
     {/* ₹{design.originalPrice ?? 1299} */}₹ 1299
