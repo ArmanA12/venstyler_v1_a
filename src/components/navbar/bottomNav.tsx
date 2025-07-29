@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-  Home, Search, PlusCircle, User, Compass, Settings, LogOut
+  Home, Search, PlusCircle, User, Compass, Settings, LogOut,
+  Shield
 } from "lucide-react";
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
@@ -64,6 +65,8 @@ export const BottomNav = () => {
             <DropdownMenuItem asChild>
               <Link to="/settings"><Settings className="w-4 h-4 mr-2" /> Settings</Link>
             </DropdownMenuItem>
+                          <DropdownMenuItem asChild><Link to="/admin"><Shield className="w-4 h-4 mr-2" /> User Dashboard</Link></DropdownMenuItem>
+
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={signOut} className="text-destructive focus:text-destructive">
               <LogOut className="w-4 h-4 mr-2" /> Logout

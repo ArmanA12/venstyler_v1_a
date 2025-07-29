@@ -424,7 +424,7 @@ const Profile = () => {
         onImageUpload={handleImageUpload}
       />
       
-      <div className="w-4/5 mx-auto px-4 py-6">
+      <div className="w-full lg:w-4/5 mx-auto px-4 py-6">
         <div className="mb-6">
           <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />

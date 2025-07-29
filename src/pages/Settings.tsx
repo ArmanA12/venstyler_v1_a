@@ -93,7 +93,13 @@ const Settings = () => {
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         <Tabs defaultValue="account" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className=" flex
+    space-x-2
+    overflow-x-auto
+    bg-muted
+    rounded-md
+    p-2
+    scrollbar-none">
             <TabsTrigger value="account" className="flex items-center gap-2">
               <User className="w-4 h-4" />
               Account

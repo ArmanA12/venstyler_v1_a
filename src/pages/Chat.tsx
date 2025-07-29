@@ -233,7 +233,7 @@ const Chat = () => {
       
       {/* Chat Header */}
       <div className="border-b bg-background/80 backdrop-blur-sm">
-        <div className="w-4/5 mx-auto px-4 py-4">
+        <div className="w-full lg:w-4/5 mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link to="/profile" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
@@ -275,7 +275,7 @@ const Chat = () => {
 
       {/* Messages Area */}
       <div className="flex-1 overflow-hidden">
-        <div className="w-4/5 mx-auto px-4 h-full">
+        <div className="w-full lg:w-4/5 mx-auto px-4 h-full">
           <div className="h-full overflow-y-auto py-4 space-y-4">
             {messages.map((msg) => (
               <div
@@ -361,7 +361,7 @@ const Chat = () => {
 
       {/* Message Input */}
       <div className="border-t bg-background/80 backdrop-blur-sm">
-        <div className="w-4/5 mx-auto px-4 py-4">
+        <div className="w-full lg:w-4/5 mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={handleImageUploadClick}>
               <Paperclip className="w-4 h-4" />
