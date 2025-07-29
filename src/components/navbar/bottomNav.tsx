@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export const BottomNav = () => {
-  const { isAuthenticated, user, signOut } = useAuth();
-  const navigate = useNavigate();
+  // const { isAuthenticated, user, signOut } = useAuth();
+  // const navigate = useNavigate();
 
-  if (!isAuthenticated) return null;
+  // if (!isAuthenticated) return null;
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-background border-t border-border/50 backdrop-blur-lg">
