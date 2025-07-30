@@ -5,18 +5,19 @@ import { ArrowLeft, Shield } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
+
 const VerifyOTP = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
-  
-  const { verifyOTP } = useAuth();
+
+  const { verifyOTP, resendOtp } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const otpCode = otp.join("");
-    
+
     if (otpCode.length !== 6) {
       toast({
         title: "Error",
@@ -25,16 +26,16 @@ const VerifyOTP = () => {
       });
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
-      await verifyOTP(otpCode);
+      await verifyOTP(otpCode); // ← using the context function now
       toast({
         title: "Email verified!",
         description: "Your email has been successfully verified.",
       });
-      navigate("/signin");
+      navigate("/ResetPassword");
     } catch (error) {
       toast({
         title: "Error",
@@ -46,12 +47,34 @@ const VerifyOTP = () => {
     }
   };
 
+
+  const handleResendCode = async () => {
+    try {
+      setIsLoading(true);
+      await resendOtp();
+      toast({
+        title: "Code Resent!",
+        description: "A new verification code has been sent to your email.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to resend code. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
+
   const handleOtpChange = (index: number, value: string) => {
     if (value.length <= 1) {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
-      
+
       // Auto-focus next input
       if (value && index < 5) {
         const nextInput = document.getElementById(`otp-${index + 1}`);
@@ -75,11 +98,11 @@ const VerifyOTP = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Sign In
           </Link>
-          
+
           <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center mx-auto">
             <Shield className="w-8 h-8 text-primary" />
           </div>
-          
+
           <h1 className="text-3xl font-playfair font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Verify Your Email
           </h1>
@@ -117,9 +140,15 @@ const VerifyOTP = () => {
           <p className="text-sm text-muted-foreground">
             Didn't receive the code?
           </p>
-          <button className="text-sm text-primary hover:underline font-medium">
-            Resend Code
+          <button
+            type="button"
+            onClick={handleResendCode}
+            disabled={isLoading}
+            className="text-sm text-primary hover:underline font-medium"
+          >
+            {isLoading ? "Resending..." : "Resend Code"}
           </button>
+
         </div>
       </div>
     </div>

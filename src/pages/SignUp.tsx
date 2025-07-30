@@ -11,20 +11,18 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
-  
+
   const { signUp } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Real-time password matching validation
   useEffect(() => {
     if (formData.password && formData.confirmPassword) {
       setPasswordMatchError(formData.password !== formData.confirmPassword);
@@ -35,7 +33,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Error",
@@ -44,11 +42,11 @@ const SignUp = () => {
       });
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
-      await signUp(formData.email, formData.password, formData.firstName, formData.lastName);
+      await signUp(formData.email, formData.password, formData.name);
       toast({
         title: "Welcome to FashionConnect!",
         description: "Your account has been created successfully.",
@@ -82,11 +80,11 @@ const SignUp = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="firstName">Name</Label>
+              <Label htmlFor="name">Name</Label>
               <Input
-                id="firstName"
-                value={formData.firstName}
-                onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="John"
                 className="fashion-input"
                 required
@@ -100,7 +98,7 @@ const SignUp = () => {
               id="email"
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               placeholder="john@example.com"
               className="fashion-input"
               required
@@ -114,9 +112,9 @@ const SignUp = () => {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 placeholder="Create a password"
-                className={`fashion-input pr-10 ${passwordMatchError ? 'border-red-500' : ''}`}
+                className={`fashion-input pr-10 ${passwordMatchError ? "border-red-500" : ""}`}
                 required
               />
               <button
@@ -136,9 +134,9 @@ const SignUp = () => {
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
                 value={formData.confirmPassword}
-                onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 placeholder="Confirm your password"
-                className={`fashion-input pr-10 ${passwordMatchError ? 'border-red-500' : ''}`}
+                className={`fashion-input pr-10 ${passwordMatchError ? "border-red-500" : ""}`}
                 required
               />
               <button
@@ -168,9 +166,9 @@ const SignUp = () => {
             </label>
           </div>
 
-          <Button 
-            type="submit" 
-            className="w-full fashion-button" 
+          <Button
+            type="submit"
+            className="w-full fashion-button"
             disabled={isLoading || passwordMatchError}
           >
             {isLoading ? "Creating Account..." : "Create Account"}

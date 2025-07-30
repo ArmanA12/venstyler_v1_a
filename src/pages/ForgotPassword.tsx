@@ -7,6 +7,8 @@ import { ArrowLeft, Mail } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
+
+
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -15,27 +17,30 @@ const ForgotPassword = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    try {
-      await forgotPassword(email);
-      toast({
-        title: "Reset link sent!",
-        description: "Check your email for password reset instructions.",
-      });
-      navigate("/verify-otp");
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to send reset email. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setIsLoading(true);
+
+  try {
+    await forgotPassword(email); 
+    toast({
+      title: "Reset link sent!",
+      description: "Check your email for password reset instructions.",
+    });
+    navigate("/verify-otp");
+  } catch (error) {
+    toast({
+      title: "Error",
+      description: "Failed to send reset email. Please try again.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20 flex items-center justify-center p-4">
       <div className="fashion-card w-full max-w-md p-8 space-y-6 animate-fade-in">

@@ -411,7 +411,7 @@ const Index = () => {
         </div>
       </div>
     </div>
-    <div>
+    <div className="relative z-10">
       <BottomNav/>
     </div>
      </div>

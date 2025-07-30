@@ -13,6 +13,7 @@ export const BottomNav = () => {
   const { isAuthenticated, user, signOut } = useAuth();
   const navigate = useNavigate();
 
+
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-background border-t border-border/50 backdrop-blur-lg">
       <div className="flex justify-between px-6 py-2">
@@ -52,6 +53,7 @@ export const BottomNav = () => {
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="fashion-card border-0 w-48 mb-2 mr-2">
+
             {isAuthenticated ? (
               <>
                 <div className="px-3 py-1">
@@ -83,6 +85,24 @@ export const BottomNav = () => {
                 </DropdownMenuItem>
               </>
             )}
+            <div className="px-3 py-1">
+              <p className="text-sm font-medium">{user?.name} </p>
+              <p className="text-xs text-muted-foreground">{user?.email}</p>
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link to="/profile"><User className="w-4 h-4 mr-2" /> Profile</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/settings"><Settings className="w-4 h-4 mr-2" /> Settings</Link>
+            </DropdownMenuItem>
+                          <DropdownMenuItem asChild><Link to="/admin"><Shield className="w-4 h-4 mr-2" /> User Dashboard</Link></DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={signOut} className="text-destructive focus:text-destructive">
+              <LogOut className="w-4 h-4 mr-2" /> Logout
+            </DropdownMenuItem>
+
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

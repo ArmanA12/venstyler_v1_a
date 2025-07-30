@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import { CloudCog } from 'lucide-react';
 
 interface User {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  avatar?: string;
+  name: string;
 }
 
 interface AuthContextType {
@@ -13,10 +13,12 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
+  signUp: (email: string, password: string, name: string) => Promise<void>;
   signOut: () => void;
   forgotPassword: (email: string) => Promise<void>;
   verifyOTP: (otp: string) => Promise<void>;
+  resetPassword: (password: string) => Promise<void>;
+  resendOtp: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -45,60 +47,73 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      // Simulate API call - replace with real authentication
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const mockUser: User = {
-        id: '1',
+      const res = await axios.post("https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/login", {
         email,
-        firstName: 'John',
-        lastName: 'Doe',
-      };
-      
-      setUser(mockUser);
-      localStorage.setItem('fashionconnect_user', JSON.stringify(mockUser));
+        password,
+      }, { withCredentials: true });
+      console.log(res, "while signin")
+      const user = res.data?.data;
+      setUser(user);
+      localStorage.setItem('fashionconnect_user', JSON.stringify(user));
     } catch (error) {
-      throw new Error('Invalid credentials');
+      throw new Error(error.response?.data?.message || 'Invalid credentials');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const signUp = async (email: string, password: string, firstName: string, lastName: string) => {
-    setIsLoading(true);
-    try {
-      // Simulate API call - replace with real authentication
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const mockUser: User = {
-        id: Date.now().toString(),
-        email,
-        firstName,
-        lastName,
+
+const signUp = async (email: string, password: string, name: string) => {
+  setIsLoading(true);
+  try {
+    const response = await axios.post(
+      "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/register",
+      { email, password, name },
+      { withCredentials: true }
+    );
+
+    const registeredUser = response.data?.user;
+
+    if (registeredUser) {
+      const user: User = {
+        id: registeredUser._id || registeredUser.id,
+        email: registeredUser.email,
+        name: registeredUser.name,
       };
-      
-      setUser(mockUser);
-      localStorage.setItem('fashionconnect_user', JSON.stringify(mockUser));
-    } catch (error) {
-      throw new Error('Registration failed');
-    } finally {
-      setIsLoading(false);
+      setUser(user);
+      localStorage.setItem("fashionconnect_user", JSON.stringify(user));
     }
-  };
+  } catch (error) {
+    throw new Error("Registration failed");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+
+
 
   const signOut = () => {
     setUser(null);
     localStorage.removeItem('fashionconnect_user');
   };
 
+
+
+
   const forgotPassword = async (email: string) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // In real implementation, this would send a reset email
-    } catch (error) {
-      throw new Error('Failed to send reset email');
+      await axios.post(
+        "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/forgotPassowrd",
+        { email },
+        { withCredentials: true }
+      );
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Failed to send reset email"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -107,15 +122,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const verifyOTP = async (otp: string) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // In real implementation, this would verify the OTP
-    } catch (error) {
-      throw new Error('Invalid OTP');
+      await axios.post(
+        "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/verifyOtp",
+        { otp },
+        { withCredentials: true }
+      );
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Invalid OTP"
+      );
     } finally {
       setIsLoading(false);
     }
   };
+
+  const resetPassword = async (password: string) => {
+    setIsLoading(true);
+    try {
+      await axios.post(
+        "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/resetPassword",
+        { password },
+        { withCredentials: true }
+      );
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Failed to reset password"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const resendOtp = async () => {
+    setIsLoading(true);
+    try {
+      await axios.post(
+        "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/resendOtp",
+        {},
+        { withCredentials: true }
+      );
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Failed to resend code");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
 
   const value: AuthContextType = {
     user,
@@ -126,6 +179,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signOut,
     forgotPassword,
     verifyOTP,
+    resetPassword,
+    resendOtp,
   };
 
   return (

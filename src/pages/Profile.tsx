@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Header } from "@/components/Header";
 import { ProfileImageUpload } from "@/components/ProfileImageUpload";
+import { ProfileProgress } from "@/components/ProfileProgress";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -30,8 +31,8 @@ import {
 } from "lucide-react";
 
 const personalInfoSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  name: z.string().min(1, "First name is required"),
+
   email: z.string().email("Invalid email address"),
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
   address: z.string().min(1, "Address is required"),
@@ -62,11 +63,10 @@ const Profile = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm<PersonalInfoForm>({
+  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<PersonalInfoForm>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
+      name: user?.name || "",
       email: user?.email || "",
       phone: "",
       address: "",
@@ -80,6 +80,8 @@ const Profile = () => {
       googleMapLink: "",
     }
   });
+
+  const watchedValues = watch();
 
   const sidebarItems = [
     { id: "personal", label: "Personal Info", icon: User },
@@ -106,6 +108,13 @@ const Profile = () => {
       case "personal":
         return (
           <div className="space-y-6">
+            <ProfileProgress 
+              profileData={{
+                ...watchedValues,
+                profileImage: profileImage
+              }}
+            />
+            
             <div className="fashion-card p-6">
               <h3 className="text-xl font-playfair font-semibold mb-4">Profile Picture</h3>
               <div className="flex items-center gap-6">
@@ -151,20 +160,12 @@ const Profile = () => {
                     <Label htmlFor="firstName">First Name *</Label>
                     <Input 
                       id="firstName" 
-                      {...register("firstName")}
+                      {...register("name")}
                       className="fashion-input" 
                     />
-                    {errors.firstName && <p className="text-destructive text-sm">{errors.firstName.message}</p>}
+                    {errors.name && <p className="text-destructive text-sm">{errors.name.message}</p>}
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName">Last Name *</Label>
-                    <Input 
-                      id="lastName" 
-                      {...register("lastName")}
-                      className="fashion-input" 
-                    />
-                    {errors.lastName && <p className="text-destructive text-sm">{errors.lastName.message}</p>}
-                  </div>
+               
                   <div className="space-y-2">
                     <Label htmlFor="email">Email *</Label>
                     <Input 

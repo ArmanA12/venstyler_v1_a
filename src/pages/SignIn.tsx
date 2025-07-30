@@ -7,6 +7,7 @@ import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
+
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -22,6 +23,7 @@ const SignIn = () => {
     setIsLoading(true);
     
     try {
+      
       await signIn(email, password);
       toast({
         title: "Welcome back!",
