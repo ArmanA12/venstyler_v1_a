@@ -18,7 +18,8 @@ import {
   Bell,
   Globe,
   TrendingUp,
-  Share
+  Share,
+  Share2
 } from "lucide-react";
 import design1 from "@/assets/design-1.jpg";
 import design2 from "@/assets/design-2.jpg";
@@ -245,7 +246,7 @@ const Index = () => {
 
       {/* Share */}
       <Button variant="ghost" size="icon" className="hover-glow">
-        <Share className="w-6 h-6" />
+        <Share2 className="w-6 h-6" />
       </Button>
     </div>
 
