@@ -19,6 +19,9 @@ const productUploadSchema = z.object({
   price: z.string().min(1, "Price is required"),
   discount: z.string().min(0, "Discount must be 0 or greater"),
   completionTime: z.string().min(1, "Completion time is required"),
+  materialOne: z.string().optional(),       // ✅ new
+  materialTwo: z.string().optional(),       // ✅ new
+
 });
 
 type ProductUploadForm = z.infer<typeof productUploadSchema>;
@@ -236,7 +239,28 @@ const ProductUpload = () => {
                   {errors.completionTime && <p className="text-destructive text-sm">{errors.completionTime.message}</p>}
                 </div>
               </div>
+              <div className="space-y-2 mt-3">
+                 <Label htmlFor="materialOne">Material One</Label>
+  <Input 
+    id="materialOne"
+    {...register("materialOne")}
+    className="fashion-input"
+    placeholder="Enter first material details"
+  />
+</div>
+
+<div className="space-y-2 mt-3">
+  <Label htmlFor="materialTwo">Material Two</Label>
+  <Input 
+    id="materialTwo"
+    {...register("materialTwo")}
+    className="fashion-input"
+    placeholder="Enter second material details"
+  />
+</div>
             </div>
+
+            
 
             <div className="fashion-card p-6">
               <h3 className="text-xl font-playfair font-semibold mb-6">Product Images *</h3>
