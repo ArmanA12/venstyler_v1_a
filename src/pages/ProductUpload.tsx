@@ -127,19 +127,61 @@ const ProductUpload = () => {
       });
       return;
     }
-
+  
     setIsSubmitting(true);
-
-    // Simulate form submission
-    setTimeout(() => {
+  
+    try {
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("category", data.category);
+      formData.append("price", data.price);
+      formData.append("discount", data.discount);
+      formData.append("completionTime", data.completionTime);
+  
+      // New fields
+      if (data.materialOne) formData.append("materialOne", data.materialOne);
+      if (data.materialTwo) formData.append("materialTwo", data.materialTwo);
+  
+      // Images
+      selectedImages.forEach((image, index) => {
+        formData.append("images", image);
+      });
+  
+      // Optional video
+      if (selectedVideo) {
+        formData.append("video", selectedVideo);
+      }
+  
+      const response = await fetch("http://localhost:5000/api/design/uploadDesign", {
+        method: "POST",
+        body: formData,
+        credentials: "include", 
+      });
+  
+      const result = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to upload product");
+      }
+  
       toast({
         title: "Success",
         description: "Product uploaded successfully!",
       });
+  
       navigate("/");
+    } catch (error: any) {
+      toast({
+        title: "Upload failed",
+        description: error.message || "Something went wrong",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20">

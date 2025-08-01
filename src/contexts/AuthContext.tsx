@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      const res = await axios.post("https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/login", {
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
         email,
         password,
       }, { withCredentials: true });
@@ -67,7 +67,7 @@ const signUp = async (email: string, password: string, name: string) => {
   setIsLoading(true);
   try {
     const response = await axios.post(
-      "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/register",
+      "http://localhost:5000/api/auth/register",
       { email, password, name },
       { withCredentials: true }
     );
@@ -106,7 +106,7 @@ const signUp = async (email: string, password: string, name: string) => {
     setIsLoading(true);
     try {
       await axios.post(
-        "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/forgotPassowrd",
+        "http://localhost:5000/api/auth/forgotPassowrd",
         { email },
         { withCredentials: true }
       );
@@ -123,7 +123,7 @@ const signUp = async (email: string, password: string, name: string) => {
     setIsLoading(true);
     try {
       await axios.post(
-        "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/verifyOtp",
+        "http://localhost:5000/api/auth/verifyOtp",
         { otp },
         { withCredentials: true }
       );
@@ -140,7 +140,7 @@ const signUp = async (email: string, password: string, name: string) => {
     setIsLoading(true);
     try {
       await axios.post(
-        "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/resetPassword",
+        "http://localhost:5000/api/auth/resetPassword",
         { password },
         { withCredentials: true }
       );
@@ -157,7 +157,7 @@ const signUp = async (email: string, password: string, name: string) => {
     setIsLoading(true);
     try {
       await axios.post(
-        "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/resendOtp",
+        "http://localhost:5000/api/auth/resendOtp",
         {},
         { withCredentials: true }
       );
