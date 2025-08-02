@@ -66,7 +66,14 @@ const App = () => (
                   </ProtectedRoute>
                 }
               />
-              <Route path="/upload-product" element={<ProductUpload />} />
+              <Route
+                path="/upload-product"
+                element={
+                  <ProtectedRoute>
+                    <ProductUpload />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/product/:id/reviews" element={<ProductReviews />} />
               <Route
