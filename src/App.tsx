@@ -26,6 +26,7 @@ import OrderView from "./pages/admin/OrderView";
 import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/routes/ProtectedRoutes";
+import ExplorePage from "./pages/explore/Explore";
 
 const queryClient = new QueryClient();
 
@@ -100,6 +101,7 @@ const App = () => (
                   </ProtectedRoute>
                 }
               />
+              <Route path="/explore" element={<ExplorePage />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route
                 path="/admin/users/:userId"
