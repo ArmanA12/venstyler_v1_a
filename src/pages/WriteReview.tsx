@@ -81,42 +81,40 @@ const WriteReview = () => {
 
   const onSubmit = async (data: ReviewForm) => {
     if (!id) return;
-  
+
     setIsSubmitting(true);
-  
+
     try {
-      
       const formData = new FormData();
-formData.append("rating", selectedRating.toString());      // Example: "4"
-formData.append("comment", data.description);              // Backend expects `comment`, not `description`
-formData.append("designId", id);                           // Should be a string or number
+      formData.append("rating", selectedRating.toString()); // Example: "4"
+      formData.append("comment", data.description); // Backend expects `comment`, not `description`
+      formData.append("designId", id); // Should be a string or number
 
-selectedImages.forEach((image) => {
-  formData.append("images", image);                        // Make sure `image` is a File or Blob
-});
+      selectedImages.forEach((image) => {
+        formData.append("images", image); // Make sure `image` is a File or Blob
+      });
 
-const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRating`, {
-  method: "POST",
-  body: formData,
-  credentials: "include", // needed if your backend uses cookies (e.g., sessions)
-});
+      const response = await fetch(
+        `http://localhost:5000/api/design/submitReviewAndRating`,
+        {
+          method: "POST",
+          body: formData,
+          credentials: "include", // needed if your backend uses cookies (e.g., sessions)
+        }
+      );
 
       const result = await response.json();
-  
+
       if (!response.ok) {
         throw new Error(result?.message || "Failed to submit review.");
       }
-  
+
       toast({
         title: "Review submitted!",
-<<<<<<< HEAD
-        description: "Thank you for your feedback.",
-=======
         description:
           "Thank you for your feedback. Your review will be published shortly.",
->>>>>>> akbar
       });
-  
+
       navigate(`/product/${id}/reviews`);
     } catch (error: any) {
       toast({
@@ -128,7 +126,6 @@ const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRa
       setIsSubmitting(false);
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20">
