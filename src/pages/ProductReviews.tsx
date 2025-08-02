@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from "lucide-react";
+import { BottomNav } from "@/components/navbar/bottomNav";
 
 const ProductReviews = () => {
   const { id } = useParams();
@@ -306,6 +307,9 @@ const ProductReviews = () => {
           </div>
         </div>
       </div>
+      <div>
+            <BottomNav/>
+          </div>
 
       {/* Modal for review images */}
       {modalOpen && (

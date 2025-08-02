@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
-import { CloudCog } from 'lucide-react';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
+import { CloudCog } from "lucide-react";
 
 interface User {
   id: string;
@@ -26,18 +26,20 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Check for existing session in localStorage
-    const savedUser = localStorage.getItem('fashionconnect_user');
+    const savedUser = localStorage.getItem("fashionconnect_user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
@@ -47,60 +49,56 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      const res = await axios.post("https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/login", {
-        email,
-        password,
-      }, { withCredentials: true });
-      console.log(res, "while signin")
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
+      console.log(res, "while signin");
       const user = res.data?.data;
       setUser(user);
-      localStorage.setItem('fashionconnect_user', JSON.stringify(user));
+      localStorage.setItem("fashionconnect_user", JSON.stringify(user));
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Invalid credentials');
+      throw new Error(error.response?.data?.message || "Invalid credentials");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const signUp = async (email: string, password: string, name: string) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        { email, password, name },
+        { withCredentials: true }
+      );
 
-const signUp = async (email: string, password: string, name: string) => {
-  setIsLoading(true);
-  try {
-    const response = await axios.post(
-      "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/register",
-      { email, password, name },
-      { withCredentials: true }
-    );
+      const registeredUser = response.data?.user;
 
-    const registeredUser = response.data?.user;
-
-    if (registeredUser) {
-      const user: User = {
-        id: registeredUser._id || registeredUser.id,
-        email: registeredUser.email,
-        name: registeredUser.name,
-      };
-      setUser(user);
-      localStorage.setItem("fashionconnect_user", JSON.stringify(user));
+      if (registeredUser) {
+        const user: User = {
+          id: registeredUser._id || registeredUser.id,
+          email: registeredUser.email,
+          name: registeredUser.name,
+        };
+        setUser(user);
+        localStorage.setItem("fashionconnect_user", JSON.stringify(user));
+      }
+    } catch (error) {
+      throw new Error("Registration failed");
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    throw new Error("Registration failed");
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-
-
-
+  };
 
   const signOut = () => {
     setUser(null);
-    localStorage.removeItem('fashionconnect_user');
+    localStorage.removeItem("fashionconnect_user");
   };
-
-
-
 
   const forgotPassword = async (email: string) => {
     setIsLoading(true);
@@ -128,9 +126,7 @@ const signUp = async (email: string, password: string, name: string) => {
         { withCredentials: true }
       );
     } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message || "Invalid OTP"
-      );
+      throw new Error(error.response?.data?.message || "Invalid OTP");
     } finally {
       setIsLoading(false);
     }
@@ -168,8 +164,6 @@ const signUp = async (email: string, password: string, name: string) => {
     }
   };
 
-
-
   const value: AuthContextType = {
     user,
     isAuthenticated: !!user,
@@ -183,9 +177,5 @@ const signUp = async (email: string, password: string, name: string) => {
     resendOtp,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
