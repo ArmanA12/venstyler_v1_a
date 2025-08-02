@@ -91,6 +91,15 @@ formData.append("rating", selectedRating.toString());      // Example: "4"
 formData.append("comment", data.description);              // Backend expects `comment`, not `description`
 formData.append("designId", id);                           // Should be a string or number
 
+
+    // Simulate form submission
+    setTimeout(() => {
+      // toast({
+      //   title: "Review submitted!",
+      //   description:
+      //     "Thank you for your feedback. Your review will be published shortly.",
+      // });
+
 selectedImages.forEach((image) => {
   formData.append("images", image);                        // Make sure `image` is a File or Blob
 });
@@ -109,14 +118,15 @@ const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRa
   
       toast({
         title: "Review submitted!",
-<<<<<<< HEAD
+
         description: "Thank you for your feedback.",
-=======
+
         description:
           "Thank you for your feedback. Your review will be published shortly.",
->>>>>>> akbar
+
       });
   
+
       navigate(`/product/${id}/reviews`);
     } catch (error: any) {
       toast({
