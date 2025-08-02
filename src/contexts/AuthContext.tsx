@@ -100,8 +100,6 @@ const signUp = async (email: string, password: string, name: string) => {
   };
 
 
-
-
   const forgotPassword = async (email: string) => {
     setIsLoading(true);
     try {
