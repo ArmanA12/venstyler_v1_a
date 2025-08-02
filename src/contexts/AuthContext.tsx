@@ -104,7 +104,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       await axios.post(
-        "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/forgotPassowrd",
+        "http://localhost:5000/api/auth/forgotPassowrd",
         { email },
         { withCredentials: true }
       );
@@ -121,7 +121,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       await axios.post(
-        "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/verifyOtp",
+        "http://localhost:5000/api/auth/verifyOtp",
         { otp },
         { withCredentials: true }
       );
@@ -136,7 +136,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       await axios.post(
-        "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/resetPassword",
+        "http://localhost:5000/api/auth/resetPassword",
         { password },
         { withCredentials: true }
       );
@@ -153,7 +153,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       await axios.post(
-        "https://friendly-adventure-574gxvvjq66fvxjp-5000.app.github.dev/api/auth/resendOtp",
+        "http://localhost:5000/api/auth/resendOtp",
         {},
         { withCredentials: true }
       );

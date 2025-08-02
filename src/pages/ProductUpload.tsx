@@ -26,6 +26,8 @@ const productUploadSchema = z.object({
   price: z.string().min(1, "Price is required"),
   discount: z.string().min(0, "Discount must be 0 or greater"),
   completionTime: z.string().min(1, "Completion time is required"),
+  materialOne: z.string().optional(), // ✅ new
+  materialTwo: z.string().optional(), // ✅ new
 });
 
 type ProductUploadForm = z.infer<typeof productUploadSchema>;
@@ -140,15 +142,59 @@ const ProductUpload = () => {
 
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("category", data.category);
+      formData.append("price", data.price);
+      formData.append("discount", data.discount);
+      formData.append("completionTime", data.completionTime);
+
+      // New fields
+      if (data.materialOne) formData.append("materialOne", data.materialOne);
+      if (data.materialTwo) formData.append("materialTwo", data.materialTwo);
+
+      // Images
+      selectedImages.forEach((image, index) => {
+        formData.append("images", image);
+      });
+
+      // Optional video
+      if (selectedVideo) {
+        formData.append("video", selectedVideo);
+      }
+
+      const response = await fetch(
+        "http://localhost:5000/api/design/uploadDesign",
+        {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to upload product");
+      }
+
       toast({
         title: "Success",
         description: "Product uploaded successfully!",
       });
+
       navigate("/");
+    } catch (error: any) {
+      toast({
+        title: "Upload failed",
+        description: error.message || "Something went wrong",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
 
   return (
