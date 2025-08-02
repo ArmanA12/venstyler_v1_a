@@ -44,7 +44,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
 
       setActualTheme(newActualTheme);
-
       // Apply theme to document
       const root = document.documentElement;
       root.classList.remove('light', 'dark');
