@@ -42,8 +42,22 @@ const App = () => (
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/verify-otp" element={<VerifyOTP />} />
-              <Route path="/ResetPassword" element={<ResetPassword />} />
+              <Route
+                path="/verify-otp"
+                element={
+                  <ProtectedRoute>
+                    <VerifyOTP />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ResetPassword"
+                element={
+                  <ProtectedRoute>
+                    <ResetPassword />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/profile"
                 element={
