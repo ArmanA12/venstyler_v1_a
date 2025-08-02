@@ -100,7 +100,7 @@ const WriteReview = () => {
         {
           method: "POST",
           body: formData,
-          credentials: "include", // for cookies/session handling
+          credentials: "include",
         }
       );
 
