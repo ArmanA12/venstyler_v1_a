@@ -101,8 +101,22 @@ const App = () => (
                 }
               />
               <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/users/:userId" element={<UserProfile />} />
-              <Route path="/admin/users/:userId/edit" element={<EditUser />} />
+              <Route
+                path="/admin/users/:userId"
+                element={
+                  <ProtectedRoute>
+                    <UserProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/users/:userId/edit"
+                element={
+                  <ProtectedRoute>
+                    <EditUser />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/admin/products/:productId"
                 element={
@@ -114,7 +128,11 @@ const App = () => (
 
               <Route
                 path="/admin/products/:productId/edit"
-                element={<EditProduct />}
+                element={
+                  <ProtectedRoute>
+                    <EditProduct />
+                  </ProtectedRoute>
+                }
               />
               <Route path="/admin/orders/:orderId" element={<OrderView />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
