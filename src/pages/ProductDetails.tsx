@@ -4,24 +4,26 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  ArrowLeft, 
-  Star, 
-  Heart, 
-  Bookmark, 
-  Share, 
+import {
+  ArrowLeft,
+  Star,
+  Heart,
+  Bookmark,
+  Share,
   MessageCircle,
   ShoppingCart,
   Eye,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Share2,
 } from "lucide-react";
+import { BottomNav } from "@/components/navbar/bottomNav";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -30,7 +32,8 @@ const ProductDetails = () => {
   const product = {
     id: id,
     title: "Elegant Summer Dress",
-    description: "Beautiful handcrafted summer dress made with premium cotton fabric. Perfect for casual outings and special occasions. Features intricate embroidery and comfortable fit.",
+    description:
+      "Beautiful handcrafted summer dress made with premium cotton fabric. Perfect for casual outings and special occasions. Features intricate embroidery and comfortable fit.",
     price: 149.99,
     originalPrice: 199.99,
     discount: 25,
@@ -42,27 +45,27 @@ const ProductDetails = () => {
       "https://picsum.photos/seed/1/600/600",
       "https://picsum.photos/seed/2/600/600",
       "https://picsum.photos/seed/3/600/600",
-      "https://picsum.photos/seed/4/600/600"
+      "https://picsum.photos/seed/4/600/600",
     ],
     category: "Women's Fashion",
     designer: {
       name: "Sarah Johnson",
       avatar: "https://picsum.photos/seed/avatar1/40/40",
       verified: true,
-      email: "sarah.johnson@email.com"
+      email: "sarah.johnson@email.com",
     },
     completionTime: "5-7 business days",
-    inStock: true
+    inStock: true,
   };
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => 
+    setCurrentImageIndex((prev) =>
       prev === product.images.length - 1 ? 0 : prev + 1
     );
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => 
+    setCurrentImageIndex((prev) =>
       prev === 0 ? product.images.length - 1 : prev - 1
     );
   };
@@ -71,7 +74,9 @@ const ProductDetails = () => {
     setIsLiked(!isLiked);
     toast({
       title: isLiked ? "Removed from likes" : "Added to likes",
-      description: isLiked ? "Product removed from your likes" : "Product added to your likes",
+      description: isLiked
+        ? "Product removed from your likes"
+        : "Product added to your likes",
     });
   };
 
@@ -79,7 +84,9 @@ const ProductDetails = () => {
     setIsSaved(!isSaved);
     toast({
       title: isSaved ? "Removed from saved" : "Saved",
-      description: isSaved ? "Product removed from saved items" : "Product saved for later",
+      description: isSaved
+        ? "Product removed from saved items"
+        : "Product saved for later",
     });
   };
 
@@ -98,10 +105,13 @@ const ProductDetails = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20">
       <Header />
-      
+
       <div className="w-full lg:w-4/5 mx-auto px-4 py-6">
         <div className="mb-6">
-          <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4">
+          <Link
+            to="/"
+            className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4"
+          >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Feed
           </Link>
@@ -119,7 +129,7 @@ const ProductDetails = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              
+
               {/* Navigation Buttons */}
               <button
                 onClick={prevImage}
@@ -165,11 +175,13 @@ const ProductDetails = () => {
           {/* Right Side - Product Info */}
           <div className="space-y-6">
             <div>
-              <Badge variant="secondary" className="mb-2">{product.category}</Badge>
+              <Badge variant="secondary" className="mb-2">
+                {product.category}
+              </Badge>
               <h1 className="text-3xl font-playfair font-bold text-primary mb-2">
                 {product.title}
               </h1>
-              
+
               {/* Designer Info */}
               <div className="flex items-center gap-3 mb-4">
                 <img
@@ -178,11 +190,18 @@ const ProductDetails = () => {
                   className="w-8 h-8 rounded-full"
                 />
                 <span className="text-sm text-muted-foreground">
-                  by <span className="text-primary font-medium">{product.designer.name}</span>
+                  by{" "}
+                  <span className="text-primary font-medium">
+                    {product.designer.name}
+                  </span>
                   {product.designer.verified && (
-                    <Badge variant="secondary" className="ml-2 text-xs">Verified</Badge>
+                    <Badge variant="secondary" className="ml-2 text-xs">
+                      Verified
+                    </Badge>
                   )}
-                  <span className="ml-2 text-xs text-muted-foreground">{product.designer.email}</span>
+                  <span className="ml-2 text-xs text-muted-foreground">
+                    {product.designer.email}
+                  </span>
                 </span>
               </div>
             </div>
@@ -190,8 +209,12 @@ const ProductDetails = () => {
             {/* Price */}
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <span className="text-3xl font-bold text-primary">${product.price}</span>
-                <span className="text-lg text-muted-foreground line-through">${product.originalPrice}</span>
+                <span className="text-3xl font-bold text-primary">
+                  ${product.price}
+                </span>
+                <span className="text-lg text-muted-foreground line-through">
+                  ${product.originalPrice}
+                </span>
                 <Badge variant="destructive">{product.discount}% OFF</Badge>
               </div>
             </div>
@@ -199,7 +222,9 @@ const ProductDetails = () => {
             {/* Description */}
             <div>
               <h3 className="font-semibold mb-2">Description</h3>
-              <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+              <p className="text-muted-foreground leading-relaxed">
+                {product.description}
+              </p>
             </div>
 
             {/* Stats */}
@@ -231,14 +256,15 @@ const ProductDetails = () => {
               <div className="flex items-center gap-2">
                 <Eye className="w-5 h-5 text-primary" />
                 <span className="text-sm">
-                  <span className="font-medium">Completion Time:</span> {product.completionTime}
+                  <span className="font-medium">Completion Time:</span>{" "}
+                  {product.completionTime}
                 </span>
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="space-y-3">
-              <Button 
+              <Button
                 onClick={handleOrder}
                 disabled={!product.inStock}
                 className="w-full fashion-button text-lg py-6"
@@ -246,29 +272,37 @@ const ProductDetails = () => {
                 <ShoppingCart className="w-5 h-5 mr-2" />
                 {product.inStock ? "Order Now" : "Out of Stock"}
               </Button>
-              
+
               <div className="grid grid-cols-3 gap-2">
                 <Button
                   variant="outline"
                   onClick={handleLike}
-                  className={isLiked ? "bg-primary/20 border-primary text-primary" : ""}
+                  className={
+                    isLiked ? "bg-primary/20 border-primary text-primary" : ""
+                  }
                 >
-                  <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
+                  <Heart
+                    className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`}
+                  />
                 </Button>
                 <Button
                   variant="outline"
                   onClick={handleSave}
-                  className={isSaved ? "bg-primary/20 border-primary text-primary" : ""}
+                  className={
+                    isSaved ? "bg-primary/20 border-primary text-primary" : ""
+                  }
                 >
-                  <Bookmark className={`w-4 h-4 ${isSaved ? "fill-current" : ""}`} />
+                  <Bookmark
+                    className={`w-4 h-4 ${isSaved ? "fill-current" : ""}`}
+                  />
                 </Button>
                 <Button variant="outline">
-                  <Share className="w-4 h-4" />
+                  <Share2 className="w-4 h-4" />
                 </Button>
               </div>
-              
-              <Button 
-                variant="outline" 
+
+              <Button
+                variant="outline"
                 onClick={handleMessage}
                 className="w-full"
               >
@@ -281,14 +315,21 @@ const ProductDetails = () => {
             <div className="pt-6 border-t">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Reviews & Ratings</h3>
-                <Button variant="outline" size="sm" onClick={() => navigate(`/product/${id}/reviews`)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate(`/product/${id}/reviews`)}
+                >
                   View All
                 </Button>
               </div>
-              
+
               <div className="space-y-4">
                 {[1, 2].map((review) => (
-                  <div key={review} className="flex gap-3 p-4 bg-muted/30 rounded-lg">
+                  <div
+                    key={review}
+                    className="flex gap-3 p-4 bg-muted/30 rounded-lg"
+                  >
                     <img
                       src={`https://picsum.photos/seed/review${review}/40/40`}
                       alt="User"
@@ -299,7 +340,10 @@ const ProductDetails = () => {
                         <span className="font-medium text-sm">Sarah M.</span>
                         <div className="flex">
                           {[1, 2, 3, 4, 5].map((star) => (
-                            <Star key={star} className="w-3 h-3 fill-primary text-primary" />
+                            <Star
+                              key={star}
+                              className="w-3 h-3 fill-primary text-primary"
+                            />
                           ))}
                         </div>
                       </div>
@@ -313,6 +357,9 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div>
+        <BottomNav />
       </div>
     </div>
   );

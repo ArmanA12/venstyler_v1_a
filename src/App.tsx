@@ -25,6 +25,7 @@ import EditProduct from "./pages/admin/EditProduct";
 import OrderView from "./pages/admin/OrderView";
 import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
+import ProtectedRoute from "./components/routes/ProtectedRoutes";
 
 const queryClient = new QueryClient();
 
@@ -33,37 +34,115 @@ const App = () => (
     <ThemeProvider>
       <AuthProvider>
         <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/verify-otp" element={<VerifyOTP />} />
-            <Route path="/ResetPassword" element={<ResetPassword />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/upload-product" element={<ProductUpload />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
-            <Route path="/product/:id/reviews" element={<ProductReviews />} />
-            <Route path="/product/:id/write-review" element={<WriteReview />} />
-            <Route path="/chat/:userId" element={<Chat />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/users/:userId" element={<UserProfile />} />
-            <Route path="/admin/users/:userId/edit" element={<EditUser />} />
-            <Route path="/admin/products/:productId" element={<ProductView />} />
-            <Route path="/admin/products/:productId/edit" element={<EditProduct />} />
-            <Route path="/admin/orders/:orderId" element={<OrderView />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </ThemeProvider>
-</QueryClientProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route
+                path="/verify-otp"
+                element={
+                  <ProtectedRoute>
+                    <VerifyOTP />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ResetPassword"
+                element={
+                  <ProtectedRoute>
+                    <ResetPassword />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/upload-product"
+                element={
+                  <ProtectedRoute>
+                    <ProductUpload />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/product/:id/reviews" element={<ProductReviews />} />
+              <Route
+                path="/product/:id/write-review"
+                element={
+                  <ProtectedRoute>
+                    <WriteReview />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/chat/:userId"
+                element={
+                  <ProtectedRoute>
+                    <Chat />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <ProtectedRoute>
+                    <Settings />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route
+                path="/admin/users/:userId"
+                element={
+                  <ProtectedRoute>
+                    <UserProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/users/:userId/edit"
+                element={
+                  <ProtectedRoute>
+                    <EditUser />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/products/:productId"
+                element={
+                  <ProtectedRoute>
+                    <ProductUpload />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/admin/products/:productId/edit"
+                element={
+                  <ProtectedRoute>
+                    <EditProduct />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/admin/orders/:orderId" element={<OrderView />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </ThemeProvider>
+  </QueryClientProvider>
 );
 
 export default App;

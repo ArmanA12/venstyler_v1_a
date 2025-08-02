@@ -7,28 +7,39 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Header } from "@/components/Header";
 import { ProfileImageUpload } from "@/components/ProfileImageUpload";
 import { ProfileProgress } from "@/components/ProfileProgress";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  ArrowLeft, 
-  Camera, 
-  Edit, 
-  Package, 
-  MessageCircle, 
-  Star, 
-  Bookmark, 
-  Heart, 
-  LogOut, 
+import {
+  ArrowLeft,
+  Camera,
+  Edit,
+  Package,
+  MessageCircle,
+  Star,
+  Bookmark,
+  Heart,
+  LogOut,
   Trash2,
   Settings,
   User,
-  ShoppingBag
+  ShoppingBag,
+  Menu,
+  X,
+  Upload,
+  LucideUpload,
 } from "lucide-react";
+import { BottomNav } from "@/components/navbar/bottomNav";
 
 const personalInfoSchema = z.object({
   name: z.string().min(1, "First name is required"),
@@ -50,20 +61,27 @@ type PersonalInfoForm = z.infer<typeof personalInfoSchema>;
 
 const professions = [
   "Fashion Designer",
-  "Textile Designer", 
+  "Textile Designer",
   "Costume Designer",
-  "Fashion Merchandiser"
+  "Fashion Merchandiser",
 ];
 
 const Profile = () => {
-  const [activeTab, setActiveTab] = useState("personal");
+  const [activeTab, setActiveTab] = useState("sales");
   const [isImageUploadOpen, setIsImageUploadOpen] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [showMobleHeader, setShowMobileSidebar] = useState(false);
 
-  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<PersonalInfoForm>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm<PersonalInfoForm>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
       name: user?.name || "",
@@ -78,7 +96,7 @@ const Profile = () => {
       numberOfEmployees: "",
       bio: "",
       googleMapLink: "",
-    }
+    },
   });
 
   const watchedValues = watch();
@@ -108,25 +126,31 @@ const Profile = () => {
       case "personal":
         return (
           <div className="space-y-6">
-            <ProfileProgress 
+            <ProfileProgress
               profileData={{
                 ...watchedValues,
-                profileImage: profileImage
+                profileImage: profileImage,
               }}
             />
-            
+
             <div className="fashion-card p-6">
-              <h3 className="text-xl font-playfair font-semibold mb-4">Profile Picture</h3>
+              <h3 className="text-xl font-playfair font-semibold mb-4">
+                Profile Picture
+              </h3>
               <div className="flex items-center gap-6">
                 <div className="relative">
                   <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center overflow-hidden">
                     {profileImage ? (
-                      <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                      <img
+                        src={profileImage}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
                       <User className="w-10 h-10 text-primary" />
                     )}
                   </div>
-                  <button 
+                  <button
                     onClick={() => setIsImageUploadOpen(true)}
                     className="absolute -bottom-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground hover:bg-primary/90 transition-colors"
                   >
@@ -134,15 +158,15 @@ const Profile = () => {
                   </button>
                 </div>
                 <div>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="mr-3"
                     onClick={() => setIsImageUploadOpen(true)}
                   >
                     Upload Photo
                   </Button>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     className="text-destructive"
                     onClick={() => setProfileImage(null)}
                   >
@@ -154,87 +178,123 @@ const Profile = () => {
 
             <form onSubmit={handleSubmit(onSubmitPersonalInfo)}>
               <div className="fashion-card p-6">
-                <h3 className="text-xl font-playfair font-semibold mb-4">Personal Information</h3>
+                <h3 className="text-xl font-playfair font-semibold mb-4">
+                  Personal Information
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">First Name *</Label>
-                    <Input 
-                      id="firstName" 
+                    <Input
+                      id="firstName"
                       {...register("name")}
-                      className="fashion-input" 
+                      className="fashion-input"
                     />
-                    {errors.name && <p className="text-destructive text-sm">{errors.name.message}</p>}
+                    {errors.name && (
+                      <p className="text-destructive text-sm">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
-               
+
                   <div className="space-y-2">
                     <Label htmlFor="email">Email *</Label>
-                    <Input 
-                      id="email" 
-                      type="email" 
+                    <Input
+                      id="email"
+                      type="email"
                       {...register("email")}
-                      className="fashion-input" 
+                      className="fashion-input"
                     />
-                    {errors.email && <p className="text-destructive text-sm">{errors.email.message}</p>}
+                    {errors.email && (
+                      <p className="text-destructive text-sm">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Mobile Number *</Label>
-                    <Input 
-                      id="phone" 
+                    <Input
+                      id="phone"
                       {...register("phone")}
-                      className="fashion-input" 
+                      className="fashion-input"
                       placeholder="+1 (555) 123-4567"
                     />
-                    {errors.phone && <p className="text-destructive text-sm">{errors.phone.message}</p>}
+                    {errors.phone && (
+                      <p className="text-destructive text-sm">
+                        {errors.phone.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="address">Address *</Label>
-                    <Input 
-                      id="address" 
+                    <Input
+                      id="address"
                       {...register("address")}
-                      className="fashion-input" 
+                      className="fashion-input"
                       placeholder="Street address"
                     />
-                    {errors.address && <p className="text-destructive text-sm">{errors.address.message}</p>}
+                    {errors.address && (
+                      <p className="text-destructive text-sm">
+                        {errors.address.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="city">City *</Label>
-                    <Input 
-                      id="city" 
+                    <Input
+                      id="city"
                       {...register("city")}
-                      className="fashion-input" 
+                      className="fashion-input"
                     />
-                    {errors.city && <p className="text-destructive text-sm">{errors.city.message}</p>}
+                    {errors.city && (
+                      <p className="text-destructive text-sm">
+                        {errors.city.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="state">State *</Label>
-                    <Input 
-                      id="state" 
+                    <Input
+                      id="state"
                       {...register("state")}
-                      className="fashion-input" 
+                      className="fashion-input"
                     />
-                    {errors.state && <p className="text-destructive text-sm">{errors.state.message}</p>}
+                    {errors.state && (
+                      <p className="text-destructive text-sm">
+                        {errors.state.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="pincode">Pincode *</Label>
-                    <Input 
-                      id="pincode" 
+                    <Input
+                      id="pincode"
                       {...register("pincode")}
-                      className="fashion-input" 
+                      className="fashion-input"
                     />
-                    {errors.pincode && <p className="text-destructive text-sm">{errors.pincode.message}</p>}
+                    {errors.pincode && (
+                      <p className="text-destructive text-sm">
+                        {errors.pincode.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="country">Country *</Label>
-                    <Input 
-                      id="country" 
+                    <Input
+                      id="country"
                       {...register("country")}
-                      className="fashion-input" 
+                      className="fashion-input"
                     />
-                    {errors.country && <p className="text-destructive text-sm">{errors.country.message}</p>}
+                    {errors.country && (
+                      <p className="text-destructive text-sm">
+                        {errors.country.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label>Profession *</Label>
-                    <Select onValueChange={(value) => setValue("profession", value)}>
+                    <Select
+                      onValueChange={(value) => setValue("profession", value)}
+                    >
                       <SelectTrigger className="fashion-input">
                         <SelectValue placeholder="Select profession" />
                       </SelectTrigger>
@@ -246,22 +306,28 @@ const Profile = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                    {errors.profession && <p className="text-destructive text-sm">{errors.profession.message}</p>}
+                    {errors.profession && (
+                      <p className="text-destructive text-sm">
+                        {errors.profession.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="numberOfEmployees">Number of Employees</Label>
-                    <Input 
-                      id="numberOfEmployees" 
+                    <Label htmlFor="numberOfEmployees">
+                      Number of Employees
+                    </Label>
+                    <Input
+                      id="numberOfEmployees"
                       type="number"
                       {...register("numberOfEmployees")}
-                      className="fashion-input" 
+                      className="fashion-input"
                       placeholder="Optional"
                     />
                   </div>
                   <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="bio">Bio (Optional)</Label>
-                    <Textarea 
-                      id="bio" 
+                    <Textarea
+                      id="bio"
                       rows={4}
                       {...register("bio")}
                       className="fashion-input resize-none"
@@ -269,18 +335,26 @@ const Profile = () => {
                     />
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="googleMapLink">Google Map Link (Optional)</Label>
-                    <Input 
-                      id="googleMapLink" 
+                    <Label htmlFor="googleMapLink">
+                      Google Map Link (Optional)
+                    </Label>
+                    <Input
+                      id="googleMapLink"
                       type="url"
                       {...register("googleMapLink")}
-                      className="fashion-input" 
+                      className="fashion-input"
                       placeholder="https://maps.google.com/..."
                     />
-                    {errors.googleMapLink && <p className="text-destructive text-sm">{errors.googleMapLink.message}</p>}
+                    {errors.googleMapLink && (
+                      <p className="text-destructive text-sm">
+                        {errors.googleMapLink.message}
+                      </p>
+                    )}
                   </div>
                 </div>
-                <Button type="submit" className="mt-4 fashion-button">Save Changes</Button>
+                <Button type="submit" className="mt-4 fashion-button">
+                  Save Changes
+                </Button>
               </div>
             </form>
           </div>
@@ -290,7 +364,9 @@ const Profile = () => {
         return (
           <div className="space-y-6">
             <div className="fashion-card p-6">
-              <h3 className="text-xl font-playfair font-semibold mb-4">Sales Overview</h3>
+              <h3 className="text-xl font-playfair font-semibold mb-4">
+                Sales Overview
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="text-center p-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg">
                   <p className="text-2xl font-bold text-primary">24</p>
@@ -308,20 +384,29 @@ const Profile = () => {
             </div>
 
             <div className="fashion-card p-6">
-              <h3 className="text-xl font-playfair font-semibold mb-4">Recent Orders</h3>
+              <h3 className="text-xl font-playfair font-semibold mb-4">
+                Recent Orders
+              </h3>
               <div className="space-y-4">
                 {[1, 2, 3].map((order) => (
-                  <div key={order} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                  <div
+                    key={order}
+                    className="flex items-center justify-between p-4 bg-muted/30 rounded-lg"
+                  >
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg flex items-center justify-center">
                         <ShoppingBag className="w-6 h-6 text-primary" />
                       </div>
                       <div>
                         <p className="font-medium">Order #FC00{order}</p>
-                        <p className="text-sm text-muted-foreground">2 items • $85.00</p>
+                        <p className="text-sm text-muted-foreground">
+                          2 items • $85.00
+                        </p>
                       </div>
                     </div>
-                    <span className="px-3 py-1 bg-primary/20 text-primary rounded-full text-sm">Completed</span>
+                    <span className="px-3 py-1 bg-primary/20 text-primary rounded-full text-sm">
+                      Completed
+                    </span>
                   </div>
                 ))}
               </div>
@@ -332,25 +417,51 @@ const Profile = () => {
       case "chats":
         return (
           <div className="fashion-card p-6">
-            <h3 className="text-xl font-playfair font-semibold mb-4">Recent Conversations</h3>
+            <h3 className="text-xl font-playfair font-semibold mb-4">
+              Recent Conversations
+            </h3>
             <div className="space-y-4">
               {[
-                { name: "Sarah Johnson", type: "Vendor", message: "Thanks for the quick delivery!", time: "2h ago" },
-                { name: "Mike Chen", type: "Customer", message: "Can you customize this design?", time: "1d ago" },
-                { name: "Emma Wilson", type: "Vendor", message: "New collection is ready", time: "3d ago" }
+                {
+                  name: "Sarah Johnson",
+                  type: "Vendor",
+                  message: "Thanks for the quick delivery!",
+                  time: "2h ago",
+                },
+                {
+                  name: "Mike Chen",
+                  type: "Customer",
+                  message: "Can you customize this design?",
+                  time: "1d ago",
+                },
+                {
+                  name: "Emma Wilson",
+                  type: "Vendor",
+                  message: "New collection is ready",
+                  time: "3d ago",
+                },
               ].map((chat, index) => (
-                <div key={index} className="flex items-center gap-4 p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
+                <div
+                  key={index}
+                  className="flex items-center gap-4 p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
+                >
                   <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center">
                     <User className="w-6 h-6 text-primary" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <p className="font-medium">{chat.name}</p>
-                      <span className="px-2 py-0.5 bg-accent/20 text-accent text-xs rounded-full">{chat.type}</span>
+                      <span className="px-2 py-0.5 bg-accent/20 text-accent text-xs rounded-full">
+                        {chat.type}
+                      </span>
                     </div>
-                    <p className="text-sm text-muted-foreground">{chat.message}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {chat.message}
+                    </p>
                   </div>
-                  <span className="text-xs text-muted-foreground">{chat.time}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {chat.time}
+                  </span>
                 </div>
               ))}
             </div>
@@ -360,7 +471,9 @@ const Profile = () => {
       case "ratings":
         return (
           <div className="fashion-card p-6">
-            <h3 className="text-xl font-playfair font-semibold mb-4">Product Ratings</h3>
+            <h3 className="text-xl font-playfair font-semibold mb-4">
+              Product Ratings
+            </h3>
             <div className="space-y-4">
               {[1, 2, 3].map((rating) => (
                 <div key={rating} className="p-4 bg-muted/30 rounded-lg">
@@ -370,12 +483,21 @@ const Profile = () => {
                       <h4 className="font-medium">Elegant Summer Dress</h4>
                       <div className="flex items-center gap-1 my-2">
                         {[1, 2, 3, 4, 5].map((star) => (
-                          <Star key={star} className="w-4 h-4 fill-primary text-primary" />
+                          <Star
+                            key={star}
+                            className="w-4 h-4 fill-primary text-primary"
+                          />
                         ))}
-                        <span className="text-sm text-muted-foreground ml-2">(4.8)</span>
+                        <span className="text-sm text-muted-foreground ml-2">
+                          (4.8)
+                        </span>
                       </div>
-                      <p className="text-sm text-muted-foreground">"Amazing quality and perfect fit!"</p>
-                      <p className="text-xs text-muted-foreground mt-2">- Sarah M. • 2 days ago</p>
+                      <p className="text-sm text-muted-foreground">
+                        "Amazing quality and perfect fit!"
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        - Sarah M. • 2 days ago
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -393,7 +515,10 @@ const Profile = () => {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[1, 2, 3, 4, 5, 6].map((item) => (
-                <div key={item} className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 aspect-square">
+                <div
+                  key={item}
+                  className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 aspect-square"
+                >
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="absolute bottom-4 left-4 text-white">
                       <p className="font-medium">Design {item}</p>
@@ -401,7 +526,11 @@ const Profile = () => {
                     </div>
                   </div>
                   <button className="absolute top-3 right-3 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                    {activeTab === "saved" ? <Bookmark className="w-4 h-4" /> : <Heart className="w-4 h-4" />}
+                    {activeTab === "saved" ? (
+                      <Bookmark className="w-4 h-4" />
+                    ) : (
+                      <Heart className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
               ))}
@@ -416,79 +545,129 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20">
-      <Header />
-      
-      <ProfileImageUpload 
+      <div className="hidden lg:block">
+        <Header />
+      </div>
+
+      <ProfileImageUpload
         isOpen={isImageUploadOpen}
         onClose={() => setIsImageUploadOpen(false)}
         onImageUpload={handleImageUpload}
       />
-      
+
       <div className="w-full lg:w-4/5 mx-auto px-4 py-6">
-        <div className="mb-6">
-          <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Feed
-          </Link>
-          <h1 className="text-3xl font-playfair font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Profile Settings
-          </h1>
+        <div className="mb-6 flex items-center justify-between">
+          <span className="text-sm font-medium text-muted-foreground">
+            {user?.name || "User"}
+          </span>
+
+          {/* Mobile Header Right Side */}
+          <div className="flex items-center gap-3 lg:hidden">
+            <button
+              onClick={() => console.log("Upload clicked")}
+              className="p-2  hover:bg-muted"
+            >
+              <LucideUpload className="w-5 h-5" />
+            </button>
+
+            {/* Hamburger Icon */}
+            <button className="p-2 " onClick={() => setShowMobileSidebar(true)}>
+              <Menu className="w-5 h-5" />
+            </button>
+          </div>
         </div>
+        <Link
+          to="/"
+          className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Feed
+        </Link>
+
+        <h1 className="text-3xl font-playfair font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-4">
+          Profile Settings
+        </h1>
 
         <div className="grid grid-cols-12 gap-6">
-          {/* Sidebar */}
-          <div className="col-span-12 lg:col-span-3">
-            <div className="fashion-card p-6 space-y-2">
-              {sidebarItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
-                    activeTab === item.id
-                      ? "bg-primary/20 text-primary"
-                      : "text-muted-foreground hover:text-primary hover:bg-muted/50"
-                  }`}
-                >
-                  <item.icon className="w-5 h-5" />
-                  {item.label}
-                </button>
-              ))}
-              
-              <Separator className="my-4" />
-              
-              <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors">
-                <Settings className="w-5 h-5" />
-                Settings
-              </button>
-              
-              <button 
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
-                onClick={() => {
-                  signOut();
-                  navigate("/");
-                  toast({
-                    title: "Signed out",
-                    description: "You have been successfully signed out.",
-                  });
-                }}
-              >
-                <LogOut className="w-5 h-5" />
-                Log Out
-              </button>
-              
-              <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-destructive hover:bg-destructive/10 transition-colors">
-                <Trash2 className="w-5 h-5" />
-                Delete Account
-              </button>
-            </div>
+          {/* Desktop Sidebar */}
+          <div className="hidden lg:block col-span-12 lg:col-span-3">
+            <Sidebar
+              items={sidebarItems}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              // onSignOut={handleSignOut}
+            />
           </div>
 
+          {/* Mobile Sidebar Modal */}
+          {showMobleHeader && (
+            <div className="fixed inset-0 z-50 bg-white shadow-md p-6 overflow-y-auto lg:hidden">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold">Menu</h2>
+                <button onClick={() => setShowMobileSidebar(false)}>
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <Sidebar
+                items={sidebarItems}
+                activeTab={activeTab}
+                setActiveTab={(tab) => {
+                  setActiveTab(tab);
+                  setShowMobileSidebar(false);
+                }}
+                // onSignOut={handleSignOut}
+              />
+            </div>
+          )}
+
           {/* Main Content */}
-          <div className="col-span-12 lg:col-span-9">
-            {renderContent()}
+          <div className="col-span-12 lg:col-span-9">{renderContent()}</div>
+          <div>
+            <BottomNav />
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const Sidebar = ({ items, activeTab, setActiveTab, onSignOut }) => {
+  return (
+    <div className="fashion-card p-6 space-y-2">
+      {items.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => setActiveTab(item.id)}
+          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
+            activeTab === item.id
+              ? "bg-primary/20 text-primary"
+              : "text-muted-foreground hover:text-primary hover:bg-muted/50"
+          }`}
+        >
+          <item.icon className="w-5 h-5" />
+          {item.label}
+        </button>
+      ))}
+
+      <Separator className="my-4" />
+
+      <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors">
+        <Settings className="w-5 h-5" />
+        Settings
+      </button>
+
+      <button
+        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
+        onClick={onSignOut}
+      >
+        <LogOut className="w-5 h-5" />
+        Log Out
+      </button>
+
+      <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-destructive hover:bg-destructive/10 transition-colors">
+        <Trash2 className="w-5 h-5" />
+        Delete Account
+      </button>
     </div>
   );
 };

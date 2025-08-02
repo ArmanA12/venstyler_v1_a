@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Header } from "@/components/Header";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Star, Upload, X, Image as ImageIcon } from "lucide-react";
+import { BottomNav } from "@/components/navbar/bottomNav";
 
 const reviewSchema = z.object({
   rating: z.number().min(1, "Please select a rating"),
@@ -22,20 +23,25 @@ const WriteReview = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
+
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm<ReviewForm>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<ReviewForm>({
     resolver: zodResolver(reviewSchema),
   });
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
-    
+
     if (files.length + selectedImages.length > 5) {
       toast({
         title: "Too many images",
@@ -45,7 +51,7 @@ const WriteReview = () => {
       return;
     }
 
-    const validFiles = files.filter(file => {
+    const validFiles = files.filter((file) => {
       if (file.size > 5 * 1024 * 1024) {
         toast({
           title: "File too large",
@@ -54,18 +60,18 @@ const WriteReview = () => {
         });
         return false;
       }
-      return file.type.startsWith('image/');
+      return file.type.startsWith("image/");
     });
 
-    setSelectedImages(prev => [...prev, ...validFiles]);
-    
-    const newPreviewUrls = validFiles.map(file => URL.createObjectURL(file));
-    setImagePreviewUrls(prev => [...prev, ...newPreviewUrls]);
+    setSelectedImages((prev) => [...prev, ...validFiles]);
+
+    const newPreviewUrls = validFiles.map((file) => URL.createObjectURL(file));
+    setImagePreviewUrls((prev) => [...prev, ...newPreviewUrls]);
   };
 
   const removeImage = (index: number) => {
-    setSelectedImages(prev => prev.filter((_, i) => i !== index));
-    setImagePreviewUrls(prev => prev.filter((_, i) => i !== index));
+    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+    setImagePreviewUrls((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleRatingClick = (rating: number) => {
@@ -103,7 +109,12 @@ const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRa
   
       toast({
         title: "Review submitted!",
+<<<<<<< HEAD
         description: "Thank you for your feedback.",
+=======
+        description:
+          "Thank you for your feedback. Your review will be published shortly.",
+>>>>>>> akbar
       });
   
       navigate(`/product/${id}/reviews`);
@@ -122,10 +133,13 @@ const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRa
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20">
       <Header />
-      
-      <div className="w-4/5 mx-auto px-4 py-6">
+
+      <div className="w-full lg:w-4/5 mx-auto px-4 py-6">
         <div className="mb-6">
-          <Link to={`/product/${id}/reviews`} className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4">
+          <Link
+            to={`/product/${id}/reviews`}
+            className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4"
+          >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Reviews
           </Link>
@@ -145,7 +159,9 @@ const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRa
               />
               <div>
                 <h3 className="font-semibold text-lg">Elegant Summer Dress</h3>
-                <p className="text-sm text-muted-foreground">by Sarah Johnson</p>
+                <p className="text-sm text-muted-foreground">
+                  by Sarah Johnson
+                </p>
               </div>
             </div>
           </div>
@@ -153,8 +169,10 @@ const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRa
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Rating */}
             <div className="fashion-card p-6">
-              <h3 className="text-xl font-playfair font-semibold mb-4">Rate this product</h3>
-              
+              <h3 className="text-xl font-playfair font-semibold mb-4">
+                Rate this product
+              </h3>
+
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -166,12 +184,12 @@ const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRa
                       onMouseLeave={() => setHoverRating(0)}
                       className="p-1 transition-colors"
                     >
-                      <Star 
+                      <Star
                         className={`w-8 h-8 transition-colors ${
                           star <= (hoverRating || selectedRating)
                             ? "fill-primary text-primary"
                             : "text-muted-foreground hover:text-primary/50"
-                        }`} 
+                        }`}
                       />
                     </button>
                   ))}
@@ -187,31 +205,43 @@ const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRa
                     )}
                   </span>
                 </div>
-                {errors.rating && <p className="text-destructive text-sm">{errors.rating.message}</p>}
+                {errors.rating && (
+                  <p className="text-destructive text-sm">
+                    {errors.rating.message}
+                  </p>
+                )}
               </div>
             </div>
 
             {/* Review Description */}
             <div className="fashion-card p-6">
-              <h3 className="text-xl font-playfair font-semibold mb-4">Share your experience</h3>
-              
+              <h3 className="text-xl font-playfair font-semibold mb-4">
+                Share your experience
+              </h3>
+
               <div className="space-y-2">
                 <Label htmlFor="description">Write your review *</Label>
-                <Textarea 
+                <Textarea
                   id="description"
                   {...register("description")}
                   rows={5}
                   className="fashion-input resize-none"
                   placeholder="Tell others about your experience with this product..."
                 />
-                {errors.description && <p className="text-destructive text-sm">{errors.description.message}</p>}
+                {errors.description && (
+                  <p className="text-destructive text-sm">
+                    {errors.description.message}
+                  </p>
+                )}
               </div>
             </div>
 
             {/* Upload Images */}
             <div className="fashion-card p-6">
-              <h3 className="text-xl font-playfair font-semibold mb-4">Add photos (optional)</h3>
-              
+              <h3 className="text-xl font-playfair font-semibold mb-4">
+                Add photos (optional)
+              </h3>
+
               <div className="space-y-4">
                 <div className="border-2 border-dashed border-primary/30 rounded-lg p-6 text-center">
                   <ImageIcon className="w-8 h-8 text-primary mx-auto mb-3" />
@@ -258,18 +288,18 @@ const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRa
 
             {/* Submit Buttons */}
             <div className="flex gap-4">
-              <Button 
-                type="button" 
-                variant="outline" 
+              <Button
+                type="button"
+                variant="outline"
                 className="flex-1"
                 onClick={() => navigate(`/product/${id}/reviews`)}
               >
                 Cancel
               </Button>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={isSubmitting}
-                className="flex-1 fashion-button"
+                className="flex-1 fashion-button mb-10"
               >
                 {isSubmitting ? (
                   <div className="flex items-center gap-2">
@@ -283,6 +313,9 @@ const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRa
             </div>
           </form>
         </div>
+      </div>
+      <div>
+        <BottomNav />
       </div>
     </div>
   );
