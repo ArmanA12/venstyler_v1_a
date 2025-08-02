@@ -11,6 +11,7 @@ import { Header } from "@/components/Header";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Star, Upload, X, Image as ImageIcon } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
+import axios from "axios";
 
 const reviewSchema = z.object({
   rating: z.number().min(1, "Please select a rating"),
@@ -86,12 +87,12 @@ const WriteReview = () => {
 
     try {
       const formData = new FormData();
-      formData.append("rating", selectedRating.toString()); // Example: "4"
-      formData.append("comment", data.description); // Backend expects `comment`, not `description`
-      formData.append("designId", id); // Should be a string or number
+      formData.append("rating", selectedRating.toString());
+      formData.append("comment", data.description); // Assuming backend expects "comment"
+      formData.append("designId", id); // Make sure id is string
 
       selectedImages.forEach((image) => {
-        formData.append("images", image); // Make sure `image` is a File or Blob
+        formData.append("images", image); // `image` must be File or Blob
       });
 
       const response = await fetch(
@@ -99,7 +100,7 @@ const WriteReview = () => {
         {
           method: "POST",
           body: formData,
-          credentials: "include", // needed if your backend uses cookies (e.g., sessions)
+          credentials: "include", // for cookies/session handling
         }
       );
 
