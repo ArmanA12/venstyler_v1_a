@@ -84,11 +84,11 @@ const WriteReview = () => {
 
     // Simulate form submission
     setTimeout(() => {
-      toast({
-        title: "Review submitted!",
-        description:
-          "Thank you for your feedback. Your review will be published shortly.",
-      });
+      // toast({
+      //   title: "Review submitted!",
+      //   description:
+      //     "Thank you for your feedback. Your review will be published shortly.",
+      // });
       navigate(`/product/${id}/reviews`);
       setIsSubmitting(false);
     }, 2000);
