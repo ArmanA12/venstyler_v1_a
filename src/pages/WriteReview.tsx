@@ -11,7 +11,7 @@ import { Header } from "@/components/Header";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Star, Upload, X, Image as ImageIcon } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
-import axios from "axios";
+// import axios from "axios";
 
 const reviewSchema = z.object({
   rating: z.number().min(1, "Please select a rating"),
@@ -100,7 +100,7 @@ const WriteReview = () => {
         {
           method: "POST",
           body: formData,
-          credentials: "include",
+          credentials: "include", // for cookies/session handling
         }
       );
 
