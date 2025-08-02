@@ -138,7 +138,7 @@ export const ExploreMobile: FC<ExploreProps> = ({ items }) => {
               key={user.id}
               className="bg-white rounded-xl overflow-hidden shadow-md transform transition-transform hover:scale-105"
             >
-              <div className="relative w-full h-40 overflow-hidden">
+              <div className="relative w-full aspect-square overflow-hidden">
                 <img
                   src={avatarSrc}
                   onError={(e) => {
