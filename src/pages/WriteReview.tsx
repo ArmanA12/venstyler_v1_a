@@ -11,6 +11,7 @@ import { Header } from "@/components/Header";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Star, Upload, X, Image as ImageIcon } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
+import axios from "axios";
 
 const reviewSchema = z.object({
   rating: z.number().min(1, "Please select a rating"),
@@ -81,51 +82,39 @@ const WriteReview = () => {
 
   const onSubmit = async (data: ReviewForm) => {
     if (!id) return;
-  
+
     setIsSubmitting(true);
-  
+
     try {
-      
       const formData = new FormData();
-formData.append("rating", selectedRating.toString());      // Example: "4"
-formData.append("comment", data.description);              // Backend expects `comment`, not `description`
-formData.append("designId", id);                           // Should be a string or number
+      formData.append("rating", selectedRating.toString());
+      formData.append("comment", data.description); // Assuming backend expects "comment"
+      formData.append("designId", id); // Make sure id is string
 
+      selectedImages.forEach((image) => {
+        formData.append("images", image); // `image` must be File or Blob
+      });
 
-    // Simulate form submission
-    setTimeout(() => {
-      // toast({
-      //   title: "Review submitted!",
-      //   description:
-      //     "Thank you for your feedback. Your review will be published shortly.",
-      // });
-
-selectedImages.forEach((image) => {
-  formData.append("images", image);                        // Make sure `image` is a File or Blob
-});
-
-const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRating`, {
-  method: "POST",
-  body: formData,
-  credentials: "include", // needed if your backend uses cookies (e.g., sessions)
-});
+      const response = await fetch(
+        `http://localhost:5000/api/design/submitReviewAndRating`,
+        {
+          method: "POST",
+          body: formData,
+          credentials: "include", // for cookies/session handling
+        }
+      );
 
       const result = await response.json();
-  
+
       if (!response.ok) {
         throw new Error(result?.message || "Failed to submit review.");
       }
-  
+
       toast({
         title: "Review submitted!",
-
-        description: "Thank you for your feedback.",
-
         description:
           "Thank you for your feedback. Your review will be published shortly.",
-
       });
-  
 
       navigate(`/product/${id}/reviews`);
     } catch (error: any) {
@@ -138,7 +127,6 @@ const response = await fetch(`http://localhost:5000/api/design/submitReviewAndRa
       setIsSubmitting(false);
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20">
