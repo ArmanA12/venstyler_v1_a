@@ -27,11 +27,52 @@ import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/routes/ProtectedRoutes";
 import ExplorePage from "./pages/explore/Explore";
+import socket from "@/lib/socket";
+import { useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
+
+
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+const App = () =>{
+
+  const { toast } = useToast();
+  const userId = 8; // Replace with actual logged-in user's ID
+useEffect(() => {
+  if (userId) {
+    socket.emit("join-room", userId);
+  }
+
+  socket.on("connect", () => {
+    console.log("Connected to socket:", socket.id);
+  });
+
+  return () => {
+    socket.disconnect();
+  };
+}, []);
+
+
+useEffect(() => {
+  socket.on("new-notification", (data) => {
+    console.log("New notification:", data);
+    toast({
+      title: data.type,
+      description: data.message,
+    });
+
+  });
+
+  return () => {
+    socket.off("new-notification");
+  };
+}, []);
+
+
+
+  return <>
+   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <AuthProvider>
         <TooltipProvider>
@@ -145,6 +186,7 @@ const App = () => (
       </AuthProvider>
     </ThemeProvider>
   </QueryClientProvider>
-);
+  </>
+}
 
 export default App;

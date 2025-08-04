@@ -169,26 +169,6 @@ const Index = () => {
             {/* Main Feed */}
             <div className="col-span-12 lg:col-span-6  border-l border-r border-border/30 ">
               {/* Enhanced Stories */}
-              {/* <div className="fashion-card p-6 animate-slide-up">
-              <div className="flex gap-5 overflow-x-auto pb-2 scrollbar-hide">
-                {stories.map((story, index) => (
-                  <div key={story.id} className="flex flex-col items-center gap-3 min-w-[85px] animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                    <div className={`relative ${story.hasStory ? 'story-gradient' : ''} hover-lift cursor-pointer`}>
-                      <Avatar className="w-18 h-18">
-                        <AvatarImage src={story.avatar} className="object-cover" />
-                        <AvatarFallback className="text-lg font-semibold bg-gradient-to-br from-primary/20 to-secondary/20">{story.name[0]}</AvatarFallback>
-                      </Avatar>
-                      {!story.hasStory && (
-                        <div className="absolute bottom-0 right-0 w-6 h-6 bg-gradient-to-r from-primary to-secondary rounded-full border-2 border-background flex items-center justify-center shadow-colored">
-                          <PlusCircle className="w-4 h-4 text-white" />
-                        </div>
-                      )}
-                    </div>
-                    <span className="text-sm text-center font-medium text-muted-foreground">{story.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div> */}
 
               {/* Enhanced Create Post */}
               <div className="hidden md:block">
