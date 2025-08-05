@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
 import {
   ArrowLeft,
   Send,
@@ -107,50 +108,32 @@ const Chat = () => {
   };
 
   // Send text message
-  const handleSendMessage = () => {
-    if (!message.trim()) return;
+const handleSendMessage = async () => {
+  if (!message.trim()) return;
 
-    const newMessage: Message = {
-      id: messages.length + 1,
-      text: message,
-      sender: "me",
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      type: "text",
-    };
+  const payload = {
+    chatId: 1,       // Replace with actual state or prop
+    receiverId: 9,       // Replace with actual state or prop
+    content: message,
+  };
+
+  try {
+    const res = await axios.post(
+      "http://localhost:5000/api/chat/send",
+      payload,
+      { withCredentials: true }
+    );
+
+    const newMessage = res.data.message;
 
     setMessages((prev) => [...prev, newMessage]);
     setMessage("");
     setShowEmoji(false);
+  } catch (error) {
+    console.error("Failed to send message:", error.response?.data || error.message);
+  }
+};
 
-    // Simulate typing indicator
-    setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
-      // Simulate response
-      const responses = [
-        "That sounds great! Let me check on that for you.",
-        "I'll get back to you with the details shortly.",
-        "Thanks for your interest! I appreciate it.",
-        "Let me prepare the information you requested.",
-      ];
-
-      const responseMessage: Message = {
-        id: messages.length + 2,
-        text: responses[Math.floor(Math.random() * responses.length)],
-        sender: "other",
-        timestamp: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        type: "text",
-      };
-
-      setMessages((prev) => [...prev, responseMessage]);
-    }, 2000);
-  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
