@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Index from "./pages/Index";
@@ -31,162 +31,180 @@ import socket from "@/lib/socket";
 import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-
-
 const queryClient = new QueryClient();
 
-const App = () =>{
-
+const App = () => {
   const { toast } = useToast();
-  const userId = 8; // Replace with actual logged-in user's ID
-useEffect(() => {
-  if (userId) {
-    socket.emit("join-room", userId);
-  }
+  const userId = 8; // Replace with actual logged-in user's ID (e.g., from AuthContext)
 
-  socket.on("connect", () => {
-    console.log("Connected to socket:", socket.id);
-  });
+  useEffect(() => {
+    if (userId) {
+      // Join user-specific room for notifications and new chats
+      socket.emit("join-room", userId);
+      console.log(`Joined user room: user_${userId}`);
+    }
 
-  return () => {
-    socket.disconnect();
-  };
-}, []);
-
-
-useEffect(() => {
-  socket.on("new-notification", (data) => {
-    console.log("New notification:", data);
-    toast({
-      title: data.type,
-      description: data.message,
+    socket.on("connect", () => {
+      console.log("Connected to socket:", socket.id);
     });
 
-  });
+    // Handle new chat creation (e.g., when a new chat is initiated)
+    socket.on("newChat", ({ chatId }) => {
+      socket.emit("joinChat", { chatId });
+      console.log(`Joined new chat room: chat_${chatId}`);
+      toast({
+        title: "New Chat",
+        description: "A new chat has been started.",
+      });
+    });
 
-  return () => {
-    socket.off("new-notification");
-  };
-}, []);
+    return () => {
+      socket.off("connect");
+      socket.off("newChat");
+      socket.disconnect();
+    };
+  }, [userId]);
 
+  useEffect(() => {
+    // Handle notifications
+    socket.on("new-notification", (data) => {
+      console.log("New notification:", data);
+      toast({
+        title: data.type,
+        description: data.message,
+      });
+    });
 
+    // Handle new messages globally
+    socket.on("newMessage", (message) => {
+      console.log("New message received:", message);
+      toast({
+        title: "New Message",
+        description: `${message.sender.name}: ${message.content}`,
+      });
+      // Optionally, update chat state here if using a global chat context
+    });
 
-  return <>
-   <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route
-                path="/verify-otp"
-                element={
-                  <ProtectedRoute>
-                    <VerifyOTP />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/ResetPassword"
-                element={
-                  <ProtectedRoute>
-                    <ResetPassword />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/upload-product"
-                element={
-                  <ProtectedRoute>
-                    <ProductUpload />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/product/:id" element={<ProductDetails />} />
-              <Route path="/product/:id/reviews" element={<ProductReviews />} />
-              <Route
-                path="/product/:id/write-review"
-                element={
-                  <ProtectedRoute>
-                    <WriteReview />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/chat/:userId"
-                element={
-                  <ProtectedRoute>
-                    <Chat />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/settings"
-                element={
-                  <ProtectedRoute>
-                    <Settings />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/explore" element={<ExplorePage />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route
-                path="/admin/users/:userId"
-                element={
-                  <ProtectedRoute>
-                    <UserProfile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/users/:userId/edit"
-                element={
-                  <ProtectedRoute>
-                    <EditUser />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/products/:productId"
-                element={
-                  <ProtectedRoute>
-                    <ProductUpload />
-                  </ProtectedRoute>
-                }
-              />
+    return () => {
+      socket.off("new-notification");
+      socket.off("newMessage");
+    };
+  }, []);
 
-              <Route
-                path="/admin/products/:productId/edit"
-                element={
-                  <ProtectedRoute>
-                    <EditProduct />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/admin/orders/:orderId" element={<OrderView />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </AuthProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
-  </>
-}
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route
+                  path="/verify-otp"
+                  element={
+                    <ProtectedRoute>
+                      <VerifyOTP />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/ResetPassword"
+                  element={
+                    <ProtectedRoute>
+                      <ResetPassword />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/upload-product"
+                  element={
+                    <ProtectedRoute>
+                      <ProductUpload />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/product/:id" element={<ProductDetails />} />
+                <Route path="/product/:id/reviews" element={<ProductReviews />} />
+                <Route
+                  path="/product/:id/write-review"
+                  element={
+                    <ProtectedRoute>
+                      <WriteReview />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/chat/:chatId/:receiverId"
+                  element={
+                    <ProtectedRoute>
+                      <Chat />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/settings"
+                  element={
+                    <ProtectedRoute>
+                      <Settings />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/explore" element={<ExplorePage />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route
+                  path="/admin/users/:userId"
+                  element={
+                    <ProtectedRoute>
+                      <UserProfile />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/users/:userId/edit"
+                  element={
+                    <ProtectedRoute>
+                      <EditUser />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/products/:productId"
+                  element={
+                    <ProtectedRoute>
+                      <ProductView />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/products/:productId/edit"
+                  element={
+                    <ProtectedRoute>
+                      <EditProduct />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/admin/orders/:orderId" element={<OrderView />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

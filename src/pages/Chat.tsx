@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
+import socket from "@/lib/socket";
 import {
   ArrowLeft,
   Send,
@@ -20,120 +21,116 @@ import {
 
 interface Message {
   id: number;
-  text: string;
-  sender: "me" | "other";
-  timestamp: string;
+  content: string;
+  senderId: number;
+  createdAt: string;
   type: "text" | "image" | "audio";
-  imageUrl?: string;
-  audioUrl?: string;
+  sender: { id: number; name: string };
+}
+
+interface ChatUser {
+  id: number;
+  name: string;
+  avatar?: string;
+  isOnline?: boolean;
+  lastSeen?: string;
 }
 
 const emojiList = ["😀", "😍", "😂", "👍", "🎉", "🙏", "❤️", "😎"];
 
 const Chat = () => {
-  const { userId } = useParams();
+  const { chatId, receiverId } = useParams();
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const audioInputRef = useRef<HTMLInputElement>(null);
-
+  
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "Hi! I'm interested in your Elegant Summer Dress. Is it still available?",
-      sender: "me",
-      timestamp: "10:30 AM",
-      type: "text",
-    },
-    {
-      id: 2,
-      text: "Hello! Yes, it's still available. Would you like to know more details about it?",
-      sender: "other",
-      timestamp: "10:32 AM",
-      type: "text",
-    },
-    {
-      id: 3,
-      text: "Yes, please! What fabric is it made of and can you customize the size?",
-      sender: "me",
-      timestamp: "10:35 AM",
-      type: "text",
-    },
-    {
-      id: 4,
-      text: "It's made of premium cotton with silk lining. Yes, I can definitely customize the size for you. I'll need your measurements.",
-      sender: "other",
-      timestamp: "10:37 AM",
-      type: "text",
-    },
-    {
-      id: 5,
-      text: "Here's the size chart for reference",
-      sender: "other",
-      timestamp: "10:38 AM",
-      type: "image",
-      imageUrl: "https://picsum.photos/seed/chatimg1/300/200",
-    },
-  ]);
-
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [chatUser, setChatUser] = useState<ChatUser | null>(null);
   const [isTyping, setIsTyping] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [recording, setRecording] = useState(false);
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
-    null
-  );
-  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
-
-  // Mock user data
-  const chatUser = {
-    name: userId === "me" ? "You" : userId || "Sarah Johnson",
-    avatar: "https://picsum.photos/seed/chatavatar/40/40",
-    isOnline: true,
-    lastSeen: "Active now",
-  };
+  const currentUserId = 1; // Replace with actual current user ID from auth context
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Fetch messages and chat details
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/chat/chats/${chatId}/messages`,
+          { withCredentials: true }
+        );
+        
+        setMessages(response.data.messages);
+        setChatUser({
+          ...response.data.chatUser,
+          avatar: "https://picsum.photos/seed/chatavatar/40/40",
+          isOnline: true,
+          lastSeen: "Active now"
+        });
+      } catch (error) {
+        toast({
+          title: "Error loading messages",
+          description: error.response?.data?.message || "Server error",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (chatId) {
+      fetchMessages();
+      socket.emit("joinChat", { chatId: parseInt(chatId) });
+    }
+  }, [chatId, toast]);
+
+  // Socket.IO real-time messaging
+  useEffect(() => {
+    const handleNewMessage = (newMessage: Message) => {
+      setMessages((prev) => [...prev, newMessage]);
+    };
+
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, []);
+
+  // Scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  // Delete message
-  const handleDeleteMessage = (id: number) => {
-    setMessages((prev) => prev.filter((msg) => msg.id !== id));
-    toast({ title: "Message deleted" });
-  };
-
   // Send text message
-const handleSendMessage = async () => {
-  if (!message.trim()) return;
+  const handleSendMessage = async () => {
+    if (!message.trim() || !chatUser) return;
 
-  const payload = {
-    chatId: 1,       // Replace with actual state or prop
-    receiverId: 9,       // Replace with actual state or prop
-    content: message,
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/chat/send",
+        {
+          receiverId:parseInt(receiverId),
+          content: message,
+          type: "text",
+        },
+        { withCredentials: true }
+      );
+
+      setMessage("");
+      setShowEmoji(false);
+    } catch (error) {
+      toast({
+        title: "Failed to send message",
+        description: error.response?.data?.message || "Network error",
+      });
+    }
   };
-
-  try {
-    const res = await axios.post(
-      "http://localhost:5000/api/chat/send",
-      payload,
-      { withCredentials: true }
-    );
-
-    const newMessage = res.data.message;
-
-    setMessages((prev) => [...prev, newMessage]);
-    setMessage("");
-    setShowEmoji(false);
-  } catch (error) {
-    console.error("Failed to send message:", error.response?.data || error.message);
-  }
-};
-
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -142,7 +139,13 @@ const handleSendMessage = async () => {
     }
   };
 
-  // Image upload logic
+  // Delete message (frontend-only for now)
+  const handleDeleteMessage = (id: number) => {
+    setMessages((prev) => prev.filter((msg) => msg.id !== id));
+    toast({ title: "Message deleted" });
+  };
+
+  // Image upload logic (frontend-only for now)
   const handleImageUploadClick = () => {
     fileInputRef.current?.click();
   };
@@ -156,15 +159,13 @@ const handleSendMessage = async () => {
         ...prev,
         {
           id: prev.length + 1,
-          text: "Image",
-          sender: "me",
-          timestamp: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
+          content: "Image",
+          senderId: currentUserId,
+          createdAt: new Date().toISOString(),
           type: "image",
+          sender: { id: currentUserId, name: "You" },
           imageUrl: ev.target?.result as string,
-        },
+        } as Message,
       ]);
     };
     reader.readAsDataURL(file);
@@ -177,48 +178,6 @@ const handleSendMessage = async () => {
     setShowEmoji(false);
   };
 
-  // Voice recording logic
-  const handleVoiceRecord = async () => {
-    if (recording) {
-      mediaRecorder?.stop();
-      setRecording(false);
-      return;
-    }
-    if (!navigator.mediaDevices?.getUserMedia) {
-      toast({ title: "Voice not supported in this browser" });
-      return;
-    }
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const recorder = new MediaRecorder(stream);
-    setMediaRecorder(recorder);
-    setAudioChunks([]);
-    recorder.start();
-    setRecording(true);
-
-    recorder.ondataavailable = (e) => {
-      setAudioChunks((prev) => [...prev, e.data]);
-    };
-    recorder.onstop = () => {
-      const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-      const audioUrl = URL.createObjectURL(audioBlob);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: prev.length + 1,
-          text: "Voice message",
-          sender: "me",
-          timestamp: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          type: "audio",
-          audioUrl,
-        },
-      ]);
-      setAudioChunks([]);
-    };
-  };
-
   // Video call using daily.co
   const handleVideoCall = () => {
     window.open(
@@ -227,6 +186,28 @@ const handleSendMessage = async () => {
       "width=900,height=600"
     );
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20 flex flex-col">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">Loading messages...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!chatUser) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20 flex flex-col">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">Chat not found</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20 flex flex-col">
@@ -238,7 +219,7 @@ const handleSendMessage = async () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link
-                to="/profile"
+                to="/messages"
                 className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
@@ -286,12 +267,16 @@ const handleSendMessage = async () => {
             {messages.map((msg) => (
               <div
                 key={msg.id}
-                className={`flex ${msg.sender === "me" ? "justify-end" : "justify-start"}`}
+                className={`flex ${
+                  msg.senderId === currentUserId ? "justify-end" : "justify-start"
+                }`}
               >
                 <div
-                  className={`flex gap-2 max-w-[70%] ${msg.sender === "me" ? "flex-row-reverse" : "flex-row"}`}
+                  className={`flex gap-2 max-w-[70%] ${
+                    msg.senderId === currentUserId ? "flex-row-reverse" : "flex-row"
+                  }`}
                 >
-                  {msg.sender === "other" && (
+                  {msg.senderId !== currentUserId && (
                     <img
                       src={chatUser.avatar}
                       alt={chatUser.name}
@@ -302,39 +287,44 @@ const handleSendMessage = async () => {
                   <div className="space-y-1 relative">
                     <div
                       className={`px-4 py-2 rounded-2xl ${
-                        msg.sender === "me"
+                        msg.senderId === currentUserId
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted"
                       }`}
                     >
                       {msg.type === "text" ? (
-                        <p className="text-sm">{msg.text}</p>
+                        <p className="text-sm">{msg.content}</p>
                       ) : msg.type === "image" ? (
                         <div className="space-y-2">
-                          <p className="text-sm">{msg.text}</p>
+                          <p className="text-sm">{msg.content}</p>
                           <img
-                            src={msg.imageUrl}
+                            src={(msg as any).imageUrl}
                             alt="Shared image"
                             className="max-w-full rounded-lg"
                           />
                         </div>
                       ) : msg.type === "audio" ? (
                         <div className="space-y-2">
-                          <p className="text-sm">{msg.text}</p>
+                          <p className="text-sm">{msg.content}</p>
                           <audio
                             controls
-                            src={msg.audioUrl}
+                            src={(msg as any).audioUrl}
                             className="w-full"
                           />
                         </div>
                       ) : null}
                     </div>
                     <p
-                      className={`text-xs text-muted-foreground ${msg.sender === "me" ? "text-right" : "text-left"}`}
+                      className={`text-xs text-muted-foreground ${
+                        msg.senderId === currentUserId ? "text-right" : "text-left"
+                      }`}
                     >
-                      {msg.timestamp}
+                      {new Date(msg.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </p>
-                    {msg.sender === "me" && (
+                    {msg.senderId === currentUserId && (
                       <button
                         className="absolute -top-2 -right-8 text-muted-foreground hover:text-destructive"
                         onClick={() => handleDeleteMessage(msg.id)}
@@ -386,9 +376,6 @@ const handleSendMessage = async () => {
             <Button variant="ghost" size="sm" onClick={handleImageUploadClick}>
               <Paperclip className="w-4 h-4" />
             </Button>
-            {/* <Button variant="ghost" size="sm" onClick={handleImageUploadClick}>
-              <ImageIcon className="w-4 h-4" />
-            </Button> */}
             <input
               type="file"
               accept="image/*"
@@ -401,7 +388,7 @@ const handleSendMessage = async () => {
             <Button
               variant={recording ? "destructive" : "ghost"}
               size="sm"
-              onClick={handleVoiceRecord}
+              onClick={() => setRecording(!recording)}
               title={recording ? "Stop Recording" : "Record Voice"}
             >
               <Mic className="w-4 h-4" />
