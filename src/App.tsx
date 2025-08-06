@@ -30,6 +30,7 @@ import ExplorePage from "./pages/explore/Explore";
 import socket from "@/lib/socket";
 import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import ChatBox from "./pages/ChatBox";
 
 const queryClient = new QueryClient();
 
@@ -138,6 +139,7 @@ const App = () => {
                 />
                 <Route path="/product/:id" element={<ProductDetails />} />
                 <Route path="/product/:id/reviews" element={<ProductReviews />} />
+                <Route path="/chat" element={<ChatBox />} />
                 <Route
                   path="/product/:id/write-review"
                   element={
