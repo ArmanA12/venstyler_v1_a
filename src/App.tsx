@@ -28,47 +28,70 @@ import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/routes/ProtectedRoutes";
 import ExplorePage from "./pages/explore/Explore";
 import socket from "@/lib/socket";
-import { useEffect } from "react";
+import { useEffect, useId, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import ChatBox from "./pages/ChatBox";
+import { checkUserAuth } from './lib/getCurrentUserDetails';
+
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const { toast } = useToast();
-  const userId = 8; // Replace with actual logged-in user's ID (e.g., from AuthContext)
+  const [userId, setUserId] = useState<number | null>(null);
 
+  console.log("Rendering App");
+
+  // ✅ Fetch user ID once
   useEffect(() => {
-    if (userId) {
-      // Join user-specific room for notifications and new chats
-      socket.emit("join-room", userId);
-      console.log(`Joined user room: user_${userId}`);
-    }
+    const fetchUser = async () => {
+      const result = await checkUserAuth();
+      console.log(result, "result");
 
-    socket.on("connect", () => {
-      console.log("Connected to socket:", socket.id);
-    });
-
-    // Handle new chat creation (e.g., when a new chat is initiated)
-    socket.on("newChat", ({ chatId }) => {
-      socket.emit("joinChat", { chatId });
-      console.log(`Joined new chat room: chat_${chatId}`);
-      toast({
-        title: "New Chat",
-        description: "A new chat has been started.",
-      });
-    });
-
-    return () => {
-      socket.off("connect");
-      socket.off("newChat");
-      socket.disconnect();
+      if (result.success && result.user?.id) {
+        setUserId(result.user.id);
+      } else {
+        console.error("Failed to fetch user:", result.error);
+      }
     };
-  }, [userId]);
 
+    fetchUser();
+  }, []);
+
+  // ✅ Join personal room ONCE per session
+useEffect(() => {
+  if (!userId) return;
+
+  socket.emit("join-room", userId);
+
+  socket.off("newChat").on("newChat", ({ chatId }) => {
+    socket.emit("joinChat", { chatId });
+    toast({ title: "New Chat", description: "A new chat has been started." });
+  });
+
+  socket.off("new-notification").on("new-notification", (data) => {
+    toast({ title: data.type, description: data.message });
+  });
+
+  socket.off("userOnline").on("userOnline", (id) => {
+    console.log("User online:", id);
+  });
+
+  socket.off("userOffline").on("userOffline", (id) => {
+    console.log("User offline:", id);
+  });
+
+  return () => {
+    socket.off("newChat");
+    socket.off("new-notification");
+    socket.off("userOnline");
+    socket.off("userOffline");
+  };
+}, [userId]);
+
+  // ✅ Global notifications only (no newMessage here)
   useEffect(() => {
-    // Handle notifications
-    socket.on("new-notification", (data) => {
+    socket.off("new-notification").on("new-notification", (data) => {
       console.log("New notification:", data);
       toast({
         title: data.type,
@@ -76,19 +99,8 @@ const App = () => {
       });
     });
 
-    // Handle new messages globally
-    socket.on("newMessage", (message) => {
-      console.log("New message received:", message);
-      toast({
-        title: "New Message",
-        description: `${message.sender.name}: ${message.content}`,
-      });
-      // Optionally, update chat state here if using a global chat context
-    });
-
     return () => {
       socket.off("new-notification");
-      socket.off("newMessage");
     };
   }, []);
 
