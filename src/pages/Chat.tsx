@@ -48,9 +48,9 @@ export default Chat
 //   const { toast } = useToast();
 
   
-  useEffect(() => {
-    if (chatId) {
-      socket.emit("joinRoom", `chat_${chatId}`);
+  // useEffect(() => {
+  //   if (chatId) {
+  //     socket.emit("joinRoom", `chat_${chatId}`);
 
 //   const scrollToBottom = () => {
 //     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
