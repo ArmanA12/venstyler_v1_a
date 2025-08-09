@@ -1,4 +1,3 @@
-// ChatBox.tsx
 import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
@@ -14,10 +13,10 @@ import {
   Video,
   MoreVertical,
   Smile,
-  Trash,
   Mic,
 } from "lucide-react";
 
+// ✅ Connect once globally
 const socket = io("http://localhost:5000", { withCredentials: true });
 
 interface Message {
@@ -31,15 +30,22 @@ interface Message {
   createdAt?: string;
 }
 
+interface ChatUser {
+  id: number;
+  name: string;
+  isOnline?: boolean;
+  lastSeen?: string;
+}
+
 const ChatBox: React.FC = () => {
   const [searchParams] = useSearchParams();
   const chatId = Number(searchParams.get("chatId"));
   const receiverId = Number(searchParams.get("receiverId"));
-  const { toast } = useToast();
 
+  const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState("");
-  const [chatUser, setChatUser] = useState<{ id: number; name: string } | null>(null);
+  const [chatUser, setChatUser] = useState<ChatUser | null>(null);
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -47,12 +53,14 @@ const ChatBox: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // ✅ Fetch chat history and user info
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/chat/chats/${chatId}/messages`, {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `http://localhost:5000/api/chat/chats/${chatId}/messages`,
+          { withCredentials: true }
+        );
         setMessages(res.data.messages);
         setChatUser(res.data.chatUser);
         scrollToBottom();
@@ -61,45 +69,63 @@ const ChatBox: React.FC = () => {
       }
     };
 
-    if (chatId) {
-      fetchMessages();
-    }
+    if (chatId) fetchMessages();
   }, [chatId]);
 
+  // ✅ Setup socket for messages
   useEffect(() => {
-    if (chatId) {
-      socket.emit("joinRoom", `chat_${chatId}`);
+    if (!chatId || !receiverId) return;
 
-      socket.on("newMessage", (newMsg: Message) => {
-        setMessages((prev) => [...prev, newMsg]);
-        toast({
-          title: newMsg.sender.name,
-          description: newMsg.content,
-        });
-        scrollToBottom();
-      });
+    // Join the chat room
+    socket.emit("joinRoom", `chat_${chatId}`);
 
-      return () => {
-        socket.off("newMessage");
-        socket.emit("leaveRoom", `chat_${chatId}`);
-      };
+    socket.on("newMessage", (newMsg: Message) => {
+      setMessages((prev) => [...prev, newMsg]);
+      toast({ title: newMsg.sender.name, description: newMsg.content });
+      scrollToBottom();
+    });
+
+    return () => {
+      socket.off("newMessage");
+      socket.emit("leaveRoom", `chat_${chatId}`);
+    };
+  }, [chatId, receiverId, toast]);
+
+  // ✅ Join personal room for online status tracking
+  useEffect(() => {
+    const currentUserId = Number(localStorage.getItem("userId")); // Replace with your auth state
+    if (currentUserId) {
+      socket.emit("join-room", currentUserId);
     }
-  }, [chatId]);
+
+    socket.on("userOnline", (userId: number) => {
+      if (chatUser?.id === userId) {
+        setChatUser((prev) => prev && { ...prev, isOnline: true });
+      }
+    });
+
+    socket.on("userOffline", (userId: number) => {
+      if (chatUser?.id === userId) {
+        setChatUser((prev) => prev && { ...prev, isOnline: false, lastSeen: new Date().toISOString() });
+      }
+    });
+
+    return () => {
+      socket.off("userOnline");
+      socket.off("userOffline");
+    };
+  }, [chatUser]);
 
   const sendMessage = async () => {
     if (!message.trim()) return;
 
     const tempMessage: Message = {
-      id: Date.now(), // Temporary ID
-      senderId: 0, // Replace with actual sender ID if available
+      id: Date.now(),
+      senderId: 0, // Replace with actual sender ID
       content: message,
-      sender: {
-        id: 0,
-        name: "You", // Replace with actual sender name if available
-      },
+      sender: { id: 0, name: "You" }, // Replace with actual sender name
     };
 
-    // Optimistic update
     setMessages((prev) => [...prev, tempMessage]);
     scrollToBottom();
     setMessage("");
@@ -108,16 +134,13 @@ const ChatBox: React.FC = () => {
     try {
       await axios.post(
         `http://localhost:5000/api/chat/send`,
-        {
-          receiverId,
-          content: tempMessage.content,
-        },
+        { receiverId, content: tempMessage.content },
         { withCredentials: true }
       );
     } catch (error) {
       console.error("Error sending message:", error);
     } finally {
-      setTimeout(() => setIsSending(false), 1000); // Disable button for 1 second
+      setTimeout(() => setIsSending(false), 1000);
     }
   };
 
@@ -138,11 +161,19 @@ const ChatBox: React.FC = () => {
                     alt={chatUser?.name}
                     className="w-10 h-10 rounded-full"
                   />
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
+                  {chatUser?.isOnline && (
+                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
+                  )}
                 </div>
                 <div>
                   <h2 className="font-semibold">{chatUser?.name || "User"}</h2>
-                  <p className="text-xs text-muted-foreground">Active now</p>
+                  <p className="text-xs text-muted-foreground">
+                    {chatUser?.isOnline
+                      ? "Active now"
+                      : chatUser?.lastSeen
+                      ? `Last seen ${new Date(chatUser.lastSeen).toLocaleString()}`
+                      : "Offline"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -161,6 +192,7 @@ const ChatBox: React.FC = () => {
         </div>
       </div>
 
+      {/* Messages */}
       <div className="flex-1 overflow-hidden">
         <div className="w-full lg:w-4/5 mx-auto px-4 h-full">
           <div className="h-full overflow-y-auto py-4 space-y-4">
@@ -197,6 +229,7 @@ const ChatBox: React.FC = () => {
         </div>
       </div>
 
+      {/* Input */}
       <div className="border-t bg-background/80 backdrop-blur-sm">
         <div className="w-full lg:w-4/5 mx-auto px-2 py-4">
           <div className="flex items-center gap-3">

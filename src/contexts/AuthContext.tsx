@@ -38,14 +38,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session in localStorage
-    const savedUser = localStorage.getItem("fashionconnect_user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    setIsLoading(false);
-  }, []);
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/auth/userAuthChecker",
+          {
+            withCredentials: true,
+          }
+        );
 
+        const userFromToken = res.data?.data?.userFromToken;
+        if (userFromToken) {
+          setUser(userFromToken);
+        }
+      } catch (err) {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
@@ -58,9 +72,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         { withCredentials: true }
       );
       console.log(res, "while signin");
-      const user = res.data?.data;
+      const user = res.data?.data?.user;
       setUser(user);
-      localStorage.setItem("fashionconnect_user", JSON.stringify(user));
     } catch (error) {
       throw new Error(error.response?.data?.message || "Invalid credentials");
     } finally {

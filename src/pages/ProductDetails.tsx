@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,75 +18,111 @@ import {
   Share2,
 } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
+import { useProductDetails } from "@/hooks/useProductDetail";
 
 const ProductDetails = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const designId = useMemo(() => {
+    const n = Number(id);
+    return Number.isFinite(n) ? n : undefined;
+  }, [id]);
+
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // fetch actual product details
+  const { data: prod, isLoading, isError, error } = useProductDetails(designId);
+
+  // local UI-only states (like/save + carousel index)
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  // Mock product data with working dummy images
+  // reset carousel to first image when product changes
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [prod?.id]);
+
+  // show API errors
+  useEffect(() => {
+    if (isError) {
+      toast({
+        title: "Failed to load product",
+        description: (error as Error)?.message || "Please try again.",
+        variant: "destructive",
+      });
+    }
+  }, [isError, error, toast]);
+
+  // derive a view-model that matches your existing JSX shape
+  const images =
+    prod?.images && prod.images.length > 0
+      ? prod.images
+      : ["https://picsum.photos/seed/fallback1/600/600"];
+
+  const price = prod?.price ?? 0;
+  const originalPrice = prod?.discount ? price + prod.discount : price; // treat discount as absolute amount
+  const discountPct =
+    originalPrice > 0
+      ? Math.round(((originalPrice - price) / originalPrice) * 100)
+      : 0;
+
   const product = {
-    id: id,
-    title: "Elegant Summer Dress",
-    description:
-      "Beautiful handcrafted summer dress made with premium cotton fabric. Perfect for casual outings and special occasions. Features intricate embroidery and comfortable fit.",
-    price: 149.99,
-    originalPrice: 199.99,
-    discount: 25,
-    rating: 4.8,
-    totalOrders: 234,
-    totalLikes: 156,
-    totalSaves: 89,
-    images: [
-      "https://picsum.photos/seed/1/600/600",
-      "https://picsum.photos/seed/2/600/600",
-      "https://picsum.photos/seed/3/600/600",
-      "https://picsum.photos/seed/4/600/600",
-    ],
-    category: "Women's Fashion",
+    id: prod?.id ?? designId ?? 0,
+    title: prod?.title ?? "",
+    description: prod?.description ?? "",
+    price,
+    originalPrice,
+    discount: Math.max(0, discountPct),
+    rating: Number(prod?.meta?.averageRating ?? 0),
+    totalOrders: prod?.meta?.ordersCount ?? 0,
+    totalLikes: prod?.meta?.likesCount ?? 0,
+    totalSaves: prod?.meta?.savesCount ?? 0,
+    images,
+    category: prod?.category ?? "Fashion",
     designer: {
-      name: "Sarah Johnson",
-      avatar: "https://picsum.photos/seed/avatar1/40/40",
-      verified: true,
-      email: "sarah.johnson@email.com",
+      name: prod?.designer?.name ?? "Unknown Designer",
+      avatar:
+        prod?.designer?.profileImage ??
+        "https://picsum.photos/seed/designer/40/40",
+      verified: false, // set true if you add a field later
+      email: "", // not in payload; leave blank
+      id: prod?.designer?.id ?? 0,
     },
-    completionTime: "5-7 business days",
-    inStock: true,
+    completionTime: prod?.completionTime ?? "—",
+    inStock: true, // no stock flag in payload; set true or derive later
   };
 
+  // carousel handlers
   const nextImage = () => {
     setCurrentImageIndex((prev) =>
       prev === product.images.length - 1 ? 0 : prev + 1
     );
   };
-
   const prevImage = () => {
     setCurrentImageIndex((prev) =>
       prev === 0 ? product.images.length - 1 : prev - 1
     );
   };
 
+  // actions (UI only for now)
   const handleLike = () => {
-    setIsLiked(!isLiked);
+    setIsLiked((v) => !v);
     toast({
-      title: isLiked ? "Removed from likes" : "Added to likes",
-      description: isLiked
-        ? "Product removed from your likes"
-        : "Product added to your likes",
+      title: !isLiked ? "Added to likes" : "Removed from likes",
+      description: !isLiked
+        ? "Product added to your likes"
+        : "Product removed from your likes",
     });
   };
 
   const handleSave = () => {
-    setIsSaved(!isSaved);
+    setIsSaved((v) => !v);
     toast({
-      title: isSaved ? "Removed from saved" : "Saved",
-      description: isSaved
-        ? "Product removed from saved items"
-        : "Product saved for later",
+      title: !isSaved ? "Saved" : "Removed from saved",
+      description: !isSaved
+        ? "Product saved for later"
+        : "Product removed from saved items",
     });
   };
 
@@ -95,11 +131,11 @@ const ProductDetails = () => {
       title: "Order initiated",
       description: "Redirecting to checkout...",
     });
-    // Here you would redirect to checkout
   };
 
   const handleMessage = () => {
-    navigate(`/chat/${product.designer.name}`);
+    // Your app has /chat and /chat/:chatId/:receiverId; keep simple:
+    navigate(`/chat`);
   };
 
   return (

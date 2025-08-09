@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import  { createContext, useContext, useEffect, useState } from 'react';
+import socket from "@/lib/socket";
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -73,6 +74,18 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setTheme: handleSetTheme,
     actualTheme,
   };
+
+  useEffect(() => {
+    socket.on("new-notification", (data) => {
+      console.log("New notification:", data);
+      // show toast / alert / update UI
+    });
+  
+    return () => {
+      socket.off("new-notification");
+    };
+  }, []);
+  
 
   return (
     <ThemeContext.Provider value={value}>

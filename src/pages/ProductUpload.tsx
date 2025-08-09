@@ -18,18 +18,18 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Upload, X, Video, Image } from "lucide-react";
 import { Header } from "@/components/navbar/Header";
 import { BottomNav } from "@/components/navbar/bottomNav";
+import { useApi } from "@/contexts/ApiContext";
 
 const productUploadSchema = z.object({
   title: z.string().min(1, "Product title is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   category: z.string().min(1, "Category is required"),
   price: z.string().min(1, "Price is required"),
-  discount: z.string().min(0, "Discount must be 0 or greater"),
+  discount: z.string().optional(), // backend treats empty as falsy; we'll default
   completionTime: z.string().min(1, "Completion time is required"),
-  materialOne: z.string().optional(), // ✅ new
-  materialTwo: z.string().optional(), // ✅ new
+  materialOne: z.string().optional(),
+  materialTwo: z.string().optional(),
 });
-
 type ProductUploadForm = z.infer<typeof productUploadSchema>;
 
 const categories = [
@@ -43,7 +43,8 @@ const categories = [
   "Kids Fashion",
 ];
 
-const ProductUpload = () => {
+export default function ProductUpload() {
+  const { uploadDesign } = useApi();
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
@@ -58,75 +59,34 @@ const ProductUpload = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
   } = useForm<ProductUploadForm>({
     resolver: zodResolver(productUploadSchema),
   });
 
-  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-
-    if (files.length + selectedImages.length > 10) {
-      toast({
-        title: "Too many images",
-        description: "You can upload maximum 10 images.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const validFiles = files.filter((file) => {
-      if (file.size > 10 * 1024 * 1024) {
-        toast({
-          title: "File too large",
-          description: `${file.name} is larger than 10MB.`,
-          variant: "destructive",
-        });
-        return false;
-      }
-      return file.type.startsWith("image/");
-    });
-
-    setSelectedImages((prev) => [...prev, ...validFiles]);
-
-    const newPreviewUrls = validFiles.map((file) => URL.createObjectURL(file));
-    setImagePreviewUrls((prev) => [...prev, ...newPreviewUrls]);
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setSelectedImages((prev) => [...prev, ...files]);
+    const urls = files.map((image) => URL.createObjectURL(image));
+    setImagePreviewUrls((prev) => [...prev, ...urls]);
   };
 
-  const handleVideoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    if (file) {
-      if (file.size > 100 * 1024 * 1024) {
-        toast({
-          title: "Video too large",
-          description: "Video must be smaller than 100MB.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      if (!file.type.startsWith("video/")) {
-        toast({
-          title: "Invalid file type",
-          description: "Please select a valid video file.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      setSelectedVideo(file);
-      setVideoPreviewUrl(URL.createObjectURL(file));
-    }
+  const handleVideoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setSelectedVideo(file);
+    if (file) setVideoPreviewUrl(URL.createObjectURL(file));
   };
 
   const removeImage = (index: number) => {
     setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+    const url = imagePreviewUrls[index];
+    if (url) URL.revokeObjectURL(url);
     setImagePreviewUrls((prev) => prev.filter((_, i) => i !== index));
   };
 
   const removeVideo = () => {
     setSelectedVideo(null);
+    if (videoPreviewUrl) URL.revokeObjectURL(videoPreviewUrl);
     setVideoPreviewUrl(null);
   };
 
@@ -140,56 +100,38 @@ const ProductUpload = () => {
       return;
     }
 
+    const discountToSend =
+      (data.discount ?? "").trim() === "" ? "1" : String(data.discount);
+
     setIsSubmitting(true);
-
     try {
-      const formData = new FormData();
-      formData.append("title", data.title);
-      formData.append("description", data.description);
-      formData.append("category", data.category);
-      formData.append("price", data.price);
-      formData.append("discount", data.discount);
-      formData.append("completionTime", data.completionTime);
-
-      // New fields
-      if (data.materialOne) formData.append("materialOne", data.materialOne);
-      if (data.materialTwo) formData.append("materialTwo", data.materialTwo);
-
-      // Images
-      selectedImages.forEach((image, index) => {
-        formData.append("images", image);
+      await uploadDesign({
+        title: data.title,
+        description: data.description,
+        category: data.category,
+        price: data.price,
+        discount: discountToSend,
+        completionTime: data.completionTime,
+        materialOne: data.materialOne,
+        materialTwo: data.materialTwo,
+        images: selectedImages,
+        video: selectedVideo,
       });
-
-      // Optional video
-      if (selectedVideo) {
-        formData.append("video", selectedVideo);
-      }
-
-      const response = await fetch(
-        "http://localhost:5000/api/design/uploadDesign",
-        {
-          method: "POST",
-          body: formData,
-          credentials: "include",
-        }
-      );
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to upload product");
-      }
 
       toast({
         title: "Success",
         description: "Product uploaded successfully!",
       });
-
+      // Optional resets
+      // setSelectedImages([]); setImagePreviewUrls([]); removeVideo();
       navigate("/");
     } catch (error: any) {
       toast({
         title: "Upload failed",
-        description: error.message || "Something went wrong",
+        description:
+          error?.response?.data?.message ||
+          error.message ||
+          "Something went wrong",
         variant: "destructive",
       });
     } finally {
@@ -326,6 +268,27 @@ const ProductUpload = () => {
                       </p>
                     )}
                   </div>
+
+                  {/* Optional materials */}
+                  <div className="space-y-2">
+                    <Label htmlFor="materialOne">Material 1 (optional)</Label>
+                    <Input
+                      id="materialOne"
+                      {...register("materialOne")}
+                      className="fashion-input"
+                      placeholder="e.g., Silk"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="materialTwo">Material 2 (optional)</Label>
+                    <Input
+                      id="materialTwo"
+                      {...register("materialTwo")}
+                      className="fashion-input"
+                      placeholder="e.g., Cotton"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -453,11 +416,10 @@ const ProductUpload = () => {
           </div>
         </div>
       </div>
+
       <div>
         <BottomNav />
       </div>
     </>
   );
-};
-
-export default ProductUpload;
+}

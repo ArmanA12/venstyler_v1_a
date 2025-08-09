@@ -124,7 +124,7 @@ export const Header = () => {
                   align="end"
                   className="w-56 fashion-card border-0"
                 >
-                  <div className="px-2 py-1.5">
+                  <div className="px-2 py-1">
                     <p className="text-sm font-medium">
                       {user?.firstName} {user?.lastName}
                     </p>
