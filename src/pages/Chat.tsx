@@ -66,6 +66,7 @@ const ChatBox: React.FC = () => {
     }
   }, [chatId]);
 
+  
   useEffect(() => {
     if (chatId) {
       socket.emit("joinRoom", `chat_${chatId}`);
