@@ -18,7 +18,6 @@ import { Separator } from "@/components/ui/separator";
 import { Header } from "@/components/Header";
 import { ProfileImageUpload } from "@/components/ProfileImageUpload";
 import { ProfileProgress } from "@/components/ProfileProgress";
-import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import {
   ArrowLeft,
@@ -40,6 +39,7 @@ import {
   LucideUpload,
 } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
+import { useAuth } from "@/contexts/AuthContext";
 
 const personalInfoSchema = z.object({
   name: z.string().min(1, "First name is required"),
@@ -70,7 +70,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("sales");
   const [isImageUploadOpen, setIsImageUploadOpen] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [showMobleHeader, setShowMobileSidebar] = useState(false);
@@ -557,7 +557,7 @@ const Profile = () => {
 
       <div className="w-full lg:w-4/5 mx-auto px-4 py-6">
         <div className="mb-6 flex items-center justify-between">
-          <span className="text-sm font-medium text-muted-foreground">
+          <span className="block lg:hidden text-sm font-medium text-muted-foreground">
             {user?.name || "User"}
           </span>
 
