@@ -47,11 +47,10 @@ export default Chat
 //   const receiverId = Number(searchParams.get("receiverId"));
 //   const { toast } = useToast();
 
-//   const [messages, setMessages] = useState<Message[]>([]);
-//   const [message, setMessage] = useState("");
-//   const [chatUser, setChatUser] = useState<{ id: number; name: string } | null>(null);
-//   const [isSending, setIsSending] = useState(false);
-//   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    if (chatId) {
+      socket.emit("joinRoom", `chat_${chatId}`);
 
 //   const scrollToBottom = () => {
 //     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

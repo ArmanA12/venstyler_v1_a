@@ -27,9 +27,78 @@ import designerAvatar from "@/assets/designer-avatar-1.jpg";
 import { Header } from "@/components/navbar/Header";
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { Link } from "react-router-dom";
+import { useApi } from "@/contexts/ApiContext";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { useFeed } from "@/hooks/useFeed";
+import { useToggleLike } from "@/hooks/useToggleLike";
 // import { Header } from "@/components/Header";
 
 const Index = () => {
+  const { createComment } = useApi();
+  const [page, setPage] = useState(1);
+  const qc = useQueryClient();
+
+  const [openCommentBox, setOpenCommentBox] = useState<Record<string, boolean>>(
+    {}
+  );
+  const [commentText, setCommentText] = useState<Record<string, string>>({});
+  const [commentsCounts, setCommentsCounts] = useState<Record<string, number>>(
+    {}
+  );
+
+  // TanStack Query feed (cached, keepPreviousData, prefetch handled in hook)
+  const { data, isLoading, isFetching, isError, error } = useFeed(page);
+
+  // Toast API errors
+  useEffect(() => {
+    if (isError) {
+      toast.error((error as Error)?.message || "Failed to load feed");
+    }
+  }, [isError, error]);
+
+  // Data mapped by the hook's `select`
+  const items = data?.items ?? [];
+  const loading = isLoading; // alias so existing JSX `loading` checks still work
+  const total = data?.total ?? 0;
+  const pageSize = data?.pageSize ?? 10;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+  const { mutate: likeUnlike } = useToggleLike(page);
+
+  // UI helpers
+  const toggleComment = (id: string) => {
+    setOpenCommentBox((s) => ({ ...s, [id]: !s[id] }));
+  };
+
+  const onTextChange = (id: string, value: string) => {
+    setCommentText((s) => ({ ...s, [id]: value }));
+  };
+
+  const submitComment = async (id: string) => {
+    const content = (commentText[id] || "").trim();
+    if (!content) return;
+
+    try {
+      await createComment(Number(id), content);
+      setCommentText((t) => ({ ...t, [id]: "" }));
+      setOpenCommentBox((s) => ({ ...s, [id]: false }));
+      setCommentsCounts((c) => ({ ...c, [id]: (c[id] ?? 0) + 1 }));
+      toast.success("Comment posted");
+
+      // Optionally refresh this page from server (to sync counts)
+      qc.invalidateQueries({ queryKey: ["feed", page] });
+    } catch (e: any) {
+      const msg =
+        e?.response?.data?.message ||
+        e?.message ||
+        "Failed to comment. Please try again.";
+      toast.error(msg);
+    }
+  };
+
+  // (Optional) sample data you had — keep if you still need it elsewhere
   const sampleDesigns = [
     {
       id: "1",
@@ -72,6 +141,10 @@ const Index = () => {
     },
     { name: "Sustainable Fashion", category: "Movement", followers: "3.2k" },
   ];
+
+  const handleLikeClick = (designId: string) => {
+    likeUnlike(Number(designId));
+  };
 
   return (
     <div>
@@ -228,235 +301,192 @@ const Index = () => {
 
               {/* Enhanced Design Feed */}
               <div>
-                {sampleDesigns.map((design, index) => (
-                  <div
-                    key={design.id}
-                    className="fashion-card border-b border-border/30 overflow-hidden animate-fade-in"
-                    style={{ animationDelay: `${index * 0.2}s` }}
-                  >
-                    {/* Enhanced Post Header */}
-                    <div className="p-6 flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="story-gradient">
-                          <Avatar className="w-12 h-12">
-                            <AvatarImage src={design.designerAvatar} />
-                            <AvatarFallback>
-                              {design.designer[0]}
-                            </AvatarFallback>
-                          </Avatar>
+                {loading && (
+                  <div className="p-6 text-center text-muted-foreground">
+                    Loading feed…
+                  </div>
+                )}
+
+                {!loading && items.length === 0 && (
+                  <div className="p-6 text-center text-muted-foreground">
+                    No designs yet.
+                  </div>
+                )}
+
+                {!loading &&
+                  items.map((design, index) => (
+                    <div
+                      key={design.id}
+                      className="fashion-card border-b border-border/30 overflow-hidden animate-fade-in"
+                      style={{ animationDelay: `${index * 0.2}s` }}
+                    >
+                      {/* Post Header */}
+                      <div className="p-6 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="story-gradient">
+                            <Avatar className="w-12 h-12">
+                              {design.designerAvatar ? (
+                                <AvatarImage src={design.designerAvatar} />
+                              ) : (
+                                <AvatarFallback>
+                                  {design.designer?.[0] || "U"}
+                                </AvatarFallback>
+                              )}
+                            </Avatar>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-lg">
+                              {design.designer}
+                            </h4>
+                            <p className="text-sm text-muted-foreground">
+                              Just now
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <h4 className="font-semibold text-lg">
-                            {design.designer}
-                          </h4>
-                          <p className="text-sm text-muted-foreground">
-                            2 hours ago • Mumbai
-                          </p>
-                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="hover-glow"
+                        >
+                          <Settings className="w-4 h-4" />
+                        </Button>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="hover-glow"
-                      >
-                        <Settings className="w-4 h-4" />
-                      </Button>
-                    </div>
 
-                    {/* Enhanced Design Image */}
-                    <div className="relative overflow-hidden">
-                      <img
-                        src={design.imageUrl}
-                        alt={design.title}
-                        className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
+                      {/* Image */}
+                      <div className="relative overflow-hidden">
+                        {design.imageUrl ? (
+                          <img
+                            src={design.imageUrl}
+                            alt={design.title}
+                            className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className="w-full aspect-square bg-muted" />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                      </div>
 
-                    {/* Enhanced Post Actions */}
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex gap-5">
-                          {/* Like */}
+                      {/* Actions + Meta */}
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex gap-5">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className={`hover-glow ${design.isLiked ? "text-red-500" : ""}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log("[Heart] click", design.id);
+                                likeUnlike(Number(design.id));
+                              }}
+                            >
+                              <Heart
+                                className={`w-6 h-6 ${design.isLiked ? "fill-current animate-pulse" : ""}`}
+                              />
+                            </Button>
+
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="hover-glow"
+                              onClick={() => toggleComment(design.id)}
+                            >
+                              <MessageCircle className="w-6 h-6" />
+                            </Button>
+
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="hover-glow"
+                            >
+                              <Share2 className="w-6 h-6" />
+                            </Button>
+                          </div>
+
                           <Button
                             variant="ghost"
                             size="icon"
-                            className={`hover-glow ${design.isLiked ? "text-red-500" : ""}`}
+                            className="hover-glow"
                           >
-                            <Heart
-                              className={`w-6 h-6 ${design.isLiked ? "fill-current animate-pulse" : ""}`}
+                            <Bookmark className="w-6 h-6" />
+                          </Button>
+                        </div>
+
+                        <p className="font-semibold mb-2 text-lg">
+                          {design.likes.toLocaleString()} likes
+                        </p>
+
+                        <h3 className="font-semibold text-xl mb-2 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                          {design.title}
+                        </h3>
+
+                        {design.category && (
+                          <p className="text-sm text-primary mb-3 font-medium">
+                            #{design.category}
+                          </p>
+                        )}
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-muted-foreground p-0 hover:p-1 h-auto hover:text-foreground transition-colors"
+                        >
+                          View all{" "}
+                          {(commentsCounts[design.id] ?? 0) + design.comments}{" "}
+                          comments
+                        </Button>
+
+                        {openCommentBox[design.id] && (
+                          <div className="mt-3 flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={commentText[design.id] ?? ""}
+                              placeholder="Add a comment..."
+                              className="flex-1 rounded-md border px-3 py-2 text-sm bg-background"
+                              onChange={(e) =>
+                                onTextChange(design.id, e.target.value)
+                              }
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") submitComment(design.id);
+                              }}
                             />
-                          </Button>
+                            <Button
+                              size="sm"
+                              onClick={() => submitComment(design.id)}
+                              disabled={
+                                !(commentText[design.id] ?? "").trim().length
+                              }
+                            >
+                              Post
+                            </Button>
+                          </div>
+                        )}
 
-                          {/* Comment */}
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="hover-glow"
-                          >
-                            <MessageCircle className="w-6 h-6" />
-                          </Button>
+                        <div className="flex items-center justify-between mt-4">
+                          <Link to={`/product/${design.id}`}>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-sm font-medium hover-glow"
+                            >
+                              View Details
+                            </Button>
+                          </Link>
 
-                          {/* Share */}
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="hover-glow"
-                          >
-                            <Share2 className="w-6 h-6" />
-                          </Button>
-                        </div>
-
-                        {/* Bookmark */}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="hover-glow"
-                        >
-                          <Bookmark className="w-6 h-6" />
-                        </Button>
-                      </div>
-
-                      {/* Likes */}
-                      <p className="font-semibold mb-2 text-lg">
-                        {design.likes.toLocaleString()} likes
-                      </p>
-
-                      {/* Title */}
-                      <h3 className="font-semibold text-xl mb-2 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-                        {design.title}
-                      </h3>
-
-                      {/* Category */}
-                      <p className="text-sm text-primary mb-3 font-medium">
-                        #{design.category}
-                      </p>
-
-                      {/* View Comments */}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-muted-foreground p-0 hover:p-1 h-auto hover:text-foreground transition-colors"
-                      >
-                        View all {design.comments} comments
-                      </Button>
-
-                      {/* View Details + Price Section */}
-                      <div className="flex items-center justify-between mt-4">
-                        <Link to={`/product/${design.id}`}>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-sm font-medium hover-glow"
-                          >
-                            View Details
-                          </Button>
-                        </Link>
-
-                        <div className="text-right">
-                          <p className="text-muted-foreground text-sm line-through">
-                            {/* ₹{design.originalPrice ?? 1299} */}₹ 1299
-                          </p>
-                          <p className="text-primary font-semibold text-lg">
-                            {/* ₹{design.discountedPrice ?? 999} */} ₹ 999
-                          </p>
+                          {/* price/discount not in original UI here; keep your placeholder */}
+                          <div className="text-right">
+                            <p className="text-muted-foreground text-sm line-through">
+                              ₹ 1299
+                            </p>
+                            <p className="text-primary font-semibold text-lg">
+                              ₹ 999
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-
-                {/* More enhanced feed content */}
-                {sampleDesigns.map((design, index) => (
-                  <div
-                    key={`${design.id}-duplicate`}
-                    className="border-b border-border/30 fashion-card overflow-hidden animate-fade-in"
-                    style={{ animationDelay: `${(index + 2) * 0.2}s` }}
-                  >
-                    {/* Enhanced Post Header */}
-                    <div className="p-6 flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="story-gradient">
-                          <Avatar className="w-12 h-12">
-                            <AvatarImage src={design.designerAvatar} />
-                            <AvatarFallback>
-                              {design.designer[0]}
-                            </AvatarFallback>
-                          </Avatar>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-lg">
-                            {design.designer}
-                          </h4>
-                          <p className="text-sm text-muted-foreground">
-                            5 hours ago • Delhi
-                          </p>
-                        </div>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="hover-glow"
-                      >
-                        <Settings className="w-4 h-4" />
-                      </Button>
-                    </div>
-
-                    <div className="relative overflow-hidden border-3 border-red-500">
-                      <img
-                        src={design.imageUrl}
-                        alt={design.title}
-                        className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-500 "
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex gap-5">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="hover-glow"
-                          >
-                            <Heart className="w-6 h-6" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="hover-glow"
-                          >
-                            <MessageCircle className="w-6 h-6" />
-                          </Button>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="hover-glow"
-                        >
-                          <Bookmark className="w-6 h-6" />
-                        </Button>
-                      </div>
-
-                      <p className="font-semibold mb-2 text-lg">
-                        {(design.likes + 50).toLocaleString()} likes
-                      </p>
-                      <h3 className="font-semibold text-xl mb-2 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-                        {design.title}
-                      </h3>
-                      <p className="text-sm text-primary mb-3 font-medium">
-                        #{design.category}
-                      </p>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-muted-foreground p-0 h-auto hover:text-foreground transition-colors"
-                      >
-                        View all {design.comments + 5} comments
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
 
