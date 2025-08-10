@@ -103,14 +103,64 @@ interface ToggleLikeResult {
   };
 }
 
+type RawComment = {
+  id: number;
+  designId: number;
+  userId: number;
+  comment?: string; // some APIs
+  content?: string; // your API
+  createdAt: string;
+  updatedAt?: string;
+  user: {
+    id: number;
+    name: string | null;
+    profile?: { profileImage?: string | null } | null;
+  };
+};
+
+export type CommentsPageResponse = {
+  designId: number;
+  currentPage: number;
+  totalPages: number;
+  totalComments: number;
+  comments: RawComment[];
+};
+
+interface ToggleSaveResult {
+  message: string;
+  save?: {
+    id: number;
+    designId: number;
+    userId: number;
+    createdAt: string;
+  };
+}
+
+interface ShareResult {
+  message: string;
+  share: {
+    id: number;
+    designId: number;
+    userId: number;
+    createdAt: string;
+  };
+}
+
 interface ApiContextType {
   createComment: (designId: number, content: string) => Promise<void>;
   deleteComment: (commentId: number) => Promise<void>;
-  shareDesign: (designId: number) => Promise<void>;
+
   uploadDesign: (payload: UploadDesignInput) => Promise<any>;
   getFeed: (page?: number) => Promise<FeedResponse>;
   getProductDetails: (designId: number) => Promise<ProductDetailResponse>;
   toggleLike: (designId: number) => Promise<ToggleLikeResult>;
+  getCommentsByDesign: (
+    designId: number,
+    page?: number,
+    limit?: number
+  ) => Promise<CommentsPageResponse>;
+  toggleSave: (designId: number) => Promise<ToggleSaveResult>;
+  shareDesign: (designId: number) => Promise<ShareResult>;
 }
 
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
@@ -197,12 +247,45 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
     return data;
   };
 
+  const getCommentsByDesign = async (
+    designId: number,
+    page = 1,
+    limit = 10
+  ): Promise<CommentsPageResponse> => {
+    const { data } = await api.get<CommentsPageResponse>(
+      `/api/design/getCommentsByDesign/${designId}`,
+      { params: { page, limit }, withCredentials: true }
+    );
+    return data;
+  };
+
+  const toggleSave: ApiContextType["toggleSave"] = async (designId) => {
+    const { data } = await api.post<ToggleSaveResult>(
+      `/api/design/saveUnSaveDesign/${designId}`,
+      {}, // IMPORTANT: send {} (not null) to avoid body-parser error
+      { withCredentials: true }
+    );
+    return data;
+  };
+
+  const shareDesign: ApiContextType["shareDesign"] = async (designId) => {
+    const { data } = await api.post<ShareResult>(
+      `/api/design/shareDesign/${designId}`,
+      {}, // IMPORTANT: send {} not null
+      { withCredentials: true }
+    );
+    return data;
+  };
+
   const value: ApiContextType = {
     createComment,
     uploadDesign,
     getFeed,
     getProductDetails,
     toggleLike,
+    getCommentsByDesign,
+    toggleSave,
+    shareDesign,
   };
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
 };
