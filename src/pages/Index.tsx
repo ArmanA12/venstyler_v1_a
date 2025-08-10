@@ -33,6 +33,9 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useFeed } from "@/hooks/useFeed";
 import { useToggleLike } from "@/hooks/useToggleLike";
+import CommentsPanel from "@/components/comments/commentPanle";
+import { useToggleSave } from "@/hooks/useToggleSave";
+import { useShareDesign } from "@/hooks/useShareDesign";
 // import { Header } from "@/components/Header";
 
 const Index = () => {
@@ -48,10 +51,10 @@ const Index = () => {
     {}
   );
 
-  // TanStack Query feed (cached, keepPreviousData, prefetch handled in hook)
+  const [openCommentsFor, setOpenCommentsFor] = useState<string | null>(null);
+
   const { data, isLoading, isFetching, isError, error } = useFeed(page);
 
-  // Toast API errors
   useEffect(() => {
     if (isError) {
       toast.error((error as Error)?.message || "Failed to load feed");
@@ -66,6 +69,8 @@ const Index = () => {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   const { mutate: likeUnlike } = useToggleLike(page);
+  const { mutate: toggleSaveMutate } = useToggleSave(page);
+  const { mutate: shareMutate } = useShareDesign(page);
 
   // UI helpers
   const toggleComment = (id: string) => {
@@ -98,40 +103,6 @@ const Index = () => {
     }
   };
 
-  // (Optional) sample data you had — keep if you still need it elsewhere
-  const sampleDesigns = [
-    {
-      id: "1",
-      imageUrl: design1,
-      title: "Contemporary Lehenga Collection",
-      designer: "Priya Sharma",
-      designerAvatar: designerAvatar,
-      category: "Traditional",
-      likes: 234,
-      comments: 18,
-      isLiked: true,
-    },
-    {
-      id: "2",
-      imageUrl: design2,
-      title: "Fusion Wear Series",
-      designer: "Arjun Mehta",
-      designerAvatar: designerAvatar,
-      category: "Contemporary",
-      likes: 189,
-      comments: 23,
-      isLiked: true,
-    },
-  ];
-
-  const stories = [
-    { id: 1, name: "Your Story", avatar: designerAvatar, hasStory: false },
-    { id: 2, name: "Priya", avatar: designerAvatar, hasStory: true },
-    { id: 3, name: "Arjun", avatar: designerAvatar, hasStory: true },
-    { id: 4, name: "Meera", avatar: designerAvatar, hasStory: true },
-    { id: 5, name: "Raj", avatar: designerAvatar, hasStory: true },
-  ];
-
   const sidebarSuggestions = [
     { name: "Fashion Week Updates", category: "Event", followers: "2.1k" },
     {
@@ -144,6 +115,10 @@ const Index = () => {
 
   const handleLikeClick = (designId: string) => {
     likeUnlike(Number(designId));
+  };
+
+  const handleSaveClick = (id: string) => {
+    toggleSaveMutate(Number(id));
   };
 
   return (
@@ -399,6 +374,11 @@ const Index = () => {
                               variant="ghost"
                               size="icon"
                               className="hover-glow"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                shareMutate(Number(design.id));
+                              }}
                             >
                               <Share2 className="w-6 h-6" />
                             </Button>
@@ -407,9 +387,16 @@ const Index = () => {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="hover-glow"
+                            className={`hover-glow ${design.isSaved ? "text-primary" : ""}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleSaveClick(design.id);
+                            }}
                           >
-                            <Bookmark className="w-6 h-6" />
+                            <Bookmark
+                              className={`w-6 h-6 ${design.isSaved ? "fill-current" : ""}`}
+                            />
                           </Button>
                         </div>
 
@@ -431,6 +418,7 @@ const Index = () => {
                           variant="ghost"
                           size="sm"
                           className="text-muted-foreground p-0 hover:p-1 h-auto hover:text-foreground transition-colors"
+                          onClick={() => setOpenCommentsFor(design.id)}
                         >
                           View all{" "}
                           {(commentsCounts[design.id] ?? 0) + design.comments}{" "}
@@ -487,6 +475,20 @@ const Index = () => {
                       </div>
                     </div>
                   ))}
+                {openCommentsFor !== null && (
+                  <CommentsPanel
+                    designId={openCommentsFor}
+                    open
+                    onClose={() => setOpenCommentsFor(null)}
+                    onPosted={() =>
+                      setCommentsCounts((c) => ({
+                        ...c,
+                        [String(openCommentsFor)]:
+                          (c[String(openCommentsFor)] ?? 0) + 1,
+                      }))
+                    }
+                  />
+                )}
               </div>
             </div>
 

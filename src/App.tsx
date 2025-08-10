@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
@@ -28,21 +28,58 @@ import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/routes/ProtectedRoutes";
 import ExplorePage from "./pages/explore/Explore";
 import socket from "@/lib/socket";
+import { useCallback, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
+import ChatBox from "./pages/ChatBox";
+import {
+  NotificationsProvider,
+  useNotifications,
+} from "./contexts/NotificationContext";
+
 import { useEffect, useId, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import ChatBox from "./pages/ChatBox";
 import { checkUserAuth } from './lib/getCurrentUserDetails';
 
 
+
 const queryClient = new QueryClient();
 
 const App = () => {
+  //akbar
   const { toast } = useToast();
+
+  const { addNotification } = useNotifications();
+  const { user } = useAuth(); // ← real logged-in user
+
+  const handleConnect = useCallback(() => {
+    console.log("Connected to socket:", socket.id);
+  }, []);
+
+  const handleNewChat = useCallback(
+    ({ chatId }: { chatId: number }) => {
+      socket.emit("joinChat", { chatId });
+      console.log(`Joined new chat room: chat_${chatId}`);
+      toast({ title: "New Chat", description: "A new chat has been started." });
+    },
+    [toast]
+  );
+
+  const handleNewNotification = useCallback(
+    (data: any) => {
+      addNotification({
+        id: data.id,
+        type: data.type,
+        message: data.message,
+        designId: data.designId,
+        senderId: data.senderId,
+        recipientId: data.recipientId,
+        createdAt: data.createdAt,
+
   const [userId, setUserId] = useState<number | null>(null);
 
   console.log("Rendering App");
 
-  // ✅ Fetch user ID once
   useEffect(() => {
     const fetchUser = async () => {
       const result = await checkUserAuth();
@@ -58,7 +95,6 @@ const App = () => {
     fetchUser();
   }, []);
 
-  // ✅ Join personal room ONCE per session
 useEffect(() => {
   if (!userId) return;
 
@@ -89,20 +125,138 @@ useEffect(() => {
   };
 }, [userId]);
 
-  // ✅ Global notifications only (no newMessage here)
   useEffect(() => {
     socket.off("new-notification").on("new-notification", (data) => {
       console.log("New notification:", data);
       toast({
         title: data.type,
         description: data.message,
+
       });
-    });
+      toast({ title: data.type, description: data.message });
+    },
+    [addNotification, toast]
+  );
+
+
+  const handleNewMessage = useCallback(
+    (message: any) => {
+      toast({
+        title: "New Message",
+        description: `${message?.sender?.name ?? "Someone"}: ${message?.content ?? ""}`,
+      });
+    },
+    [toast]
+  );
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    // Join this user's personal room so backend emits reach them:
+    socket.emit("join-room", user.id);
+    console.log(`Joined user room: user_${user.id}`);
+
+    socket.on("connect", handleConnect);
+    socket.on("newChat", handleNewChat);
+    socket.on("new-notification", handleNewNotification);
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("connect", handleConnect);
+      socket.off("newChat", handleNewChat);
+      socket.off("new-notification", handleNewNotification);
+      socket.off("newMessage", handleNewMessage);
+      // Do not disconnect here if other parts of the app also use the socket
 
     return () => {
       socket.off("new-notification");
+
     };
-  }, []);
+  }, [
+    user?.id,
+    handleConnect,
+    handleNewChat,
+    handleNewNotification,
+    handleNewMessage,
+  ]);
+
+  //akbar end
+
+  //arman
+  // const { toast } = useToast();
+  // const { addNotification } = useNotifications();
+  // const userId = 8;
+
+  // // stable handlers (optional but nice)
+  // const handleConnect = useCallback(() => {
+  //   console.log("Connected to socket:", socket.id);
+  // }, []);
+
+  // const handleNewChat = useCallback(
+  //   ({ chatId }: { chatId: number }) => {
+  //     socket.emit("joinChat", { chatId });
+  //     console.log(`Joined new chat room: chat_${chatId}`);
+  //     toast({ title: "New Chat", description: "A new chat has been started." });
+  //   },
+  //   [toast]
+  // );
+
+  // const handleNewNotification = useCallback(
+  //   (data: any) => {
+  //     console.log("New notification:", data);
+  //     addNotification({
+  //       id: data.id,
+  //       type: data.type,
+  //       message: data.message,
+  //       designId: data.designId,
+  //       senderId: data.senderId,
+  //       recipientId: data.recipientId,
+  //       createdAt: data.createdAt,
+  //     });
+  //     toast({ title: data.type, description: data.message });
+  //   },
+  //   [addNotification, toast]
+  // );
+
+  // const handleNewMessage = useCallback(
+  //   (message: any) => {
+  //     console.log("New message received:", message);
+  //     toast({
+  //       title: "New Message",
+  //       description: `${message.sender?.name}: ${message.content}`,
+  //     });
+  //   },
+  //   [toast]
+  // );
+
+  // useEffect(() => {
+  //   if (userId) {
+  //     socket.emit("join-room", userId);
+  //     console.log(`Joined user room: user_${userId}`);
+  //   }
+
+  //   // attach
+  //   socket.on("connect", handleConnect);
+  //   socket.on("newChat", handleNewChat);
+  //   socket.on("new-notification", handleNewNotification);
+  //   socket.on("newMessage", handleNewMessage);
+
+  //   // cleanup MUST return a function (no JSX!)
+  //   return () => {
+  //     socket.off("connect", handleConnect);
+  //     socket.off("newChat", handleNewChat);
+  //     socket.off("new-notification", handleNewNotification);
+  //     socket.off("newMessage", handleNewMessage);
+  //     // optional: do NOT disconnect if other parts of app use the socket
+  //     // socket.disconnect();
+  //   };
+  // }, [
+  //   userId,
+  //   handleConnect,
+  //   handleNewChat,
+  //   handleNewNotification,
+  //   handleNewMessage,
+  // ]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -150,7 +304,10 @@ useEffect(() => {
                   }
                 />
                 <Route path="/product/:id" element={<ProductDetails />} />
-                <Route path="/product/:id/reviews" element={<ProductReviews />} />
+                <Route
+                  path="/product/:id/reviews"
+                  element={<ProductReviews />}
+                />
                 <Route path="/chat" element={<ChatBox />} />
                 <Route
                   path="/product/:id/write-review"

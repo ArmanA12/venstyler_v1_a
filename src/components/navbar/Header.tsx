@@ -27,6 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { NotificationPopover } from "./NotificationPopver";
 
 export const Header = () => {
   const { isAuthenticated, signOut, user } = useAuth();
@@ -90,10 +91,12 @@ export const Header = () => {
 
           {/* Notification + Theme Toggle */}
           <div className="flex items-center space-x-0">
-            <Button variant="ghost" size="icon" className="relative hover-glow">
+            {/* <Button variant="ghost" size="icon" className="relative hover-glow">
               <Bell className="w-5 h-5" />
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full animate-pulse"></div>
-            </Button>
+            </Button> */}
+            <NotificationPopover />
+
             <Button
               variant="ghost"
               size="icon"
