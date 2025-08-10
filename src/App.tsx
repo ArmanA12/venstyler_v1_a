@@ -36,11 +36,19 @@ import {
   useNotifications,
 } from "./contexts/NotificationContext";
 
+import { useEffect, useId, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import ChatBox from "./pages/ChatBox";
+import { checkUserAuth } from './lib/getCurrentUserDetails';
+
+
+
 const queryClient = new QueryClient();
 
 const App = () => {
   //akbar
   const { toast } = useToast();
+
   const { addNotification } = useNotifications();
   const { user } = useAuth(); // ← real logged-in user
 
@@ -67,11 +75,69 @@ const App = () => {
         senderId: data.senderId,
         recipientId: data.recipientId,
         createdAt: data.createdAt,
+
+  const [userId, setUserId] = useState<number | null>(null);
+
+  console.log("Rendering App");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const result = await checkUserAuth();
+      console.log(result, "result");
+
+      if (result.success && result.user?.id) {
+        setUserId(result.user.id);
+      } else {
+        console.error("Failed to fetch user:", result.error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+useEffect(() => {
+  if (!userId) return;
+
+  socket.emit("join-room", userId);
+
+  socket.off("newChat").on("newChat", ({ chatId }) => {
+    socket.emit("joinChat", { chatId });
+    toast({ title: "New Chat", description: "A new chat has been started." });
+  });
+
+  socket.off("new-notification").on("new-notification", (data) => {
+    toast({ title: data.type, description: data.message });
+  });
+
+  socket.off("userOnline").on("userOnline", (id) => {
+    console.log("User online:", id);
+  });
+
+  socket.off("userOffline").on("userOffline", (id) => {
+    console.log("User offline:", id);
+  });
+
+  return () => {
+    socket.off("newChat");
+    socket.off("new-notification");
+    socket.off("userOnline");
+    socket.off("userOffline");
+  };
+}, [userId]);
+
+  useEffect(() => {
+    socket.off("new-notification").on("new-notification", (data) => {
+      console.log("New notification:", data);
+      toast({
+        title: data.type,
+        description: data.message,
+
       });
       toast({ title: data.type, description: data.message });
     },
     [addNotification, toast]
   );
+
 
   const handleNewMessage = useCallback(
     (message: any) => {
@@ -101,6 +167,10 @@ const App = () => {
       socket.off("new-notification", handleNewNotification);
       socket.off("newMessage", handleNewMessage);
       // Do not disconnect here if other parts of the app also use the socket
+
+    return () => {
+      socket.off("new-notification");
+
     };
   }, [
     user?.id,

@@ -15,6 +15,8 @@ import {
   Smile,
   Mic,
 } from "lucide-react";
+import { checkUserAuth } from '../lib/getCurrentUserDetails';
+
 
 // ✅ Connect once globally
 const socket = io("http://localhost:5000", { withCredentials: true });
@@ -53,7 +55,7 @@ const ChatBox: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // ✅ Fetch chat history and user info
+  // ✅ Fetch chat history
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -72,41 +74,43 @@ const ChatBox: React.FC = () => {
     if (chatId) fetchMessages();
   }, [chatId]);
 
-  // ✅ Setup socket for messages
-  useEffect(() => {
-    if (!chatId || !receiverId) return;
+  // ✅ Listen for new messages (only here)
+useEffect(() => {
+  if (!chatId) return;
 
-    // Join the chat room
-    socket.emit("joinRoom", `chat_${chatId}`);
+  // Join this chat room
+  socket.emit("joinRoom", `chat_${chatId}`);
 
-    socket.on("newMessage", (newMsg: Message) => {
-      setMessages((prev) => [...prev, newMsg]);
-      toast({ title: newMsg.sender.name, description: newMsg.content });
-      scrollToBottom();
+  // Remove old listener & attach new one
+  socket.off("newMessage").on("newMessage", (newMsg: Message) => {
+    setMessages((prev) => [...prev, newMsg]);
+    toast({
+      title: newMsg.sender.name,
+      description: newMsg.content,
     });
+    scrollToBottom();
+  });
 
-    return () => {
-      socket.off("newMessage");
-      socket.emit("leaveRoom", `chat_${chatId}`);
-    };
-  }, [chatId, receiverId, toast]);
+  return () => {
+    socket.emit("leaveRoom", `chat_${chatId}`);
+    socket.off("newMessage");
+  };
+}, [chatId, toast]);
 
-  // ✅ Join personal room for online status tracking
+  // ✅ Online/offline status tracking
   useEffect(() => {
-    const currentUserId = Number(localStorage.getItem("userId")); // Replace with your auth state
-    if (currentUserId) {
-      socket.emit("join-room", currentUserId);
-    }
-
-    socket.on("userOnline", (userId: number) => {
-      if (chatUser?.id === userId) {
+    socket.off("userOnline").on("userOnline", (id: number) => {
+      if (chatUser?.id === id) {
         setChatUser((prev) => prev && { ...prev, isOnline: true });
       }
     });
 
-    socket.on("userOffline", (userId: number) => {
-      if (chatUser?.id === userId) {
-        setChatUser((prev) => prev && { ...prev, isOnline: false, lastSeen: new Date().toISOString() });
+    socket.off("userOffline").on("userOffline", (id: number) => {
+      if (chatUser?.id === id) {
+        setChatUser(
+          (prev) =>
+            prev && { ...prev, isOnline: false, lastSeen: new Date().toISOString() }
+        );
       }
     });
 
@@ -116,33 +120,26 @@ const ChatBox: React.FC = () => {
     };
   }, [chatUser]);
 
-  const sendMessage = async () => {
-    if (!message.trim()) return;
+const sendMessage = async () => {
+  if (!message.trim()) return;
 
-    const tempMessage: Message = {
-      id: Date.now(),
-      senderId: 0, // Replace with actual sender ID
-      content: message,
-      sender: { id: 0, name: "You" }, // Replace with actual sender name
-    };
-
-    setMessages((prev) => [...prev, tempMessage]);
+  setIsSending(true);
+  try {
+    await axios.post(
+      `http://localhost:5000/api/chat/send`,
+      { receiverId, content: message },
+      { withCredentials: true }
+    );
+    setMessage(""); // clear input
     scrollToBottom();
-    setMessage("");
-    setIsSending(true);
+  } catch (error) {
+    console.error("Error sending message:", error);
+  } finally {
+    setTimeout(() => setIsSending(false), 1000);
+  }
+};
 
-    try {
-      await axios.post(
-        `http://localhost:5000/api/chat/send`,
-        { receiverId, content: tempMessage.content },
-        { withCredentials: true }
-      );
-    } catch (error) {
-      console.error("Error sending message:", error);
-    } finally {
-      setTimeout(() => setIsSending(false), 1000);
-    }
-  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20 flex flex-col">
