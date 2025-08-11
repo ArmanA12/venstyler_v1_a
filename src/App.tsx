@@ -117,7 +117,7 @@ useEffect(() => {
   });
 
 
-  
+
   return () => {
     socket.off("newChat");
     socket.off("new-notification");
@@ -158,6 +158,7 @@ useEffect(() => {
     console.log(`Joined user room: user_${user.id}`);
 
     socket.on("connect", handleConnect);
+    
     socket.on("newChat", handleNewChat);
     socket.on("new-notification", handleNewNotification);
     socket.on("newMessage", handleNewMessage);
