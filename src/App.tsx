@@ -117,6 +117,8 @@ useEffect(() => {
     console.log("User offline:", id);
   });
 
+
+  
   return () => {
     socket.off("newChat");
     socket.off("new-notification");
