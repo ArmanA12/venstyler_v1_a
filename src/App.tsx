@@ -78,7 +78,6 @@ const App = () => {
 
   const [userId, setUserId] = useState<number | null>(null);
 
-  console.log("Rendering App");
 
   useEffect(() => {
     const fetchUser = async () => {
