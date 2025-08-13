@@ -54,7 +54,7 @@ const Index = () => {
   const [openCommentsFor, setOpenCommentsFor] = useState<string | null>(null);
 
   const { data, isLoading, isFetching, isError, error } = useFeed(page);
-
+  console.log(data, "feed")
   useEffect(() => {
     if (isError) {
       toast.error((error as Error)?.message || "Failed to load feed");

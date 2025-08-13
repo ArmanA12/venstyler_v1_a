@@ -37,6 +37,8 @@ type FeedProduct = {
     sharesCount: number;
     commentCount: number;
   };
+  isLiked: boolean;
+  isSaved: boolean;
 };
 
 export type ProductDetail = {
