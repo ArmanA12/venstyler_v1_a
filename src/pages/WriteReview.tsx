@@ -11,6 +11,7 @@ import { Header } from "@/components/Header";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Star, Upload, X, Image as ImageIcon } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
+import { useSubmitReviewAndRating } from "@/hooks/useSubmitReviewRating";
 // import axios from "axios";
 
 const reviewSchema = z.object({
@@ -30,6 +31,7 @@ const WriteReview = () => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutateAsync: submitReview } = useSubmitReviewAndRating(Number(id));
 
   const {
     register,
@@ -83,32 +85,33 @@ const WriteReview = () => {
   const onSubmit = async (data: ReviewForm) => {
     if (!id) return;
 
-    setIsSubmitting(true);
+    if (!selectedRating || selectedRating < 1 || selectedRating > 5) {
+      // setError("rating", { type: "manual", message: "Please select a rating (1–5)" });
+      return;
+    }
 
-    try {
-      const formData = new FormData();
-      formData.append("rating", selectedRating.toString());
-      formData.append("comment", data.description); // Assuming backend expects "comment"
-      formData.append("designId", id); // Make sure id is string
-
-      selectedImages.forEach((image) => {
-        formData.append("images", image); // `image` must be File or Blob
+    const MAX_FILES = 5;
+    const MAX_MB = 5;
+    const tooMany = selectedImages.length > MAX_FILES;
+    const tooBig = selectedImages.some((f) => f.size > MAX_MB * 1024 * 1024);
+    if (tooMany || tooBig) {
+      toast({
+        title: "Invalid images",
+        description: tooMany
+          ? `You can upload up to ${MAX_FILES} images.`
+          : `Each image must be ≤ ${MAX_MB}MB.`,
+        variant: "destructive",
       });
+      return;
+    }
 
-      const response = await fetch(
-        `http://localhost:5000/api/design/submitReviewAndRating`,
-        {
-          method: "POST",
-          body: formData,
-          credentials: "include", // for cookies/session handling
-        }
-      );
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result?.message || "Failed to submit review.");
-      }
+    setIsSubmitting(true);
+    try {
+      await submitReview({
+        comment: data.description,
+        rating: selectedRating,
+        images: selectedImages, // File[]
+      });
 
       toast({
         title: "Review submitted!",
@@ -117,10 +120,10 @@ const WriteReview = () => {
       });
 
       navigate(`/product/${id}/reviews`);
-    } catch (error: any) {
+    } catch (err: any) {
       toast({
         title: "Error",
-        description: error.message || "Something went wrong.",
+        description: err?.message || "Something went wrong.",
         variant: "destructive",
       });
     } finally {

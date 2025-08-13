@@ -146,6 +146,24 @@ interface ShareResult {
   };
 }
 
+export interface SubmitReviewInput {
+  designId: number;
+  comment: string;
+  rating: number;
+  images?: File[];
+}
+
+export interface SubmitReviewResponse {
+  success: boolean;
+  data: {
+    id: number;
+    comment: string | null;
+    createdAt: string;
+    ReviewImage: Array<{ id: number; url: string }>;
+  };
+  message: string;
+}
+
 interface ApiContextType {
   createComment: (designId: number, content: string) => Promise<void>;
   deleteComment: (commentId: number) => Promise<void>;
@@ -161,6 +179,9 @@ interface ApiContextType {
   ) => Promise<CommentsPageResponse>;
   toggleSave: (designId: number) => Promise<ToggleSaveResult>;
   shareDesign: (designId: number) => Promise<ShareResult>;
+  submitReviewAndRating: (
+    input: SubmitReviewInput
+  ) => Promise<SubmitReviewResponse>;
 }
 
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
@@ -277,6 +298,26 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
     return data;
   };
 
+  const submitReviewAndRating: ApiContextType["submitReviewAndRating"] = async (
+    input
+  ) => {
+    const fd = new FormData();
+    fd.append("designId", String(input.designId));
+    fd.append("comment", input.comment);
+    fd.append("rating", String(input.rating));
+    input.images?.forEach((f) => fd.append("images", f));
+
+    const { data } = await api.post<SubmitReviewResponse>(
+      `/api/design/submitReviewAndRating`,
+      fd,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+      }
+    );
+    return data;
+  };
+
   const value: ApiContextType = {
     createComment,
     uploadDesign,
@@ -286,6 +327,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
     getCommentsByDesign,
     toggleSave,
     shareDesign,
+    submitReviewAndRating,
   };
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
 };
