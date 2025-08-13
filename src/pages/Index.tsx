@@ -456,9 +456,10 @@ const Index = () => {
                             <Button
                               variant="outline"
                               size="sm"
-                              className="text-sm font-medium hover-glow"
+                              className="text-sm text-[#ee4482] rounded-lg btshadow font-medium hover-glow relative overflow-clip border-transparent"
                             >
                               View Details
+                              <div className="w-20 h-5 bg-[#ee4482] absolute top-0 blur-2xl"></div>
                             </Button>
                           </Link>
 
