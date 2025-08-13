@@ -31,14 +31,11 @@ import socket from "@/lib/socket";
 import { useCallback, useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import ChatBox from "./pages/ChatBox";
+import { checkUserAuth } from './lib/getCurrentUserDetails'
 import {
   NotificationsProvider,
   useNotifications,
 } from "./contexts/NotificationContext";
-<<<<<<< HEAD
-import { checkUserAuth } from './lib/getCurrentUserDetails';
-=======
->>>>>>> b422daca6a8bf79ec03ce08cceebfdea13ada4cb
 
 const queryClient = new QueryClient();
 
@@ -130,12 +127,7 @@ const App = () => {
       socket.off("newChat", handleNewChat);
       socket.off("new-notification", handleNewNotification);
       socket.off("newMessage", handleNewMessage);
-<<<<<<< HEAD
-      socket.off("userOnline");
-      socket.off("userOffline");
-=======
       // Do not disconnect here if other parts of the app also use the socket
->>>>>>> b422daca6a8bf79ec03ce08cceebfdea13ada4cb
     };
   }, [userId, handleConnect, handleNewChat, handleNewNotification, handleNewMessage]);
 

@@ -159,7 +159,7 @@ const Settings = () => {
                     <div className="relative">
                       <Avatar className="w-20 h-20">
                         <AvatarImage src={designerAvatar} />
-                        <AvatarFallback>{user?.firstName?.[0]}</AvatarFallback>
+                        <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
                       </Avatar>
                       <Button
                         size="icon"
@@ -171,7 +171,7 @@ const Settings = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">
-                        {user?.firstName} {user?.lastName}
+                        {user?.name} 
                       </h3>
                       <p className="text-muted-foreground">{user?.email}</p>
                       <Badge variant="secondary" className="mt-2">
@@ -180,23 +180,24 @@ const Settings = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name</Label>
+                      <Label htmlFor="firstName"> Name</Label>
                       <Input
+                      className="w-full"
                         id="firstName"
-                        defaultValue={user?.firstName}
+                        defaultValue={user?.name}
                         placeholder="Enter first name"
                       />
                     </div>
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                       <Label htmlFor="lastName">Last Name</Label>
                       <Input
                         id="lastName"
                         defaultValue={user?.lastName}
                         placeholder="Enter last name"
                       />
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="space-y-2">
