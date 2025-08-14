@@ -27,6 +27,8 @@ import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/routes/ProtectedRoutes";
 import ExplorePage from "./pages/explore/Explore";
+import Checkout from "./pages/Checkout";
+import OrderConfirmation from "./pages/OrderConfirmation";
 import socket from "@/lib/socket";
 import { useCallback, useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -204,6 +206,22 @@ const App = () => {
                     }
                   />
                   <Route path="/explore" element={<ExplorePage />} />
+                  <Route
+                    path="/checkout"
+                    element={
+                      <ProtectedRoute>
+                        <Checkout />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/order-confirmation"
+                    element={
+                      <ProtectedRoute>
+                        <OrderConfirmation />
+                      </ProtectedRoute>
+                    }
+                  />
                   <Route path="/admin" element={<AdminDashboard />} />
                   <Route
                     path="/admin/users/:userId"
