@@ -27,7 +27,7 @@ import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/routes/ProtectedRoutes";
 import ExplorePage from "./pages/explore/Explore";
-import Checkout from "./pages/Checkout";
+
 import OrderConfirmation from "./pages/OrderConfirmation";
 import socket from "@/lib/socket";
 import { useCallback, useEffect, useState } from "react";
