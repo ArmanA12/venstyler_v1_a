@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import io from "socket.io-client";
 import { useToast } from "@/hooks/use-toast";
@@ -35,9 +35,8 @@ interface ChatUser {
 }
 
 const ChatBox: React.FC = () => {
-  const [searchParams] = useSearchParams();
-  const receiverId = Number(searchParams.get("receiverId")); // ✅ only receiverId from URL
-  console.log(receiverId, "receiver ID in front end")
+  let { receiverId } = useParams();
+  receiverId = Number(receiverId);
 
   const { toast } = useToast();
   const [chatId, setChatId] = useState<number | null>(null);
@@ -58,10 +57,10 @@ const ChatBox: React.FC = () => {
   useEffect(() => {
     const checkChatExists = async () => {
       try {
-const res = await axios.get(
-  `http://localhost:5000/api/chat/find-or-null/${receiverId}`,
-  { withCredentials: true }
-);
+        const res = await axios.get(
+          `http://localhost:5000/api/chat/find-or-null/${receiverId}`,
+          { withCredentials: true }
+        );
 
         if (res.data.exists) {
           setChatId(res.data.chatId);
@@ -71,7 +70,7 @@ const res = await axios.get(
         } else {
           setChatUser(res.data.chatUser); // still set receiver's info
           setIsFirstMessage(true);
-          
+
         }
       } catch (error) {
         console.error("Error checking chat:", error);
@@ -150,10 +149,10 @@ const res = await axios.get(
         { receiverId, content: message },
         { withCredentials: true }
       );
-       console.log(res, "from send ")
-       if(res.data.createdFirst){
-                navigate(0); // Refresh current route in React Router
-       }
+      console.log(res, "from send ")
+      if (res.data.createdFirst) {
+        navigate(0); // Refresh current route in React Router
+      }
       if (isFirstMessage && res.data.chatId) {
         setChatId(res.data.chatId);
         setIsFirstMessage(false);
@@ -196,8 +195,8 @@ const res = await axios.get(
                   {chatUser?.isOnline
                     ? "Active now"
                     : chatUser?.lastSeen
-                    ? `Last seen ${new Date(chatUser.lastSeen).toLocaleString()}`
-                    : "Offline"}
+                      ? `Last seen ${new Date(chatUser.lastSeen).toLocaleString()}`
+                      : "Offline"}
                 </p>
               </div>
             </div>
@@ -215,9 +214,18 @@ const res = await axios.get(
         <div className="w-full lg:w-4/5 mx-auto px-4 h-full">
           <div className="h-full overflow-y-auto py-4 space-y-4">
             {isFirstMessage && messages.length === 0 ? (
-              <p className="text-center text-muted-foreground">
-                Send first message from your side
-              </p>
+              <div className="flex justify-center items-center py-10">
+                <div className="text-center rounded-2xl px-6 py-8 btshadow animate-fade-in">
+                  <div className="text-4xl mb-3">💌</div>
+                  <h2 className="text-lg font-semibold text-primary mb-1">
+                    No messages yet
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Start the conversation by sending the first message!
+                  </p>
+                </div>
+              </div>
+
             ) : (
               messages.map((msg) => {
                 const isMe = msg.senderId !== chatUser?.id;
@@ -233,9 +241,8 @@ const res = await axios.get(
                       )}
                       <div>
                         <div
-                          className={`px-4 py-2 rounded-2xl ${
-                            isMe ? "bg-primary text-primary-foreground" : "bg-muted"
-                          }`}
+                          className={`px-4 py-2 rounded-2xl ${isMe ? "bg-primary text-primary-foreground" : "bg-muted"
+                            }`}
                         >
                           <p className="text-sm">{msg.content}</p>
                         </div>

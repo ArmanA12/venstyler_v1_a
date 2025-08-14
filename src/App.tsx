@@ -36,6 +36,7 @@ import {
   NotificationsProvider,
   useNotifications,
 } from "./contexts/NotificationContext";
+import Checkout from "./pages/Checkout";
 
 const queryClient = new QueryClient();
 
@@ -178,7 +179,7 @@ const App = () => {
                   />
                   <Route path="/product/:id" element={<ProductDetails />} />
                   <Route path="/product/:id/reviews" element={<ProductReviews />} />
-                  <Route path="/chat" element={<ChatBox />} />
+                  <Route path="/chat/receiverId/:receiverId" element={<ChatBox />} />
                   <Route
                     path="/product/:id/write-review"
                     element={
@@ -188,13 +189,21 @@ const App = () => {
                     }
                   />
                   <Route
+                    path="/checkout"
+                    element={
+                      <ProtectedRoute>
+                        <Checkout />
+                      </ProtectedRoute>
+                    }
+                  />
+                  {/* <Route
                     path="/chat/:chatId/:receiverId"
                     element={
                       <ProtectedRoute>
                         <Chat />
                       </ProtectedRoute>
                     }
-                  />
+                  /> */}
                   <Route
                     path="/settings"
                     element={
