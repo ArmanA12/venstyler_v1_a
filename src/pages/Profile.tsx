@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,6 +40,13 @@ import {
 } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { useAuth } from "@/contexts/AuthContext";
+import { useProfileImage } from "@/hooks/useProfileImage";
+import { useMe } from "@/hooks/useMe";
+import { useUpdateProfile } from "@/hooks/useUpdateProfile";
+import { useMyProfile } from "@/hooks/useMyProfile";
+import { useSavedDesigns } from "@/hooks/useSaveDesign";
+import { useLikedDesigns } from "@/hooks/useLikeDesign";
+import { RatingsTab } from "@/tab/RatingTab";
 
 const personalInfoSchema = z.object({
   name: z.string().min(1, "First name is required"),
@@ -69,18 +76,34 @@ const professions = [
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("sales");
   const [isImageUploadOpen, setIsImageUploadOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const { data: me } = useMe();
+  const [profileImage, setProfileImage] = useState<string | null>(
+    me?.profileImage ?? null
+  );
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [showMobleHeader, setShowMobileSidebar] = useState(false);
+  // const [profileImage, setProfileImage] = useState<string | null>(null);
 
+  const { data: myProfile, isLoading } = useMyProfile();
+  const updateMut = useUpdateProfile();
+
+  const { inputRef, inputAttrs, openPicker, previewUrl, uploading, remove } =
+    useProfileImage({
+      onSuccess: (url) => setProfileImage(url || null),
+      onError: (e) => console.error(e),
+    });
+
+  const { data: savedDesigns, isLoading: loadingSaved } = useSavedDesigns();
+  const { data: likedDesigns, isLoading: loadingLiked } = useLikedDesigns();
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
     watch,
+    reset,
   } = useForm<PersonalInfoForm>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
@@ -99,6 +122,30 @@ const Profile = () => {
     },
   });
 
+  useEffect(() => {
+    setProfileImage(me?.profileImage ?? null);
+  }, [me]);
+
+  useEffect(() => {
+    if (!myProfile) return;
+    reset({
+      name: myProfile.name ?? "",
+      email: myProfile.email ?? "",
+      phone: myProfile.phone ?? "",
+      address: myProfile.address ?? "",
+      city: myProfile.city ?? "",
+      state: myProfile.state ?? "",
+      pincode: myProfile.pincode ?? "",
+      country: myProfile.country ?? "",
+      profession: myProfile.profession ?? "",
+      numberOfEmployees: String(myProfile.numberOfEmployees ?? ""),
+      bio: myProfile.bio ?? "",
+      googleMapLink: myProfile.googleMapLink ?? "",
+    });
+    // also set the avatar shown at the top, if you keep it in state:
+    setProfileImage(myProfile.profileImage ?? null);
+  }, [myProfile, reset]);
+
   const watchedValues = watch();
 
   const sidebarItems = [
@@ -110,11 +157,24 @@ const Profile = () => {
     { id: "liked", label: "Liked Designs", icon: Heart },
   ];
 
-  const onSubmitPersonalInfo = async (data: PersonalInfoForm) => {
-    toast({
-      title: "Profile updated",
-      description: "Your personal information has been saved successfully.",
-    });
+  const onSubmitPersonalInfo = async (formData: PersonalInfoForm) => {
+    // cast to UpdateProfileInput shape
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address,
+      city: formData.city,
+      state: formData.state,
+      pincode: formData.pincode,
+      country: formData.country,
+      profession: formData.profession,
+      numberOfEmployees: formData.numberOfEmployees || "",
+      bio: formData.bio || "",
+      googleMapLink: formData.googleMapLink || "",
+    };
+
+    await updateMut.mutateAsync(payload);
   };
 
   const handleImageUpload = (imageUrl: string) => {
@@ -134,15 +194,17 @@ const Profile = () => {
             />
 
             <div className="fashion-card p-6">
+              <input ref={inputRef} {...inputAttrs} className="hidden" />
+
               <h3 className="text-xl font-playfair font-semibold mb-4">
                 Profile Picture
               </h3>
               <div className="flex items-center gap-6">
                 <div className="relative">
                   <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center overflow-hidden">
-                    {profileImage ? (
+                    {previewUrl || profileImage ? (
                       <img
-                        src={profileImage}
+                        src={previewUrl || profileImage || ""}
                         alt="Profile"
                         className="w-full h-full object-cover"
                       />
@@ -151,31 +213,33 @@ const Profile = () => {
                     )}
                   </div>
                   <button
-                    onClick={() => setIsImageUploadOpen(true)}
-                    className="absolute -bottom-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground hover:bg-primary/90 transition-colors"
+                    onClick={openPicker}
+                    disabled={uploading}
+                    className="absolute -bottom-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
                   >
                     <Camera className="w-4 h-4" />
                   </button>
                 </div>
+
                 <div>
                   <Button
                     variant="outline"
                     className="mr-3"
-                    onClick={() => setIsImageUploadOpen(true)}
+                    onClick={openPicker}
+                    disabled={uploading}
                   >
-                    Upload Photo
+                    {uploading ? "Uploading..." : "Upload Photo"}
                   </Button>
                   <Button
                     variant="ghost"
                     className="text-destructive"
-                    onClick={() => setProfileImage(null)}
+                    onClick={remove}
                   >
                     Remove
                   </Button>
                 </div>
               </div>
             </div>
-
             <form onSubmit={handleSubmit(onSubmitPersonalInfo)}>
               <div className="fashion-card p-6">
                 <h3 className="text-xl font-playfair font-semibold mb-4">
@@ -469,75 +533,90 @@ const Profile = () => {
         );
 
       case "ratings":
-        return (
-          <div className="fashion-card p-6">
-            <h3 className="text-xl font-playfair font-semibold mb-4">
-              Product Ratings
-            </h3>
-            <div className="space-y-4">
-              {[1, 2, 3].map((rating) => (
-                <div key={rating} className="p-4 bg-muted/30 rounded-lg">
-                  <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg"></div>
-                    <div className="flex-1">
-                      <h4 className="font-medium">Elegant Summer Dress</h4>
-                      <div className="flex items-center gap-1 my-2">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            className="w-4 h-4 fill-primary text-primary"
-                          />
-                        ))}
-                        <span className="text-sm text-muted-foreground ml-2">
-                          (4.8)
-                        </span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        "Amazing quality and perfect fit!"
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-2">
-                        - Sarah M. • 2 days ago
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
+        return <RatingsTab />;
 
       case "saved":
-      case "liked":
+      case "liked": {
+        const isSaved = activeTab === "saved";
+        const loading = isSaved ? loadingSaved : loadingLiked;
+        const items = isSaved
+          ? (savedDesigns ?? []).map((d, idx) => ({
+              key: `saved-${idx}`,
+              title: `Saved design ${idx + 1}`,
+              by: d.userName,
+              image: d.images?.[0] ?? "", // first image or fallback
+            }))
+          : (likedDesigns ?? []).map((d) => ({
+              key: `liked-${d.id}`,
+              title: d.title ?? "Untitled design",
+              by: d.designerName ?? "Designer",
+              image: d.images?.[0] ?? "",
+            }));
+
         return (
           <div className="fashion-card p-6">
             <h3 className="text-xl font-playfair font-semibold mb-4">
-              {activeTab === "saved" ? "Saved Designs" : "Liked Designs"}
+              {isSaved ? "Saved Designs" : "Liked Designs"}
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[1, 2, 3, 4, 5, 6].map((item) => (
-                <div
-                  key={item}
-                  className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 aspect-square"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="absolute bottom-4 left-4 text-white">
-                      <p className="font-medium">Design {item}</p>
-                      <p className="text-sm opacity-90">By Designer Name</p>
-                    </div>
-                  </div>
-                  <button className="absolute top-3 right-3 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                    {activeTab === "saved" ? (
-                      <Bookmark className="w-4 h-4" />
+
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="animate-pulse h-64 rounded-lg bg-muted/40"
+                  />
+                ))}
+              </div>
+            ) : items.length === 0 ? (
+              <div className="text-sm text-muted-foreground">
+                {isSaved
+                  ? "You haven’t saved any designs yet."
+                  : "You haven’t liked any designs yet."}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {items.map((it) => (
+                  <div
+                    key={it.key}
+                    className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 aspect-square"
+                  >
+                    {/* thumb */}
+                    {it.image ? (
+                      <img
+                        src={it.image}
+                        alt={it.title}
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
-                      <Heart className="w-4 h-4" />
+                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                        No image
+                      </div>
                     )}
-                  </button>
-                </div>
-              ))}
-            </div>
+
+                    {/* hover overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="absolute bottom-4 left-4 text-white">
+                        <p className="font-medium">{it.title}</p>
+                        <p className="text-sm opacity-90">By {it.by}</p>
+                      </div>
+                    </div>
+
+                    {/* corner icon */}
+                    <button className="absolute top-3 right-3 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                      {isSaved ? (
+                        <Bookmark className="w-4 h-4" />
+                      ) : (
+                        <Heart className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         );
-
+      }
       default:
         return null;
     }

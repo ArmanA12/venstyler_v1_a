@@ -36,6 +36,8 @@ import { useToggleLike } from "@/hooks/useToggleLike";
 import CommentsPanel from "@/components/comments/commentPanle";
 import { useToggleSave } from "@/hooks/useToggleSave";
 import { useShareDesign } from "@/hooks/useShareDesign";
+import { useRefreshAfterToggle } from "@/hooks/useRefreshAfterLikeAndSave";
+import ImageCarousel from "@/components/caraousel/ImageCaraousel";
 // import { Header } from "@/components/Header";
 
 const Index = () => {
@@ -54,12 +56,16 @@ const Index = () => {
   const [openCommentsFor, setOpenCommentsFor] = useState<string | null>(null);
 
   const { data, isLoading, isFetching, isError, error } = useFeed(page);
-  console.log(data, "feed")
+
   useEffect(() => {
     if (isError) {
       toast.error((error as Error)?.message || "Failed to load feed");
     }
   }, [isError, error]);
+
+  const likeMut = useToggleLike(page); // or: const { mutate: likeUnlike } = useToggleLike(page)
+  const saveMut = useToggleSave(page); // or: const { mutate: toggleSaveMutate } = useToggleSave(page)
+  const refresh = useRefreshAfterToggle();
 
   // Data mapped by the hook's `select`
   const items = data?.items ?? [];
@@ -112,14 +118,6 @@ const Index = () => {
     },
     { name: "Sustainable Fashion", category: "Movement", followers: "3.2k" },
   ];
-
-  const handleLikeClick = (designId: string) => {
-    likeUnlike(Number(designId));
-  };
-
-  const handleSaveClick = (id: string) => {
-    toggleSaveMutate(Number(id));
-  };
 
   return (
     <div>
@@ -327,18 +325,17 @@ const Index = () => {
                         </Button>
                       </div>
 
-                      {/* Image */}
                       <div className="relative overflow-hidden">
-                        {design.imageUrl ? (
-                          <img
-                            src={design.imageUrl}
-                            alt={design.title}
-                            className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-500"
-                          />
-                        ) : (
-                          <div className="w-full aspect-square bg-muted" />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                        <ImageCarousel
+                          images={
+                            Array.isArray(design.images) && design.images.length
+                              ? design.images // <-- must be string[]
+                              : design.imageUrl
+                                ? [design.imageUrl]
+                                : []
+                          }
+                          alt={design.title}
+                        />
                       </div>
 
                       {/* Actions + Meta */}
@@ -352,8 +349,19 @@ const Index = () => {
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                console.log("[Heart] click", design.id);
-                                likeUnlike(Number(design.id));
+                                likeMut.mutate(Number(design.id), {
+                                  onSuccess: () => {
+                                    refresh();
+                                  },
+                                  onError: (err) => {
+                                    toast.error("Couldn't update like", {
+                                      description:
+                                        err instanceof Error
+                                          ? err.message
+                                          : "Please try again.",
+                                    });
+                                  },
+                                });
                               }}
                             >
                               <Heart
@@ -391,7 +399,22 @@ const Index = () => {
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              handleSaveClick(design.id);
+                              saveMut.mutate(Number(design.id), {
+                                onSuccess: (res) => {
+                                  toast.success(
+                                    res?.message ?? "Updated your saves"
+                                  );
+                                  refresh();
+                                },
+                                onError: (err) => {
+                                  toast.error("Couldn't update saves", {
+                                    description:
+                                      err instanceof Error
+                                        ? err.message
+                                        : "Please try again.",
+                                  });
+                                },
+                              });
                             }}
                           >
                             <Bookmark
@@ -456,10 +479,9 @@ const Index = () => {
                             <Button
                               variant="outline"
                               size="sm"
-                              className="text-sm text-[#ee4482] rounded-lg btshadow font-medium hover-glow relative overflow-clip border-transparent"
+                              className="text-sm font-medium hover-glow"
                             >
                               View Details
-                              <div className="w-20 h-5 bg-[#ee4482] absolute top-0 blur-2xl"></div>
                             </Button>
                           </Link>
 

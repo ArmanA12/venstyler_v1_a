@@ -113,53 +113,86 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem("fashionconnect_user");
   };
 
+  // const forgotPassword = async (email: string) => {
+  //   setIsLoading(true);
+  //   try {
+  //     await axios.post(
+  //       "http://localhost:5000/api/auth/forgotPassowrd",
+  //       { email },
+  //       { withCredentials: true }
+  //     );
+  //   } catch (error: any) {
+  //     throw new Error(
+  //       error.response?.data?.message || "Failed to send reset email"
+  //     );
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  // const verifyOTP = async (otp: string) => {
+  //   setIsLoading(true);
+  //   try {
+  //     await axios.post(
+  //       "http://localhost:5000/api/auth/verifyOtp",
+  //       { otp },
+  //       { withCredentials: true }
+  //     );
+  //   } catch (error: any) {
+  //     throw new Error(error.response?.data?.message || "Invalid OTP");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  // const resetPassword = async (password: string) => {
+  //   setIsLoading(true);
+  //   try {
+  //     await axios.post(
+  //       "http://localhost:5000/api/auth/resetPassword",
+  //       { password },
+  //       { withCredentials: true }
+  //     );
+  //   } catch (error: any) {
+  //     throw new Error(
+  //       error.response?.data?.message || "Failed to reset password"
+  //     );
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  // useAuth.ts (axios instance recommended)
   const forgotPassword = async (email: string) => {
-    setIsLoading(true);
-    try {
-      await axios.post(
-        "http://localhost:5000/api/auth/forgotPassowrd",
-        { email },
-        { withCredentials: true }
-      );
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message || "Failed to send reset email"
-      );
-    } finally {
-      setIsLoading(false);
-    }
+    await axios.post("http://localhost:5000/api/auth/forgotPassowrd", {
+      email,
+    });
+    localStorage.setItem("fp_email", email);
+    return true;
   };
 
   const verifyOTP = async (otp: string) => {
-    setIsLoading(true);
-    try {
-      await axios.post(
-        "http://localhost:5000/api/auth/verifyOtp",
-        { otp },
-        { withCredentials: true }
-      );
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || "Invalid OTP");
-    } finally {
-      setIsLoading(false);
-    }
+    const email = localStorage.getItem("fp_email") || "";
+    const { data } = await axios.post(
+      "http://localhost:5000/api/auth/verifyOtp",
+      { email, otp }
+    );
+    const token = data?.data?.resetToken;
+    if (!token) throw new Error("No reset token");
+    localStorage.setItem("reset_token", token);
+    return true;
   };
 
   const resetPassword = async (password: string) => {
-    setIsLoading(true);
-    try {
-      await axios.post(
-        "http://localhost:5000/api/auth/resetPassword",
-        { password },
-        { withCredentials: true }
-      );
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message || "Failed to reset password"
-      );
-    } finally {
-      setIsLoading(false);
-    }
+    const resetToken = localStorage.getItem("reset_token") || "";
+    await axios.post("http://localhost:5000/api/auth/resetPassword", {
+      password,
+      resetToken,
+    });
+    // cleanup
+    localStorage.removeItem("reset_token");
+    localStorage.removeItem("fp_email");
+    return true;
   };
 
   const resendOtp = async () => {
