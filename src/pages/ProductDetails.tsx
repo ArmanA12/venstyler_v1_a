@@ -32,7 +32,6 @@ const ProductDetails = () => {
 
   // fetch actual product details
   const { data: prod, isLoading, isError, error } = useProductDetails(designId);
-
   // local UI-only states (like/save + carousel index)
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);

@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,25 +7,46 @@ import { Separator } from "@/components/ui/separator";
 import { CheckCircle, Package, Truck, Home, Mail } from "lucide-react";
 
 const OrderConfirmation = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  
-  const orderData = location.state?.orderData;
-  
-  if (!orderData) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Card className="max-w-md w-full">
-          <CardContent className="pt-6 text-center">
-            <p className="text-muted-foreground mb-4">No order data found</p>
-            <Button onClick={() => navigate("/")}>Return Home</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
-  const { products, totals, firstName, lastName, email, address, city, state, zipCode } = orderData;
+  // ✅ Dummy data for testing
+  const orderData = {
+    products: [
+      {
+        id: 1,
+        title: "Custom Silk Dress",
+        designer: "Arman Styles",
+        quantity: 1,
+        price: 129.99,
+        image: "https://via.placeholder.com/150",
+      },
+      {
+        id: 2,
+        title: "Leather Handbag",
+        designer: "Vogue Luxe",
+        quantity: 1,
+        price: 89.5,
+        image: "https://via.placeholder.com/150",
+      },
+    ],
+    totals: {
+      subtotal: 219.49,
+      shippingCost: 10.0,
+      tax: 12.5,
+      total: 241.99,
+    },
+    firstName: "John",
+    lastName: "Doe",
+    email: "john.doe@example.com",
+    address: "123 Fashion Street",
+    city: "New York",
+    state: "NY",
+    zipCode: "10001",
+  };
+
+  const { products, totals, firstName, lastName, email, address, city, state, zipCode } =
+    orderData;
+
   const orderNumber = `ORD-${Date.now().toString().slice(-8)}`;
   const estimatedDelivery = new Date();
   estimatedDelivery.setDate(estimatedDelivery.getDate() + 7);
@@ -34,7 +55,7 @@ const OrderConfirmation = () => {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          {/* Success Header */}
+          {/* ✅ Success Header */}
           <div className="text-center mb-8">
             <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
               <CheckCircle className="h-8 w-8 text-green-600" />
@@ -45,12 +66,11 @@ const OrderConfirmation = () => {
             </p>
           </div>
 
-          {/* Order Details */}
+          {/* ✅ Order Details */}
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Package className="h-5 w-5" />
-                Order Details
+                <Package className="h-5 w-5" /> Order Details
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -69,19 +89,22 @@ const OrderConfirmation = () => {
             </CardContent>
           </Card>
 
-          {/* Shipping Information */}
+          {/* ✅ Shipping Info */}
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Truck className="h-5 w-5" />
-                Shipping Information
+                <Truck className="h-5 w-5" /> Shipping Information
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="font-medium">{firstName} {lastName}</p>
+                <p className="font-medium">
+                  {firstName} {lastName}
+                </p>
                 <p className="text-muted-foreground">{address}</p>
-                <p className="text-muted-foreground">{city}, {state} {zipCode}</p>
+                <p className="text-muted-foreground">
+                  {city}, {state} {zipCode}
+                </p>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Estimated Delivery:</span>
@@ -90,13 +113,13 @@ const OrderConfirmation = () => {
             </CardContent>
           </Card>
 
-          {/* Order Items */}
+          {/* ✅ Order Items */}
           <Card className="mb-6">
             <CardHeader>
               <CardTitle>Order Items</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {products.map((product: any) => (
+              {products.map((product) => (
                 <div key={product.id} className="flex gap-4">
                   <img
                     src={product.image}
@@ -138,7 +161,7 @@ const OrderConfirmation = () => {
             </CardContent>
           </Card>
 
-          {/* Next Steps */}
+          {/* ✅ Next Steps */}
           <Card className="mb-6">
             <CardHeader>
               <CardTitle>What's Next?</CardTitle>
@@ -174,17 +197,13 @@ const OrderConfirmation = () => {
             </CardContent>
           </Card>
 
-          {/* Actions */}
+          {/* ✅ Actions */}
           <div className="flex gap-4">
             <Button onClick={() => navigate("/")} className="flex-1">
               <Home className="h-4 w-4 mr-2" />
               Continue Shopping
             </Button>
-            <Button 
-              variant="outline" 
-              onClick={() => navigate("/profile")}
-              className="flex-1"
-            >
+            <Button variant="outline" onClick={() => navigate("/profile")} className="flex-1">
               View Orders
             </Button>
           </div>

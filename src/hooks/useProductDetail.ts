@@ -11,6 +11,7 @@ export function useProductDetails(designId?: number) {
     queryFn: async () => {
       if (!designId) throw new Error("Missing designId");
       const res = await getProductDetails(designId);
+      console.log(res, "product details")
       if (!res.success) throw new Error("Failed to load product details");
       return res.product;
     },
