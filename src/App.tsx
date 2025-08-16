@@ -11,7 +11,6 @@ import { NotificationsProvider } from "./contexts/NotificationContext";
 
 import { NotificationsSocketBridge } from "./bridge/NotificationBridge";
 import { checkUserAuth } from "./lib/getCurrentUserDetails";
-
 // pages
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
