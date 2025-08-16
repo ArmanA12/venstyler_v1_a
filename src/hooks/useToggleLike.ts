@@ -14,6 +14,7 @@ type FeedProductsShape = {
 };
 
 type AnyFeed = FeedItemsShape | (FeedProductsShape & Record<string, any>);
+
 export function useToggleLike(page?: number) {
   const { toggleLike } = useApi();
   const qc = useQueryClient();

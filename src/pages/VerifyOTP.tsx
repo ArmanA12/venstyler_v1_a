@@ -5,7 +5,6 @@ import { ArrowLeft, Shield } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
-
 const VerifyOTP = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,39 +13,33 @@ const VerifyOTP = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  // inside VerifyOTP.tsx
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const otpCode = otp.join("");
-
     if (otpCode.length !== 6) {
-      toast({
-        title: "Error",
-        description: "Please enter the complete 6-digit code.",
-        variant: "destructive",
-      });
-      return;
+      /* toast … */ return;
     }
 
     setIsLoading(true);
-
     try {
-      await verifyOTP(otpCode); // ← using the context function now
-      toast({
-        title: "Email verified!",
-        description: "Your email has been successfully verified.",
-      });
-      navigate("/ResetPassword");
-    } catch (error) {
+      const ok = await verifyOTP(otpCode);
+      if (ok) {
+        toast({ title: "Email verified!", description: "Proceed to reset." });
+        navigate("/ResetPassword"); // <-- use your real route, lowercase
+      } else {
+        throw new Error("Invalid OTP");
+      }
+    } catch (err) {
       toast({
         title: "Error",
-        description: "Invalid verification code. Please try again.",
+        description: "Invalid or expired code. Try again.",
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
     }
   };
-
 
   const handleResendCode = async () => {
     try {
@@ -66,8 +59,6 @@ const VerifyOTP = () => {
       setIsLoading(false);
     }
   };
-
-
 
   const handleOtpChange = (index: number, value: string) => {
     if (value.length <= 1) {
@@ -94,7 +85,10 @@ const VerifyOTP = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20 flex items-center justify-center p-4">
       <div className="fashion-card w-full max-w-md p-8 space-y-6 animate-fade-in">
         <div className="text-center space-y-4">
-          <Link to="/signin" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4">
+          <Link
+            to="/signin"
+            className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4"
+          >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Sign In
           </Link>
@@ -108,13 +102,17 @@ const VerifyOTP = () => {
           </h1>
           <p className="text-muted-foreground">
             We've sent a 6-digit code to <br />
-            <span className="font-medium text-foreground">john@example.com</span>
+            <span className="font-medium text-foreground">
+              john@example.com
+            </span>
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-center">Enter verification code</label>
+            <label className="block text-sm font-medium text-center">
+              Enter verification code
+            </label>
             <div className="flex gap-3 justify-center">
               {otp.map((digit, index) => (
                 <input
@@ -131,7 +129,11 @@ const VerifyOTP = () => {
             </div>
           </div>
 
-          <Button type="submit" className="w-full fashion-button" disabled={isLoading}>
+          <Button
+            type="submit"
+            className="w-full fashion-button"
+            disabled={isLoading}
+          >
             {isLoading ? "Verifying..." : "Verify Code"}
           </Button>
         </form>
@@ -148,7 +150,6 @@ const VerifyOTP = () => {
           >
             {isLoading ? "Resending..." : "Resend Code"}
           </button>
-
         </div>
       </div>
     </div>

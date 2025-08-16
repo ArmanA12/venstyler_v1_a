@@ -37,8 +37,6 @@ type FeedProduct = {
     sharesCount: number;
     commentCount: number;
   };
-  isLiked: boolean;
-  isSaved: boolean;
 };
 
 export type ProductDetail = {
@@ -166,6 +164,65 @@ export interface SubmitReviewResponse {
   message: string;
 }
 
+export type AppUser = {
+  id: number;
+  name: string | null;
+  email: string;
+  profileImage?: string | null; // flattened for easy access
+};
+
+export type MyProfile = {
+  id: number;
+  name: string | null;
+  email: string;
+  profileImage: string | null;
+  bio: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  pincode: string;
+  country: string;
+  profession: string;
+  numberOfEmployees?: string | number | null;
+  googleMapLink?: string | null;
+};
+
+export type UpdateProfileInput = Omit<MyProfile, "id" | "profileImage">;
+
+export type SavedDesignItem = {
+  userName: string;
+  images: string[];
+};
+
+export type LikedDesignItem = {
+  id: number;
+  title?: string | null;
+  designerName?: string | null;
+  images: string[];
+};
+
+export type MyDesignReview = {
+  id: number;
+  comment: string | null;
+  createdAt: string;
+  user: {
+    id: number;
+    name: string | null;
+    profileImage: string | null;
+  };
+  images: string[];
+};
+
+export type MyDesignRatings = {
+  designId: number;
+  title: string;
+  images: string[];
+  avgRating: number | null;
+  totalRatings: number;
+  reviews: MyDesignReview[];
+};
+
 interface ApiContextType {
   createComment: (designId: number, content: string) => Promise<void>;
   deleteComment: (commentId: number) => Promise<void>;
@@ -184,6 +241,16 @@ interface ApiContextType {
   submitReviewAndRating: (
     input: SubmitReviewInput
   ) => Promise<SubmitReviewResponse>;
+
+  uploadProfileImage: (file: File) => Promise<string>;
+  getMe: () => Promise<AppUser>;
+  getMyProfileImage: () => Promise<string | null>;
+
+  getMyProfile: () => Promise<MyProfile>;
+  updateProfile: (payload: UpdateProfileInput) => Promise<MyProfile>;
+  getSavedDesignsByUser: () => Promise<SavedDesignItem[]>;
+  getLikedDesignsByUser: () => Promise<LikedDesignItem[]>;
+  getMyProductReviewsAndRatings: () => Promise<MyDesignRatings[]>;
 }
 
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
@@ -201,10 +268,6 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const createComment = async (designId: number, content: string) => {
     await api.post(`/api/design/createComment/${designId}`, { content });
-  };
-
-  const deleteComment = async (commentId: number) => {
-    await api.delete(`/api/design/deleteComment/${commentId}`);
   };
 
   const uploadDesign = async (payload: UploadDesignInput) => {
@@ -324,9 +387,146 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
     return data;
   };
 
+  const uploadProfileImage: ApiContextType["uploadProfileImage"] = async (
+    file
+  ) => {
+    const fd = new FormData();
+    fd.append("image", file); // must match multer.single("image")
+    const { data } = await api.post<{
+      success: boolean;
+      message: string;
+      data: { imageUrl: string };
+    }>("/api/users/updateProfileImage", fd, {
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true,
+    });
+    return data.data.imageUrl; // ← grab it from data.data
+  };
+
+  const getMe: ApiContextType["getMe"] = async () => {
+    const { data } = await api.get<{
+      success: boolean;
+      message: string;
+      data: AppUser;
+    }>("/api/users/me", { withCredentials: true });
+    return data.data;
+  };
+
+  const getMyProfileImage: ApiContextType["getMyProfileImage"] = async () => {
+    const { data } = await api.get<{
+      success: boolean;
+      message: string;
+      data: { profileImage: string | null };
+    }>("/api/users/profile-image", { withCredentials: true });
+    return data.data.profileImage;
+  };
+
+  const getMyProfile: ApiContextType["getMyProfile"] = async () => {
+    const { data } = await api.get<{
+      success: boolean;
+      message: string;
+      data: MyProfile;
+    }>("/api/users/profile", { withCredentials: true });
+    return data.data;
+  };
+
+  const updateProfile: ApiContextType["updateProfile"] = async (payload) => {
+    const { data } = await api.post<{
+      success: boolean;
+      message: string;
+      data: MyProfile;
+    }>("/api/users/updateProfile", payload, { withCredentials: true });
+    return data.data;
+  };
+
+  const getSavedDesignsByUser: ApiContextType["getSavedDesignsByUser"] =
+    async () => {
+      const { data } = await api.get<{ designs: SavedDesignItem[] }>(
+        "/api/users/getSavedDesignsByUser",
+        { withCredentials: true }
+      );
+      // data.designs is already [{ userName, images: string[] }]
+      return data.designs ?? [];
+    };
+
+  const getLikedDesignsByUser: ApiContextType["getLikedDesignsByUser"] =
+    async () => {
+      const { data } = await api.get<{
+        message: string;
+        data: Array<{
+          id: number;
+          title?: string | null;
+          designer?: { name?: string | null } | null;
+          images?: Array<{ url: string }>;
+        }>;
+      }>("/api/users/getLikedDesignsByUser", { withCredentials: true });
+
+      // normalize to LikedDesignItem[]
+      return (data.data ?? []).map((d) => ({
+        id: d.id,
+        title: d.title ?? null,
+        designerName: d.designer?.name ?? null,
+        images: (d.images ?? []).map((i) => i.url),
+      }));
+    };
+
+  const getMyProductReviewsAndRatings: ApiContextType["getMyProductReviewsAndRatings"] =
+    async () => {
+      const { data } = await api.get<{
+        message: string;
+        data: Array<{
+          id: number;
+          title: string;
+          images?: Array<{ url: string }>;
+          ratings?: Array<{ rating: number }>;
+          reviews: Array<{
+            id: number;
+            comment: string | null;
+            createdAt: string;
+            user: {
+              id: number;
+              name: string | null;
+              profile?: { profileImage?: string | null } | null;
+            };
+            ReviewImage?: Array<{ url: string }>;
+          }>;
+        }>;
+      }>("/api/users/getMyProductReviewsAndRatings", { withCredentials: true });
+
+      const items = (data.data ?? []).map((d) => {
+        const ratings = (d.ratings ?? []).map((r) => r.rating);
+        const avg =
+          ratings.length > 0
+            ? Number(
+                (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)
+              )
+            : null;
+
+        return {
+          designId: d.id,
+          title: d.title,
+          images: (d.images ?? []).map((i) => i.url),
+          avgRating: avg,
+          totalRatings: ratings.length,
+          reviews: (d.reviews ?? []).map((r) => ({
+            id: r.id,
+            comment: r.comment,
+            createdAt: r.createdAt,
+            user: {
+              id: r.user.id,
+              name: r.user.name,
+              profileImage: r.user.profile?.profileImage ?? null,
+            },
+            images: (r.ReviewImage ?? []).map((i) => i.url),
+          })),
+        } as MyDesignRatings;
+      });
+
+      return items;
+    };
+
   const value: ApiContextType = {
     createComment,
-    deleteComment,
     uploadDesign,
     getFeed,
     getProductDetails,
@@ -335,6 +535,14 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
     toggleSave,
     shareDesign,
     submitReviewAndRating,
+    uploadProfileImage,
+    getMe,
+    getMyProfileImage,
+    getMyProfile,
+    updateProfile,
+    getSavedDesignsByUser,
+    getLikedDesignsByUser,
+    getMyProductReviewsAndRatings,
   };
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
 };

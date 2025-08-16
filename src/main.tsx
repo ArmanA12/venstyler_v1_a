@@ -1,16 +1,22 @@
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
+import App from "./App";
 import "./index.css";
-import { AuthProvider } from "./contexts/AuthContext.tsx";
-import { ApiProvider } from "./contexts/ApiContext.tsx";
-import { NotificationsProvider } from "./contexts/NotificationContext.tsx";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ApiProvider } from "./contexts/ApiContext";
+import { NotificationsProvider } from "./contexts/NotificationContext";
+
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
-  <AuthProvider>
-    <ApiProvider>
-      <NotificationsProvider>
-        <App />
-      </NotificationsProvider>
-    </ApiProvider>
-  </AuthProvider>
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <ApiProvider>
+        <NotificationsProvider>
+          <App />
+        </NotificationsProvider>
+      </ApiProvider>
+    </AuthProvider>
+  </QueryClientProvider>
 );
