@@ -68,7 +68,7 @@ const Checkout = () => {
   // Example: from location or fallback
   const products: CheckoutProduct[] = location.state?.products || [
     {
-      id: 9,
+      id: 2,
       title: "Custom Wedding Dress Design",
       price: 899.99,
       image: "/api/placeholder/200/200",
@@ -190,7 +190,7 @@ const onSubmit = async (data: ShippingFormData) => {
       handler: async function (response: any) {
         // 4️⃣ Verify payment with backend
         const { data: verifyData } = await axios.post(
-          "/api/orders/verify-payment",
+          "http://localhost:5000/api/order/verify-payment",
           {
             razorpay_order_id: response.razorpay_order_id,
             razorpay_payment_id: response.razorpay_payment_id,

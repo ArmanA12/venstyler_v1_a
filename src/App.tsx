@@ -35,6 +35,8 @@ import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/routes/ProtectedRoutes";
 import ExplorePage from "./pages/explore/Explore";
 import ChatBox from "./pages/ChatBox";
+import Checkout from "./pages/Checkout";
+import OrderConfirmation from "./pages/OrderConfirmation";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -80,6 +82,14 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
+                <Route
+                  path="/checkout"
+                  element={
+                    <ProtectedRoute>
+                      <Checkout />
+                    </ProtectedRoute>
+                  }
+                />
 
                 <Route
                   path="/ResetPassword"
@@ -98,6 +108,16 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
+
+                 <Route
+                  path="/order-confirmation"
+                  element={
+                    <ProtectedRoute>
+                      <OrderConfirmation />
+                    </ProtectedRoute>
+                  }
+                />
+
 
                 <Route
                   path="/upload-product"
