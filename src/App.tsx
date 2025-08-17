@@ -37,6 +37,7 @@ import ExplorePage from "./pages/explore/Explore";
 import ChatBox from "./pages/ChatBox";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import PublicProfilePage from "./pages/PublicProfilePage";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -199,6 +200,8 @@ export default function App() {
                   }
                 />
                 <Route path="/admin/orders/:orderId" element={<OrderView />} />
+                <Route path="/publicProfile/:userId" element={<PublicProfilePage />} />
+
 
                 <Route path="*" element={<NotFound />} />
               </Routes>
