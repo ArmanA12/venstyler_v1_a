@@ -13,7 +13,8 @@ import {
   User,
   Scissors,
   Gem,
-} from "lucide-react"; // ✅ only lucide-react used
+  CheckCircle, // ✅ verified icon
+} from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,7 @@ interface UserType {
   id: number;
   name: string;
   role: string;
+  isVerified?: boolean; // ✅ added field
   profile: {
     profileImage?: string;
   } | null;
@@ -49,9 +51,8 @@ interface ApiResponse {
   };
 }
 
-// Roles array with lucide-react icons
 const roles = [
-  { id: "ALL", label: "All Users", icon: <Users className="w-4 h-4" /> }, // ✅ new
+  { id: "ALL", label: "All Users", icon: <Users className="w-4 h-4" /> },
   { id: "DESIGNER", label: "Designer", icon: <PenTool className="w-4 h-4" /> },
   { id: "VENDOR", label: "Vendor", icon: <Store className="w-4 h-4" /> },
   { id: "MASTER", label: "Master", icon: <UserCog className="w-4 h-4" /> },
@@ -67,7 +68,7 @@ const ExplorePage: FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalUsers, setTotalUsers] = useState(0);
-  const [selectedRole, setSelectedRole] = useState("ALL"); // ✅ default ALL
+  const [selectedRole, setSelectedRole] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
@@ -75,7 +76,7 @@ const ExplorePage: FC = () => {
     try {
       setLoading(true);
       const response = await api.get("http://localhost:5000/api/public/getListOfUsersByRole", {
-        params: role === "ALL" ? { page } : { role, page }, // ✅ skip role when ALL
+        params: role === "ALL" ? { page } : { role, page },
       });
       const data: ApiResponse = response.data;
 
@@ -134,7 +135,6 @@ const ExplorePage: FC = () => {
 
           {/* Right: Search + View toggle */}
           <div className="flex items-center gap-3">
-            {/* Search Bar */}
             <div className="relative hidden sm:block">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
               <Input
@@ -197,8 +197,7 @@ const ExplorePage: FC = () => {
                 {filteredUsers.map((user) => (
                   <Card
                     key={user.id}
-                    
-                    className="group overflow-hidden hover-lift p-2 card-foreground shadow-sm   rounded bg-background transition-all hover:shadow-xl"
+                    className="group overflow-hidden hover-lift p-2 card-foreground shadow-sm rounded bg-background transition-all hover:shadow-xl"
                   >
                     <div className="relative aspect-square overflow-hidden">
                       <img
@@ -211,14 +210,22 @@ const ExplorePage: FC = () => {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <div className="p-5 text-center">
-                      <h3 className="font-playfair font-bold text-lg mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent group-hover:scale-105 transition-transform">
+                    <div className="p-5">
+                      <h3 className="font-playfair font-bold text-lg mb-2 flex items-center gap-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                        {user.isVerified && (
+                          <CheckCircle className="w-4 h-4 text-green-500" />
+                        )}
                         {user.name}
                       </h3>
-                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary capitalize">
-                        <User className="w-3 h-3" />
-                        {user.role.toLowerCase()}
-                      </span>
+                      <div className="flex items-center justify-between">
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary capitalize">
+                          <User className="w-3 h-3" />
+                          {user.role.toLowerCase()}
+                        </span>
+                        <Button size="sm" className="rounded-full shadow">
+                          View Profile
+                        </Button>
+                      </div>
                     </div>
                   </Card>
                 ))}
@@ -238,19 +245,22 @@ const ExplorePage: FC = () => {
                       alt={user.name}
                       className="w-16 h-16 rounded-full object-cover border-2 border-primary/30 hover:border-primary transition"
                     />
-                    <div>
-                      <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg flex items-center gap-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                        {user.isVerified && (
+                          <CheckCircle className="w-4 h-4 text-green-500" />
+                        )}
                         {user.name}
                       </h3>
-                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-accent/10 text-accent capitalize">
-                        <User className="w-3 h-3" />
-                        {user.role.toLowerCase()}
-                      </span>
-                    </div>
-                    <div className="ml-auto">
-                      <Button size="sm" className="rounded-full shadow">
-                        View Profile
-                      </Button>
+                      <div className="flex items-center justify-between">
+                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-accent/10 text-accent capitalize">
+                          <User className="w-3 h-3" />
+                          {user.role.toLowerCase()}
+                        </span>
+                        <Button size="sm" className="rounded-full shadow">
+                          View Profile
+                        </Button>
+                      </div>
                     </div>
                   </Card>
                 ))}
