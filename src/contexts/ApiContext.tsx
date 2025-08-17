@@ -270,6 +270,10 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
     await api.post(`/api/design/createComment/${designId}`, { content });
   };
 
+  const deleteComment = async (commentId: number) => {
+    await api.delete(`/api/design/deleteComment/${commentId}`);
+  };
+
   const uploadDesign = async (payload: UploadDesignInput) => {
     const {
       title,
@@ -527,6 +531,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const value: ApiContextType = {
     createComment,
+    deleteComment,
     uploadDesign,
     getFeed,
     getProductDetails,

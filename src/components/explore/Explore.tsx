@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 
-export type Category = "All" | "Designer" | "Karigar" | "Vendor";
+export type Category = "All" | "DESIGNER" | "KARIGAR" | "VENDOR" | "USER";
 
 export interface UserCard {
   id: string;
@@ -24,7 +24,7 @@ const gradientClasses = {
 };
 
 export const ExploreDesktop: FC<ExploreProps> = ({ items }) => {
-  const categories: Category[] = ["All", "Designer", "Karigar", "Vendor"];
+  const categories: Category[] = ["All", "DESIGNER", "KARIGAR", "VENDOR", "USER"];
   const [activeCat, setActiveCat] = useState<Category>("All");
 
   const filtered =
@@ -99,7 +99,7 @@ export const ExploreDesktop: FC<ExploreProps> = ({ items }) => {
 };
 
 export const ExploreMobile: FC<ExploreProps> = ({ items }) => {
-  const categories: Category[] = ["All", "Designer", "Karigar", "Vendor"];
+  const categories: Category[] = ["All", "DESIGNER", "KARIGAR", "VENDOR", "USER"];
   const [activeCat, setActiveCat] = useState<Category>("All");
 
   const filtered =
