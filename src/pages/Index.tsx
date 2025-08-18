@@ -35,6 +35,7 @@ import { useToggleSave } from "@/hooks/useToggleSave";
 import { useShareDesign } from "@/hooks/useShareDesign";
 import { useRefreshAfterToggle } from "@/hooks/useRefreshAfterLikeAndSave";
 import ImageCarousel from "@/components/caraousel/ImageCaraousel";
+import { ShareMenu } from "@/components/shareMenu/ShareMenu";
 // import { Header } from "@/components/Header";
 
 const Index = () => {
@@ -354,22 +355,21 @@ const Index = () => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 likeMut.mutate(Number(design.id), {
-                                  onSuccess: () => {
-                                    refresh();
-                                  },
-                                  onError: (err) => {
+                                  onSuccess: refresh,
+                                  onError: (err) =>
                                     toast.error("Couldn't update like", {
                                       description:
                                         err instanceof Error
                                           ? err.message
                                           : "Please try again.",
-                                    });
-                                  },
+                                    }),
                                 });
                               }}
                             >
                               <Heart
-                                className={`w-6 h-6 ${design.isLiked ? "fill-current animate-pulse" : ""}`}
+                                className={`w-6 h-6 transition
+      ${design.isLiked ? "text-red-500 [&_path]:fill-current" : ""}
+    `}
                               />
                             </Button>
 
@@ -382,24 +382,17 @@ const Index = () => {
                               <MessageCircle className="w-6 h-6" />
                             </Button>
 
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="hover-glow"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                shareMutate(Number(design.id));
-                              }}
-                            >
-                              <Share2 className="w-6 h-6" />
-                            </Button>
+                            <ShareMenu
+                              url={`http://localhost:8080/product/${design.id}`}
+                              title={design.title}
+                              onShared={() => shareMutate(design.id)}
+                            />
                           </div>
 
                           <Button
                             variant="ghost"
                             size="icon"
-                            className={`hover-glow ${design.isSaved ? "text-primary" : ""}`}
+                            className={`hover-glow ${design.isSaved ? "text-black" : ""}`}
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
@@ -410,19 +403,20 @@ const Index = () => {
                                   );
                                   refresh();
                                 },
-                                onError: (err) => {
+                                onError: (err) =>
                                   toast.error("Couldn't update saves", {
                                     description:
                                       err instanceof Error
                                         ? err.message
                                         : "Please try again.",
-                                  });
-                                },
+                                  }),
                               });
                             }}
                           >
                             <Bookmark
-                              className={`w-6 h-6 ${design.isSaved ? "fill-current" : ""}`}
+                              className={`w-6 h-6 transition
+      ${design.isSaved ? "text-black [&_path]:fill-current" : ""}
+    `}
                             />
                           </Button>
                         </div>

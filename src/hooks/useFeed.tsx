@@ -7,6 +7,24 @@ import {
 } from "@tanstack/react-query";
 import { useApi } from "@/contexts/ApiContext";
 
+export type FeedItem = {
+  id: number;
+  title: string;
+  images: string[];
+  designer: {
+    id: number;
+    name: string | null;
+    profileImage: string | null;
+    city: string | null;
+  } | null;
+  designerAvatar: string | null;
+  category?: string;
+  likes: number;
+  comments: number;
+  isLiked: boolean;
+  isSaved: boolean;
+};
+
 export function useFeed(page: number) {
   const { getFeed } = useApi();
   const qc = useQueryClient();
@@ -29,7 +47,8 @@ export function useFeed(page: number) {
         category: p.category,
         likes: p.meta?.likesCount ?? 0,
         comments: p.meta?.commentCount ?? 0,
-        isLiked: false,
+        isLiked: !!p.isLiked, // <-- normalize here
+        isSaved: !!p.isSaved,
       })),
       total: res.total,
       pageSize: res.pageSize,
