@@ -25,11 +25,12 @@ export const VerificationBadge: React.FC<VerificationBadgeProps> = ({
 
   return (
     <div className={cn(
-      "inline-flex items-center justify-center rounded-full bg-blue-500 text-white flex-shrink-0",
+      "inline-flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white flex-shrink-0 shadow-lg shadow-blue-500/25 ring-2 ring-white/20 relative",
       sizeClasses[size],
       className
     )}>
-      <Check className={cn("stroke-[3]", iconSizes[size])} />
+      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400 to-blue-500 opacity-50 blur-sm"></div>
+      <Check className={cn("stroke-[3] relative z-10", iconSizes[size])} />
     </div>
   );
 };
