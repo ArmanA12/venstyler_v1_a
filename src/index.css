@@ -278,6 +278,12 @@
   .dark .shimmer {
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
   }
+
+  /* Gradient text animation */
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+  }
 }
 
 @keyframes fadeIn {
@@ -328,5 +334,14 @@
   }
   100% {
     background-position: 200% 0;
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }
