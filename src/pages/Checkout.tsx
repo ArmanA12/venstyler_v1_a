@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
-import { User, MapPin, CreditCard } from "lucide-react";
+import { User, MapPin, CreditCard, BaggageClaim, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Header } from "@/components/navbar/Header";
 import {
@@ -21,6 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import axios from "axios";
+import { checkUserAuth } from "../lib/getCurrentUserDetails";
 
 import {
   Select,
@@ -59,23 +60,44 @@ declare global {
 }
 
 const Checkout = () => {
+  const { id } = useParams<{ id: string }>();
+  const designId = parseInt(id)
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
   const [userInfo, setUserInfo] = useState({ name: "", email: "", phone: "" });
+  const [products, setProducts] = useState<CheckoutProduct[]>([]);
+  console.log(id, "product ID")
 
-  // Example: from location or fallback
-  const products: CheckoutProduct[] = location.state?.products || [
-    {
-      id: 2,
-      title: "Custom Wedding Dress Design",
-      price: 899.99,
-      image: "/api/placeholder/200/200",
-      quantity: 1,
-      designer: "Sarah Johnson",
-    },
-  ];
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (!id) return;
+      try {
+        const { data } = await axios.get(
+          `http://localhost:5000/api/design/getProductBasicInfo/${designId}`,
+          { withCredentials: true }
+        );
+        if (data.success && data.product) {
+          const product = data.product;
+          setProducts([
+            {
+              id: product.id,
+              title: product.title,
+              price: product.price,
+              image: product.image || "/api/placeholder/200/200",
+              quantity: 1,
+              designer: product.designer.name,
+            },
+          ]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch product", err);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
 
   const form = useForm<ShippingFormData>({
     resolver: zodResolver(shippingSchema),
@@ -107,17 +129,44 @@ const Checkout = () => {
 
   // Fetch user contact info from API/local storage
   useEffect(() => {
-    // Replace with real API call or context
     const fetchUserInfo = async () => {
-      const data = {
-        name: "John Doe",
-        email: "john@example.com",
-        phone: "9876543210",
-      };
-      setUserInfo(data);
+      try {
+        // 1️⃣ Fetch user info (name, email, phone)
+        const result = await checkUserAuth();
+        const userData = {
+          name: result.user.name,
+          email: result.user.email,
+          phone: result.user.phone,
+        };
+        setUserInfo(userData);
+
+        // 2️⃣ Fetch latest shipping address
+        const { data: addressData } = await axios.get(
+          "http://localhost:5000/api/order/current-user-shipping-address",
+          { withCredentials: true }
+        );
+
+        if (addressData.success && addressData.shippingAddress) {
+          const addr = addressData.shippingAddress;
+          // Populate the form fields
+          form.reset({
+            address: addr.shippingAddress || "",
+            city: addr.shippingCity || "",
+            state: addr.shippingState || "",
+            zipCode: addr.shippingPincode || "",
+            country: addr.shippingCountry || "",
+            specialInstructions: "", // Optional
+            saveAddress: true,
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch user/shipping info", error);
+      }
     };
+
     fetchUserInfo();
   }, []);
+
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -130,123 +179,131 @@ const Checkout = () => {
   };
 
 
-const onSubmit = async (data: ShippingFormData) => {
-  setIsProcessing(true);
-  try {
-    // 1️⃣ Load Razorpay script
-    const scriptLoaded = await loadRazorpayScript();
-    if (!scriptLoaded) {
+
+  const onSubmit = async (data: ShippingFormData) => {
+    setIsProcessing(true);
+    try {
+      // 1️⃣ Load Razorpay script
+      const scriptLoaded = await loadRazorpayScript();
+      if (!scriptLoaded) {
+        toast({
+          title: "Error",
+          description: "Razorpay SDK failed to load",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // 2️⃣ Create order on backend
+      const { data: orderData } = await axios.post(
+        "http://localhost:5000/api/order/create",
+        {
+          items: products.map((p) => ({
+            designId: p.id,
+            quantity: p.quantity,
+          })),
+          shippingDetails: {
+            name: userInfo.name,
+            phone: userInfo.phone,
+            address: data.address,
+            city: data.city,
+            state: data.state,
+            pincode: data.zipCode,
+            country: data.country,
+          },
+        },
+        { withCredentials: true }
+      );
+
+      if (!orderData.success) {
+        toast({
+          title: "Order Failed",
+          description: orderData.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // 3️⃣ Open Razorpay payment modal
+      const options = {
+        key: orderData.razorpayKey,
+        amount: orderData.amount * 100,
+        currency: orderData.currency,
+        name: "VenStyler",
+        description: "Purchase from VenStyler",
+        order_id: orderData.razorpayOrderId,
+        prefill: {
+          name: userInfo.name,
+          email: userInfo.email,
+          contact: userInfo.phone,
+        },
+        handler: async function (response: any) {
+          // 4️⃣ Verify payment with backend
+          const { data: verifyData } = await axios.post(
+            "http://localhost:5000/api/order/verify-payment",
+            {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              orderId: orderData.orderId,
+            },
+            { withCredentials: true }
+          );
+
+          if (verifyData.success) {
+            toast({
+              title: "Payment Successful",
+              description: "Your order has been placed!",
+            });
+            navigate("/order-confirmation", {
+              state: {
+                orderDatas: {
+                  ...data,
+                  products,
+                  totals: { subtotal, tax, total },
+                   orderId: orderData.orderId,
+                },
+              },
+            });
+          } else {
+            toast({
+              title: "Payment Failed",
+              description: "Verification failed",
+              variant: "destructive",
+            });
+          }
+        },
+        theme: { color: "#3399cc" },
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (error) {
+      console.error(error);
       toast({
         title: "Error",
-        description: "Razorpay SDK failed to load",
+        description: "Something went wrong",
         variant: "destructive",
       });
-      return;
+    } finally {
+      setIsProcessing(false);
     }
-
-    // 2️⃣ Create order on backend
-    const { data: orderData } = await axios.post(
-      "http://localhost:5000/api/order/create",
-      {
-        items: products.map((p) => ({
-          designId: p.id,
-          quantity: p.quantity,
-        })),
-        shippingDetails: {
-          name: userInfo.name,
-          phone: userInfo.phone,
-          address: data.address,
-          city: data.city,
-          state: data.state,
-          pincode: data.zipCode,
-          country: data.country,
-        },
-      },
-      { withCredentials: true }
-    );
-
-    if (!orderData.success) {
-      toast({
-        title: "Order Failed",
-        description: orderData.message,
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // 3️⃣ Open Razorpay payment modal
-    const options = {
-      key: orderData.razorpayKey,
-      amount: orderData.amount * 100,
-      currency: orderData.currency,
-      name: "VenStyler",
-      description: "Purchase from VenStyler",
-      order_id: orderData.razorpayOrderId,
-      prefill: {
-        name: userInfo.name,
-        email: userInfo.email,
-        contact: userInfo.phone,
-      },
-      handler: async function (response: any) {
-        // 4️⃣ Verify payment with backend
-        const { data: verifyData } = await axios.post(
-          "http://localhost:5000/api/order/verify-payment",
-          {
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-            orderId: orderData.orderId,
-          },
-          { withCredentials: true }
-        );
-
-        if (verifyData.success) {
-          toast({
-            title: "Payment Successful",
-            description: "Your order has been placed!",
-          });
-          navigate("/order-confirmation", {
-            state: {
-              orderData: {
-                ...data,
-                products,
-                totals: { subtotal, tax, total },
-              },
-            },
-          });
-        } else {
-          toast({
-            title: "Payment Failed",
-            description: "Verification failed",
-            variant: "destructive",
-          });
-        }
-      },
-      theme: { color: "#3399cc" },
-    };
-
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
-  } catch (error) {
-    console.error(error);
-    toast({
-      title: "Error",
-      description: "Something went wrong",
-      variant: "destructive",
-    });
-  } finally {
-    setIsProcessing(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center gap-4 mb-8">
-          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="flex items-center gap-2">
-            Back
-          </Button>
+        <div className="flex items-center  gap-4 mb-8">
+          <div className="mt-5">
+            <Link
+              to="/"
+              className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Feed
+            </Link>
+          </div>
           <h1 className="text-3xl font-bold">Checkout</h1>
         </div>
 
@@ -357,14 +414,18 @@ const onSubmit = async (data: ShippingFormData) => {
           <div className="space-y-6">
             <Card className="sticky top-4">
               <CardHeader>
-                <CardTitle>Order Summary</CardTitle>
+
+                <CardTitle className="flex items-center gap-2">
+                  <BaggageClaim className="h-5 w-5" />
+                  Order Summary
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {products.map((product) => (
                   <div key={product.id} className="flex gap-4">
                     <img src={product.image} alt={product.title} className="w-16 h-16 object-cover rounded-lg" />
                     <div className="flex-1">
-                      <h4 className="font-medium text-sm">{product.title}</h4>
+                      <h4 className="font-medium text-lg text-primary">{product.title}</h4>
                       <p className="text-sm text-muted-foreground">by {product.designer}</p>
                       <div className="flex items-center justify-between mt-1">
                         <span className="text-sm">Qty: {product.quantity}</span>

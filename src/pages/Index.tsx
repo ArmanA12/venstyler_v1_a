@@ -306,6 +306,7 @@ const Index = () => {
                     >
                       {/* Post Header */}
 
+
                       <Link to={`/publicProfile/${design.id}`}>
                         <div className="p-6 flex items-center justify-between">
                           <div className="flex items-center gap-4">
@@ -338,6 +339,7 @@ const Index = () => {
                             <Settings className="w-4 h-4" />
                           </Button>
                         </div>
+
                       </Link>
 
                       <div className="relative overflow-hidden">
@@ -533,13 +535,16 @@ const Index = () => {
                     <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                       Suggestions for you
                     </h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-primary hover:text-primary/80"
-                    >
-                      See All
-                    </Button>
+                    <Link to={'/explore'}>
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-primary hover:text-primary/80"
+                      >
+                        See All
+                      </Button>
+                    </Link>
                   </div>
                   <div className="space-y-4">
                     {sidebarSuggestions.map((suggestion, index) => (
