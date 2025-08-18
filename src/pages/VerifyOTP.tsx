@@ -1,39 +1,43 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Shield } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 const VerifyOTP = () => {
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation() as {
+    state?: { email?: string; emailMasked?: string };
+  };
+  const email = location.state?.email;
 
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [emailMaskedUI, setEmailMaskedUI] = useState(
+    location.state?.emailMasked
+  );
+  const [isLoading, setIsLoading] = useState(false);
   const { verifyOTP, resendOtp } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // inside VerifyOTP.tsx
+  const emailMasked = location.state?.emailMasked;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const otpCode = otp.join("");
-    if (otpCode.length !== 6) {
-      /* toast … */ return;
-    }
+    if (otpCode.length !== 6) return;
 
     setIsLoading(true);
     try {
-      const ok = await verifyOTP(otpCode);
-      if (ok) {
-        toast({ title: "Email verified!", description: "Proceed to reset." });
-        navigate("/ResetPassword"); // <-- use your real route, lowercase
-      } else {
-        throw new Error("Invalid OTP");
-      }
-    } catch (err) {
+      const token = await verifyOTP(otpCode, email);
+      if (!token) throw new Error("No reset token");
+
+      toast({ title: "Email verified!", description: "Proceed to reset." });
+      navigate("/ResetPassword", { state: { resetToken: token } }); // <— pass token
+    } catch (err: any) {
       toast({
         title: "Error",
-        description: "Invalid or expired code. Try again.",
+        description: err?.message || "Invalid or expired code. Try again.",
         variant: "destructive",
       });
     } finally {
@@ -44,15 +48,17 @@ const VerifyOTP = () => {
   const handleResendCode = async () => {
     try {
       setIsLoading(true);
-      await resendOtp();
+      const masked = await resendOtp(email);
+      if (masked) setEmailMaskedUI(masked);
       toast({
         title: "Code Resent!",
-        description: "A new verification code has been sent to your email.",
+        description: `A new verification code has been sent to ${masked ?? emailMaskedUI ?? "your email"}.`,
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "Failed to resend code. Please try again.",
+        description:
+          error?.message || "Failed to resend code. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -61,24 +67,46 @@ const VerifyOTP = () => {
   };
 
   const handleOtpChange = (index: number, value: string) => {
-    if (value.length <= 1) {
-      const newOtp = [...otp];
-      newOtp[index] = value;
-      setOtp(newOtp);
+    // allow only digits
+    const v = value.replace(/\D/g, "");
+    if (v.length <= 1) {
+      const next = [...otp];
+      next[index] = v;
+      setOtp(next);
 
-      // Auto-focus next input
-      if (value && index < 5) {
+      // auto focus next
+      if (v && index < 5) {
         const nextInput = document.getElementById(`otp-${index + 1}`);
         nextInput?.focus();
       }
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       const prevInput = document.getElementById(`otp-${index - 1}`);
       prevInput?.focus();
     }
+  };
+
+  const handlePaste: React.ClipboardEventHandler<HTMLInputElement> = (e) => {
+    const pasted = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 6);
+    if (!pasted) return;
+    const arr = pasted.split("");
+    const next = Array(6).fill("");
+    for (let i = 0; i < arr.length && i < 6; i++) next[i] = arr[i];
+    setOtp(next);
+    // focus last filled
+    const lastIndex = Math.min(arr.length - 1, 5);
+    const nextInput = document.getElementById(`otp-${lastIndex}`);
+    nextInput?.focus();
+    e.preventDefault();
   };
 
   return (
@@ -101,9 +129,9 @@ const VerifyOTP = () => {
             Verify Your Email
           </h1>
           <p className="text-muted-foreground">
-            We've sent a 6-digit code to <br />
+            We&apos;ve sent a 6-digit code to <br />
             <span className="font-medium text-foreground">
-              john@example.com
+              {emailMasked ?? "your email"}
             </span>
           </p>
         </div>
@@ -118,12 +146,16 @@ const VerifyOTP = () => {
                 <input
                   key={index}
                   id={`otp-${index}`}
-                  type="text"
+                  type="tel"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   maxLength={1}
                   value={digit}
                   onChange={(e) => handleOtpChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
+                  onPaste={index === 0 ? handlePaste : undefined} // paste entire code into first box
                   className="w-12 h-12 text-center text-lg font-semibold border border-border rounded-lg bg-background/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  aria-label={`Digit ${index + 1}`}
                 />
               ))}
             </div>
@@ -140,7 +172,7 @@ const VerifyOTP = () => {
 
         <div className="text-center space-y-2">
           <p className="text-sm text-muted-foreground">
-            Didn't receive the code?
+            Didn&apos;t receive the code?
           </p>
           <button
             type="button"

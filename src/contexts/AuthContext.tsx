@@ -16,9 +16,9 @@ interface AuthContextType {
   signUp: (email: string, password: string, name: string) => Promise<void>;
   signOut: () => void;
   forgotPassword: (email: string) => Promise<void>;
-  verifyOTP: (otp: string) => Promise<void>;
-  resetPassword: (password: string) => Promise<void>;
-  resendOtp: () => Promise<void>;
+  verifyOTP: (otp: string, email?: string) => Promise<string | undefined>;
+  resetPassword: (password: string, resetToken?: string) => Promise<void>;
+  resendOtp: (email?: string) => Promise<string | undefined>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -108,106 +108,66 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const signOut = () => {
-    setUser(null);
-    localStorage.removeItem("fashionconnect_user");
-  };
-
-  // const forgotPassword = async (email: string) => {
-  //   setIsLoading(true);
-  //   try {
-  //     await axios.post(
-  //       "http://localhost:5000/api/auth/forgotPassowrd",
-  //       { email },
-  //       { withCredentials: true }
-  //     );
-  //   } catch (error: any) {
-  //     throw new Error(
-  //       error.response?.data?.message || "Failed to send reset email"
-  //     );
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // const verifyOTP = async (otp: string) => {
-  //   setIsLoading(true);
-  //   try {
-  //     await axios.post(
-  //       "http://localhost:5000/api/auth/verifyOtp",
-  //       { otp },
-  //       { withCredentials: true }
-  //     );
-  //   } catch (error: any) {
-  //     throw new Error(error.response?.data?.message || "Invalid OTP");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // const resetPassword = async (password: string) => {
-  //   setIsLoading(true);
-  //   try {
-  //     await axios.post(
-  //       "http://localhost:5000/api/auth/resetPassword",
-  //       { password },
-  //       { withCredentials: true }
-  //     );
-  //   } catch (error: any) {
-  //     throw new Error(
-  //       error.response?.data?.message || "Failed to reset password"
-  //     );
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // useAuth.ts (axios instance recommended)
-  const forgotPassword = async (email: string) => {
-    await axios.post("http://localhost:5000/api/auth/forgotPassowrd", {
-      email,
-    });
-    localStorage.setItem("fp_email", email);
-    return true;
-  };
-
-  const verifyOTP = async (otp: string) => {
-    const email = localStorage.getItem("fp_email") || "";
-    const { data } = await axios.post(
-      "http://localhost:5000/api/auth/verifyOtp",
-      { email, otp }
-    );
-    const token = data?.data?.resetToken;
-    if (!token) throw new Error("No reset token");
-    localStorage.setItem("reset_token", token);
-    return true;
-  };
-
-  const resetPassword = async (password: string) => {
-    const resetToken = localStorage.getItem("reset_token") || "";
-    await axios.post("http://localhost:5000/api/auth/resetPassword", {
-      password,
-      resetToken,
-    });
-    // cleanup
-    localStorage.removeItem("reset_token");
-    localStorage.removeItem("fp_email");
-    return true;
-  };
-
-  const resendOtp = async () => {
+  const signOut = async () => {
     setIsLoading(true);
     try {
       await axios.post(
-        "http://localhost:5000/api/auth/resendOtp",
+        "http://localhost:5000/api/auth/logout",
         {},
         { withCredentials: true }
       );
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || "Failed to resend code");
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      setUser(null);
+      localStorage.removeItem("fashionconnect_user");
+      setIsLoading(false);
+    }
+  };
+
+  const forgotPassword = async (email: string) => {
+    setIsLoading(true);
+    try {
+      const { data } = await axios.post(
+        "http://localhost:5000/api/auth/forgotPassowrd",
+        { email },
+        { withCredentials: true }
+      );
+      // server sends { data: { emailMasked } }
+      return data?.data?.emailMasked as string | undefined;
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const verifyOTP = async (otp: string, email?: string) => {
+    const { data } = await axios.post(
+      "http://localhost:5000/api/auth/verifyOtp",
+      email ? { otp, email } : { otp },
+      { withCredentials: true }
+    );
+
+    // backend may return: { data: "<jwt>" } OR { data: { resetToken: "<jwt>" } }
+    const body = data?.data;
+    const token = typeof body === "string" ? body : body?.resetToken;
+    return token;
+  };
+
+  const resetPassword = async (password: string, resetToken?: string) => {
+    await axios.post(
+      "http://localhost:5000/api/auth/resetPassword",
+      { password, resetToken }, // ⬅️ include body token as fallback
+      { withCredentials: true }
+    );
+  };
+
+  const resendOtp = async (email?: string) => {
+    const { data } = await axios.post(
+      "http://localhost:5000/api/auth/resendOtp",
+      email ? { email } : {},
+      { withCredentials: true }
+    );
+    return data?.data?.emailMasked as string | undefined;
   };
 
   const value: AuthContextType = {
