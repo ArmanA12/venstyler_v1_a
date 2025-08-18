@@ -291,40 +291,40 @@ const Index = () => {
                       style={{ animationDelay: `${index * 0.2}s` }}
                     >
                       {/* Post Header */}
-                      
+
 
                       <Link to={`/publicProfile/${design.id}`}>
-                                            <div className="p-6 flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="story-gradient">
-                            <Avatar className="w-12 h-12">
-                              {design.designerAvatar ? (
-                                <AvatarImage src={design.designerAvatar} />
-                              ) : (
-                                <AvatarFallback>
-                                  {design.designer?.[0] || "U"}
-                                </AvatarFallback>
-                              )}
-                            </Avatar>
+                        <div className="p-6 flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <div className="story-gradient">
+                              <Avatar className="w-12 h-12">
+                                {design.designerAvatar ? (
+                                  <AvatarImage src={design.designerAvatar} />
+                                ) : (
+                                  <AvatarFallback>
+                                    {design.designer?.[0] || "U"}
+                                  </AvatarFallback>
+                                )}
+                              </Avatar>
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-lg">
+                                {design.designer}
+                              </h4>
+                              <p className="text-sm text-muted-foreground flex gap-1 items-center">
+                                <MapPin className="w-4 h-4 text-primary" />
+                                {design.city}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h4 className="font-semibold text-lg">
-                              {design.designer}
-                            </h4>
-<p className="text-sm text-muted-foreground flex gap-1 items-center">
-                        <MapPin className="w-4 h-4 text-primary" />
-  {design.city}
-</p>
-                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="hover-glow"
+                          >
+                            <Settings className="w-4 h-4" />
+                          </Button>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="hover-glow"
-                        >
-                          <Settings className="w-4 h-4" />
-                        </Button>
-                      </div>
 
                       </Link>
 
@@ -529,13 +529,16 @@ const Index = () => {
                     <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                       Suggestions for you
                     </h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-primary hover:text-primary/80"
-                    >
-                      See All
-                    </Button>
+                    <Link to={'/explore'}>
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-primary hover:text-primary/80"
+                      >
+                        See All
+                      </Button>
+                    </Link>
                   </div>
                   <div className="space-y-4">
                     {sidebarSuggestions.map((suggestion, index) => (

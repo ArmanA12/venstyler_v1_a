@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Star, Upload, X, Image as ImageIcon } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { useSubmitReviewAndRating } from "@/hooks/useSubmitReviewRating";
+import axios from "axios";
 // import axios from "axios";
 
 const reviewSchema = z.object({
@@ -25,12 +26,14 @@ const WriteReview = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const designId = parseInt(id);
 
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [products, setProducts] = useState<CheckoutProduct[]>([]);
   const { mutateAsync: submitReview } = useSubmitReviewAndRating(Number(id));
 
   const {
@@ -41,6 +44,38 @@ const WriteReview = () => {
   } = useForm<ReviewForm>({
     resolver: zodResolver(reviewSchema),
   });
+
+
+
+   useEffect(() => {
+      const fetchProduct = async () => {
+        if (!id) return;
+        try {
+          const { data } = await axios.get(
+            `http://localhost:5000/api/design/getProductBasicInfo/${designId}`,
+            { withCredentials: true }
+          );
+          if (data.success && data.product) {
+            const product = data.product;
+            setProducts([
+              {
+                id: product.id,
+                title: product.title,
+                price: product.price,
+                image: product.image || "/api/placeholder/200/200",
+                quantity: 1,
+                designer: product.designer.name,
+              },
+            ]);
+            console.log(products, "in write reveiw page")
+          }
+        } catch (err) {
+          console.error("Failed to fetch product", err);
+        }
+      };
+  
+      fetchProduct();
+    }, [id]);
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
@@ -154,14 +189,14 @@ const WriteReview = () => {
           <div className="fashion-card p-6 mb-6">
             <div className="flex items-center gap-4">
               <img
-                src="/api/placeholder/80/80"
+                src={products[0]?.image}
                 alt="Product"
                 className="w-20 h-20 object-cover rounded-lg"
               />
               <div>
-                <h3 className="font-semibold text-lg">Elegant Summer Dress</h3>
+                <h3 className="font-semibold text-lg">{products[0]?.title}</h3>
                 <p className="text-sm text-muted-foreground">
-                  by Sarah Johnson
+                  by {products[0]?.designer}
                 </p>
               </div>
             </div>

@@ -84,7 +84,7 @@ export default function App() {
                   }
                 />
                 <Route
-                  path="/checkout"
+                  path="/checkout/:id"
                   element={
                     <ProtectedRoute>
                       <Checkout />

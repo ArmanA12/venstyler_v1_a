@@ -130,6 +130,7 @@ const ProductDetails = () => {
       title: "Order initiated",
       description: "Redirecting to checkout...",
     });
+    navigate(`/checkout/${designId}`);
   };
 
   const handleMessage = () => {

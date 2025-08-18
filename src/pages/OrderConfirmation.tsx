@@ -1,52 +1,56 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { CheckCircle, Package, Truck, Home, Mail } from "lucide-react";
+import axios from "axios";
 
 const OrderConfirmation = () => {
   const navigate = useNavigate();
 
-  // ✅ Dummy data for testing
-  const orderData = {
-    products: [
-      {
-        id: 1,
-        title: "Custom Silk Dress",
-        designer: "Arman Styles",
-        quantity: 1,
-        price: 129.99,
-        image: "https://via.placeholder.com/150",
-      },
-      {
-        id: 2,
-        title: "Leather Handbag",
-        designer: "Vogue Luxe",
-        quantity: 1,
-        price: 89.5,
-        image: "https://via.placeholder.com/150",
-      },
-    ],
-    totals: {
-      subtotal: 219.49,
-      shippingCost: 10.0,
-      tax: 12.5,
-      total: 241.99,
-    },
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    address: "123 Fashion Street",
-    city: "New York",
-    state: "NY",
-    zipCode: "10001",
-  };
+  const location = useLocation();
+  const { orderDatas } = location.state;
 
-  const { products, totals, firstName, lastName, email, address, city, state, zipCode } =
-    orderData;
+  console.log(orderDatas, "order Data after success")
+  
+  const orderId = orderDatas.orderId; 
+  console.log(orderId, "from backend This id is  coming")
 
+  const [orderData, setOrderData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        const { data } = await axios.get(
+          `http://localhost:5000/api/order/confirmation/${orderId}`,
+          {
+            withCredentials: true, // sends cookies/session automatically
+          }
+        );
+        console.log(data, "order confirmation Data")
+        setOrderData(data.orderData);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError(err.response?.data?.message || "Something went wrong");
+        setLoading(false);
+      }
+    };
+
+    fetchOrder();
+  }, [orderId]);
+
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
+  if (!orderData) return null;
+
+  const { products, totals, firstName, lastName, email, address, city, state, zipCode } = orderData;
   const orderNumber = `ORD-${Date.now().toString().slice(-8)}`;
   const estimatedDelivery = new Date();
   estimatedDelivery.setDate(estimatedDelivery.getDate() + 7);
@@ -55,7 +59,7 @@ const OrderConfirmation = () => {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          {/* ✅ Success Header */}
+          {/* Success Header */}
           <div className="text-center mb-8">
             <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
               <CheckCircle className="h-8 w-8 text-green-600" />
@@ -66,7 +70,7 @@ const OrderConfirmation = () => {
             </p>
           </div>
 
-          {/* ✅ Order Details */}
+          {/* Order Details */}
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -80,7 +84,7 @@ const OrderConfirmation = () => {
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Order Date:</span>
-                <span>{new Date().toLocaleDateString()}</span>
+                <span>{new Date(orderData.createdAt).toLocaleDateString()}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Email:</span>
@@ -89,7 +93,7 @@ const OrderConfirmation = () => {
             </CardContent>
           </Card>
 
-          {/* ✅ Shipping Info */}
+          {/* Shipping Info */}
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -98,13 +102,9 @@ const OrderConfirmation = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="font-medium">
-                  {firstName} {lastName}
-                </p>
+                <p className="font-medium">{firstName} {lastName}</p>
                 <p className="text-muted-foreground">{address}</p>
-                <p className="text-muted-foreground">
-                  {city}, {state} {zipCode}
-                </p>
+                <p className="text-muted-foreground">{city}, {state} {zipCode}</p>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Estimated Delivery:</span>
@@ -113,7 +113,7 @@ const OrderConfirmation = () => {
             </CardContent>
           </Card>
 
-          {/* ✅ Order Items */}
+          {/* Order Items */}
           <Card className="mb-6">
             <CardHeader>
               <CardTitle>Order Items</CardTitle>
@@ -161,7 +161,7 @@ const OrderConfirmation = () => {
             </CardContent>
           </Card>
 
-          {/* ✅ Next Steps */}
+          {/* Next Steps */}
           <Card className="mb-6">
             <CardHeader>
               <CardTitle>What's Next?</CardTitle>
@@ -197,7 +197,7 @@ const OrderConfirmation = () => {
             </CardContent>
           </Card>
 
-          {/* ✅ Actions */}
+          {/* Actions */}
           <div className="flex gap-4">
             <Button onClick={() => navigate("/")} className="flex-1">
               <Home className="h-4 w-4 mr-2" />
