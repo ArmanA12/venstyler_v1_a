@@ -78,9 +78,9 @@ export default function App() {
                 <Route
                   path="/verify-otp"
                   element={
-                    <ProtectedRoute>
-                      <VerifyOTP />
-                    </ProtectedRoute>
+                    // <ProtectedRoute>
+                    <VerifyOTP />
+                    // </ProtectedRoute>
                   }
                 />
                 <Route
@@ -95,9 +95,9 @@ export default function App() {
                 <Route
                   path="/ResetPassword"
                   element={
-                    <ProtectedRoute>
-                      <ResetPassword />
-                    </ProtectedRoute>
+                    // <ProtectedRoute>
+                    <ResetPassword />
+                    // </ProtectedRoute>
                   }
                 />
 
@@ -110,7 +110,7 @@ export default function App() {
                   }
                 />
 
-                 <Route
+                <Route
                   path="/order-confirmation"
                   element={
                     <ProtectedRoute>
@@ -118,7 +118,6 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
-
 
                 <Route
                   path="/upload-product"
