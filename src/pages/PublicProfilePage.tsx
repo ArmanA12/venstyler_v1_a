@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { CheckCircle, MapPin, ArrowLeft, Heart, Eye, MessageCircle, Star } from "lucide-react";
+import { MapPin, ArrowLeft, Heart, Eye, MessageCircle, Star } from "lucide-react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Header } from "@/components/navbar/Header";
+import { VerificationBadge } from "@/components/ui/verification-badge";
 
 interface ProfileImage {
   url: string;
@@ -100,26 +101,24 @@ const PublicProfilePage: React.FC = () => {
 
         {/* Hero Profile Section */}
         <div className="relative mb-12">
-          <Card className="overflow-hidden border-0 shadow-2xl bg-gradient-to-r from-card via-card to-card/50 backdrop-blur-sm animate-fade-in">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5"></div>
-            <div className="relative p-8">
+          <Card className="overflow-hidden border shadow-md bg-card backdrop-blur-sm animate-fade-in">
+            <div className="p-8">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                 {/* Enhanced Profile Image */}
-                <div className="relative group">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-primary via-secondary to-accent rounded-full opacity-30 group-hover:opacity-50 transition-opacity duration-500 blur"></div>
-                  <Avatar className="relative w-32 h-32 border-4 border-background shadow-2xl ring-2 ring-primary/20">
+                <div className="relative">
+                  <Avatar className="w-32 h-32 border-2 border-border shadow-md">
                     <AvatarImage 
                       src={userData.profile?.profileImage || "/default-avatar.png"} 
                       alt={userData.name}
                       className="object-cover"
                     />
-                    <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground text-2xl font-bold">
+                    <AvatarFallback className="bg-muted text-foreground text-2xl font-bold">
                       {userData.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   {userData.isOnline && (
-                    <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 border-4 border-background rounded-full shadow-lg animate-pulse flex items-center justify-center">
-                      <div className="w-3 h-3 bg-white rounded-full"></div>
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-2 border-background rounded-full flex items-center justify-center">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
                   )}
                 </div>
@@ -132,10 +131,7 @@ const PublicProfilePage: React.FC = () => {
                         {userData.name}
                       </h1>
                       {userData.isVerified && (
-                        <div className="relative">
-                          <CheckCircle className="w-8 h-8 text-blue-500 animate-pulse" />
-                          <div className="absolute inset-0 w-8 h-8 bg-blue-500/20 rounded-full animate-ping"></div>
-                        </div>
+                        <VerificationBadge size="lg" />
                       )}
                     </div>
                     
@@ -189,7 +185,7 @@ const PublicProfilePage: React.FC = () => {
         </div>
 
         {/* Enhanced Designs Section */}
-        <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm overflow-hidden">
+        <Card className="border shadow-md bg-card backdrop-blur-sm overflow-hidden">
           <div className="p-8">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent flex items-center gap-3">
@@ -214,7 +210,7 @@ const PublicProfilePage: React.FC = () => {
                 {userData.designs.map((design, i) => (
                   <Card
                     key={design.id}
-                    className="group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-card to-card/80 backdrop-blur-sm animate-fade-in"
+                    className="group overflow-hidden border shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-card animate-fade-in"
                     style={{ animationDelay: `${i * 0.1}s` }}
                   >
                     <div className="relative overflow-hidden">
@@ -222,7 +218,7 @@ const PublicProfilePage: React.FC = () => {
                         <img
                           src={design.images[0]?.url || "/no-image.png"}
                           alt={design.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
                       
@@ -243,7 +239,7 @@ const PublicProfilePage: React.FC = () => {
 
                     <div className="p-6 space-y-4">
                       <div>
-                        <h3 className="font-bold text-lg bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent line-clamp-1">
+                        <h3 className="font-bold text-lg line-clamp-1">
                           {design.title}
                         </h3>
                         <p className="text-sm text-muted-foreground line-clamp-2 mt-1 leading-relaxed">
@@ -266,7 +262,7 @@ const PublicProfilePage: React.FC = () => {
                         <Link to={`/product/${design.id}`}>
                           <Button 
                             size="sm" 
-                            className="rounded-full bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80 transition-all duration-300 shadow-md hover:shadow-lg"
+                            className="rounded-full"
                           >
                             View
                           </Button>
