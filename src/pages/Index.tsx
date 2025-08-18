@@ -15,10 +15,9 @@ import {
   Camera,
   Video,
   Image as ImageIcon,
-
   TrendingUp,
   Share2,
-  MapPin
+  MapPin,
 } from "lucide-react";
 import designerAvatar from "@/assets/designer-avatar-1.jpg";
 import { Header } from "@/components/navbar/Header";
@@ -76,6 +75,15 @@ const Index = () => {
   const { mutate: toggleSaveMutate } = useToggleSave(page);
   const { mutate: shareMutate } = useShareDesign(page);
 
+  const handleClose = (status: "success" | "error") => {
+    // Show toast based on the share status
+    if (status === "success") {
+      toast.success("Shared successfully!");
+    } else if (status === "error") {
+      toast.error("Sharing failed!");
+    }
+  };
+
   // UI helpers
   const toggleComment = (id: string) => {
     setOpenCommentBox((s) => ({ ...s, [id]: !s[id] }));
@@ -105,6 +113,11 @@ const Index = () => {
         "Failed to comment. Please try again.";
       toast.error(msg);
     }
+  };
+
+  const handleShare = (designId: number) => {
+    // Trigger the mutation and wait for the result
+    shareMutate(designId);
   };
 
   const sidebarSuggestions = [
@@ -329,7 +342,6 @@ const Index = () => {
 
                       </Link>
 
-
                       <div className="relative overflow-hidden">
                         <ImageCarousel
                           images={
@@ -385,7 +397,8 @@ const Index = () => {
                             <ShareMenu
                               url={`http://localhost:8080/product/${design.id}`}
                               title={design.title}
-                              onShared={() => shareMutate(design.id)}
+                              onShared={() => handleShare(design.id)}
+                              onClose={handleClose}
                             />
                           </div>
 
@@ -489,8 +502,7 @@ const Index = () => {
                               ₹ {design.discount}
                             </p>
                             <p className="text-primary font-semibold text-lg">
-                              ₹                           {design.price}
-
+                              ₹ {design.price}
                             </p>
                           </div>
                         </div>

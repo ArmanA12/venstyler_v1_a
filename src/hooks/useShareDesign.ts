@@ -1,4 +1,3 @@
-// hooks/useShareDesign.ts
 import { useApi } from "@/contexts/ApiContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -23,7 +22,7 @@ export function useShareDesign(page?: number) {
       await qc.cancelQueries({ queryKey: feedKey });
       const prev = qc.getQueryData<AnyFeed>(feedKey);
 
-      // optimistic increment
+      // Optimistic increment
       qc.setQueryData<AnyFeed>(feedKey, (old) => {
         if (!old) return old;
         // A) transformed items
@@ -61,11 +60,12 @@ export function useShareDesign(page?: number) {
 
     onError: (_e, _id, ctx) => {
       if (ctx?.prev) qc.setQueryData(feedKey, ctx.prev);
+      toast.error("Error while sharing!");
     },
 
-    onSuccess: (data) => {
-      toast.success(data.message || "Shared!");
-    },
+    // onSuccess: (data) => {
+    //   toast.success(data.message || "Shared successfully!");
+    // },
 
     onSettled: (_data, _err, designId) => {
       qc.invalidateQueries({ queryKey: feedKey });
