@@ -101,7 +101,7 @@ const PublicProfilePage: React.FC = () => {
 
         {/* Hero Profile Section */}
         <div className="relative mb-12">
-          <Card className="overflow-hidden border shadow-md bg-card backdrop-blur-sm animate-fade-in">
+          <Card className="overflow-hidden border  bg-card backdrop-blur-sm animate-fade-in">
             <div className="p-8">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                 {/* Enhanced Profile Image */}
@@ -117,7 +117,7 @@ const PublicProfilePage: React.FC = () => {
                     </AvatarFallback>
                   </Avatar>
                   {userData.isOnline && (
-                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-2 border-background rounded-full flex items-center justify-center">
+                    <div className="absolute bottom-0 right-4 w-6 h-6 bg-green-500 border-2 border-background rounded-full flex items-center justify-center">
                       <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
                   )}
@@ -127,7 +127,7 @@ const PublicProfilePage: React.FC = () => {
                 <div className="flex-1 text-center md:text-left space-y-4">
                   <div className="space-y-2">
                     <div className="flex items-center justify-center md:justify-start gap-3">
-                      <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient">
+                      <h1 className="text-xl md:text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient">
                         {userData.name}
                       </h1>
                       {userData.isVerified && (
@@ -185,11 +185,11 @@ const PublicProfilePage: React.FC = () => {
         </div>
 
         {/* Enhanced Designs Section */}
-        <Card className="border shadow-md bg-card backdrop-blur-sm overflow-hidden">
+        <Card className="border  bg-card backdrop-blur-sm overflow-hidden">
           <div className="p-8">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent flex items-center gap-3">
-                <Eye className="w-8 h-8 text-primary" />
+                {/* <Eye className="w-8 h-8 text-primary" /> */}
                 Portfolio
               </h2>
               <Badge variant="outline" className="px-3 py-1">
@@ -210,7 +210,7 @@ const PublicProfilePage: React.FC = () => {
                 {userData.designs.map((design, i) => (
                   <Card
                     key={design.id}
-                    className="group overflow-hidden border shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-card animate-fade-in"
+                    className="group overflow-hidden border p-2 hover:shadow-lg rounded transition-all duration-300 hover:-translate-y-1 bg-card animate-fade-in"
                     style={{ animationDelay: `${i * 0.1}s` }}
                   >
                     <div className="relative overflow-hidden">
@@ -264,7 +264,7 @@ const PublicProfilePage: React.FC = () => {
                             size="sm" 
                             className="rounded-full"
                           >
-                            View
+                            View Details
                           </Button>
                         </Link>
                       </div>

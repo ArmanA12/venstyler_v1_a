@@ -15,11 +15,10 @@ import {
   Camera,
   Video,
   Image as ImageIcon,
-  Bell,
-  Globe,
+
   TrendingUp,
-  Share,
   Share2,
+  MapPin
 } from "lucide-react";
 import designerAvatar from "@/assets/designer-avatar-1.jpg";
 import { Header } from "@/components/navbar/Header";
@@ -292,7 +291,10 @@ const Index = () => {
                       style={{ animationDelay: `${index * 0.2}s` }}
                     >
                       {/* Post Header */}
-                      <div className="p-6 flex items-center justify-between">
+                      
+
+                      <Link to={`/publicProfile/${design.id}`}>
+                                            <div className="p-6 flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <div className="story-gradient">
                             <Avatar className="w-12 h-12">
@@ -309,12 +311,9 @@ const Index = () => {
                             <h4 className="font-semibold text-lg">
                               {design.designer}
                             </h4>
-<p className="text-sm text-muted-foreground">
-  {new Date(design.createdAt).toLocaleDateString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  })} |  {design.city}
+<p className="text-sm text-muted-foreground flex gap-1 items-center">
+                        <MapPin className="w-4 h-4 text-primary" />
+  {design.city}
 </p>
                           </div>
                         </div>
@@ -326,6 +325,9 @@ const Index = () => {
                           <Settings className="w-4 h-4" />
                         </Button>
                       </div>
+
+                      </Link>
+
 
                       <div className="relative overflow-hidden">
                         <ImageCarousel
@@ -490,10 +492,11 @@ const Index = () => {
                           {/* price/discount not in original UI here; keep your placeholder */}
                           <div className="text-right">
                             <p className="text-muted-foreground text-sm line-through">
-                              ₹ 1299
+                              ₹ {design.discount}
                             </p>
                             <p className="text-primary font-semibold text-lg">
-                              ₹ 999
+                              ₹                           {design.price}
+
                             </p>
                           </div>
                         </div>
