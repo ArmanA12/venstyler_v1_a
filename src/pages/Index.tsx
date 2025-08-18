@@ -21,8 +21,6 @@ import {
   Share,
   Share2,
 } from "lucide-react";
-import design1 from "@/assets/design-1.jpg";
-import design2 from "@/assets/design-2.jpg";
 import designerAvatar from "@/assets/designer-avatar-1.jpg";
 import { Header } from "@/components/navbar/Header";
 import { BottomNav } from "@/components/navbar/bottomNav";
@@ -311,9 +309,13 @@ const Index = () => {
                             <h4 className="font-semibold text-lg">
                               {design.designer}
                             </h4>
-                            <p className="text-sm text-muted-foreground">
-                              Just now
-                            </p>
+<p className="text-sm text-muted-foreground">
+  {new Date(design.createdAt).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  })} |  {design.city}
+</p>
                           </div>
                         </div>
                         <Button

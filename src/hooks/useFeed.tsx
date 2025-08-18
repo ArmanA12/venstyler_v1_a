@@ -20,6 +20,8 @@ export function useFeed(page: number) {
         id: String(p.id),
         imageUrl: p.images?.[0] || "",
         title: p.title,
+        city:p.designer.city,
+        createdAt:p.createdAt,
         designer: p.designer?.name || "Unknown",
         designerAvatar: p.designer?.profileImage || null,
         category: p.category,
