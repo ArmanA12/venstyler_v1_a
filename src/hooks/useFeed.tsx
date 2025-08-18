@@ -43,6 +43,7 @@ export function useFeed(page: number) {
         city:p.designer.city,
         createdAt:p.createdAt,
         designer: p.designer?.name || "Unknown",
+        isVerified:p.designer.isVerified,
         designerAvatar: p.designer?.profileImage || null,
         category: p.category,
         likes: p.meta?.likesCount ?? 0,

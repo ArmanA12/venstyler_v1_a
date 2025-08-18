@@ -19,6 +19,8 @@ import { BottomNav } from "@/components/navbar/bottomNav";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { VerificationBadge } from "@/components/ui/verification-badge";
+
 import {
   Pagination,
   PaginationContent,
@@ -213,7 +215,7 @@ const ExplorePage: FC = () => {
                     <div className="p-5">
                       <h3 className="font-playfair font-bold text-lg mb-2 flex items-center gap-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                         {user.isVerified && (
-                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          <VerificationBadge />
                         )}
                         {user.name}
                       </h3>
@@ -222,9 +224,12 @@ const ExplorePage: FC = () => {
                           <User className="w-3 h-3" />
                           {user.role.toLowerCase()}
                         </span>
+                        <Link to={`/publicProfile/${user.id}`}>
+
                         <Button size="sm" className="rounded-full shadow">
                           View Profile
                         </Button>
+                        </Link>
                       </div>
                     </div>
                   </Card>
@@ -248,7 +253,7 @@ const ExplorePage: FC = () => {
                     <div className="flex-1">
                       <h3 className="font-semibold text-lg flex items-center gap-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                         {user.isVerified && (
-                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          <VerificationBadge />
                         )}
                         {user.name}
                       </h3>

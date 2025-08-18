@@ -9,13 +9,12 @@ import {
   Star,
   Heart,
   Bookmark,
-  Share,
+  Share2,
   MessageCircle,
   ShoppingCart,
   Eye,
   ChevronLeft,
   ChevronRight,
-  Share2,
 } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { useProductDetails } from "@/hooks/useProductDetail";
@@ -30,19 +29,20 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // fetch actual product details
+  // fetch product
   const { data: prod, isLoading, isError, error } = useProductDetails(designId);
-  // local UI-only states (like/save + carousel index)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
 
-  // reset carousel to first image when product changes
+  // local UI states
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLiked, setIsLiked] = useState(prod?.isLiked ?? false);
+  const [isSaved, setIsSaved] = useState(prod?.isSaved ?? false);
+
   useEffect(() => {
     setCurrentImageIndex(0);
-  }, [prod?.id]);
+    setIsLiked(prod?.isLiked ?? false);
+    setIsSaved(prod?.isSaved ?? false);
+  }, [prod?.id, prod?.isLiked, prod?.isSaved]);
 
-  // show API errors
   useEffect(() => {
     if (isError) {
       toast({
@@ -53,18 +53,11 @@ const ProductDetails = () => {
     }
   }, [isError, error, toast]);
 
-  // derive a view-model that matches your existing JSX shape
-  const images =
-    prod?.images && prod.images.length > 0
-      ? prod.images
-      : ["https://picsum.photos/seed/fallback1/600/600"];
-
+  // price calculation (discount as %)
   const price = prod?.price ?? 0;
-  const originalPrice = prod?.discount ? price + prod.discount : price; // treat discount as absolute amount
-  const discountPct =
-    originalPrice > 0
-      ? Math.round(((originalPrice - price) / originalPrice) * 100)
-      : 0;
+  const discountPct = prod?.discount ?? 0;
+  const originalPrice =
+    discountPct > 0 ? Math.round(price / (1 - discountPct / 100)) : price;
 
   const product = {
     id: prod?.id ?? designId ?? 0,
@@ -72,27 +65,30 @@ const ProductDetails = () => {
     description: prod?.description ?? "",
     price,
     originalPrice,
-    discount: Math.max(0, discountPct),
+    discount: discountPct,
     rating: Number(prod?.meta?.averageRating ?? 0),
     totalOrders: prod?.meta?.ordersCount ?? 0,
     totalLikes: prod?.meta?.likesCount ?? 0,
     totalSaves: prod?.meta?.savesCount ?? 0,
-    images,
+    images:
+      prod?.images && prod.images.length > 0
+        ? prod.images
+        : ["https://picsum.photos/seed/fallback1/600/600"],
     category: prod?.category ?? "Fashion",
     designer: {
       name: prod?.designer?.name ?? "Unknown Designer",
       avatar:
         prod?.designer?.profileImage ??
         "https://picsum.photos/seed/designer/40/40",
-      verified: false, // set true if you add a field later
-      email: "", // not in payload; leave blank
+      city: prod?.designer?.city ?? "",
       id: prod?.designer?.id ?? 0,
     },
     completionTime: prod?.completionTime ?? "—",
-    inStock: true, // no stock flag in payload; set true or derive later
+    inStock: true,
+    reviews: prod?.latestReviews ?? [],
   };
 
-  // carousel handlers
+  // carousel
   const nextImage = () => {
     setCurrentImageIndex((prev) =>
       prev === product.images.length - 1 ? 0 : prev + 1
@@ -104,7 +100,7 @@ const ProductDetails = () => {
     );
   };
 
-  // actions (UI only for now)
+  // actions
   const handleLike = () => {
     setIsLiked((v) => !v);
     toast({
@@ -134,7 +130,6 @@ const ProductDetails = () => {
   };
 
   const handleMessage = () => {
-    // Your app has /chat and /chat/:chatId/:receiverId; keep simple:
     navigate(`/chat`);
   };
 
@@ -154,9 +149,8 @@ const ProductDetails = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Side - Images */}
+          {/* Left - Images */}
           <div className="space-y-4">
-            {/* Main Image */}
             <div className="relative group">
               <div className="aspect-square overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10">
                 <img
@@ -166,7 +160,7 @@ const ProductDetails = () => {
                 />
               </div>
 
-              {/* Navigation Buttons */}
+              {/* Nav */}
               <button
                 onClick={prevImage}
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
@@ -180,13 +174,11 @@ const ProductDetails = () => {
                 <ChevronRight className="w-5 h-5" />
               </button>
 
-              {/* Image Counter */}
               <div className="absolute bottom-3 right-3 px-3 py-1 bg-black/50 backdrop-blur-sm rounded-full text-white text-sm">
                 {currentImageIndex + 1} / {product.images.length}
               </div>
             </div>
 
-            {/* Thumbnail Images */}
             <div className="grid grid-cols-4 gap-2">
               {product.images.map((image, index) => (
                 <button
@@ -208,7 +200,7 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          {/* Right Side - Product Info */}
+          {/* Right - Info */}
           <div className="space-y-6">
             <div>
               <Badge variant="secondary" className="mb-2">
@@ -218,7 +210,7 @@ const ProductDetails = () => {
                 {product.title}
               </h1>
 
-              {/* Designer Info */}
+              {/* Designer */}
               <div className="flex items-center gap-3 mb-4">
                 <img
                   src={product.designer.avatar}
@@ -230,14 +222,11 @@ const ProductDetails = () => {
                   <span className="text-primary font-medium">
                     {product.designer.name}
                   </span>
-                  {product.designer.verified && (
-                    <Badge variant="secondary" className="ml-2 text-xs">
-                      Verified
-                    </Badge>
+                  {product.designer.city && (
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      ({product.designer.city})
+                    </span>
                   )}
-                  <span className="ml-2 text-xs text-muted-foreground">
-                    {product.designer.email}
-                  </span>
                 </span>
               </div>
             </div>
@@ -248,10 +237,16 @@ const ProductDetails = () => {
                 <span className="text-3xl font-bold text-primary">
                   ${product.price}
                 </span>
-                <span className="text-lg text-muted-foreground line-through">
-                  ${product.originalPrice}
-                </span>
-                <Badge variant="destructive">{product.discount}% OFF</Badge>
+                {product.discount > 0 && (
+                  <>
+                    <span className="text-lg text-muted-foreground line-through">
+                      ${product.originalPrice}
+                    </span>
+                    <Badge variant="destructive">
+                      {product.discount}% OFF
+                    </Badge>
+                  </>
+                )}
               </div>
             </div>
 
@@ -298,7 +293,7 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* Action Buttons */}
+            {/* Actions */}
             <div className="space-y-3">
               <Button
                 onClick={handleOrder}
@@ -347,7 +342,7 @@ const ProductDetails = () => {
               </Button>
             </div>
 
-            {/* Reviews Section */}
+            {/* Reviews */}
             <div className="pt-6 border-t">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Reviews & Ratings</h3>
@@ -361,42 +356,52 @@ const ProductDetails = () => {
               </div>
 
               <div className="space-y-4">
-                {[1, 2].map((review) => (
-                  <div
-                    key={review}
-                    className="flex gap-3 p-4 bg-muted/30 rounded-lg"
-                  >
-                    <img
-                      src={`https://picsum.photos/seed/review${review}/40/40`}
-                      alt="User"
-                      className="w-10 h-10 rounded-full"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium text-sm">Sarah M.</span>
-                        <div className="flex">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <Star
-                              key={star}
-                              className="w-3 h-3 fill-primary text-primary"
-                            />
-                          ))}
+                {product.reviews.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    No reviews yet.
+                  </p>
+                ) : (
+                  product.reviews.map((review) => (
+                    <div
+                      key={review.id}
+                      className="flex gap-3 p-4 bg-muted/30 rounded-lg"
+                    >
+                      <img
+                        src={review.user.profileImage}
+                        alt={review.user.name}
+                        className="w-10 h-10 rounded-full"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-medium text-sm">
+                            {review.user.name}
+                            <div>
+<div className="flex items-center gap-1">
+  {Array.from({ length: review.user.rating || 0 }).map((_, idx) => (
+    <Star
+      key={idx}
+      className="w-3 h-3 fill-primary text-primary"
+    />
+  ))}
+</div>
+
+                            </div>
+                          </span>
                         </div>
+                        <p className="text-sm text-muted-foreground">
+                          {review.comment}
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Amazing quality and perfect fit! Highly recommended.
-                      </p>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div>
-        <BottomNav />
-      </div>
+
+      <BottomNav />
     </div>
   );
 };
