@@ -15,10 +15,9 @@ import {
   Camera,
   Video,
   Image as ImageIcon,
-
   TrendingUp,
   Share2,
-  MapPin
+  MapPin,
 } from "lucide-react";
 import designerAvatar from "@/assets/designer-avatar-1.jpg";
 import { Header } from "@/components/navbar/Header";
@@ -76,6 +75,15 @@ const Index = () => {
   const { mutate: toggleSaveMutate } = useToggleSave(page);
   const { mutate: shareMutate } = useShareDesign(page);
 
+  const handleClose = (status: "success" | "error") => {
+    // Show toast based on the share status
+    if (status === "success") {
+      toast.success("Shared successfully!");
+    } else if (status === "error") {
+      toast.error("Sharing failed!");
+    }
+  };
+
   // UI helpers
   const toggleComment = (id: string) => {
     setOpenCommentBox((s) => ({ ...s, [id]: !s[id] }));
@@ -105,6 +113,11 @@ const Index = () => {
         "Failed to comment. Please try again.";
       toast.error(msg);
     }
+  };
+
+  const handleShare = (designId: number) => {
+    // Trigger the mutation and wait for the result
+    shareMutate(designId);
   };
 
   const sidebarSuggestions = [
@@ -292,43 +305,40 @@ const Index = () => {
                       style={{ animationDelay: `${index * 0.2}s` }}
                     >
                       {/* Post Header */}
-                      
 
                       <Link to={`/publicProfile/${design.id}`}>
-                                            <div className="p-6 flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="story-gradient">
-                            <Avatar className="w-12 h-12">
-                              {design.designerAvatar ? (
-                                <AvatarImage src={design.designerAvatar} />
-                              ) : (
-                                <AvatarFallback>
-                                  {design.designer?.[0] || "U"}
-                                </AvatarFallback>
-                              )}
-                            </Avatar>
+                        <div className="p-6 flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <div className="story-gradient">
+                              <Avatar className="w-12 h-12">
+                                {design.designerAvatar ? (
+                                  <AvatarImage src={design.designerAvatar} />
+                                ) : (
+                                  <AvatarFallback>
+                                    {design.designer?.[0] || "U"}
+                                  </AvatarFallback>
+                                )}
+                              </Avatar>
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-lg">
+                                {design.designer}
+                              </h4>
+                              <p className="text-sm text-muted-foreground flex gap-1 items-center">
+                                <MapPin className="w-4 h-4 text-primary" />
+                                {design.city}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h4 className="font-semibold text-lg">
-                              {design.designer}
-                            </h4>
-<p className="text-sm text-muted-foreground flex gap-1 items-center">
-                        <MapPin className="w-4 h-4 text-primary" />
-  {design.city}
-</p>
-                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="hover-glow"
+                          >
+                            <Settings className="w-4 h-4" />
+                          </Button>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="hover-glow"
-                        >
-                          <Settings className="w-4 h-4" />
-                        </Button>
-                      </div>
-
                       </Link>
-
 
                       <div className="relative overflow-hidden">
                         <ImageCarousel
@@ -385,7 +395,8 @@ const Index = () => {
                             <ShareMenu
                               url={`http://localhost:8080/product/${design.id}`}
                               title={design.title}
-                              onShared={() => shareMutate(design.id)}
+                              onShared={() => handleShare(design.id)}
+                              onClose={handleClose}
                             />
                           </div>
 
@@ -489,8 +500,7 @@ const Index = () => {
                               ₹ {design.discount}
                             </p>
                             <p className="text-primary font-semibold text-lg">
-                              ₹                           {design.price}
-
+                              ₹ {design.price}
                             </p>
                           </div>
                         </div>
