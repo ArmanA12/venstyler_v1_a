@@ -38,6 +38,7 @@ import ChatBox from "./pages/ChatBox";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import PublicProfilePage from "./pages/PublicProfilePage";
+import UserDashboard from "./pages/UserDashboard";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -164,7 +165,26 @@ export default function App() {
                 />
 
                 <Route path="/explore" element={<ExplorePage />} />
-                <Route path="/admin" element={<AdminDashboard />} />
+                {/* <Route path="/admin" element={<AdminDashboard />} /> */}
+       
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/userDashboard"
+                  element={
+                    <ProtectedRoute>
+                      <UserDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+
 
                 <Route
                   path="/admin/users/:userId"
@@ -199,6 +219,7 @@ export default function App() {
                   }
                 />
                 <Route path="/admin/orders/:orderId" element={<OrderView />} />
+                
                 <Route path="/publicProfile/:userId" element={<PublicProfilePage />} />
 
 

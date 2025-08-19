@@ -223,6 +223,32 @@ export type MyDesignRatings = {
   reviews: MyDesignReview[];
 };
 
+
+
+export type MyUploadedProduct = {
+  id: number;
+  title: string;
+  category: string | null;
+  price: number;
+  createdAt: string;
+  updatedAt: string;
+  meta: {
+    likeCount: number;
+    shareCount: number;
+    saveCount: number;
+    reviewCount: number;
+    orderCount: number;
+    averageRating: string | null;
+  };
+};
+
+export type MyUploadedProductResponse = {
+  success: boolean;
+  count: number;
+  products: MyUploadedProduct[];
+};
+
+
 interface ApiContextType {
   createComment: (designId: number, content: string) => Promise<void>;
   deleteComment: (commentId: number) => Promise<void>;
@@ -251,6 +277,10 @@ interface ApiContextType {
   getSavedDesignsByUser: () => Promise<SavedDesignItem[]>;
   getLikedDesignsByUser: () => Promise<LikedDesignItem[]>;
   getMyProductReviewsAndRatings: () => Promise<MyDesignRatings[]>;
+  getMyUploadedProducts: () => Promise<MyUploadedProductResponse>;
+  getMyOrders: () => Promise<{ success: boolean; orders: any[] }>;
+
+
 }
 
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
@@ -317,7 +347,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
         withCredentials: true,
       }
     );
-    console.log(data, "data")
+
     return data;
   };
 
@@ -504,8 +534,8 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
         const avg =
           ratings.length > 0
             ? Number(
-                (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)
-              )
+              (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)
+            )
             : null;
 
         return {
@@ -531,6 +561,28 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
       return items;
     };
 
+
+  const getMyUploadedProducts: ApiContextType["getMyUploadedProducts"] =
+    async () => {
+      const { data } = await api.get<MyUploadedProductResponse>(
+        "/api/users/getMyUploadedProducts",
+        { withCredentials: true }
+      );
+      console.log(data, "user uploaded product")
+      return data;
+    };
+
+
+  const getMyOrders: ApiContextType["getMyOrders"] = async () => {
+    const { data } = await api.get<{ success: boolean; orders: any[] }>(
+      "/api/order/my-orders",
+      { withCredentials: true }
+    );
+    return data;
+  };
+
+
+
   const value: ApiContextType = {
     createComment,
     deleteComment,
@@ -550,6 +602,8 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
     getSavedDesignsByUser,
     getLikedDesignsByUser,
     getMyProductReviewsAndRatings,
+    getMyUploadedProducts,
+    getMyOrders
   };
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
 };
