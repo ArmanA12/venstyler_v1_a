@@ -67,6 +67,7 @@ const Index = () => {
 
   // Data mapped by the hook's `select`
   const items = data?.items ?? [];
+  console.log(items, "item")
   const loading = isLoading; // alias so existing JSX `loading` checks still work
   const total = data?.total ?? 0;
   const pageSize = data?.pageSize ?? 10;
@@ -121,15 +122,6 @@ const Index = () => {
     shareMutate(designId);
   };
 
-  const sidebarSuggestions = [
-    { name: "Fashion Week Updates", category: "Event", followers: "2.1k" },
-    {
-      name: "Textile Artisans Guild",
-      category: "Community",
-      followers: "1.8k",
-    },
-    { name: "Sustainable Fashion", category: "Movement", followers: "3.2k" },
-  ];
 
   return (
     <div>
@@ -308,7 +300,7 @@ const Index = () => {
                       {/* Post Header */}
 
 
-                      <Link to={`/publicProfile/${design.id}`}>
+                      <Link to={`/publicProfile/${design.userId}`}>
                         <div className="p-6 flex items-center justify-between">
                           <div className="flex items-center gap-4">
                             <div className="story-gradient">

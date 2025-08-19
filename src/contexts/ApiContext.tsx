@@ -317,6 +317,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
         withCredentials: true,
       }
     );
+    console.log(data, "data")
     return data;
   };
 

@@ -35,6 +35,7 @@ export function useFeed(page: number) {
     placeholderData: keepPreviousData,
     select: (res) => ({
       items: res.products.map((p) => ({
+        userId:p.designer.id,
         id: String(p.id),
         imageUrl: p.images?.[0] || "",
         title: p.title,

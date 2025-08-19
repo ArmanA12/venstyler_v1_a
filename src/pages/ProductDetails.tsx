@@ -15,6 +15,7 @@ import {
   Eye,
   ChevronLeft,
   ChevronRight,
+  CheckCircle2
 } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { useProductDetails } from "@/hooks/useProductDetail";
@@ -184,11 +185,10 @@ const ProductDetails = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentImageIndex(index)}
-                  className={`aspect-square rounded-lg overflow-hidden border-2 transition-colors ${
-                    currentImageIndex === index
-                      ? "border-primary"
-                      : "border-transparent hover:border-primary/50"
-                  }`}
+                  className={`aspect-square rounded-lg overflow-hidden border-2 transition-colors ${currentImageIndex === index
+                    ? "border-primary"
+                    : "border-transparent hover:border-primary/50"
+                    }`}
                 >
                   <img
                     src={image}
@@ -374,16 +374,26 @@ const ProductDetails = () => {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-medium text-sm">
-                            {review.user.name}
+                            <div className="flex gap-2">
+                              <div>{review.user.name}</div>
+                              {review.user.isVerified && (
+                                <Badge
+                                  variant="secondary"
+                                  className="flex items-center gap-1 text-xs"
+                                >
+                                  <CheckCircle2 className="w-3 h-3 text-primary" /> Verified
+                                </Badge>
+                              )}
+                            </div>
                             <div>
-<div className="flex items-center gap-1">
-  {Array.from({ length: review.user.rating || 0 }).map((_, idx) => (
-    <Star
-      key={idx}
-      className="w-3 h-3 fill-primary text-primary"
-    />
-  ))}
-</div>
+                              <div className="flex items-center gap-1">
+                                {Array.from({ length: review.user.rating || 0 }).map((_, idx) => (
+                                  <Star
+                                    key={idx}
+                                    className="w-3 h-3 fill-primary text-primary"
+                                  />
+                                ))}
+                              </div>
 
                             </div>
                           </span>

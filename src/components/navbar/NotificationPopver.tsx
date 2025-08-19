@@ -52,7 +52,7 @@ export function NotificationPopover() {
           <h4 className="font-semibold">Notifications</h4>
           {unreadCount > 0 && (
             <button
-              className="text-sm text-blue-500 hover:underline"
+              className="text-sm text-primary hover:underline"
               onClick={markAll}
             >
               Mark all read
@@ -68,9 +68,10 @@ export function NotificationPopover() {
               return (
                 <li
                   key={n.id ?? idx}
-                  className="p-2 rounded cursor-pointer transition bg-gray-50 hover:bg-gray-100"
+                  className="p-2 relative rounded overflow-clip cursor-pointer transition bg-background  hover:bg-primary/10 shadow-medium border backdrop-blur-lg"
                   onClick={() => onItemClick(n)}
                 >
+                  <div className=" w-36 h-6 bg-gray-400 absolute top-1 left-[20%]  blur-2xl"></div>
                   <p className="text-sm font-medium">{n.type}</p>
                   <p className="text-xs text-gray-500">{n.message}</p>
                   <span className="text-[10px] text-gray-400">
