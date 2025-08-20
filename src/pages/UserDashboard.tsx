@@ -20,6 +20,7 @@ import {
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { DeleteConfirmationModal } from "@/components/ui/delete-confirmation-modal";
 import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
 
 import { Header } from "@/components/Header";
 import { useNavigate } from "react-router-dom";
@@ -72,31 +73,32 @@ export default function UserDashboard() {
         });
     };
 
+
     const handleDeleteConfirm = async () => {
+        console.log(deleteModal.productId, "jjsjhf");
         if (!deleteModal.productId) return;
-
+        const designId = deleteModal.productId;
         setIsDeleting(true);
-        try {
-            // Replace this with your actual API call
-            const response = await fetch(`/api/products/${deleteModal.productId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Add your auth headers here
-                },
-            });
 
-            if (response.ok) {
+        try {
+            const response = await axios.post(
+                `http://localhost:5000/api/design/deleteSingleDesign/${designId}`,
+                { designId }, // body me bhejna
+                {
+                    withCredentials: true, // cookies/session bhejne ke liye
+                }
+            );
+
+            if (response.status === 200) {
                 toast({
                     title: "Product deleted successfully",
                     description: `"${deleteModal.productName}" has been removed from your products.`,
                 });
-                
-                // Refetch data or update state here
-                // You might want to invalidate your query cache
-                window.location.reload(); // Simple reload for now, but you should use proper state management
+
+                // Refetch / update state instead of reload
+                window.location.reload();
             } else {
-                throw new Error('Failed to delete product');
+                throw new Error("Failed to delete product");
             }
         } catch (error) {
             toast({
@@ -153,7 +155,9 @@ export default function UserDashboard() {
                             <div key={index} className="relative">
                                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,114,182,0.6),transparent)] blur-2xl"></div>
 
-                                <Card className="relative overflow-clip  border">
+                                <Card className="relative overflow-clip  border border-border/50">
+                                    <div className="absolute left-5 top-4 w-32 h-6 inset-0 bg-pink-700 blur-3xl "></div>
+
                                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                         <CardTitle className="text-lg font-semibold text-primary">{stat.title}</CardTitle>
                                         <stat.icon className="h-4 w-4 text-muted-foreground" />
@@ -190,7 +194,7 @@ export default function UserDashboard() {
                                         <CardTitle>My Products</CardTitle>
                                         <CardDescription>Manage your listed products</CardDescription>
                                     </div>
-                                    <Button onClick={()=> { navigate('/upload-product')}}>
+                                    <Button onClick={() => { navigate('/upload-product') }}>
                                         <Plus className="h-4 w-4 mr-2" />
                                         Add Product
                                     </Button>
@@ -252,7 +256,7 @@ export default function UserDashboard() {
                                                                 <Edit className="mr-2 h-4 w-4" />
                                                                 Edit
                                                             </DropdownMenuItem>
-                                                             <DropdownMenuItem 
+                                                            <DropdownMenuItem
                                                                 className="text-destructive"
                                                                 onClick={() => handleDeleteClick(product.id, product.title)}
                                                             >
@@ -364,15 +368,15 @@ export default function UserDashboard() {
                                                 <TableCell>{sale.orderId}</TableCell>
                                                 <TableCell className="flex gap-2 items-center">
                                                     <Avatar className="w-9 h-9">
-                                                    {sale?.buyerProfileImage ? (
-                                                        <AvatarImage src={sale.buyerProfileImage} />
-                                                    ) : (
-                                                        <AvatarFallback>
-                                                            {sale?.buyerName?.[0] || "U"}
-                                                        </AvatarFallback>
-                                                    )}
-                                                </Avatar>
-                                                    
+                                                        {sale?.buyerProfileImage ? (
+                                                            <AvatarImage src={sale.buyerProfileImage} />
+                                                        ) : (
+                                                            <AvatarFallback>
+                                                                {sale?.buyerName?.[0] || "U"}
+                                                            </AvatarFallback>
+                                                        )}
+                                                    </Avatar>
+
                                                     {sale.buyerName}</TableCell>
                                                 <TableCell>{sale.productTitle}</TableCell>
                                                 <TableCell>₹ {sale.amount}</TableCell>

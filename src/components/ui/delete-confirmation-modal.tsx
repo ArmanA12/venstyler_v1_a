@@ -31,12 +31,12 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] border-border/50 bg-card/95 backdrop-blur-xl shadow-2xl">
+      <DialogContent className="sm:max-w-[425px] overflow-clip border-2 border-border/50 bg-card/95 backdrop-blur-xl shadow-2xl">
         <DialogHeader className="text-center space-y-4">
           <div className="mx-auto w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center animate-pulse">
             <AlertTriangle className="w-8 h-8 text-destructive animate-bounce" />
           </div>
-          <DialogTitle className="text-xl font-bold text-foreground">
+          <DialogTitle className="text-xl font-bold text-center text-foreground">
             {title}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-center">
@@ -48,6 +48,8 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
             {description}
           </DialogDescription>
         </DialogHeader>
+                <div className="w-96 absolute top-0 h-20 bg-red-700 blur-[100px] "></div>
+
 
         <div className="bg-destructive/5 border border-destructive/20 rounded-lg p-4 my-4">
           <div className="flex items-center gap-2 text-destructive text-sm">
