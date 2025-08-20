@@ -34,7 +34,7 @@ const NotFound = () => {
         </div>
 
         {/* Main content card */}
-        <Card className="backdrop-blur-lg bg-card/80 border-border/50 shadow-2xl p-8 mb-8 animate-fade-in">
+        <Card className="backdrop-blur-lg bg-card/80 border-border/50 shadow-lg shadow-primary/5 p-8 mb-8 animate-fade-in">
           <div className="space-y-6">
             <div className="space-y-4">
               <h2 className="text-3xl font-bold text-foreground">
