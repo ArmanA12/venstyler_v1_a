@@ -18,6 +18,8 @@ import {
     DollarSign
 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DeleteConfirmationModal } from "@/components/ui/delete-confirmation-modal";
+import { useToast } from "@/hooks/use-toast";
 
 import { Header } from "@/components/Header";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +30,18 @@ import { useMySells } from "@/hooks/useMySells";
 
 export default function UserDashboard() {
     const [searchTerm, setSearchTerm] = useState("");
+    const [deleteModal, setDeleteModal] = useState<{
+        isOpen: boolean;
+        productId: string | null;
+        productName: string;
+    }>({
+        isOpen: false,
+        productId: null,
+        productName: "",
+    });
+    const [isDeleting, setIsDeleting] = useState(false);
     const navigate = useNavigate();
+    const { toast } = useToast();
 
     const { data, isLoading } = useMyUploadedProducts();
     const { data: orders, isLoading: isOrdersLoading, isError } = useMyOrders();
@@ -50,6 +63,64 @@ export default function UserDashboard() {
         { title: "Total Products", value: data?.count, change: "+0", icon: Package },
         { title: "Total Revenue", value: confirmedTotal, change: "+0.3%", icon: DollarSign },
     ];
+
+    const handleDeleteClick = (productId: number, productName: string) => {
+        setDeleteModal({
+            isOpen: true,
+            productId: productId.toString(),
+            productName,
+        });
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (!deleteModal.productId) return;
+
+        setIsDeleting(true);
+        try {
+            // Replace this with your actual API call
+            const response = await fetch(`/api/products/${deleteModal.productId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add your auth headers here
+                },
+            });
+
+            if (response.ok) {
+                toast({
+                    title: "Product deleted successfully",
+                    description: `"${deleteModal.productName}" has been removed from your products.`,
+                });
+                
+                // Refetch data or update state here
+                // You might want to invalidate your query cache
+                window.location.reload(); // Simple reload for now, but you should use proper state management
+            } else {
+                throw new Error('Failed to delete product');
+            }
+        } catch (error) {
+            toast({
+                title: "Failed to delete product",
+                description: "Something went wrong. Please try again.",
+                variant: "destructive",
+            });
+        } finally {
+            setIsDeleting(false);
+            setDeleteModal({
+                isOpen: false,
+                productId: null,
+                productName: "",
+            });
+        }
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteModal({
+            isOpen: false,
+            productId: null,
+            productName: "",
+        });
+    };
 
 
     const getStatusBadge = (status: string) => {
@@ -181,7 +252,10 @@ export default function UserDashboard() {
                                                                 <Edit className="mr-2 h-4 w-4" />
                                                                 Edit
                                                             </DropdownMenuItem>
-                                                            <DropdownMenuItem className="text-destructive">
+                                                             <DropdownMenuItem 
+                                                                className="text-destructive"
+                                                                onClick={() => handleDeleteClick(product.id, product.title)}
+                                                            >
                                                                 <Trash2 className="mr-2 h-4 w-4" />
                                                                 Delete
                                                             </DropdownMenuItem>
@@ -392,6 +466,15 @@ export default function UserDashboard() {
                     </TabsContent>
                 </Tabs>
             </div>
+
+            {/* Delete Confirmation Modal */}
+            <DeleteConfirmationModal
+                isOpen={deleteModal.isOpen}
+                onClose={handleDeleteCancel}
+                onConfirm={handleDeleteConfirm}
+                itemName={deleteModal.productName}
+                isLoading={isDeleting}
+            />
         </div>
     );
 }
