@@ -48,7 +48,7 @@ const SignUp = () => {
     try {
       await signUp(formData.email, formData.password, formData.name);
       toast({
-        title: "Welcome to FashionConnect!",
+        title: "Welcome to venStyler!",
         description: "Your account has been created successfully.",
       });
       navigate("/");
@@ -72,7 +72,7 @@ const SignUp = () => {
             Back to Home
           </Link>
           <h1 className="text-3xl font-playfair font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Join FashionConnect
+            Join venStyler
           </h1>
           <p className="text-muted-foreground">Create your designer profile today</p>
         </div>

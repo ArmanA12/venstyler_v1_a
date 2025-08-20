@@ -74,7 +74,7 @@ const professions = [
 ];
 
 const Profile = () => {
-  const [activeTab, setActiveTab] = useState("sales");
+  const [activeTab, setActiveTab] = useState("personal");
   const [isImageUploadOpen, setIsImageUploadOpen] = useState(false);
   const { data: me } = useMe();
   const [profileImage, setProfileImage] = useState<string | null>(
@@ -425,58 +425,8 @@ const Profile = () => {
         );
 
       case "sales":
-        return (
-          <div className="space-y-6">
-            <div className="fashion-card p-6">
-              <h3 className="text-xl font-playfair font-semibold mb-4">
-                Sales Overview
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="text-center p-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg">
-                  <p className="text-2xl font-bold text-primary">24</p>
-                  <p className="text-sm text-muted-foreground">Total Sales</p>
-                </div>
-                <div className="text-center p-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg">
-                  <p className="text-2xl font-bold text-primary">$2,450</p>
-                  <p className="text-sm text-muted-foreground">Revenue</p>
-                </div>
-                <div className="text-center p-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg">
-                  <p className="text-2xl font-bold text-primary">4.8</p>
-                  <p className="text-sm text-muted-foreground">Avg Rating</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="fashion-card p-6">
-              <h3 className="text-xl font-playfair font-semibold mb-4">
-                Recent Orders
-              </h3>
-              <div className="space-y-4">
-                {[1, 2, 3].map((order) => (
-                  <div
-                    key={order}
-                    className="flex items-center justify-between p-4 bg-muted/30 rounded-lg"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg flex items-center justify-center">
-                        <ShoppingBag className="w-6 h-6 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Order #FC00{order}</p>
-                        <p className="text-sm text-muted-foreground">
-                          2 items • $85.00
-                        </p>
-                      </div>
-                    </div>
-                    <span className="px-3 py-1 bg-primary/20 text-primary rounded-full text-sm">
-                      Completed
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
+        navigate('/userDashboard');
+        break;
 
       case "chats":
         return (
@@ -541,17 +491,17 @@ const Profile = () => {
         const loading = isSaved ? loadingSaved : loadingLiked;
         const items = isSaved
           ? (savedDesigns ?? []).map((d, idx) => ({
-              key: `saved-${idx}`,
-              title: `Saved design ${idx + 1}`,
-              by: d.userName,
-              image: d.images?.[0] ?? "", // first image or fallback
-            }))
+            key: `saved-${idx}`,
+            title: `Saved design ${idx + 1}`,
+            by: d.userName,
+            image: d.images?.[0] ?? "", // first image or fallback
+          }))
           : (likedDesigns ?? []).map((d) => ({
-              key: `liked-${d.id}`,
-              title: d.title ?? "Untitled design",
-              by: d.designerName ?? "Designer",
-              image: d.images?.[0] ?? "",
-            }));
+            key: `liked-${d.id}`,
+            title: d.title ?? "Untitled design",
+            by: d.designerName ?? "Designer",
+            image: d.images?.[0] ?? "",
+          }));
 
         return (
           <div className="fashion-card p-6">
@@ -674,7 +624,7 @@ const Profile = () => {
               items={sidebarItems}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
-              // onSignOut={handleSignOut}
+            // onSignOut={handleSignOut}
             />
           </div>
 
@@ -694,7 +644,7 @@ const Profile = () => {
                   setActiveTab(tab);
                   setShowMobileSidebar(false);
                 }}
-                // onSignOut={handleSignOut}
+              // onSignOut={handleSignOut}
               />
             </div>
           )}
@@ -717,11 +667,10 @@ const Sidebar = ({ items, activeTab, setActiveTab, onSignOut }) => {
         <button
           key={item.id}
           onClick={() => setActiveTab(item.id)}
-          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
-            activeTab === item.id
+          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${activeTab === item.id
               ? "bg-primary/20 text-primary"
               : "text-muted-foreground hover:text-primary hover:bg-muted/50"
-          }`}
+            }`}
         >
           <item.icon className="w-5 h-5" />
           {item.label}
@@ -730,10 +679,10 @@ const Sidebar = ({ items, activeTab, setActiveTab, onSignOut }) => {
 
       <Separator className="my-4" />
 
-      <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors">
+      <Link to={'/settings'} className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors">
         <Settings className="w-5 h-5" />
         Settings
-      </button>
+      </Link>
 
       <button
         className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"

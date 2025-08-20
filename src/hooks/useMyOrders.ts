@@ -14,8 +14,8 @@ export function useMyOrders() {
   return useQuery({
     queryKey: ["myOrders"],
     queryFn: async (): Promise<MyOrderItem[]> => {
-      const data = await getMyOrders();
-      return (data.orders ?? []).map((order: any): MyOrderItem => ({
+      const orderData = await getMyOrders();
+      return (orderData.orders ?? []).map((order: any): MyOrderItem => ({
         orderId: order.id,
         title: order.orderItems?.[0]?.title ?? "Untitled",
         price: order.totalAmount,

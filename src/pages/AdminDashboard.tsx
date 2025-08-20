@@ -74,7 +74,7 @@ export default function AdminDashboard() {
       <Header />
       <div className="border-b bg-card">
         <div className="flex h-16 items-center px-6">
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+          <h1 className="text-2xl font-bold">User Dashboard</h1>
         </div>
       </div>
 

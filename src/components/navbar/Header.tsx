@@ -145,7 +145,7 @@ export const Header = () => {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/admin">
+                      <Link to="/userDashboard">
                         <Shield className="w-4 h-4 mr-2" /> User Dashboard
                       </Link>
                     </DropdownMenuItem>
@@ -209,7 +209,7 @@ export const Header = () => {
                 <Link to="/settings" className="flex items-center gap-2">
                   <Settings className="w-5 h-5" /> Settings
                 </Link>
-                <Link to="/admin" className="flex items-center gap-2">
+                <Link to="/userDashboard" className="flex items-center gap-2">
                   <Shield className="w-5 h-5" /> User Dashboard
                 </Link>
                 <button

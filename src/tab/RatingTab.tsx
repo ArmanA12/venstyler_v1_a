@@ -54,7 +54,7 @@ export function RatingsTab() {
       <h3 className="text-xl font-playfair font-semibold mb-4">Product Ratings</h3>
       <div className="space-y-6">
         {data.map((product) => (
-          <Link to={`/product/${product.designId}/reviews`}>
+          <Link className="border border-transparent" to={`/product/${product.designId}/reviews`}>
                     <div key={product.designId} className="p-4 bg-muted/30 rounded-lg">
             {/* Product Info */}
             <div className="flex items-start gap-4 mb-4">

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
     Package,
     ShoppingCart,
@@ -22,6 +23,7 @@ import { Header } from "@/components/Header";
 import { useNavigate } from "react-router-dom";
 import { useMyUploadedProducts } from "@/hooks/useMyUploadedProducts";
 import { useMyOrders } from "@/hooks/useMyOrders";
+import { useMySells } from "@/hooks/useMySells";
 
 
 export default function UserDashboard() {
@@ -30,6 +32,7 @@ export default function UserDashboard() {
 
     const { data, isLoading } = useMyUploadedProducts();
     const { data: orders, isLoading: isOrdersLoading, isError } = useMyOrders();
+    const { data: sells, isLoading: isSellsLoading, isError: isSellsError } = useMySells();
 
     console.log(orders, "user uploaded products")
     const confirmedTotal = useMemo(() => {
@@ -54,10 +57,10 @@ export default function UserDashboard() {
             "Active": "default",
             "Low Stock": "secondary",
             "Out of Stock": "destructive",
-            "Completed": "default",
+            "CONFIRMED": "default",
             "Processing": "secondary",
             "Shipped": "outline",
-            "Pending": "secondary"
+            "PENDING": "secondary"
         };
         return <Badge variant={variants[status] || "default"}>{status}</Badge>;
     };
@@ -100,9 +103,10 @@ export default function UserDashboard() {
 
                 {/* Main Content */}
                 <Tabs defaultValue="products" className="w-full">
-                    <TabsList className="grid w-full grid-cols-3">
+                    <TabsList className="grid w-full grid-cols-4">
                         <TabsTrigger value="products">Products</TabsTrigger>
-                        <TabsTrigger value="orders"> Orders</TabsTrigger>
+                        <TabsTrigger value="orders"> My Purchase</TabsTrigger>
+                        <TabsTrigger value="sales">My Sales</TabsTrigger>
                         <TabsTrigger value="analytics">Analytics</TabsTrigger>
                     </TabsList>
 
@@ -115,7 +119,7 @@ export default function UserDashboard() {
                                         <CardTitle>My Products</CardTitle>
                                         <CardDescription>Manage your listed products</CardDescription>
                                     </div>
-                                    <Button>
+                                    <Button onClick={()=> { navigate('/upload-product')}}>
                                         <Plus className="h-4 w-4 mr-2" />
                                         Add Product
                                     </Button>
@@ -257,6 +261,84 @@ export default function UserDashboard() {
                             </CardContent>
                         </Card>
                     </TabsContent>
+
+
+                    <TabsContent value="sales">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>My Sales</CardTitle>
+                                <CardDescription>
+                                    Orders received on your uploaded products
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Order ID</TableHead>
+                                            <TableHead>Buyer</TableHead>
+                                            <TableHead>Product</TableHead>
+                                            <TableHead>Amount</TableHead>
+                                            <TableHead>Status</TableHead>
+                                            <TableHead>Date</TableHead>
+                                            <TableHead>Actions</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {sells?.map((sale) => (
+                                            <TableRow key={sale.orderId}>
+                                                <TableCell>{sale.orderId}</TableCell>
+                                                <TableCell className="flex gap-2 items-center">
+                                                    <Avatar className="w-9 h-9">
+                                                    {sale?.buyerProfileImage ? (
+                                                        <AvatarImage src={sale.buyerProfileImage} />
+                                                    ) : (
+                                                        <AvatarFallback>
+                                                            {sale?.buyerName?.[0] || "U"}
+                                                        </AvatarFallback>
+                                                    )}
+                                                </Avatar>
+                                                    
+                                                    {sale.buyerName}</TableCell>
+                                                <TableCell>{sale.productTitle}</TableCell>
+                                                <TableCell>₹ {sale.amount}</TableCell>
+                                                <TableCell>{getStatusBadge(sale.status)}</TableCell>
+                                                <TableCell>
+                                                    {new Date(sale.date).toLocaleString("en-IN", {
+                                                        day: "2-digit",
+                                                        month: "short",
+                                                        year: "numeric",
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                    })}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                                                <MoreHorizontal className="h-4 w-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuItem onClick={() => navigate(`/user/sales/${sale.id}`)}>
+                                                                <Eye className="mr-2 h-4 w-4" />
+                                                                View Sale
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => navigate(`/user/sales/${sale.id}/update`)}>
+                                                                <Edit className="mr-2 h-4 w-4" />
+                                                                Update Status
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+
 
                     {/* Analytics Tab */}
                     <TabsContent value="analytics">

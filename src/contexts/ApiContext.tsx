@@ -279,6 +279,7 @@ interface ApiContextType {
   getMyProductReviewsAndRatings: () => Promise<MyDesignRatings[]>;
   getMyUploadedProducts: () => Promise<MyUploadedProductResponse>;
   getMyOrders: () => Promise<{ success: boolean; orders: any[] }>;
+  getMySells: () => Promise<{ success: boolean; sells: any[] }>;
 
 
 }
@@ -568,7 +569,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
         "/api/users/getMyUploadedProducts",
         { withCredentials: true }
       );
-      console.log(data, "user uploaded product")
+      // console.log(data, "user uploaded product")
       return data;
     };
 
@@ -581,6 +582,14 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
     return data;
   };
 
+
+  const getMySells: ApiContextType["getMySells"] = async () => {
+  const { data } = await api.get<{ success: boolean; sells: any[] }>(
+    "/api/order/getMyProductOrdersSell",
+    { withCredentials: true }
+  );
+  return data;
+};
 
 
   const value: ApiContextType = {
@@ -603,7 +612,8 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
     getLikedDesignsByUser,
     getMyProductReviewsAndRatings,
     getMyUploadedProducts,
-    getMyOrders
+    getMyOrders,
+    getMySells
   };
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
 };

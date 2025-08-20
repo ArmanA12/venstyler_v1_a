@@ -99,7 +99,7 @@ export const BottomNav = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/admin">
+                  <Link to="/userDashboard">
                     <Shield className="w-4 h-4 mr-2" /> User Dashboard
                   </Link>
                 </DropdownMenuItem>

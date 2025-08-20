@@ -52,7 +52,7 @@ const SignIn = () => {
           <h1 className="text-3xl font-playfair font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Welcome Back
           </h1>
-          <p className="text-muted-foreground">Sign in to your FashionConnect account</p>
+          <p className="text-muted-foreground">Sign in to your venStyler account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

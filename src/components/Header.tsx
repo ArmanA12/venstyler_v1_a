@@ -144,8 +144,8 @@ export const Header = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/admin">
-                      <Shield className="w-4 h-4 mr-2" /> Admin Dashboard
+                    <Link to="/userDashboard">
+                      <Shield className="w-4 h-4 mr-2" /> User Dashboard
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
