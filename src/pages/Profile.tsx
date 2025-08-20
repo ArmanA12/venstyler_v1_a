@@ -37,6 +37,12 @@ import {
   X,
   Upload,
   LucideUpload,
+  FileText,
+  Clock,
+  AlertCircle,
+  CheckCircle2,
+  XCircle,
+  MessageSquareMore,
 } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { useAuth } from "@/contexts/AuthContext";
@@ -155,6 +161,7 @@ const Profile = () => {
     { id: "ratings", label: "Product Ratings", icon: Star },
     { id: "saved", label: "Saved Designs", icon: Bookmark },
     { id: "liked", label: "Liked Designs", icon: Heart },
+    { id: "complaints", label: "My Complaints", icon: MessageSquareMore },
   ];
 
   const onSubmitPersonalInfo = async (formData: PersonalInfoForm) => {
@@ -485,6 +492,169 @@ const Profile = () => {
       case "ratings":
         return <RatingsTab />;
 
+      case "complaints":
+        // Dummy complaints data
+        const dummyComplaints = [
+          {
+            id: "CMP-001",
+            title: "Product quality issue with evening dress",
+            category: "Product Quality",
+            status: "In Progress",
+            priority: "High",
+            createdDate: "2024-01-15",
+            lastUpdate: "2024-01-18",
+            description: "The fabric quality doesn't match the description. The material feels cheap and the stitching is poor.",
+            response: "We have forwarded your complaint to our quality team. A replacement will be sent within 3-5 business days."
+          },
+          {
+            id: "CMP-002", 
+            title: "Late delivery of wedding outfit",
+            category: "Delivery",
+            status: "Resolved",
+            priority: "Medium",
+            createdDate: "2024-01-10",
+            lastUpdate: "2024-01-12",
+            description: "My wedding dress order was delivered 3 days after the promised delivery date.",
+            response: "We sincerely apologize for the delay. A full refund of shipping charges has been processed."
+          },
+          {
+            id: "CMP-003",
+            title: "Customer service was unprofessional",
+            category: "Customer Service", 
+            status: "Open",
+            priority: "Low",
+            createdDate: "2024-01-20",
+            lastUpdate: "2024-01-20",
+            description: "The customer service representative was rude and unhelpful when I called about my order.",
+            response: null
+          }
+        ];
+
+        const getStatusIcon = (status: string) => {
+          switch (status) {
+            case "Open":
+              return <Clock className="h-4 w-4 text-orange-500" />;
+            case "In Progress":
+              return <AlertCircle className="h-4 w-4 text-blue-500" />;
+            case "Resolved":
+              return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+            default:
+              return <XCircle className="h-4 w-4 text-gray-500" />;
+          }
+        };
+
+        const getStatusColor = (status: string) => {
+          switch (status) {
+            case "Open":
+              return "bg-orange-100 text-orange-800 border-orange-200";
+            case "In Progress":
+              return "bg-blue-100 text-blue-800 border-blue-200";
+            case "Resolved":
+              return "bg-green-100 text-green-800 border-green-200";
+            default:
+              return "bg-gray-100 text-gray-800 border-gray-200";
+          }
+        };
+
+        const getPriorityColor = (priority: string) => {
+          switch (priority) {
+            case "High":
+              return "bg-red-100 text-red-800 border-red-200";
+            case "Medium":
+              return "bg-yellow-100 text-yellow-800 border-yellow-200";
+            case "Low":
+              return "bg-green-100 text-green-800 border-green-200";
+            default:
+              return "bg-gray-100 text-gray-800 border-gray-200";
+          }
+        };
+
+        return (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-xl font-playfair font-semibold">My Complaints</h3>
+                <p className="text-sm text-muted-foreground">Track and manage your submitted complaints</p>
+              </div>
+              <Button 
+                onClick={() => navigate('/complaints')}
+                className="bg-primary hover:bg-primary/90"
+              >
+                <MessageSquareMore className="h-4 w-4 mr-2" />
+                New Complaint
+              </Button>
+            </div>
+
+            <div className="space-y-4">
+              {dummyComplaints.map((complaint) => (
+                <div key={complaint.id} className="fashion-card p-6 hover:shadow-lg transition-all duration-200 border border-border/50">
+                  <div className="flex flex-col md:flex-row md:items-start gap-4">
+                    <div className="flex-1 space-y-3">
+                      <div className="flex items-center gap-3">
+                        <h4 className="font-semibold text-lg">{complaint.title}</h4>
+                        <span className="text-xs text-muted-foreground bg-muted/30 px-2 py-1 rounded">
+                          #{complaint.id}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        <span className={`px-2 py-1 rounded-md text-xs font-medium border ${getStatusColor(complaint.status)}`}>
+                          <div className="flex items-center gap-1">
+                            {getStatusIcon(complaint.status)}
+                            {complaint.status}
+                          </div>
+                        </span>
+                        <span className={`px-2 py-1 rounded-md text-xs font-medium border ${getPriorityColor(complaint.priority)}`}>
+                          {complaint.priority} Priority
+                        </span>
+                        <span className="px-2 py-1 rounded-md text-xs bg-muted/30 text-muted-foreground">
+                          {complaint.category}
+                        </span>
+                      </div>
+
+                      <p className="text-sm text-muted-foreground">
+                        {complaint.description}
+                      </p>
+
+                      {complaint.response && (
+                        <div className="bg-accent/10 border border-accent/20 rounded-lg p-3 mt-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <MessageCircle className="h-4 w-4 text-accent" />
+                            <span className="text-sm font-medium text-accent">Support Response</span>
+                          </div>
+                          <p className="text-sm text-muted-foreground">{complaint.response}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col items-end gap-2 text-right">
+                      <div className="space-y-1">
+                        <p className="text-xs text-muted-foreground">Created</p>
+                        <p className="text-sm font-medium">{complaint.createdDate}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-xs text-muted-foreground">Last Update</p>
+                        <p className="text-sm font-medium">{complaint.lastUpdate}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {dummyComplaints.length === 0 && (
+              <div className="fashion-card p-8 text-center">
+                <MessageSquareMore className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h4 className="font-semibold mb-2">No complaints submitted</h4>
+                <p className="text-muted-foreground mb-4">You haven't submitted any complaints yet.</p>
+                <Button onClick={() => navigate('/complaints')}>
+                  Submit Your First Complaint
+                </Button>
+              </div>
+            )}
+          </div>
+        );
+
       case "saved":
       case "liked": {
         const isSaved = activeTab === "saved";
@@ -660,7 +830,16 @@ const Profile = () => {
   );
 };
 
-const Sidebar = ({ items, activeTab, setActiveTab, onSignOut }) => {
+const Sidebar = ({ items, activeTab, setActiveTab, onSignOut }: { items: any; activeTab: any; setActiveTab: any; onSignOut?: any }) => {
+  const { signOut } = useAuth();
+  
+  const handleSignOut = () => {
+    if (onSignOut) {
+      onSignOut();
+    } else {
+      signOut();
+    }
+  };
   return (
     <div className="fashion-card p-6 space-y-2">
       {items.map((item) => (
@@ -686,7 +865,7 @@ const Sidebar = ({ items, activeTab, setActiveTab, onSignOut }) => {
 
       <button
         className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
-        onClick={onSignOut}
+        onClick={handleSignOut}
       >
         <LogOut className="w-5 h-5" />
         Log Out

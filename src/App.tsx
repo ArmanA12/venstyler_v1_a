@@ -39,6 +39,7 @@ import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import PublicProfilePage from "./pages/PublicProfilePage";
 import UserDashboard from "./pages/UserDashboard";
+import Complaints from "./pages/Complaints";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -222,6 +223,14 @@ export default function App() {
                 
                 <Route path="/publicProfile/:userId" element={<PublicProfilePage />} />
 
+                <Route 
+                  path="/complaints" 
+                  element={
+                    <ProtectedRoute>
+                      <Complaints />
+                    </ProtectedRoute>
+                  } 
+                />
 
                 <Route path="*" element={<NotFound />} />
               </Routes>
