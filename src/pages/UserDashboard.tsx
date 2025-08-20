@@ -173,7 +173,7 @@ export default function UserDashboard() {
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end">
-                                                            <DropdownMenuItem onClick={() => navigate(`/user/products/${product.id}`)}>
+                                                            <DropdownMenuItem onClick={() => navigate(`/product/${product.id}`)}>
                                                                 <Eye className="mr-2 h-4 w-4" />
                                                                 View
                                                             </DropdownMenuItem>
