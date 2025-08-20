@@ -43,7 +43,7 @@ import UserDashboard from "./pages/UserDashboard";
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
 
-  // Fetch the authenticated user once (don’t call useAuth here)
+  
   useEffect(() => {
     (async () => {
       const result = await checkUserAuth();
