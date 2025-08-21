@@ -1,52 +1,20 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Package, MapPin, Calendar, CreditCard, User, CheckCircle } from "lucide-react";
+import { ArrowLeft, Package, MapPin, Calendar, CreditCard, User, CheckCircle, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { useOrderDetails } from "@/hooks/useOrderDetails";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
-// Mock data based on your API structure
-const mockOrderData = {
-  products: [
-    {
-      id: 1,
-      title: "Premium Fashion Design Template",
-      designer: "Sarah Johnson",
-      quantity: 1,
-      price: 299,
-      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop",
-    },
-    {
-      id: 2,
-      title: "Modern UI Kit Bundle",
-      designer: "John Doe",
-      quantity: 2,
-      price: 149,
-      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=300&fit=crop",
-    }
-  ],
-  totals: {
-    subtotal: 597,
-    shippingCost: 25,
-    tax: 47.76,
-    total: 669.76,
-  },
-  firstName: "John",
-  lastName: "Smith",
-  email: "john.smith@example.com",
-  address: "123 Design Street, Creative District",
-  city: "New York",
-  state: "NY",
-  zipCode: "10001",
-  country: "United States",
-  status: "delivered",
-  createdAt: "2024-01-15T10:30:00Z",
-};
 
 const OrderDetails = () => {
   const { orderId, type } = useParams();
   const navigate = useNavigate();
+  
+  const { data: orderResponse, isLoading, error } = useOrderDetails(parseInt(orderId || "0"));
+  const orderData = orderResponse?.orderData;
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -68,6 +36,40 @@ const OrderDetails = () => {
       minute: '2-digit'
     });
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 p-4 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+          <p className="text-muted-foreground">Loading order details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !orderData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 p-4">
+        <div className="max-w-4xl mx-auto">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 hover:bg-primary/10 mb-6"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+          <Alert variant="destructive">
+            <AlertDescription>
+              Order not found or you don't have permission to view this order.
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 p-4">
@@ -100,13 +102,13 @@ const OrderDetails = () => {
                   </p>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                  <Badge className={`${getStatusColor(mockOrderData.status)} font-medium px-3 py-1`}>
+                  <Badge className={`${getStatusColor(orderData.status)} font-medium px-3 py-1`}>
                     <CheckCircle className="h-3 w-3 mr-1" />
-                    {mockOrderData.status.charAt(0).toUpperCase() + mockOrderData.status.slice(1)}
+                    {orderData.status.charAt(0).toUpperCase() + orderData.status.slice(1)}
                   </Badge>
                   <p className="text-sm text-muted-foreground flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
-                    {formatDate(mockOrderData.createdAt)}
+                    {formatDate(orderData.createdAt)}
                   </p>
                 </div>
               </div>
@@ -120,11 +122,11 @@ const OrderDetails = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Package className="h-5 w-5 text-primary" />
-                    Order Items ({mockOrderData.products.length})
+                    Order Items ({orderData.products.length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {mockOrderData.products.map((product, index) => (
+                  {orderData.products.map((product, index) => (
                     <div key={product.id}>
                       <div className="flex gap-4">
                         <div className="w-20 h-20 rounded-lg overflow-hidden bg-muted">
@@ -143,7 +145,7 @@ const OrderDetails = () => {
                           </div>
                         </div>
                       </div>
-                      {index < mockOrderData.products.length - 1 && <Separator className="mt-4" />}
+                      {index < orderData.products.length - 1 && <Separator className="mt-4" />}
                     </div>
                   ))}
                 </CardContent>
@@ -170,20 +172,20 @@ const OrderDetails = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Name</p>
-                      <p className="font-semibold">{mockOrderData.firstName} {mockOrderData.lastName}</p>
+                      <p className="font-semibold">{orderData.firstName} {orderData.lastName}</p>
                     </div>
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Email</p>
-                      <p className="font-semibold">{mockOrderData.email}</p>
+                      <p className="font-semibold">{orderData.email}</p>
                     </div>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Address</p>
-                    <p className="font-semibold">{mockOrderData.address}</p>
+                    <p className="font-semibold">{orderData.address}</p>
                     <p className="text-muted-foreground">
-                      {mockOrderData.city}, {mockOrderData.state} {mockOrderData.zipCode}
+                      {orderData.city}, {orderData.state} {orderData.zipCode}
                     </p>
-                    <p className="text-muted-foreground">{mockOrderData.country}</p>
+                    <p className="text-muted-foreground">{orderData.country}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -201,20 +203,20 @@ const OrderDetails = () => {
                 <CardContent className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span className="font-semibold">${mockOrderData.totals.subtotal}</span>
+                    <span className="font-semibold">${orderData.totals.subtotal}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Shipping</span>
-                    <span className="font-semibold">${mockOrderData.totals.shippingCost}</span>
+                    <span className="font-semibold">${orderData.totals.shippingCost}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Tax</span>
-                    <span className="font-semibold">${mockOrderData.totals.tax}</span>
+                    <span className="font-semibold">${orderData.totals.tax}</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between text-lg">
                     <span className="font-bold">Total</span>
-                    <span className="font-bold text-primary">${mockOrderData.totals.total}</span>
+                    <span className="font-bold text-primary">${orderData.totals.total}</span>
                   </div>
                 </CardContent>
               </Card>

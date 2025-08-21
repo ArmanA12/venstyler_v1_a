@@ -280,7 +280,7 @@ interface ApiContextType {
   getMyUploadedProducts: () => Promise<MyUploadedProductResponse>;
   getMyOrders: () => Promise<{ success: boolean; orders: any[] }>;
   getMySells: () => Promise<{ success: boolean; sells: any[] }>;
-
+  getOrderDetails: (orderId: number) => Promise<{ success: boolean; orderData: any }>;
 
 }
 
@@ -583,9 +583,17 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
 
-  const getMySells: ApiContextType["getMySells"] = async () => {
+const getMySells: ApiContextType["getMySells"] = async () => {
   const { data } = await api.get<{ success: boolean; sells: any[] }>(
     "/api/order/getMyProductOrdersSell",
+    { withCredentials: true }
+  );
+  return data;
+};
+
+const getOrderDetails: ApiContextType["getOrderDetails"] = async (orderId: number) => {
+  const { data } = await api.get<{ success: boolean; orderData: any }>(
+    `/orders/${orderId}/confirmation`,
     { withCredentials: true }
   );
   return data;
@@ -613,7 +621,8 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
     getMyProductReviewsAndRatings,
     getMyUploadedProducts,
     getMyOrders,
-    getMySells
+    getMySells,
+    getOrderDetails,
   };
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
 };
