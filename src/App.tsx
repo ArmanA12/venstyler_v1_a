@@ -40,6 +40,7 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import PublicProfilePage from "./pages/PublicProfilePage";
 import UserDashboard from "./pages/UserDashboard";
 import Complaints from "./pages/Complaints";
+import OrderDetails from "./pages/OrderDetails";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -228,6 +229,15 @@ export default function App() {
                   element={
                     <ProtectedRoute>
                       <Complaints />
+                    </ProtectedRoute>
+                  } 
+                />
+
+                <Route 
+                  path="/order-details/:type/:orderId" 
+                  element={
+                    <ProtectedRoute>
+                      <OrderDetails />
                     </ProtectedRoute>
                   } 
                 />

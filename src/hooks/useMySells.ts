@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useApi } from "@/contexts/ApiContext";
 
 export type MySellItem = {
+  id: number;
   orderId: number;
   buyerName: string;
   buyerProfileImage: string | null;
@@ -18,7 +19,8 @@ export function useMySells() {
     queryKey: ["mySells"],
     queryFn: async (): Promise<MySellItem[]> => {
       const sellData = await getMySells();
-      return (sellData?.data ?? []).map((sell: any): MySellItem => ({
+      return (sellData?.sells ?? []).map((sell: any): MySellItem => ({
+        id: sell.id,
         orderId: sell.id,
         buyerName: sell.user?.name ?? "Unknown",
         buyerProfileImage: sell.user?.profile?.profileImage ?? null,

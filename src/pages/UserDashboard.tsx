@@ -317,9 +317,9 @@ export default function UserDashboard() {
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end">
-                                                            <DropdownMenuItem onClick={() => navigate(`/user/orders/${order.id}`)}>
+                                                            <DropdownMenuItem onClick={() => navigate(`/order-details/purchase/${order.id}`)}>
                                                                 <Eye className="mr-2 h-4 w-4" />
-                                                                View Order
+                                                                View Order Details
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem onClick={() => navigate(`/user/orders/${order.id}/update`)}>
                                                                 <Edit className="mr-2 h-4 w-4" />
@@ -398,9 +398,9 @@ export default function UserDashboard() {
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end">
-                                                            <DropdownMenuItem onClick={() => navigate(`/user/sales/${sale.id}`)}>
+                                                            <DropdownMenuItem onClick={() => navigate(`/order-details/sell/${sale.id}`)}>
                                                                 <Eye className="mr-2 h-4 w-4" />
-                                                                View Sale
+                                                                View Sale Details
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem onClick={() => navigate(`/user/sales/${sale.id}/update`)}>
                                                                 <Edit className="mr-2 h-4 w-4" />
