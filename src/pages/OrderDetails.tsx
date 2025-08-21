@@ -1,20 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Package, MapPin, Calendar, CreditCard, User, CheckCircle, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { useOrderDetails } from "@/hooks/useOrderDetails";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import axios from "axios";
 
 
 const OrderDetails = () => {
   const { orderId, type } = useParams();
   const navigate = useNavigate();
   
-  const { data: orderResponse, isLoading, error } = useOrderDetails(parseInt(orderId || "0"));
-  const orderData = orderResponse?.orderData;
+  const [orderData, setOrderData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        const { data } = await axios.get(
+          `http://localhost:5000/api/order/confirmation/${orderId}`,
+          {
+            withCredentials: true, // sends cookies/session automatically
+          }
+        );
+        console.log(data, "order confirmation Data");
+        setOrderData(data.orderData);
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError(err.response?.data?.message || "Something went wrong");
+        setIsLoading(false);
+      }
+    };
+
+    if (orderId) {
+      fetchOrder();
+    }
+  }, [orderId]);
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
