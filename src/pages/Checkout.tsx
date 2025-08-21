@@ -9,7 +9,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
-import { User, MapPin, CreditCard, BaggageClaim, ArrowLeft } from "lucide-react";
+import {
+  User,
+  MapPin,
+  CreditCard,
+  BaggageClaim,
+  ArrowLeft,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Header } from "@/components/navbar/Header";
 import {
@@ -61,14 +67,14 @@ declare global {
 
 const Checkout = () => {
   const { id } = useParams<{ id: string }>();
-  const designId = parseInt(id)
+  const designId = parseInt(id);
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
   const [userInfo, setUserInfo] = useState({ name: "", email: "", phone: "" });
   const [products, setProducts] = useState<CheckoutProduct[]>([]);
-  console.log(id, "product ID")
+  console.log(id, "product ID");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -167,7 +173,6 @@ const Checkout = () => {
     fetchUserInfo();
   }, []);
 
-
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -177,8 +182,6 @@ const Checkout = () => {
       document.body.appendChild(script);
     });
   };
-
-
 
   const onSubmit = async (data: ShippingFormData) => {
     setIsProcessing(true);
@@ -261,7 +264,7 @@ const Checkout = () => {
                   ...data,
                   products,
                   totals: { subtotal, tax, total },
-                   orderId: orderData.orderId,
+                  orderId: orderData.orderId,
                 },
               },
             });
@@ -325,7 +328,10 @@ const Checkout = () => {
             </Card>
 
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
                 {/* Shipping Address */}
                 <Card>
                   <CardHeader>
@@ -335,75 +341,135 @@ const Checkout = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <FormField control={form.control} name="address" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Street Address</FormLabel>
-                        <FormControl><Input placeholder="Enter street address" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                    <FormField
+                      control={form.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Street Address</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter street address"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     <div className="grid grid-cols-2 gap-4">
-                      <FormField control={form.control} name="city" render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>City</FormLabel>
-                          <FormControl><Input placeholder="Enter city" {...field} /></FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )} />
-                      <FormField control={form.control} name="state" render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>State</FormLabel>
-                          <FormControl><Input placeholder="Enter state" {...field} /></FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )} />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <FormField control={form.control} name="zipCode" render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>ZIP/Postal Code</FormLabel>
-                          <FormControl><Input placeholder="Enter ZIP code" {...field} /></FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )} />
-                      <FormField control={form.control} name="country" render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Country</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormField
+                        control={form.control}
+                        name="city"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>City</FormLabel>
                             <FormControl>
-                              <SelectTrigger><SelectValue placeholder="Select country" /></SelectTrigger>
+                              <Input placeholder="Enter city" {...field} />
                             </FormControl>
-                            <SelectContent>
-                              {countries.map((c) => (
-                                <SelectItem key={c} value={c}>{c}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="state"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>State</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter state" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="zipCode"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>ZIP/Postal Code</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter ZIP code" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="country"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Country</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select country" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {countries.map((c) => (
+                                  <SelectItem key={c} value={c}>
+                                    {c}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <FormField
+                      control={form.control}
+                      name="specialInstructions"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Special Instructions</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Any special instructions..."
+                              {...field}
+                            />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
-                      )} />
-                    </div>
-                    <FormField control={form.control} name="specialInstructions" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Special Instructions</FormLabel>
-                        <FormControl><Textarea placeholder="Any special instructions..." {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-                    <FormField control={form.control} name="saveAddress" render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                        <FormControl>
-                          <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel>Save this address for future orders</FormLabel>
-                        </div>
-                      </FormItem>
-                    )} />
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="saveAddress"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              Save this address for future orders
+                            </FormLabel>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
                   </CardContent>
                 </Card>
 
-                <Button type="submit" className="w-full" disabled={isProcessing}>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isProcessing}
+                >
                   {isProcessing ? "Processing..." : "Place Order"}
                 </Button>
               </form>
@@ -414,7 +480,6 @@ const Checkout = () => {
           <div className="space-y-6">
             <Card className="sticky top-4">
               <CardHeader>
-
                 <CardTitle className="flex items-center gap-2">
                   <BaggageClaim className="h-5 w-5" />
                   Order Summary
@@ -423,10 +488,18 @@ const Checkout = () => {
               <CardContent className="space-y-4">
                 {products.map((product) => (
                   <div key={product.id} className="flex gap-4">
-                    <img src={product.image} alt={product.title} className="w-16 h-16 object-cover rounded-lg" />
+                    <img
+                      src={product.image}
+                      alt={product.title}
+                      className="w-16 h-16 object-cover rounded-lg"
+                    />
                     <div className="flex-1">
-                      <h4 className="font-medium text-lg text-primary">{product.title}</h4>
-                      <p className="text-sm text-muted-foreground">by {product.designer}</p>
+                      <h4 className="font-medium text-lg text-primary">
+                        {product.title}
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        by {product.designer}
+                      </p>
                       <div className="flex items-center justify-between mt-1">
                         <span className="text-sm">Qty: {product.quantity}</span>
                         <span className="font-semibold">${product.price}</span>
@@ -438,14 +511,17 @@ const Checkout = () => {
                 <Separator />
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span>Subtotal</span><span>${subtotal.toFixed(2)}</span>
+                    <span>Subtotal</span>
+                    <span>${subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Tax</span><span>${tax.toFixed(2)}</span>
+                    <span>Tax</span>
+                    <span>${tax.toFixed(2)}</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between font-semibold text-lg">
-                    <span>Total</span><span>${total.toFixed(2)}</span>
+                    <span>Total</span>
+                    <span>${total.toFixed(2)}</span>
                   </div>
                 </div>
               </CardContent>

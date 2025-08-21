@@ -36,6 +36,7 @@ import { useRefreshAfterToggle } from "@/hooks/useRefreshAfterLikeAndSave";
 import ImageCarousel from "@/components/caraousel/ImageCaraousel";
 import { ShareMenu } from "@/components/shareMenu/ShareMenu";
 import { VerificationBadge } from "@/components/ui/verification-badge";
+import { useAuthGate } from "@/hooks/useAuthGate";
 // import { Header } from "@/components/Header";
 
 const Index = () => {
@@ -52,8 +53,11 @@ const Index = () => {
   );
 
   const [openCommentsFor, setOpenCommentsFor] = useState<string | null>(null);
+  const [openShareFor, setOpenShareFor] = useState<number | null>(null);
 
   const { data, isLoading, isFetching, isError, error } = useFeed(page);
+
+  const { gate } = useAuthGate();
 
   useEffect(() => {
     if (isError) {
@@ -67,7 +71,7 @@ const Index = () => {
 
   // Data mapped by the hook's `select`
   const items = data?.items ?? [];
-  console.log(items, "item")
+  console.log(items, "item");
   const loading = isLoading; // alias so existing JSX `loading` checks still work
   const total = data?.total ?? 0;
   const pageSize = data?.pageSize ?? 10;
@@ -121,7 +125,6 @@ const Index = () => {
     // Trigger the mutation and wait for the result
     shareMutate(designId);
   };
-
 
   return (
     <div>
@@ -299,7 +302,6 @@ const Index = () => {
                     >
                       {/* Post Header */}
 
-
                       <Link to={`/publicProfile/${design.userId}`}>
                         <div className="p-6 flex items-center justify-between">
                           <div className="flex items-center gap-4">
@@ -332,7 +334,6 @@ const Index = () => {
                             <Settings className="w-4 h-4" />
                           </Button>
                         </div>
-
                       </Link>
 
                       <div className="relative overflow-hidden">
@@ -359,16 +360,18 @@ const Index = () => {
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                likeMut.mutate(Number(design.id), {
-                                  onSuccess: refresh,
-                                  onError: (err) =>
-                                    toast.error("Couldn't update like", {
-                                      description:
-                                        err instanceof Error
-                                          ? err.message
-                                          : "Please try again.",
-                                    }),
-                                });
+                                gate("like this design", () =>
+                                  likeMut.mutate(Number(design.id), {
+                                    onSuccess: refresh,
+                                    onError: (err) =>
+                                      toast.error("Couldn't update like", {
+                                        description:
+                                          err instanceof Error
+                                            ? err.message
+                                            : "Please try again.",
+                                      }),
+                                  })
+                                );
                               }}
                             >
                               <Heart
@@ -382,7 +385,11 @@ const Index = () => {
                               variant="ghost"
                               size="icon"
                               className="hover-glow"
-                              onClick={() => toggleComment(design.id)}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                gate("comment", () => toggleComment(design.id));
+                              }}
                             >
                               <MessageCircle className="w-6 h-6" />
                             </Button>
@@ -398,30 +405,32 @@ const Index = () => {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className={`hover-glow ${design.isSaved ? "text-black" : ""}`}
+                            className={`hover-glow ${design.isSaved ? "text-red-500" : ""}`}
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              saveMut.mutate(Number(design.id), {
-                                onSuccess: (res) => {
-                                  toast.success(
-                                    res?.message ?? "Updated your saves"
-                                  );
-                                  refresh();
-                                },
-                                onError: (err) =>
-                                  toast.error("Couldn't update saves", {
-                                    description:
-                                      err instanceof Error
-                                        ? err.message
-                                        : "Please try again.",
-                                  }),
-                              });
+                              gate("save this design", () =>
+                                saveMut.mutate(Number(design.id), {
+                                  onSuccess: (res) => {
+                                    toast.success(
+                                      res?.message ?? "Updated your saves"
+                                    );
+                                    refresh();
+                                  },
+                                  onError: (err) =>
+                                    toast.error("Couldn't update saves", {
+                                      description:
+                                        err instanceof Error
+                                          ? err.message
+                                          : "Please try again.",
+                                    }),
+                                })
+                              );
                             }}
                           >
                             <Bookmark
                               className={`w-6 h-6 transition
-      ${design.isSaved ? "text-black [&_path]:fill-current" : ""}
+      ${design.isSaved ? "text-red-500 [&_path]:fill-current" : ""}
     `}
                             />
                           </Button>
@@ -528,8 +537,7 @@ const Index = () => {
                     <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                       Suggestions for you
                     </h3>
-                    <Link to={'/explore'}>
-
+                    <Link to={"/explore"}>
                       <Button
                         variant="ghost"
                         size="sm"
@@ -539,64 +547,53 @@ const Index = () => {
                       </Button>
                     </Link>
                   </div>
-<div className="space-y-4">
-  {!loading &&
-    items.slice(0, 3).map((design, index) => (
-      <div
-        key={index}
-        className="flex items-center justify-between p-3  hover:bg-muted/30 transition-all duration-300 hover-lift"
-      >
-        <div className="flex items-center gap-3">
-          <div className="story-gradient">
-            <Avatar className="w-12 h-12">
-              {design.designerAvatar ? (
-                <AvatarImage src={design.designerAvatar} />
-              ) : (
-                <AvatarFallback>
-                  {design.designer?.[0] || "U"}
-                </AvatarFallback>
-              )}
-            </Avatar>
-          </div>
-          <div>
-            <p className="font-medium text-sm">{design.designer}</p>
-            <p className="text-xs text-muted-foreground">
-              {design.isVerified ? (
-                <>
-                  <VerificationBadge size="sm" /> Verified
-                </>
-              ) : (
-                "Non Verified"
-              )}
-            </p>
-          </div>
-        </div>
-                              <Link to={`/publicProfile/${design.id}`}>
-
-        <Button
-          variant="outline"
-          size="sm"
-          className="hover-glow border-primary/20 hover:border-primary/40 hover:bg-primary/5"
-        >
-          View
-        </Button>
-        </Link>
-      </div>
-    ))}
-</div>
-
+                  <div className="space-y-4">
+                    {!loading &&
+                      items.slice(0, 3).map((design, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3  hover:bg-muted/30 transition-all duration-300 hover-lift"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="story-gradient">
+                              <Avatar className="w-12 h-12">
+                                {design.designerAvatar ? (
+                                  <AvatarImage src={design.designerAvatar} />
+                                ) : (
+                                  <AvatarFallback>
+                                    {design.designer?.[0] || "U"}
+                                  </AvatarFallback>
+                                )}
+                              </Avatar>
+                            </div>
+                            <div>
+                              <p className="font-medium text-sm">
+                                {design.designer}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {design.isVerified ? (
+                                  <>
+                                    <VerificationBadge size="sm" /> Verified
+                                  </>
+                                ) : (
+                                  "Non Verified"
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                          <Link to={`/publicProfile/${design.id}`}>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="hover-glow border-primary/20 hover:border-primary/40 hover:bg-primary/5"
+                            >
+                              View
+                            </Button>
+                          </Link>
+                        </div>
+                      ))}
+                  </div>
                 </div>
-
-
-
-
-              
-
-
-
-
-
-
 
                 {/* Enhanced Trending */}
                 <div className="fashion-card p-6 animate-fade-in border-t border-border/50">
