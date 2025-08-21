@@ -18,18 +18,20 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"; // shadcn/ui
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Share2 } from "lucide-react";
-import { toast } from "sonner"; // Add Sonner for toast messages
+import { toast } from "sonner";
+import { useLocation, useNavigate } from "react-router-dom"; // ⬅️ redirect
+import { useAuth } from "@/contexts/AuthContext";
 
 type Props = {
   url: string;
   title?: string;
-  onShared?: () => void; // Call your shareMutate here
-  size?: number; // Icon size
+  onShared?: () => void;
+  size?: number;
   className?: string;
-  onClose?: (status: "success" | "error") => void; // Add onClose prop to handle success/error
+  onClose?: (status: "success" | "error") => void;
 };
 
 function isWebShareSupported() {
@@ -42,25 +44,48 @@ export function ShareMenu({
   onShared,
   size = 36,
   className,
-  onClose, // Accept onClose prop
+  onClose,
 }: Props) {
   const [open, setOpen] = React.useState(false);
+
+  const { isAuthenticated, isLoading } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const requireAuth = React.useCallback(
+    (actionLabel = "share") => {
+      if (isLoading) return false; // still resolving cookie on app boot
+      if (!isAuthenticated) {
+        toast("Please sign in", {
+          description: `You need to be logged in to ${actionLabel}.`,
+        });
+        // keep return path so we come back to the same page after login
+        navigate("/signin", { state: { from: location.pathname } });
+        return false;
+      }
+      return true;
+    },
+    [isAuthenticated, isLoading, navigate, location.pathname]
+  );
 
   const triggerNativeShare = async () => {
     try {
       await (navigator as any).share({ title, text: title, url });
-      onShared?.(); // Only count after successful share
-      onClose?.("success"); // Call onClose with success message when share is successful
-    } catch (_e) {
-      // User cancelled or not supported — ignore
-      onClose?.("error"); // Call onClose with error message if it fails
+      onShared?.(); // count share only on success
+      onClose?.("success");
+    } catch {
+      onClose?.("error");
     }
   };
 
-  // If native share is supported, click goes to native; otherwise, it opens popover
+  // If native share is supported, we use that; else open the popover
   const onTriggerClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // ⬇️ block when not authenticated (modal will NOT open)
+    if (!requireAuth("share")) return;
+
     if (isWebShareSupported()) {
       triggerNativeShare();
     } else {
@@ -68,15 +93,25 @@ export function ShareMenu({
     }
   };
 
-  // When using react-share buttons, fire onShared as well and close
+  // Extra safety: if something tries to open the popover externally
+  const handleOpenChange = (next: boolean) => {
+    if (next && !requireAuth("share")) return; // don't open
+    setOpen(next);
+  };
+
+  // Using react-share buttons
   const onReactShare = () => {
+    // Shouldn't reach here when unauthenticated because popover won't open,
+    // but keep the check as defense-in-depth.
+    if (!requireAuth("share")) return;
+
     onShared?.();
     setOpen(false);
-    onClose?.("success"); // Call onClose with success message
+    onClose?.("success");
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
@@ -120,12 +155,12 @@ export function ShareMenu({
             </EmailShareButton>
           </div>
 
-          {/* Explicit native button if supported and user opened popover manually */}
           {isWebShareSupported() && (
             <Button
               variant="secondary"
               className="w-full"
               onClick={() => {
+                if (!requireAuth("share")) return;
                 triggerNativeShare();
                 setOpen(false);
               }}

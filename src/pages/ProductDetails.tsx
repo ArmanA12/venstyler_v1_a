@@ -15,10 +15,11 @@ import {
   Eye,
   ChevronLeft,
   ChevronRight,
-  CheckCircle2
+  CheckCircle2,
 } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { useProductDetails } from "@/hooks/useProductDetail";
+import { useAuth } from "@/contexts/AuthContext";
 
 const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -37,6 +38,8 @@ const ProductDetails = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(prod?.isLiked ?? false);
   const [isSaved, setIsSaved] = useState(prod?.isSaved ?? false);
+
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     setCurrentImageIndex(0);
@@ -123,11 +126,25 @@ const ProductDetails = () => {
   };
 
   const handleOrder = () => {
+    if (isLoading) return; // still resolving auth
+
+    const target = `/checkout/${designId}`;
+
+    if (!isAuthenticated) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to continue to checkout.",
+      });
+      // send them to login and return here after
+      navigate("/signin", { state: { from: target } });
+      return;
+    }
+
     toast({
       title: "Order initiated",
       description: "Redirecting to checkout...",
     });
-    navigate(`/checkout/${designId}`);
+    navigate(target);
   };
 
   const handleMessage = () => {
@@ -185,10 +202,11 @@ const ProductDetails = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentImageIndex(index)}
-                  className={`aspect-square rounded-lg overflow-hidden border-2 transition-colors ${currentImageIndex === index
-                    ? "border-primary"
-                    : "border-transparent hover:border-primary/50"
-                    }`}
+                  className={`aspect-square rounded-lg overflow-hidden border-2 transition-colors ${
+                    currentImageIndex === index
+                      ? "border-primary"
+                      : "border-transparent hover:border-primary/50"
+                  }`}
                 >
                   <img
                     src={image}
@@ -242,9 +260,7 @@ const ProductDetails = () => {
                     <span className="text-lg text-muted-foreground line-through">
                       ${product.originalPrice}
                     </span>
-                    <Badge variant="destructive">
-                      {product.discount}% OFF
-                    </Badge>
+                    <Badge variant="destructive">{product.discount}% OFF</Badge>
                   </>
                 )}
               </div>
@@ -381,20 +397,22 @@ const ProductDetails = () => {
                                   variant="secondary"
                                   className="flex items-center gap-1 text-xs"
                                 >
-                                  <CheckCircle2 className="w-3 h-3 text-primary" /> Verified
+                                  <CheckCircle2 className="w-3 h-3 text-primary" />{" "}
+                                  Verified
                                 </Badge>
                               )}
                             </div>
                             <div>
                               <div className="flex items-center gap-1">
-                                {Array.from({ length: review.user.rating || 0 }).map((_, idx) => (
+                                {Array.from({
+                                  length: review.user.rating || 0,
+                                }).map((_, idx) => (
                                   <Star
                                     key={idx}
                                     className="w-3 h-3 fill-primary text-primary"
                                   />
                                 ))}
                               </div>
-
                             </div>
                           </span>
                         </div>
