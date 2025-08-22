@@ -48,7 +48,7 @@ export default function UserDashboard() {
     const { data: orders, isLoading: isOrdersLoading, isError } = useMyOrders();
     const { data: sells, isLoading: isSellsLoading, isError: isSellsError } = useMySells();
 
-    console.log(orders, "user uploaded products")
+    console.log(sells, "product Sells")
     const confirmedTotal = useMemo(() => {
         if (!orders || orders.length === 0) return 0;
         return orders

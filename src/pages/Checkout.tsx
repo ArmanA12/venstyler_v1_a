@@ -218,6 +218,8 @@ const Checkout = () => {
         { withCredentials: true }
       );
 
+      console.log(orderData, "After Creating the order");
+
       if (!orderData.success) {
         toast({
           title: "Order Failed",
@@ -252,6 +254,8 @@ const Checkout = () => {
             },
             { withCredentials: true }
           );
+
+          console.log(verifyData, "Verifying data after payment");
 
           if (verifyData.success) {
             toast({

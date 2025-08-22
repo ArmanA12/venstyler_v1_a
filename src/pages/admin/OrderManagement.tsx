@@ -122,7 +122,7 @@ const OrderManagement = () => {
           {/* Order Details */}
           <div className="lg:col-span-2 space-y-6">
             {/* Order Header */}
-            <Card className="shadow-lg border-0 bg-gradient-to-r from-card via-card to-primary/5">
+            <Card className=" border border-border-50 bg-gradient-to-r from-card via-card to-primary/5">
               <CardHeader>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
@@ -143,7 +143,7 @@ const OrderManagement = () => {
             </Card>
 
             {/* Order Items */}
-            <Card className="shadow-lg border-0">
+            <Card className=" border border-border-50">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Package className="h-5 w-5 text-primary" />
@@ -177,7 +177,7 @@ const OrderManagement = () => {
             </Card>
 
             {/* Customer Details */}
-            <Card className="shadow-lg border-0">
+            <Card className=" border border-border-50">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5 text-primary" />
@@ -217,7 +217,7 @@ const OrderManagement = () => {
           {/* Order Management Panel */}
           <div className="space-y-6">
             {/* Order Status Update */}
-            <Card className="shadow-lg border-0 bg-gradient-to-br from-primary/5 to-card">
+            <Card className=" border border-border-50 bg-gradient-to-br from-primary/5 to-card">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-primary" />
@@ -261,7 +261,7 @@ const OrderManagement = () => {
             </Card>
 
             {/* Shipment Tracking */}
-            <Card className="shadow-lg border-0">
+            <Card className=" border border-border-50">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Truck className="h-5 w-5 text-primary" />
@@ -311,7 +311,7 @@ const OrderManagement = () => {
             </Card>
 
             {/* Order Summary */}
-            <Card className="shadow-lg border-0">
+            <Card className=" border border-border-50">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-primary" />
@@ -336,7 +336,7 @@ const OrderManagement = () => {
             </Card>
 
             {/* Action Buttons */}
-            <Card className="shadow-lg border-0">
+            <Card className=" border border-border-50">
               <CardContent className="pt-6 space-y-3">
                 <Button 
                   className="w-full" 

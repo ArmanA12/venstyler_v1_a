@@ -588,6 +588,7 @@ const getMySells: ApiContextType["getMySells"] = async () => {
     "/api/order/getMyProductOrdersSell",
     { withCredentials: true }
   );
+  console.log(data, "Product Sell insight the context")
   return data;
 };
 

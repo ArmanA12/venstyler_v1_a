@@ -21,12 +21,12 @@ const OrderDetails = () => {
     const fetchOrder = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:5000/api/order/confirmation/${orderId}`,
+          `http://localhost:5000/api/order/orderDetailsForBuyerAndSeller/${orderId}`,
           {
             withCredentials: true, // sends cookies/session automatically
           }
         );
-        console.log(data, "order confirmation Data");
+        console.log(data, "order details Data");
         setOrderData(data.orderData);
         setIsLoading(false);
       } catch (err) {
@@ -114,7 +114,7 @@ const OrderDetails = () => {
 
         <div className="grid gap-6">
           {/* Order Header */}
-          <Card className="shadow-lg border-0 bg-gradient-to-r from-card via-card to-primary/5">
+          <Card className=" border border-border-50 bg-gradient-to-r from-card via-card to-primary/5">
             <CardHeader className="pb-4">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
@@ -143,7 +143,7 @@ const OrderDetails = () => {
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Order Items */}
             <div className="lg:col-span-2 space-y-4">
-              <Card className="shadow-lg border-0">
+              <Card className=" border border-border-50">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Package className="h-5 w-5 text-primary" />
@@ -177,7 +177,7 @@ const OrderDetails = () => {
               </Card>
 
               {/* Customer Details */}
-              <Card className="shadow-lg border-0">
+              <Card className=" border border-border-50">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     {type === 'purchase' ? (
@@ -218,7 +218,7 @@ const OrderDetails = () => {
 
             {/* Order Summary */}
             <div className="space-y-4">
-              <Card className="shadow-lg border-0 bg-gradient-to-br from-primary/5 to-card">
+              <Card className=" border border-border-50 bg-gradient-to-br from-primary/5 to-card">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <CreditCard className="h-5 w-5 text-primary" />
@@ -247,7 +247,7 @@ const OrderDetails = () => {
               </Card>
 
               {/* Action Buttons */}
-              <Card className="shadow-lg border-0">
+              <Card className=" border border-border-50">
                 <CardContent className="pt-6 space-y-3">
                   <Button className="w-full" variant="outline">
                     Download Invoice

@@ -19,7 +19,9 @@ export function useMySells() {
     queryKey: ["mySells"],
     queryFn: async (): Promise<MySellItem[]> => {
       const sellData = await getMySells();
-      return (sellData?.sells ?? []).map((sell: any): MySellItem => ({
+
+      // ✅ fix: use .data instead of .sells
+      return (sellData?.data ?? []).map((sell: any): MySellItem => ({
         id: sell.id,
         orderId: sell.id,
         buyerName: sell.user?.name ?? "Unknown",
