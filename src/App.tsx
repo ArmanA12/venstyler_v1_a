@@ -41,6 +41,7 @@ import PublicProfilePage from "./pages/PublicProfilePage";
 import UserDashboard from "./pages/UserDashboard";
 import Complaints from "./pages/Complaints";
 import OrderDetails from "./pages/OrderDetails";
+import OrderManagement from "./pages/admin/OrderManagement";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -221,6 +222,14 @@ export default function App() {
                   }
                 />
                 <Route path="/admin/orders/:orderId" element={<OrderView />} />
+                <Route 
+                  path="/admin/orders/:orderId/manage" 
+                  element={
+                    <ProtectedRoute>
+                      <OrderManagement />
+                    </ProtectedRoute>
+                  } 
+                />
                 
                 <Route path="/publicProfile/:userId" element={<PublicProfilePage />} />
 
