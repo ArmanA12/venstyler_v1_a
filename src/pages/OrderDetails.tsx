@@ -197,20 +197,20 @@ const OrderDetails = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Name</p>
-                      <p className="font-semibold">{orderData.firstName} {orderData.lastName}</p>
+                      <p className="font-semibold">{orderData.buyer.name} {orderData.lastName}</p>
                     </div>
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Email</p>
-                      <p className="font-semibold">{orderData.email}</p>
+                      <p className="font-semibold">{orderData.buyer.email}</p>
                     </div>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Address</p>
-                    <p className="font-semibold">{orderData.address}</p>
+                    <p className="font-semibold">{orderData.shipping.address}</p>
                     <p className="text-muted-foreground">
-                      {orderData.city}, {orderData.state} {orderData.zipCode}
+                      {orderData.shipping.city}, {orderData.shipping.state} {orderData.shipping.zipCode}
                     </p>
-                    <p className="text-muted-foreground">{orderData.country}</p>
+                    <p className="text-muted-foreground">{orderData.shipping.country}</p>
                   </div>
                 </CardContent>
               </Card>
