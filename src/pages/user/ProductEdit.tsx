@@ -57,7 +57,7 @@ export default function ProductEdit() {
         description: "Product updated successfully!"
       });
       
-      navigate("/user-dashboard");
+      navigate("/userDashboard");
     } catch (error) {
       toast({
         title: "Error",
@@ -74,7 +74,7 @@ export default function ProductEdit() {
       <Header />
       <div className="container mx-auto p-6">
         <div className="flex items-center gap-4 mb-6">
-          <Button variant="outline" onClick={() => navigate("/user-dashboard")}>
+          <Button variant="outline" onClick={() => navigate("/userDashboard")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
           </Button>
@@ -245,7 +245,7 @@ export default function ProductEdit() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => navigate("/user-dashboard")}
+                  onClick={() => navigate("/userDashboard")}
                 >
                   Cancel
                 </Button>

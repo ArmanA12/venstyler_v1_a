@@ -223,7 +223,26 @@ export type MyDesignRatings = {
   reviews: MyDesignReview[];
 };
 
-
+interface ProductAnalyticsResponse {
+  success: boolean;
+  analytics: {
+    totalSales: number;
+    totalRevenue: number;
+    avgOrderValue: number;
+    confirmedOrders: number;
+    pendingOrders: number;
+    cancelledOrders: number;
+  };
+  orders: Array<{
+    orderId: number;
+    buyerName: string;
+    buyerImage: string | null;
+    productTitle: string;
+    amount: number;
+    status: string;
+    date: string;
+  }>;
+}
 
 export type MyUploadedProduct = {
   id: number;
@@ -281,6 +300,8 @@ interface ApiContextType {
   getMyOrders: () => Promise<{ success: boolean; orders: any[] }>;
   getMySells: () => Promise<{ success: boolean; sells: any[] }>;
   getOrderDetails: (orderId: number) => Promise<{ success: boolean; orderData: any }>;
+  getProductAnalytics: (productId: number) => Promise<ProductAnalyticsResponse>;
+
 
 }
 
@@ -601,6 +622,15 @@ const getOrderDetails: ApiContextType["getOrderDetails"] = async (orderId: numbe
 };
 
 
+const getProductAnalytics: ApiContextType["getProductAnalytics"] = async (productId) => {
+  const { data } = await api.get<ProductAnalyticsResponse>(
+    `/api/order/getProductAnalytics/${productId}`,
+    { withCredentials: true }
+  );
+  return data;
+};
+
+
   const value: ApiContextType = {
     createComment,
     deleteComment,
@@ -624,6 +654,7 @@ const getOrderDetails: ApiContextType["getOrderDetails"] = async (orderId: numbe
     getMyOrders,
     getMySells,
     getOrderDetails,
+    getProductAnalytics
   };
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
 };
