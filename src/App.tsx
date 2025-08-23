@@ -42,6 +42,8 @@ import UserDashboard from "./pages/UserDashboard";
 import Complaints from "./pages/Complaints";
 import OrderDetails from "./pages/OrderDetails";
 import OrderManagement from "./pages/admin/OrderManagement";
+import ProductEdit from "./pages/user/ProductEdit";
+import ProductSellsDetails from "./pages/user/ProductSellsDetails";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -247,6 +249,25 @@ export default function App() {
                   element={
                     <ProtectedRoute>
                       <OrderDetails />
+                    </ProtectedRoute>
+                  } 
+                />
+
+                {/* User Product Routes */}
+                <Route 
+                  path="/user/products/:productId/edit" 
+                  element={
+                    <ProtectedRoute>
+                      <ProductEdit />
+                    </ProtectedRoute>
+                  } 
+                />
+
+                <Route 
+                  path="/user/products/:productId/sells-details" 
+                  element={
+                    <ProtectedRoute>
+                      <ProductSellsDetails />
                     </ProtectedRoute>
                   } 
                 />

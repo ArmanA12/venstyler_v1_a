@@ -15,7 +15,8 @@ import {
     MoreHorizontal,
     Edit,
     Trash2,
-    DollarSign
+    DollarSign,
+    TrendingUp
 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { DeleteConfirmationModal } from "@/components/ui/delete-confirmation-modal";
@@ -255,6 +256,10 @@ export default function UserDashboard() {
                                                             <DropdownMenuItem onClick={() => navigate(`/user/products/${product.id}/edit`)}>
                                                                 <Edit className="mr-2 h-4 w-4" />
                                                                 Edit
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => navigate(`/user/products/${product.id}/sells-details`)}>
+                                                                <TrendingUp className="mr-2 h-4 w-4" />
+                                                                Sells Details
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem
                                                                 className="text-destructive"
