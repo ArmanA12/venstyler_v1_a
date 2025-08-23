@@ -34,7 +34,7 @@ const NotFound = () => {
         </div>
 
         {/* Main content card */}
-        <Card className="backdrop-blur-lg bg-card/80 border-border/50 shadow-lg shadow-primary/5 p-8 mb-8 animate-fade-in">
+        <Card className="backdrop-blur-lg bg-card/80 border-border/50 p-8 mb-8 animate-fade-in hover:scale-105 transition-all duration-500">
           <div className="space-y-6">
             <div className="space-y-4">
               <h2 className="text-3xl font-bold text-foreground">
@@ -53,7 +53,7 @@ const NotFound = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
               <Button 
                 onClick={() => navigate('/')}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 hover:scale-105 group animate-fade-in"
                 size="lg"
               >
                 <Home className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
@@ -63,7 +63,7 @@ const NotFound = () => {
               <Button 
                 onClick={() => navigate(-1)}
                 variant="outline"
-                className="border-border/50 hover:bg-accent/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+                className="border-border/50 hover:bg-accent/50 transition-all duration-300 hover:scale-105 group animate-fade-in delay-150"
                 size="lg"
               >
                 <ArrowLeft className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
