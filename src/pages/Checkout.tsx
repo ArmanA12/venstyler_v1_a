@@ -81,7 +81,7 @@ const Checkout = () => {
       if (!id) return;
       try {
         const { data } = await axios.get(
-          `https://venstyler-backend.onrender.com/api/design/getProductBasicInfo/${designId}`,
+          `https://venstyler.armanshekh.com/api/design/getProductBasicInfo/${designId}`,
           { withCredentials: true }
         );
         if (data.success && data.product) {
@@ -148,7 +148,7 @@ const Checkout = () => {
 
         // 2️⃣ Fetch latest shipping address
         const { data: addressData } = await axios.get(
-          "https://venstyler-backend.onrender.com/api/order/current-user-shipping-address",
+          "https://venstyler.armanshekh.com/api/order/current-user-shipping-address",
           { withCredentials: true }
         );
 
@@ -199,7 +199,7 @@ const Checkout = () => {
 
       // 2️⃣ Create order on backend
       const { data: orderData } = await axios.post(
-        "https://venstyler-backend.onrender.com/api/order/create",
+        "https://venstyler.armanshekh.com/api/order/create",
         {
           items: products.map((p) => ({
             designId: p.id,
@@ -245,7 +245,7 @@ const Checkout = () => {
         handler: async function (response: any) {
           // 4️⃣ Verify payment with backend
           const { data: verifyData } = await axios.post(
-            "https://venstyler-backend.onrender.com/api/order/verify-payment",
+            "https://venstyler.armanshekh.com/api/order/verify-payment",
             {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,

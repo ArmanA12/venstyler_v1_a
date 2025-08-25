@@ -19,7 +19,7 @@ import { checkUserAuth } from '../lib/getCurrentUserDetails';
 
 
 // ✅ Connect once globally
-const socket = io("https://venstyler-backend.onrender.com", { withCredentials: true });
+const socket = io("https://venstyler.armanshekh.com", { withCredentials: true });
 
 interface Message {
   id: number;
@@ -60,7 +60,7 @@ const ChatBox: React.FC = () => {
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          `https://venstyler-backend.onrender.com/api/chat/chats/${chatId}/messages`,
+          `https://venstyler.armanshekh.com/api/chat/chats/${chatId}/messages`,
           { withCredentials: true }
         );
         setMessages(res.data.messages);
@@ -126,7 +126,7 @@ const sendMessage = async () => {
   setIsSending(true);
   try {
     await axios.post(
-      `https://venstyler-backend.onrender.com/api/chat/send`,
+      `https://venstyler.armanshekh.com/api/chat/send`,
       { receiverId, content: message },
       { withCredentials: true }
     );

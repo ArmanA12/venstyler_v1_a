@@ -37,7 +37,7 @@ const ProductReviews = () => {
   const fetchReviews = async (pageNum: number) => {
     try {
       setLoading(true);
-      const res = await fetch(`https://venstyler-backend.onrender.com/api/design/${designId}/reviews?page=${pageNum}&limit=5`);
+      const res = await fetch(`https://venstyler.armanshekh.com/api/design/${designId}/reviews?page=${pageNum}&limit=5`);
       const data = await res.json();
 
       if (data.success) {

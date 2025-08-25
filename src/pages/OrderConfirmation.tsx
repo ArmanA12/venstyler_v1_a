@@ -28,7 +28,7 @@ const OrderConfirmation = () => {
     const fetchOrder = async () => {
       try {
         const { data } = await axios.get(
-          `https://venstyler-backend.onrender.com/api/order/confirmation/${orderId}`,
+          `https://venstyler.armanshekh.com/api/order/confirmation/${orderId}`,
           {
             withCredentials: true, // sends cookies/session automatically
           }

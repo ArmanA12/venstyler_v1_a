@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const checkAuth = async () => {
       try {
         const res = await axios.get(
-          "https://venstyler-backend.onrender.com/api/auth/userAuthChecker",
+          "https://venstyler.armanshekh.com/api/auth/userAuthChecker",
           {
             withCredentials: true,
           }
@@ -64,7 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       const res = await axios.post(
-        "https://venstyler-backend.onrender.com/api/auth/login",
+        "https://venstyler.armanshekh.com/api/auth/login",
         {
           email,
           password,
@@ -85,7 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://venstyler-backend.onrender.com/api/auth/register",
+        "https://venstyler.armanshekh.com/api/auth/register",
         { email, password, name },
         { withCredentials: true }
       );
@@ -112,7 +112,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       await axios.post(
-        "https://venstyler-backend.onrender.com/api/auth/logout",
+        "https://venstyler.armanshekh.com/api/auth/logout",
         {},
         { withCredentials: true }
       );
@@ -129,7 +129,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       const { data } = await axios.post(
-        "https://venstyler-backend.onrender.com/api/auth/forgotPassowrd",
+        "https://venstyler.armanshekh.com/api/auth/forgotPassowrd",
         { email },
         { withCredentials: true }
       );
@@ -142,7 +142,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const verifyOTP = async (otp: string, email?: string) => {
     const { data } = await axios.post(
-      "https://venstyler-backend.onrender.com/api/auth/verifyOtp",
+      "https://venstyler.armanshekh.com/api/auth/verifyOtp",
       email ? { otp, email } : { otp },
       { withCredentials: true }
     );
@@ -155,7 +155,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const resetPassword = async (password: string, resetToken?: string) => {
     await axios.post(
-      "https://venstyler-backend.onrender.com/api/auth/resetPassword",
+      "https://venstyler.armanshekh.com/api/auth/resetPassword",
       { password, resetToken }, // ⬅️ include body token as fallback
       { withCredentials: true }
     );
@@ -163,7 +163,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const resendOtp = async (email?: string) => {
     const { data } = await axios.post(
-      "https://venstyler-backend.onrender.com/api/auth/resendOtp",
+      "https://venstyler.armanshekh.com/api/auth/resendOtp",
       email ? { email } : {},
       { withCredentials: true }
     );

@@ -46,7 +46,7 @@ const PublicProfilePage: React.FC = () => {
     const fetchProfile = async () => {
       try {
         const res = await axios.get(
-          `https://venstyler-backend.onrender.com/api/public/viewPublicProfile/${userId}`
+          `https://venstyler.armanshekh.com/api/public/viewPublicProfile/${userId}`
         );
         if (res.data.success) {
           setUserData(res.data.data);
