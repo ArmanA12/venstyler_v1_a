@@ -28,7 +28,7 @@ export default Chat
 //   Mic,
 // } from "lucide-react";
 
-// const socket = io("http://localhost:5000", { withCredentials: true });
+// const socket = io("https://venstyler-backend.onrender.com", { withCredentials: true });
 
 // interface Message {
 //   id: number;
@@ -59,7 +59,7 @@ export default Chat
 //   useEffect(() => {
 //     const fetchMessages = async () => {
 //       try {
-//         const res = await axios.get(`http://localhost:5000/api/chat/chats/${chatId}/messages`, {
+//         const res = await axios.get(`https://venstyler-backend.onrender.com/api/chat/chats/${chatId}/messages`, {
 //           withCredentials: true,
 //         });
 //         setMessages(res.data.messages);
@@ -116,7 +116,7 @@ export default Chat
 
 //     try {
 //       await axios.post(
-//         `http://localhost:5000/api/chat/send`,
+//         `https://venstyler-backend.onrender.com/api/chat/send`,
 //         {
 //           receiverId,
 //           content: tempMessage.content,

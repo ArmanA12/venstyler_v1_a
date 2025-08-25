@@ -4,7 +4,7 @@ import axios from 'axios';
 export const checkUserAuth = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:5000/api/auth/userAuthChecker`,
+      `https://venstyler-backend.onrender.com/api/auth/userAuthChecker`,
       {
         withCredentials: true, // ✅ ensure cookies are sent
       }

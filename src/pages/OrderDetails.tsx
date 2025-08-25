@@ -21,7 +21,7 @@ const OrderDetails = () => {
     const fetchOrder = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:5000/api/order/orderDetailsForBuyerAndSeller/${orderId}`,
+          `https://venstyler-backend.onrender.com/api/order/orderDetailsForBuyerAndSeller/${orderId}`,
           {
             withCredentials: true, // sends cookies/session automatically
           }

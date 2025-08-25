@@ -52,7 +52,7 @@ const WriteReview = () => {
         if (!id) return;
         try {
           const { data } = await axios.get(
-            `http://localhost:5000/api/design/getProductBasicInfo/${designId}`,
+            `https://venstyler-backend.onrender.com/api/design/getProductBasicInfo/${designId}`,
             { withCredentials: true }
           );
           if (data.success && data.product) {

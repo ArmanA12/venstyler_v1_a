@@ -77,7 +77,7 @@ const ExplorePage: FC = () => {
   const fetchUsers = async (role: string, page: number) => {
     try {
       setLoading(true);
-      const response = await api.get("http://localhost:5000/api/public/getListOfUsersByRole", {
+      const response = await api.get("https://venstyler-backend.onrender.com/api/public/getListOfUsersByRole", {
         params: role === "ALL" ? { page } : { role, page },
       });
       const data: ApiResponse = response.data;

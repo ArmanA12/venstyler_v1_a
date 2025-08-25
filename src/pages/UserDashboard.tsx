@@ -83,7 +83,7 @@ export default function UserDashboard() {
 
         try {
             const response = await axios.post(
-                `http://localhost:5000/api/design/deleteSingleDesign/${designId}`,
+                `https://venstyler-backend.onrender.com/api/design/deleteSingleDesign/${designId}`,
                 { designId }, // body me bhejna
                 {
                     withCredentials: true, // cookies/session bhejne ke liye
