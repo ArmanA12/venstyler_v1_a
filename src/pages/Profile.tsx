@@ -53,6 +53,7 @@ import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSavedDesigns } from "@/hooks/useSaveDesign";
 import { useLikedDesigns } from "@/hooks/useLikeDesign";
 import { RatingsTab } from "@/tab/RatingTab";
+import { ChatTab } from "@/tab/ChatTab";
 
 const personalInfoSchema = z.object({
   name: z.string().min(1, "First name is required"),
@@ -436,58 +437,7 @@ const Profile = () => {
         break;
 
       case "chats":
-        return (
-          <div className="fashion-card p-6">
-            <h3 className="text-xl font-playfair font-semibold mb-4">
-              Recent Conversations
-            </h3>
-            <div className="space-y-4">
-              {[
-                {
-                  name: "Sarah Johnson",
-                  type: "Vendor",
-                  message: "Thanks for the quick delivery!",
-                  time: "2h ago",
-                },
-                {
-                  name: "Mike Chen",
-                  type: "Customer",
-                  message: "Can you customize this design?",
-                  time: "1d ago",
-                },
-                {
-                  name: "Emma Wilson",
-                  type: "Vendor",
-                  message: "New collection is ready",
-                  time: "3d ago",
-                },
-              ].map((chat, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-4 p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
-                >
-                  <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center">
-                    <User className="w-6 h-6 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <p className="font-medium">{chat.name}</p>
-                      <span className="px-2 py-0.5 bg-accent/20 text-accent text-xs rounded-full">
-                        {chat.type}
-                      </span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      {chat.message}
-                    </p>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {chat.time}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
+        return <ChatTab />;
 
       case "ratings":
         return <RatingsTab />;

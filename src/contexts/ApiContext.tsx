@@ -301,8 +301,7 @@ interface ApiContextType {
   getMySells: () => Promise<{ success: boolean; sells: any[] }>;
   getOrderDetails: (orderId: number) => Promise<{ success: boolean; orderData: any }>;
   getProductAnalytics: (productId: number) => Promise<ProductAnalyticsResponse>;
-
-
+  getUserChats: () => Promise<any[]>;
 }
 
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
@@ -630,6 +629,14 @@ const getProductAnalytics: ApiContextType["getProductAnalytics"] = async (produc
   return data;
 };
 
+const getUserChats: ApiContextType["getUserChats"] = async () => {
+  const { data } = await api.get<{ success: boolean; chats: any[] }>(
+    "/api/chat/userChats",
+    { withCredentials: true }
+  );
+  return data.chats;
+};
+
 
   const value: ApiContextType = {
     createComment,
@@ -654,7 +661,8 @@ const getProductAnalytics: ApiContextType["getProductAnalytics"] = async (produc
     getMyOrders,
     getMySells,
     getOrderDetails,
-    getProductAnalytics
+    getProductAnalytics,
+    getUserChats
   };
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
 };

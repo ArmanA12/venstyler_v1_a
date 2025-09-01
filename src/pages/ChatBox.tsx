@@ -43,7 +43,6 @@ const ChatBox: React.FC = () => {
   const [searchParams] = useSearchParams();
   const chatId = Number(searchParams.get("chatId"));
   const receiverId = Number(searchParams.get("receiverId"));
-  console.log(receiverId, "receiver ID")
 
   const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([]);
