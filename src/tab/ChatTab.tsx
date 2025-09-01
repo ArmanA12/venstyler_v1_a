@@ -93,7 +93,7 @@ export function ChatTab() {
         {chats.map((chat: UserChat) => (
           <Link
             key={chat.chatId}
-            to={`/chatbox?chatId=${chat.chatId}&receiverId=${chat.chatUser.id}`}
+            to={`/chat?receiverId=${chat.chatUser.id}`}
             className="block"
           >
             <div className="flex items-center gap-4 p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
