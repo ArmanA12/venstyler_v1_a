@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import io from "socket.io-client";
 import { useToast } from "@/hooks/use-toast";
@@ -15,8 +15,6 @@ import {
   Smile,
   Mic,
 } from "lucide-react";
-import { checkUserAuth } from '../lib/getCurrentUserDetails';
-
 
 // ✅ Connect once globally
 const socket = io("https://venstyler.armanshekh.com", { withCredentials: true });
@@ -25,6 +23,7 @@ interface Message {
   id: number;
   senderId: number;
   content: string;
+  chatId?: number;
   sender: {
     id: number;
     name: string;
@@ -41,11 +40,11 @@ interface ChatUser {
 
 const ChatBox: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const chatId = Number(searchParams.get("chatId"));
+  const navigate = useNavigate();
   const receiverId = Number(searchParams.get("receiverId"));
-  console.log(receiverId, "receiverId")
 
   const { toast } = useToast();
+  const [chatId, setChatId] = useState<number | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState("");
   const [chatUser, setChatUser] = useState<ChatUser | null>(null);
@@ -56,8 +55,31 @@ const ChatBox: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // ✅ Fetch chat history
+  // ✅ Step 1: Resolve chat & user info on mount
   useEffect(() => {
+    const initChat = async () => {
+      try {
+        const res = await axios.get(
+          `https://venstyler.armanshekh.com/api/chat/find-or-null/${receiverId}`,
+          { withCredentials: true }
+        );
+
+        if (res.data.exists) {
+          setChatId(res.data.chatId);
+        }
+        setChatUser(res.data.chatUser);
+      } catch (error) {
+        console.error("Error initializing chat:", error);
+      }
+    };
+
+    if (receiverId) initChat();
+  }, [receiverId]);
+
+  // ✅ Step 2: Fetch messages once chatId is known
+  useEffect(() => {
+    if (!chatId) return;
+
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
@@ -65,40 +87,37 @@ const ChatBox: React.FC = () => {
           { withCredentials: true }
         );
         setMessages(res.data.messages);
-        setChatUser(res.data.chatUser);
         scrollToBottom();
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
     };
 
-    if (receiverId) fetchMessages();
-  }, [receiverId]);
+    fetchMessages();
+  }, [chatId]);
 
-  // ✅ Listen for new messages (only here)
-useEffect(() => {
-  if (!chatId) return;
+  // ✅ Step 3: Socket new message listener
+  useEffect(() => {
+    if (!chatId) return;
 
-  // Join this chat room
-  socket.emit("joinRoom", `chat_${chatId}`);
+    socket.emit("joinRoom", `chat_${chatId}`);
 
-  // Remove old listener & attach new one
-  socket.off("newMessage").on("newMessage", (newMsg: Message) => {
-    setMessages((prev) => [...prev, newMsg]);
-    toast({
-      title: newMsg.sender.name,
-      description: newMsg.content,
+    socket.off("newMessage").on("newMessage", (newMsg: Message) => {
+      setMessages((prev) => [...prev, newMsg]);
+      toast({
+        title: newMsg.sender.name,
+        description: newMsg.content,
+      });
+      scrollToBottom();
     });
-    scrollToBottom();
-  });
 
-  return () => {
-    socket.emit("leaveRoom", `chat_${chatId}`);
-    socket.off("newMessage");
-  };
-}, [chatId, toast]);
+    return () => {
+      socket.emit("leaveRoom", `chat_${chatId}`);
+      socket.off("newMessage");
+    };
+  }, [chatId, toast]);
 
-  // ✅ Online/offline status tracking
+  // ✅ Step 4: Online/offline tracking
   useEffect(() => {
     socket.off("userOnline").on("userOnline", (id: number) => {
       if (chatUser?.id === id) {
@@ -121,26 +140,31 @@ useEffect(() => {
     };
   }, [chatUser]);
 
-const sendMessage = async () => {
-  if (!message.trim()) return;
+  // ✅ Step 5: Send message (create chat if needed)
+  const sendMessage = async () => {
+    if (!message.trim()) return;
 
-  setIsSending(true);
-  try {
-    await axios.post(
-      `https://venstyler.armanshekh.com/api/chat/send`,
-      { receiverId, content: message },
-      { withCredentials: true }
-    );
-    setMessage(""); // clear input
-    scrollToBottom();
-  } catch (error) {
-    console.error("Error sending message:", error);
-  } finally {
-    setTimeout(() => setIsSending(false), 1000);
-  }
-};
+    setIsSending(true);
+    try {
+      const res = await axios.post(
+        `https://venstyler.armanshekh.com/api/chat/send`,
+        { receiverId, content: message },
+        { withCredentials: true }
+      );
 
+      // If chat created first time → update chatId
+      if (res.data.createdFirst && res.data.message.chatId) {
+        setChatId(res.data.message.chatId);
+      }
 
+      setMessage(""); // clear input
+      scrollToBottom();
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      setTimeout(() => setIsSending(false), 1000);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20 flex flex-col">
@@ -149,7 +173,10 @@ const sendMessage = async () => {
         <div className="w-full lg:w-4/5 mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <button className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
+              <button
+                onClick={() => navigate(-1)}
+                className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
                 <ArrowLeft className="w-4 h-4 mr-2" />
               </button>
               <div className="flex items-center gap-3">
