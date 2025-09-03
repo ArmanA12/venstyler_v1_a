@@ -43,6 +43,7 @@ const ChatBox: React.FC = () => {
   const [searchParams] = useSearchParams();
   const chatId = Number(searchParams.get("chatId"));
   const receiverId = Number(searchParams.get("receiverId"));
+  console.log(receiverId, "receiverId")
 
   const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -71,8 +72,8 @@ const ChatBox: React.FC = () => {
       }
     };
 
-    if (chatId) fetchMessages();
-  }, [chatId]);
+    if (receiverId) fetchMessages();
+  }, [receiverId]);
 
   // ✅ Listen for new messages (only here)
 useEffect(() => {
