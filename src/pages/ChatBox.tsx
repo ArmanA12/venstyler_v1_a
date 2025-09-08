@@ -167,7 +167,7 @@ const ChatBox: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20 flex flex-col">
+    <div className="h-screen bg-gradient-to-br from-background via-background/95 to-muted/20 flex flex-col">
       <Header />
       <div className="border-b bg-background/80 backdrop-blur-sm">
         <div className="w-full lg:w-4/5 mx-auto px-4 py-4">
@@ -209,9 +209,6 @@ const ChatBox: React.FC = () => {
               <button className="hover:bg-muted p-2 rounded-full">
                 <Phone className="w-4 h-4" />
               </button>
-              {/* <button className="hover:bg-muted p-2 rounded-full">
-                <MoreVertical className="w-4 h-4" />
-              </button> */}
             </div>
           </div>
         </div>
@@ -220,7 +217,7 @@ const ChatBox: React.FC = () => {
       {/* Messages */}
       <div className="flex-1 overflow-hidden">
         <div className="w-full lg:w-4/5 mx-auto px-4 h-full">
-          <div className="h-full overflow-y-auto py-4 space-y-4">
+          <div className="h-full overflow-y-auto py-4 space-y-4 pb-20">
             {messages.map((msg) => {
               const isMe = msg.senderId !== chatUser?.id;
               return (
@@ -254,13 +251,10 @@ const ChatBox: React.FC = () => {
         </div>
       </div>
 
-      {/* Input */}
-      <div className="border-t bg-background/80 backdrop-blur-sm">
-        <div className="w-full lg:w-4/5 mx-auto px-2 py-4">
+      {/* Fixed Input at Bottom */}
+      <div className="fixed bottom-0 left-0 right-0 border-t bg-background/95 backdrop-blur-sm">
+        <div className="w-full lg:w-4/5 mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
-            {/* <button className="hover:bg-muted p-2 rounded-full">
-              <Paperclip className="w-4 h-4" />
-            </button> */}
             <button className="hover:bg-muted p-2 rounded-full">
               <ImageIcon className="w-4 h-4" />
             </button>
@@ -274,16 +268,16 @@ const ChatBox: React.FC = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                 placeholder="Type a message..."
-                className="w-full px-4 py-2 text-primary  border rounded-full focus:outline-none focus:ring"
+                className="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary bg-background"
               />
-              <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1">
+              <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded-full">
                 <Smile className="w-4 h-4" />
               </button>
             </div>
             <button
               onClick={sendMessage}
               disabled={!message.trim() || isSending}
-              className="bg-primary text-white px-4 py-2 rounded-full hover:bg-primary/90 disabled:opacity-50"
+              className="bg-primary text-primary-foreground px-4 py-2 rounded-full hover:bg-primary/90 disabled:opacity-50 transition-colors"
             >
               <Send className="w-4 h-4" />
             </button>
