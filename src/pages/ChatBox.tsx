@@ -217,7 +217,7 @@ const ChatBox: React.FC = () => {
       {/* Messages */}
       <div className="flex-1 overflow-hidden">
         <div className="w-full lg:w-4/5 mx-auto px-4 h-full">
-          <div className="h-full overflow-y-auto py-4 space-y-4 pb-20">
+          <div className="h-full overflow-y-auto py-4 space-y-4 pb-20 scrollbar-hide">
             {messages.map((msg) => {
               const isMe = msg.senderId !== chatUser?.id;
               return (
