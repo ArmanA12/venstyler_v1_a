@@ -209,9 +209,9 @@ const ChatBox: React.FC = () => {
               <button className="hover:bg-muted p-2 rounded-full">
                 <Phone className="w-4 h-4" />
               </button>
-              <button className="hover:bg-muted p-2 rounded-full">
+              {/* <button className="hover:bg-muted p-2 rounded-full">
                 <MoreVertical className="w-4 h-4" />
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
@@ -258,9 +258,9 @@ const ChatBox: React.FC = () => {
       <div className="border-t bg-background/80 backdrop-blur-sm">
         <div className="w-full lg:w-4/5 mx-auto px-2 py-4">
           <div className="flex items-center gap-3">
-            <button className="hover:bg-muted p-2 rounded-full">
+            {/* <button className="hover:bg-muted p-2 rounded-full">
               <Paperclip className="w-4 h-4" />
-            </button>
+            </button> */}
             <button className="hover:bg-muted p-2 rounded-full">
               <ImageIcon className="w-4 h-4" />
             </button>
@@ -274,7 +274,7 @@ const ChatBox: React.FC = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                 placeholder="Type a message..."
-                className="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring"
+                className="w-full px-4 py-2 text-primary  border rounded-full focus:outline-none focus:ring"
               />
               <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1">
                 <Smile className="w-4 h-4" />

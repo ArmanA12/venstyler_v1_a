@@ -581,7 +581,7 @@ const Index = () => {
                               </p>
                             </div>
                           </div>
-                          <Link to={`/publicProfile/${design.id}`}>
+                          <Link to={`/publicProfile/${design.userId}`}>
                             <Button
                               variant="outline"
                               size="sm"

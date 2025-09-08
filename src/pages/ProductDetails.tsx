@@ -33,7 +33,7 @@ const ProductDetails = () => {
 
   // fetch product
   const { data: prod, isLoading, isError, error } = useProductDetails(designId);
-
+  console.log(prod, "product details");
   // local UI states
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(prod?.isLiked ?? false);
@@ -148,7 +148,7 @@ const ProductDetails = () => {
   };
 
   const handleMessage = () => {
-    navigate(`/chat`);
+    navigate(`/chat?receiverId=${product.designer.id}`);
   };
 
   return (
@@ -253,12 +253,12 @@ const ProductDetails = () => {
             <div className="space-y-2">
               <div className="flex items-center gap-3">
                 <span className="text-3xl font-bold text-primary">
-                  ${product.price}
+                  ₹{product.price}
                 </span>
                 {product.discount > 0 && (
                   <>
                     <span className="text-lg text-muted-foreground line-through">
-                      ${product.originalPrice}
+                      ₹{product.originalPrice}
                     </span>
                     <Badge variant="destructive">{product.discount}% OFF</Badge>
                   </>

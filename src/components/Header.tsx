@@ -226,9 +226,9 @@ export const Header = () => {
         <div className="md:hidden bg-background px-4 py-4 border-t border-border/50 space-y-4">
           {/* Mobile Links */}
           <div className="flex flex-col space-y-3">
-            <Link to={`/chat/${user?.id}`} className="flex items-center gap-2">
+            {/* <Link to={`/chat/${user?.id}`} className="flex items-center gap-2">
               <MessageCircle className="w-5 h-5" /> Chat
-            </Link>
+            </Link> */}
 
             <Link to="/" className="flex items-center gap-2">
               <Home className="w-5 h-5" /> Home

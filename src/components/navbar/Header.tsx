@@ -69,13 +69,13 @@ export const Header = () => {
         {/* Right Icons */}
         <div className="flex items-center space-x-3">
           {/* Chat */}
-          {isAuthenticated && (
+          {/* {isAuthenticated && (
             <Link to={`/chat/${user?.id}`} className="hidden md:inline-flex">
               <Button variant="ghost" size="icon" className="hover-glow">
                 <MessageCircle className="w-5 h-5" />
               </Button>
             </Link>
-          )}
+          )} */}
 
           {/* Upload */}
           {isAuthenticated && (

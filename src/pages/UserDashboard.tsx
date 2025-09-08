@@ -179,11 +179,11 @@ export default function UserDashboard() {
 
                 {/* Main Content */}
                 <Tabs defaultValue="products" className="w-full">
-                    <TabsList className="grid w-full grid-cols-4">
+                    <TabsList className="grid w-full grid-cols-3">
                         <TabsTrigger value="products">Products</TabsTrigger>
                         <TabsTrigger value="orders"> My Purchase</TabsTrigger>
                         <TabsTrigger value="sales">My Sales</TabsTrigger>
-                        <TabsTrigger value="analytics">Analytics</TabsTrigger>
+                        {/* <TabsTrigger value="analytics">Analytics</TabsTrigger> */}
                     </TabsList>
 
                     {/* Products Tab */}
@@ -424,7 +424,7 @@ export default function UserDashboard() {
 
 
                     {/* Analytics Tab */}
-                    <TabsContent value="analytics">
+                    {/* <TabsContent value="analytics">
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                             <Card>
                                 <CardHeader>
@@ -472,7 +472,7 @@ export default function UserDashboard() {
                                 </CardContent>
                             </Card>
                         </div>
-                    </TabsContent>
+                    </TabsContent> */}
                 </Tabs>
             </div>
 
