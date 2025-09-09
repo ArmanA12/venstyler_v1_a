@@ -4,6 +4,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import { useToast } from "@/hooks/use-toast";
 import { Header } from "@/components/navbar/Header";
+import VideoCall from "./VideoCall";
 import {
   ArrowLeft,
   Send,
@@ -75,7 +76,7 @@ const startCall = async () => {
     const initChat = async () => {
       try {
         const res = await axios.get(
-          `https://venstyler.armanshekh.com/api/chat/find-or-null/${receiverId}`,
+          `http://localhost:5000/api/chat/find-or-null/${receiverId}`,
           { withCredentials: true }
         );
 
