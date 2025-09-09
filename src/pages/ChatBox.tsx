@@ -55,7 +55,7 @@ const ChatBox: React.FC = () => {
 const startCall = async () => {
   try {
     const res = await axios.post(
-      "https://venstyler.https://venstyler.armanshekh.comcom/api/chat/videoCall",
+      "https://venstyler.armanshekh.com/api/chat/videoCall",
       { chatId },
       { withCredentials: true } // ✅ must be inside config object
     );
