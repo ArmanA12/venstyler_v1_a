@@ -50,6 +50,21 @@ const ChatBox: React.FC = () => {
   const [chatUser, setChatUser] = useState<ChatUser | null>(null);
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [callUrl, setCallUrl] = useState<string | null>(null);
+
+const startCall = async () => {
+  try {
+    const res = await axios.post(
+      "http://localhost:5000/api/chat/videoCall",
+      { chatId },
+      { withCredentials: true } // ✅ must be inside config object
+    );
+    setCallUrl(res.data.url);
+  } catch (error) {
+    console.error("Error starting call:", error);
+  }
+};
+
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -205,6 +220,24 @@ const ChatBox: React.FC = () => {
             <div className="flex items-center gap-2">
               <button className="hover:bg-muted p-2 rounded-full">
                 <Video className="w-4 h-4" />
+                    <div>
+      {!callUrl ? (
+        <button
+          onClick={startCall}
+          style={{
+            padding: "10px 20px",
+            borderRadius: "8px",
+            background: "#4f46e5",
+            color: "white",
+          }}
+        >
+          Start Video Call
+        </button>
+      ) : (
+        <VideoCall url={callUrl} onLeave={() => setCallUrl(null)} />
+      )}
+    </div>
+
               </button>
               <button className="hover:bg-muted p-2 rounded-full">
                 <Phone className="w-4 h-4" />
