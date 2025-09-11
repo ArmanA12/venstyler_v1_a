@@ -53,18 +53,18 @@ const ChatBox: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [callUrl, setCallUrl] = useState<string | null>(null);
 
-const startCall = async () => {
-  try {
-    const res = await axios.post(
-      "https://venstyler.armanshekh.com/api/chat/videoCall",
-      { chatId },
-      { withCredentials: true } // ✅ must be inside config object
-    );
-    setCallUrl(res.data.url);
-  } catch (error) {
-    console.error("Error starting call:", error);
-  }
-};
+// const startCall = async () => {
+//   try {
+//     const res = await axios.post(
+//       "https://venstyler.armanshekh.com/api/chat/videoCall",
+//       { chatId },
+//       { withCredentials: true } // ✅ must be inside config object
+//     );
+//     setCallUrl(res.data.url);
+//   } catch (error) {
+//     console.error("Error starting call:", error);
+//   }
+// };
 
 
   const scrollToBottom = () => {
@@ -222,7 +222,7 @@ const startCall = async () => {
               <button className="hover:bg-muted p-2 rounded-full">
                 <Video className="w-4 h-4" />
                     <div>
-      {!callUrl ? (
+      {/* {!callUrl ? (
         <button
           onClick={startCall}
           style={{
@@ -236,7 +236,7 @@ const startCall = async () => {
         </button>
       ) : (
         <VideoCall url={callUrl} onLeave={() => setCallUrl(null)} />
-      )}
+      )} */}
     </div>
 
               </button>
