@@ -67,6 +67,20 @@ const ChatBox: React.FC = () => {
 // };
 
 
+  const startCall = async () => {
+    try {
+      const res = await axios.post(
+        "https://venstyler.armanshekh.com/api/chat/videoCall",
+        { chatId },
+        { withCredentials: true } // ✅ fixed
+      );
+      setCallUrl(res.data.url);
+    } catch (error) {
+      console.error("Error starting call:", error);
+    }
+  };
+
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -222,13 +236,13 @@ const ChatBox: React.FC = () => {
               <button className="hover:bg-muted p-2 rounded-full">
                 <Video className="w-4 h-4" />
                     <div>
-      {/* {!callUrl ? (
+      {!callUrl ? (
         <button
           onClick={startCall}
           style={{
             padding: "10px 20px",
             borderRadius: "8px",
-            background: "#4f46e5",
+            background: "#ff1a75",
             color: "white",
           }}
         >
@@ -236,7 +250,7 @@ const ChatBox: React.FC = () => {
         </button>
       ) : (
         <VideoCall url={callUrl} onLeave={() => setCallUrl(null)} />
-      )} */}
+      )}
     </div>
 
               </button>

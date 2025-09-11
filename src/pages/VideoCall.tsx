@@ -2,19 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import DailyIframe, { DailyCall } from "@daily-co/daily-js";
 
 interface VideoCallProps {
-  url: string; // Daily.co room URL
-  onLeave?: () => void; // callback when user leaves
+  url: string;
+  onLeave?: () => void;
 }
 
 const VideoCall: React.FC<VideoCallProps> = ({ url, onLeave }) => {
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [callObject, setCallObject] = useState<DailyCall | null>(null);
 
   useEffect(() => {
-    if (!url) return;
+    if (!url || !containerRef.current) return;
 
-    // Create Daily iframe
-    const callFrame = DailyIframe.createFrame(iframeRef.current!, {
+    const callFrame = DailyIframe.createFrame(containerRef.current, {
       showLeaveButton: true,
       iframeStyle: {
         width: "100%",
@@ -27,7 +26,6 @@ const VideoCall: React.FC<VideoCallProps> = ({ url, onLeave }) => {
     callFrame.join({ url });
     setCallObject(callFrame);
 
-    // Handle leave event
     callFrame.on("left-meeting", () => {
       onLeave?.();
     });
@@ -39,9 +37,10 @@ const VideoCall: React.FC<VideoCallProps> = ({ url, onLeave }) => {
   }, [url]);
 
   return (
-    <div style={{ width: "100%", height: "80vh", borderRadius: "12px" }}>
-      <div ref={iframeRef}></div>
-    </div>
+    <div
+      ref={containerRef}
+      style={{ width: "100%", height: "80vh", borderRadius: "12px" }}
+    />
   );
 };
 
