@@ -76,7 +76,7 @@ const ChatBox: React.FC = () => {
     const initChat = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/chat/find-or-null/${receiverId}`,
+          `https://venstyler.armanshekh.com/api/chat/find-or-null/${receiverId}`,
           { withCredentials: true }
         );
 
