@@ -130,9 +130,9 @@ const ExplorePage: FC = () => {
             <h1 className="text-2xl font-playfair font-bold bg-gradient-primary bg-clip-text text-transparent">
               Explore Creators
             </h1>
-            <p className="text-sm text-muted-foreground">
+            {/* <p className="text-sm text-muted-foreground">
               {totalUsers} talented professionals
-            </p>
+            </p> */}
           </div>
 
           {/* Right: Search + View toggle */}
