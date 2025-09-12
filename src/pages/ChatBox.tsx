@@ -4,7 +4,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import { useToast } from "@/hooks/use-toast";
 import { Header } from "@/components/navbar/Header";
-import VideoCall from "./VideoCall";
+import VideoCallApp from "./VideoCall";
 import {
   ArrowLeft,
   Send,
@@ -51,34 +51,6 @@ const ChatBox: React.FC = () => {
   const [chatUser, setChatUser] = useState<ChatUser | null>(null);
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [callUrl, setCallUrl] = useState<string | null>(null);
-
-// const startCall = async () => {
-//   try {
-//     const res = await axios.post(
-//       "https://venstyler.armanshekh.com/api/chat/videoCall",
-//       { chatId },
-//       { withCredentials: true } // ✅ must be inside config object
-//     );
-//     setCallUrl(res.data.url);
-//   } catch (error) {
-//     console.error("Error starting call:", error);
-//   }
-// };
-
-
-  const startCall = async () => {
-    try {
-      const res = await axios.post(
-        "https://venstyler.armanshekh.com/api/chat/videoCall",
-        { chatId },
-        { withCredentials: true } // ✅ fixed
-      );
-      setCallUrl(res.data.url);
-    } catch (error) {
-      console.error("Error starting call:", error);
-    }
-  };
 
 
   const scrollToBottom = () => {
@@ -235,23 +207,7 @@ const ChatBox: React.FC = () => {
             <div className="flex items-center gap-2">
               <button className="hover:bg-muted p-2 rounded-full">
                 <Video className="w-4 h-4" />
-                    <div>
-      {!callUrl ? (
-        <button
-          onClick={startCall}
-          style={{
-            padding: "10px 20px",
-            borderRadius: "8px",
-            background: "#ff1a75",
-            color: "white",
-          }}
-        >
-          Start Video Call
-        </button>
-      ) : (
-        <VideoCall url={callUrl} onLeave={() => setCallUrl(null)} />
-      )}
-    </div>
+      <VideoCallApp chatId={chatId} />
 
               </button>
               <button className="hover:bg-muted p-2 rounded-full">
