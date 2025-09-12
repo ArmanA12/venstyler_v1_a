@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import DailyIframe from "@daily-co/daily-js";
 import axios from "axios";
 
-const VideoCall = ({ url, onLeave }) => {
+const VideoCall = ({ url, onLeave, onError }) => {
   const containerRef = useRef(null);
   const callObjectRef = useRef(null);
 
@@ -26,11 +26,17 @@ const VideoCall = ({ url, onLeave }) => {
       onLeave?.();
     });
 
+    // Add error handling
+    callFrame.on("error", (e) => {
+      console.error("Daily.co error:", e);
+      onError?.(e);
+    });
+
     return () => {
       callFrame.destroy();
       callObjectRef.current = null;
     };
-  }, [url, onLeave]);
+  }, [url, onLeave, onError]);
 
   return (
     <div
@@ -45,6 +51,7 @@ const VideoCallApp = ({ chatId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [callStatus, setCallStatus] = useState("idle");
+  const [dailyError, setDailyError] = useState(null);
 
   const startCall = async () => {
     if (!chatId) {
@@ -54,6 +61,7 @@ const VideoCallApp = ({ chatId }) => {
     
     setLoading(true);
     setError(null);
+    setDailyError(null);
     setCallStatus("creating");
     
     try {
@@ -82,6 +90,19 @@ const VideoCallApp = ({ chatId }) => {
   const handleLeaveCall = () => {
     setCallUrl(null);
     setCallStatus("idle");
+    setDailyError(null);
+  };
+
+  const handleDailyError = (error) => {
+    console.error("Daily.co error:", error);
+    
+    if (error.errorMsg === "account-missing-payment-method") {
+      setDailyError("Payment method required. Please add a payment method to your Daily.co account.");
+    } else {
+      setDailyError("Video call error: " + (error.errorMsg || "Unknown error"));
+    }
+    
+    setCallStatus("error");
   };
 
   return (
@@ -111,6 +132,26 @@ const VideoCallApp = ({ chatId }) => {
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
           </svg>
           <span>{error}</span>
+        </div>
+      )}
+      
+      {dailyError && (
+        <div style={{ 
+          color: "#d69e2e", 
+          padding: "12px", 
+          marginBottom: "20px",
+          backgroundColor: "#fefcbf",
+          border: "1px solid "#faf089",
+          borderRadius: "8px"
+        }}>
+          <h4 style={{ margin: "0 0 8px 0" }}>Video Call Setup Required</h4>
+          <p style={{ margin: "0" }}>{dailyError}</p>
+          <p style={{ margin: "8px 0 0 0", fontSize: "14px" }}>
+            <a href="https://dashboard.daily.co/" target="_blank" rel="noopener noreferrer" 
+               style={{ color: "#3182ce", textDecoration: "underline" }}>
+              Add payment method to your Daily.co account
+            </a>
+          </p>
         </div>
       )}
       
@@ -185,7 +226,11 @@ const VideoCallApp = ({ chatId }) => {
             </p>
           </div>
           
-          <VideoCall url={callUrl} onLeave={handleLeaveCall} />
+          <VideoCall 
+            url={callUrl} 
+            onLeave={handleLeaveCall} 
+            onError={handleDailyError}
+          />
           
           <div style={{ marginTop: "15px", textAlign: "center" }}>
             <button
