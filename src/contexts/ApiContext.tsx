@@ -29,8 +29,10 @@ type FeedProduct = {
     name: string | null;
     city: string | null;
     profileImage: string | null;
+    isVerified?: boolean;
   };
-
+  isLiked?: boolean;
+  isSaved?: boolean;
   category?: string;
   meta: {
     likesCount: number;
@@ -50,32 +52,31 @@ export type ProductDetail = {
   materialOne?: string | null;
   materialTwo?: string | null;
   category?: string | null;
-  createdAt: string;
-  updatedAt: string;
   images: string[];
   designer: {
-    id: number | null;
+    id: number;
     name: string | null;
-    city: string | null;
     profileImage: string | null;
+    isVerified?: boolean;
+    rating?: number;
   };
-  meta: {
+  isLiked?: boolean;
+  isSaved?: boolean;
+  meta?: {
     likesCount: number;
+    commentCount: number;
     sharesCount: number;
     savesCount: number;
-    reviewsCount: number;
-    ordersCount: number;
-    averageRating: string | null; // backend sends toFixed(1)
+    rating: number;
+    orders: number;
   };
-  latestReviews: Array<{
+  reviews?: Array<{
     id: number;
-    comment: string | null;
+    user: { name: string; profileImage?: string };
+    rating: number;
+    comment: string;
+    images?: string[];
     createdAt: string;
-    user: {
-      id: number;
-      name: string | null;
-      profileImage: string | null;
-    };
   }>;
 };
 

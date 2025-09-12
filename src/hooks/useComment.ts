@@ -24,6 +24,7 @@ export function useComments(designId?: number, pageSize = 10) {
   const q = useInfiniteQuery({
     enabled: !!designId,
     queryKey: ["comments", designId, pageSize],
+    initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }): Promise<UiPage> => {
       const res = await getCommentsByDesign!(designId!, pageParam, pageSize);
       return {

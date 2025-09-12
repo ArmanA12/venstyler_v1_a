@@ -33,7 +33,9 @@ export function NotificationsSocketBridge({
     if (!userId) return;
     socket.emit("join-room", userId);
     socket.on("new-notification", handleNewNotification);
-    return () => socket.off("new-notification", handleNewNotification);
+    return () => {
+      socket.off("new-notification", handleNewNotification);
+    };
   }, [userId, handleNewNotification]);
 
   return null;

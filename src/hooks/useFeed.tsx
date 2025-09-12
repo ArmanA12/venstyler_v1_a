@@ -35,16 +35,17 @@ export function useFeed(page: number) {
     placeholderData: keepPreviousData,
     select: (res) => ({
       items: res.products.map((p) => ({
-        userId:p.designer.id,
+        userId: p.designer.id,
         id: String(p.id),
         imageUrl: p.images?.[0] || "",
+        images: p.images || [], // Add images array
         title: p.title,
-        price:p.price,
-        discount:p.discount,
-        city:p.designer.city,
-        createdAt:p.createdAt,
+        price: p.price,
+        discount: p.discount,
+        city: p.designer.city,
+        createdAt: p.createdAt,
         designer: p.designer?.name || "Unknown",
-        isVerified:p.designer.isVerified,
+        isVerified: p.designer?.isVerified || false,
         designerAvatar: p.designer?.profileImage || null,
         category: p.category,
         likes: p.meta?.likesCount ?? 0,

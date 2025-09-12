@@ -6,6 +6,8 @@ interface User {
   id: string;
   email: string;
   name: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 interface AuthContextType {
@@ -15,7 +17,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name: string) => Promise<void>;
   signOut: () => void;
-  forgotPassword: (email: string) => Promise<void>;
+  forgotPassword: (email: string) => Promise<string | undefined>;
   verifyOTP: (otp: string, email?: string) => Promise<string | undefined>;
   resetPassword: (password: string, resetToken?: string) => Promise<void>;
   resendOtp: (email?: string) => Promise<string | undefined>;

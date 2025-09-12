@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import designerAvatar from "@/assets/designer-avatar-1.jpg";
 import { Header } from "@/components/navbar/Header";
+import { FeedSkeleton } from "@/components/FeedSkeleton";
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { Link } from "react-router-dom";
 import { useApi } from "@/contexts/ApiContext";
@@ -397,7 +398,7 @@ const Index = () => {
                             <ShareMenu
                               url={`http://localhost:8080/product/${design.id}`}
                               title={design.title}
-                              onShared={() => handleShare(design.id)}
+                              onShared={() => handleShare(Number(design.id))}
                               onClose={handleClose}
                             />
                           </div>
@@ -513,7 +514,7 @@ const Index = () => {
                   ))}
                 {openCommentsFor !== null && (
                   <CommentsPanel
-                    designId={openCommentsFor}
+                    designId={Number(openCommentsFor)}
                     open
                     onClose={() => setOpenCommentsFor(null)}
                     onPosted={() =>
@@ -591,8 +592,13 @@ const Index = () => {
                             </Button>
                           </Link>
                         </div>
-                      ))}
+                  ))
+                ) : (
+                  <div className="p-6 text-center text-muted-foreground">
+                    No designs found
                   </div>
+                )}
+              </div>
                 </div>
 
                 {/* Enhanced Trending */}

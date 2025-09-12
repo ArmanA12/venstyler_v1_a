@@ -70,8 +70,8 @@ const ProductDetails = () => {
     price,
     originalPrice,
     discount: discountPct,
-    rating: Number(prod?.meta?.averageRating ?? 0),
-    totalOrders: prod?.meta?.ordersCount ?? 0,
+    rating: Number(prod?.meta?.rating ?? 0),
+    totalOrders: prod?.meta?.orders ?? 0,
     totalLikes: prod?.meta?.likesCount ?? 0,
     totalSaves: prod?.meta?.savesCount ?? 0,
     images:
@@ -311,14 +311,25 @@ const ProductDetails = () => {
 
             {/* Actions */}
             <div className="space-y-3">
-              <Button
-                onClick={handleOrder}
-                disabled={!product.inStock}
-                className="w-full fashion-button text-lg py-6"
-              >
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                {product.inStock ? "Order Now" : "Out of Stock"}
-              </Button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <Button
+                  onClick={handleOrder}
+                  disabled={!product.inStock}
+                  className="fashion-button text-lg py-6"
+                >
+                  <ShoppingCart className="w-5 h-5 mr-2" />
+                  {product.inStock ? "Order Now" : "Out of Stock"}
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  onClick={() => navigate(`/enquiry/${product.id}`)}
+                  className="text-lg py-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                >
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Enquiry
+                </Button>
+              </div>
 
               <div className="grid grid-cols-3 gap-2">
                 <Button
