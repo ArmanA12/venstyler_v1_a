@@ -281,20 +281,10 @@ const Index = () => {
               </div>
 
               {/* Enhanced Design Feed */}
-              <div>
-                {loading && (
-                  <div className="p-6 text-center text-muted-foreground">
-                    Loading feed…
-                  </div>
-                )}
-
-                {!loading && items.length === 0 && (
-                  <div className="p-6 text-center text-muted-foreground">
-                    No designs yet.
-                  </div>
-                )}
-
-                {!loading &&
+              <div className="space-y-6">
+                {isLoading ? (
+                  <FeedSkeleton />
+                ) : items.length > 0 ? (
                   items.map((design, index) => (
                     <div
                       key={design.id}
@@ -510,8 +500,14 @@ const Index = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                     </div>
+                   ))
+                ) : (
+                  <div className="p-6 text-center text-muted-foreground">
+                    No designs found
+                  </div>
+                )}
+
                 {openCommentsFor !== null && (
                   <CommentsPanel
                     designId={Number(openCommentsFor)}
@@ -590,18 +586,11 @@ const Index = () => {
                             >
                               View
                             </Button>
-                          </Link>
-                        </div>
-                  ))
-                ) : (
-                  <div className="p-6 text-center text-muted-foreground">
-                    No designs found
-                  </div>
-                )}
-              </div>
-                </div>
+                           </Link>
+                         </div>
+                       </div>
 
-                {/* Enhanced Trending */}
+                  {/* Enhanced Trending */}
                 <div className="fashion-card p-6 animate-fade-in border-t border-border/50">
                   <div className="flex items-center gap-3 mb-5">
                     <div className="p-2 rounded-lg bg-gradient-to-r from-primary/20 to-secondary/20">
