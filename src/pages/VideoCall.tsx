@@ -141,7 +141,6 @@ const VideoCallApp = ({ chatId }) => {
           padding: "12px", 
           marginBottom: "20px",
           backgroundColor: "#fefcbf",
-          border: "1px solid "#faf089",
           borderRadius: "8px"
         }}>
           <h4 style={{ margin: "0 0 8px 0" }}>Video Call Setup Required</h4>
