@@ -4,7 +4,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import { useToast } from "@/hooks/use-toast";
 import { Header } from "@/components/navbar/Header";
-import VideoCallApp from "./VideoCall";
+// import VideoCallApp from "./VideoCall";
 import {
   ArrowLeft,
   Send,
@@ -207,7 +207,7 @@ const ChatBox: React.FC = () => {
             <div className="flex items-center gap-2">
               <button className="hover:bg-muted p-2 rounded-full">
                 <Video className="w-4 h-4" />
-      <VideoCallApp chatId={chatId} />
+      {/* <VideoCallApp chatId={chatId} /> */}
 
               </button>
               <button className="hover:bg-muted p-2 rounded-full">
