@@ -23,7 +23,6 @@ import designerAvatar from "@/assets/designer-avatar-1.jpg";
 import { Header } from "@/components/navbar/Header";
 import { FeedSkeleton } from "@/components/FeedSkeleton";
 import { BottomNav } from "@/components/navbar/bottomNav";
-import { ImageWithFallback } from "@/components/ImageWithFallback";
 import { Link } from "react-router-dom";
 import { useApi } from "@/contexts/ApiContext";
 import { useEffect, useState } from "react";
@@ -230,14 +229,13 @@ const Index = () => {
                 <div className="fashion-card p-6 animate-slide-up border-b border-border/30">
                   <div className="flex gap-4">
                     <div className="">
-                      <div className="w-12 h-12 story-gradient rounded-full overflow-hidden">
-                        <ImageWithFallback
+                      <Avatar className="w-12 h-12 story-gradient rounded-full">
+                        <AvatarImage
+                          className="rounded-full"
                           src={designerAvatar}
-                          alt="User"
-                          className="w-full h-full object-cover rounded-full"
-                          fallbackSize="sm"
                         />
-                      </div>
+                        <AvatarFallback>U</AvatarFallback>
+                      </Avatar>
                     </div>
                     <div className="flex-1">
                       <Input
@@ -298,14 +296,17 @@ const Index = () => {
                       <Link to={`/publicProfile/${design.userId}`}>
                         <div className="p-6 flex items-center justify-between">
                           <div className="flex items-center gap-4">
-                             <div className="story-gradient w-12 h-12 rounded-full overflow-hidden">
-                               <ImageWithFallback
-                                 src={design.designerAvatar}
-                                 alt={design.designer}
-                                 className="w-full h-full object-cover rounded-full"
-                                 fallbackSize="sm"
-                               />
-                             </div>
+                            <div className="story-gradient">
+                              <Avatar className="w-12 h-12">
+                                {design.designerAvatar ? (
+                                  <AvatarImage src={design.designerAvatar} />
+                                ) : (
+                                  <AvatarFallback>
+                                    {design.designer?.[0] || "U"}
+                                  </AvatarFallback>
+                                )}
+                              </Avatar>
+                            </div>
                             <div>
                               <h4 className="font-semibold text-lg">
                                 {design.designer}
@@ -551,14 +552,17 @@ const Index = () => {
         className="flex items-center justify-between p-3 hover:bg-muted/30 transition-all duration-300 hover-lift"
       >
         <div className="flex items-center gap-3">
-           <div className="story-gradient w-12 h-12 rounded-full overflow-hidden">
-             <ImageWithFallback
-               src={design.designerAvatar}
-               alt={design.designer}
-               className="w-full h-full object-cover rounded-full"
-               fallbackSize="sm"
-             />
-           </div>
+          <div className="story-gradient">
+            <Avatar className="w-12 h-12">
+              {design.designerAvatar ? (
+                <AvatarImage src={design.designerAvatar} />
+              ) : (
+                <AvatarFallback>
+                  {design.designer?.[0] || "U"}
+                </AvatarFallback>
+              )}
+            </Avatar>
+          </div>
           <div>
             <p className="font-medium text-sm">{design.designer}</p>
             <p className="text-xs text-muted-foreground">

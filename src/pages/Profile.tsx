@@ -48,8 +48,6 @@ import { BottomNav } from "@/components/navbar/bottomNav";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfileImage } from "@/hooks/useProfileImage";
 import { useMe } from "@/hooks/useMe";
-import { ProfileSkeleton } from "@/components/ProfileSkeleton";
-import { ImageWithFallback } from "@/components/ImageWithFallback";
 import { useUpdateProfile } from "@/hooks/useUpdateProfile";
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSavedDesigns } from "@/hooks/useSaveDesign";
@@ -654,12 +652,17 @@ const Profile = () => {
                     className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 aspect-square"
                   >
                     {/* thumb */}
-                     <ImageWithFallback
-                       src={it.image}
-                       alt={it.title}
-                       className="w-full h-full object-cover"
-                       fallbackSize="lg"
-                     />
+                    {it.image ? (
+                      <img
+                        src={it.image}
+                        alt={it.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                        No image
+                      </div>
+                    )}
 
                     {/* hover overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
@@ -688,19 +691,6 @@ const Profile = () => {
         return null;
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20">
-        <div className="hidden lg:block">
-          <Header />
-        </div>
-        <div className="container mx-auto px-4 py-6">
-          <ProfileSkeleton />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20">

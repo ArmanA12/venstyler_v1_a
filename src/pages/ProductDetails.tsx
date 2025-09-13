@@ -86,12 +86,12 @@ const ProductDetails = () => {
       avatar:
         prod?.designer?.profileImage ??
         "https://picsum.photos/seed/designer/40/40",
-      city: "",
+      city: prod?.designer?.city ?? "",
       id: prod?.designer?.id ?? 0,
     },
     completionTime: prod?.completionTime ?? "—",
     inStock: true,
-    reviews: prod?.reviews ?? [],
+    reviews: prod?.latestReviews ?? [],
   };
 
   // carousel
@@ -405,7 +405,7 @@ const ProductDetails = () => {
                           <span className="font-medium text-sm">
                             <div className="flex gap-2">
                               <div>{review.user.name}</div>
-                              {false && (
+                              {review.user.isVerified && (
                                 <Badge
                                   variant="secondary"
                                   className="flex items-center gap-1 text-xs"
@@ -418,7 +418,7 @@ const ProductDetails = () => {
                             <div>
                               <div className="flex items-center gap-1">
                                 {Array.from({
-                                  length: review.rating || 0,
+                                  length: review.user.rating || 0,
                                 }).map((_, idx) => (
                                   <Star
                                     key={idx}

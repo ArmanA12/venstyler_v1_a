@@ -48,14 +48,14 @@ export default function ProductSellsDetails() {
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
               <img
-                src="/placeholder.jpg"
-                alt="Product"
+                src={data.product.images[0]?.url}
+                alt={data.product.title}
                 className="w-20 h-20 object-cover rounded-lg border"
               />
               <div>
-                <h2 className="text-xl font-semibold">Product Title</h2>
-                <p className="text-muted-foreground">Category</p>
-                <p className="text-lg font-medium">₹ 0</p>
+                <h2 className="text-xl font-semibold">{data.product.title}</h2>
+                <p className="text-muted-foreground">{data.product.category}</p>
+                <p className="text-lg font-medium">₹ {data.product.price}</p>
               </div>
             </div>
           </CardContent>
@@ -171,7 +171,7 @@ export default function ProductSellsDetails() {
                         <span className="font-medium">{order.buyerName}</span>
                       </div>
                     </TableCell>
-                    <TableCell>₹ {order.amount.toLocaleString()}</TableCell>
+                    <TableCell>₹ {order.product.amount.toLocaleString()}</TableCell>
                     <TableCell>{getStatusBadge(order.status)}</TableCell>
                     <TableCell>
                       {new Date(order.date).toLocaleString("en-IN", {
