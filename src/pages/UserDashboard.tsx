@@ -28,6 +28,8 @@ import { useNavigate } from "react-router-dom";
 import { useMyUploadedProducts } from "@/hooks/useMyUploadedProducts";
 import { useMyOrders } from "@/hooks/useMyOrders";
 import { useMySells } from "@/hooks/useMySells";
+import { DashboardSkeleton } from "@/components/DashboardSkeleton";
+import { ImageWithFallback } from "@/components/ImageWithFallback";
 
 
 export default function UserDashboard() {
@@ -138,6 +140,22 @@ export default function UserDashboard() {
         };
         return <Badge variant={variants[status] || "default"}>{status}</Badge>;
     };
+
+    if (isLoading || isOrdersLoading || isSellsLoading) {
+        return (
+            <div className="min-h-screen bg-background">
+                <Header />
+                <div className="border-b bg-card">
+                    <div className="flex h-16 items-center px-6">
+                        <h1 className="text-2xl font-bold">User Dashboard</h1>
+                    </div>
+                </div>
+                <div className="p-6">
+                    <DashboardSkeleton />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-background">

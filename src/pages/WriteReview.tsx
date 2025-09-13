@@ -33,7 +33,7 @@ const WriteReview = () => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [products, setProducts] = useState<CheckoutProduct[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
   const { mutateAsync: submitReview } = useSubmitReviewAndRating(Number(id));
 
   const {

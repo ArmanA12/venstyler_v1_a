@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { useState } from "react";
+import { ImageWithFallback } from "@/components/ImageWithFallback";
 
 interface DesignCardProps {
   id: string;
@@ -38,10 +39,11 @@ export function DesignCard({
   return (
     <Card className="overflow-hidden hover-lift shadow-soft hover:shadow-medium transition-all duration-300 group">
       <div className="relative">
-        <img 
+        <ImageWithFallback 
           src={imageUrl} 
           alt={title}
           className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+          fallbackSize="lg"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <Button
@@ -56,10 +58,11 @@ export function DesignCard({
       
       <div className="p-4 space-y-3">
         <div className="flex items-center gap-3">
-          <img 
+          <ImageWithFallback 
             src={designerAvatar}
             alt={designer}
             className="w-8 h-8 rounded-full object-cover"
+            fallbackSize="sm"
           />
           <div className="flex-1 min-w-0">
             <h3 className="font-medium text-sm truncate">{title}</h3>
