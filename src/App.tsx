@@ -43,7 +43,7 @@ import Complaints from "./pages/Complaints";
 import OrderDetails from "./pages/OrderDetails";
 import OrderManagement from "./pages/admin/OrderManagement";
 import ProductEdit from "./pages/user/ProductEdit";
-import Enquiry from "./pages/Enquiry";
+
 import ProductSellsDetails from "./pages/user/ProductSellsDetails";
 
 export default function App() {
@@ -273,14 +273,6 @@ export default function App() {
                   } 
                 />
 
-                <Route 
-                  path="/enquiry/:productId" 
-                  element={
-                    <ProtectedRoute>
-                      <Enquiry />
-                    </ProtectedRoute>
-                  } 
-                />
 
                 <Route path="*" element={<NotFound />} />
               </Routes>
