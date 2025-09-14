@@ -245,7 +245,7 @@ const Checkout = () => {
         handler: async function (response: any) {
           // 4️⃣ Verify payment with backend
           const { data: verifyData } = await axios.post(
-            "https://venstyler.armanshekh.com/api/order/verify-payment",
+            "https://venstyler.armanshekh.com/api/order/verifyInitialPayment",
             {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
