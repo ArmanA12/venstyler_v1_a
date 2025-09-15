@@ -130,7 +130,7 @@ export function ShareMenu({
           <p className="text-sm font-medium">Share this design</p>
 
           <div className="grid grid-cols-3 gap-3 justify-items-center">
-            <FacebookShareButton url={url} quote={title} onClick={onReactShare}>
+            <FacebookShareButton url={url} title={title} onClick={onReactShare}>
               <FacebookIcon size={size} round />
             </FacebookShareButton>
 

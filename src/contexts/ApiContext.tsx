@@ -234,6 +234,16 @@ interface ProductAnalyticsResponse {
     pendingOrders: number;
     cancelledOrders: number;
   };
+  product: {
+    id: number;
+    title: string;
+    category: string;
+    price: number;
+    images: Array<{
+      id: number;
+      url: string;
+    }>;
+  };
   orders: Array<{
     orderId: number;
     buyerName: string;

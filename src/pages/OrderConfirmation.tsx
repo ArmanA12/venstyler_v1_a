@@ -50,7 +50,7 @@ const OrderConfirmation = () => {
   if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
   if (!orderData) return null;
 
-  const { products, totals, firstName, lastName, email, address, city, state, zipCode } = orderData;
+  const { products, totals, firstName, lastName, email, address, city, state, zipCode, country, status, paymentInfo } = orderData;
   const orderNumber = `ORD-${Date.now().toString().slice(-8)}`;
   const estimatedDelivery = new Date();
   estimatedDelivery.setDate(estimatedDelivery.getDate() + 7);
@@ -131,7 +131,7 @@ const OrderConfirmation = () => {
                     <p className="text-sm text-muted-foreground">by {product.designer}</p>
                     <div className="flex items-center justify-between mt-1">
                       <span className="text-sm">Qty: {product.quantity}</span>
-                      <span className="font-semibold">${product.price}</span>
+                      <span className="font-semibold">₹{product.price}</span>
                     </div>
                   </div>
                 </div>
@@ -142,21 +142,42 @@ const OrderConfirmation = () => {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span>${totals.subtotal.toFixed(2)}</span>
+                  <span>₹{totals.subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Shipping</span>
-                  <span>${totals.shippingCost.toFixed(2)}</span>
+                  <span>₹{totals.shippingCost.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Tax</span>
-                  <span>${totals.tax.toFixed(2)}</span>
+                  <span>₹{totals.tax.toFixed(2)}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between font-semibold text-lg">
                   <span>Total</span>
-                  <span>${totals.total.toFixed(2)}</span>
+                  <span>₹{totals.total.toFixed(2)}</span>
                 </div>
+                
+                {paymentInfo && (
+                  <>
+                    <Separator />
+                    <div className="bg-muted/50 p-4 rounded-lg space-y-2">
+                      <h4 className="font-medium">Payment Information</h4>
+                      <div className="flex justify-between text-sm">
+                        <span>Initial Payment (Paid)</span>
+                        <span className="text-green-600">₹{paymentInfo.initialAmount}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span>Remaining Amount</span>
+                        <span className="text-orange-600">₹{paymentInfo.remainingAmount}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span>Due Date</span>
+                        <span>{new Date(paymentInfo.dueDate).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -198,14 +219,35 @@ const OrderConfirmation = () => {
           </Card>
 
           {/* Actions */}
-          <div className="flex gap-4">
-            <Button onClick={() => navigate("/")} className="flex-1">
-              <Home className="h-4 w-4 mr-2" />
-              Continue Shopping
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/profile")} className="flex-1">
-              View Orders
-            </Button>
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-4">
+              <Button onClick={() => navigate("/")} className="flex-1">
+                <Home className="h-4 w-4 mr-2" />
+                Continue Shopping
+              </Button>
+              <Button variant="outline" onClick={() => navigate("/profile")} className="flex-1">
+                View Orders
+              </Button>
+            </div>
+            
+            {status === "DESIGN_IN_PROGRESS" && (
+              <div className="flex gap-4">
+                <Button 
+                  onClick={() => navigate(`/order-processing/${orderId}`)} 
+                  variant="secondary"
+                  className="flex-1"
+                >
+                  Track Order Progress
+                </Button>
+                <Button 
+                  onClick={() => navigate(`/schedule-meeting/${orderId}`)} 
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Schedule Measurement
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

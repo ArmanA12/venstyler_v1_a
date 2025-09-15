@@ -86,12 +86,11 @@ const ProductDetails = () => {
       avatar:
         prod?.designer?.profileImage ??
         "https://picsum.photos/seed/designer/40/40",
-      city: prod?.designer?.city ?? "",
       id: prod?.designer?.id ?? 0,
     },
     completionTime: prod?.completionTime ?? "—",
     inStock: true,
-    reviews: prod?.latestReviews ?? [],
+    reviews: prod?.reviews ?? [],
   };
 
   // carousel
@@ -242,11 +241,7 @@ const ProductDetails = () => {
                   <span className="text-primary font-medium">
                     {product.designer.name}
                   </span>
-                  {product.designer.city && (
-                    <span className="ml-2 text-xs text-muted-foreground">
-                      ({product.designer.city})
-                    </span>
-                  )}
+                  <span className="text-sm text-muted-foreground">Designer</span>
                 </span>
               </div>
             </div>
@@ -403,26 +398,17 @@ const ProductDetails = () => {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-medium text-sm">
-                            <div className="flex gap-2">
-                              <div>{review.user.name}</div>
-                              {review.user.isVerified && (
-                                <Badge
-                                  variant="secondary"
-                                  className="flex items-center gap-1 text-xs"
-                                >
-                                  <CheckCircle2 className="w-3 h-3 text-primary" />{" "}
-                                  Verified
-                                </Badge>
-                              )}
-                            </div>
+                          <div className="flex gap-2">
+                            <div>{review.user.name}</div>
+                          </div>
                             <div>
                               <div className="flex items-center gap-1">
                                 {Array.from({
-                                  length: review.user.rating || 0,
+                                  length: 5,
                                 }).map((_, idx) => (
                                   <Star
                                     key={idx}
-                                    className="w-3 h-3 fill-primary text-primary"
+                                    className={`w-3 h-3 ${idx < (review.rating || 0) ? 'fill-primary text-primary' : 'text-muted-foreground'}`}
                                   />
                                 ))}
                               </div>

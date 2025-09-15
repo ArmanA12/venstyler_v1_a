@@ -37,6 +37,8 @@ import ExplorePage from "./pages/explore/Explore";
 import ChatBox from "./pages/ChatBox";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import OrderProcessing from "./pages/OrderProcessing";
+import ScheduleMeeting from "./pages/ScheduleMeeting";
 import PublicProfilePage from "./pages/PublicProfilePage";
 import UserDashboard from "./pages/UserDashboard";
 import Complaints from "./pages/Complaints";
@@ -122,6 +124,24 @@ export default function App() {
                   element={
                     <ProtectedRoute>
                       <OrderConfirmation />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/order-processing/:orderId"
+                  element={
+                    <ProtectedRoute>
+                      <OrderProcessing />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/schedule-meeting/:orderId"
+                  element={
+                    <ProtectedRoute>
+                      <ScheduleMeeting />
                     </ProtectedRoute>
                   }
                 />
