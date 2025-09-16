@@ -10,6 +10,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { CalendarDays, Clock, MapPin, Phone, ArrowLeft, CheckCircle } from "lucide-react";
 import { Header } from "@/components/Header";
 import { toast } from "sonner";
+import axios from "axios";
+
 
 const ScheduleMeeting = () => {
   const { orderId } = useParams();
@@ -42,26 +44,40 @@ const ScheduleMeeting = () => {
     }
   ];
 
-  const handleSchedule = async () => {
-    if (!selectedDate || !selectedTime || !meetingType) {
-      toast.error("Please select date, time, and meeting type");
-      return;
-    }
+const handleSchedule = async () => {
+  if (!selectedDate || !selectedTime || !meetingType) {
+    toast.error("Please select date, time, and meeting type");
+    return;
+  }
 
-    setIsSubmitting(true);
-    
-    try {
-      // Mock API call - in real app, this would schedule the meeting
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+  setIsSubmitting(true);
+
+  try {
+    const response = await axios.post(
+      `http://localhost:5000/api/meeting/orders/${orderId}/meetings`,
+      {
+        date: selectedDate,
+        time: selectedTime,
+        type: meetingType,
+      },
+      {
+        withCredentials: true, // ✅ send cookies / auth headers
+      }
+    );
+
+    if (response.data.success) {
       toast.success("Meeting scheduled successfully!");
       navigate(`/order-processing/${orderId}`);
-    } catch (error) {
-      toast.error("Failed to schedule meeting. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      toast.error(response.data.message || "Failed to schedule meeting");
     }
-  };
+  } catch (error) {
+    console.error("Error scheduling meeting:", error);
+    toast.error("Failed to schedule meeting. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const isDateDisabled = (date: Date) => {
     const today = new Date();
