@@ -185,7 +185,7 @@ const ScheduleMeeting = () => {
       console.log(response.data, "response", response)
       if (response.data.success) {
         toast.success("Address created successfully!");
-        setSelectedAddressId(response.data.address.id);
+        setSelectedAddressId(response.data.data.id);
         setAddressOption("existing");
         fetchExistingAddresses();
       } else {
