@@ -108,11 +108,33 @@ const ScheduleMeeting = () => {
         { withCredentials: true }
       );
       
-      if (response.data.success && response.data.addresses) {
-        setExistingAddresses(response.data.addresses);
-        if (response.data.addresses.length > 0) {
-          setSelectedAddressId(response.data.addresses[0].id);
+      console.log(response.data, "fatching existing address");
+
+      if (response.data?.success) {
+        if (Array.isArray(response.data.addresses) && response.data.addresses.length > 0) {
+          setExistingAddresses(response.data.addresses);
+          setSelectedAddressId(response.data.addresses[0]?.id ?? null);
+        } else if (response.data.shippingAddress) {
+          const sa = response.data.shippingAddress;
+          const pseudoAddress: Address = {
+            id: 0,
+            label: `${sa.shippingName || "Shipping Address"}`,
+            fullAddress: sa.shippingAddress || "",
+            city: sa.shippingCity || "",
+            state: sa.shippingState || "",
+            pincode: sa.shippingPincode || "",
+            country: sa.shippingCountry || "India",
+            isDefault: true,
+          };
+          setExistingAddresses([pseudoAddress]);
+          setSelectedAddressId(0);
+        } else {
+          setExistingAddresses([]);
+          setSelectedAddressId(null);
         }
+      } else {
+        setExistingAddresses([]);
+        setSelectedAddressId(null);
       }
     } catch (error) {
       console.error("Error fetching addresses:", error);
@@ -198,7 +220,7 @@ const handleSchedule = async () => {
       notes: notes
     };
 
-    if (meetingType === "home" && selectedAddressId) {
+    if (meetingType === "home" && selectedAddressId !== null && selectedAddressId > 0) {
       meetingData.addressId = selectedAddressId;
     }
 
@@ -552,7 +574,7 @@ const handleSchedule = async () => {
               </Card>
 
               {/* Summary */}
-              {selectedDate && selectedTime && meetingType && (meetingType === "phone" || selectedAddressId) && (
+              {selectedDate && selectedTime && meetingType && (meetingType === "phone" || selectedAddressId !== null) && (
                 <Card className="mb-6 bg-accent/50">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
@@ -609,7 +631,7 @@ const handleSchedule = async () => {
                 </Button>
                 <Button
                   onClick={handleSchedule}
-                  disabled={!selectedDate || !selectedTime || !meetingType || isSubmitting || (meetingType === "home" && !selectedAddressId)}
+                  disabled={!selectedDate || !selectedTime || !meetingType || isSubmitting || (meetingType === "home" && selectedAddressId === null)}
                   className="flex-1"
                 >
                   {isSubmitting ? "Scheduling..." : "Schedule Meeting"}
