@@ -41,14 +41,14 @@ const ScheduleMeeting = () => {
   
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = useState("");
-  const [meetingType, setMeetingType] = useState("home");
+  const [meetingType, setMeetingType] = useState("HOME_VISIT");
   const [notes, setNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Address related state
   const [addressOption, setAddressOption] = useState("existing");
   const [existingAddresses, setExistingAddresses] = useState<Address[]>([]);
-  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
+  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(7);
   const [isLoadingAddresses, setIsLoadingAddresses] = useState(false);
   const [isCreatingAddress, setIsCreatingAddress] = useState(false);
   
@@ -75,13 +75,13 @@ const ScheduleMeeting = () => {
 
   const meetingOptions = [
     {
-      value: "home",
+      value: "HOME_VISIT",
       label: "Home Visit",
       description: "Our master will visit your home for measurement",
       icon: <MapPin className="h-5 w-5" />
     },
     {
-      value: "phone",
+      value: "PHONE_CALL",
       label: "Phone Consultation",
       description: "Get measurement guidance over phone call",
       icon: <Phone className="h-5 w-5" />
@@ -90,7 +90,7 @@ const ScheduleMeeting = () => {
 
   // Fetch existing addresses when home visit is selected
   useEffect(() => {
-    if (meetingType === "home" && addressOption === "existing") {
+    if (meetingType === "HOME_VISIT" && addressOption === "existing") {
       fetchExistingAddresses();
     }
   }, [meetingType, addressOption]);
@@ -127,7 +127,7 @@ const ScheduleMeeting = () => {
             isDefault: true,
           };
           setExistingAddresses([pseudoAddress]);
-          setSelectedAddressId(0);
+          setSelectedAddressId(7);
         } else {
           setExistingAddresses([]);
           setSelectedAddressId(null);
@@ -205,31 +205,50 @@ const handleSchedule = async () => {
     return;
   }
 
-  if (meetingType === "home" && !selectedAddressId) {
-    toast.error("Please select or create an address for home visit");
-    return;
+  if (meetingType === "HOME_VISIT") {
+    if (addressOption === "new" && !selectedAddressId) {
+      toast.error("Please create and save new address before scheduling");
+      return;
+    }
+    if (addressOption === "existing" && !selectedAddressId) {
+      toast.error("Please select an existing address");
+      return;
+    }
   }
 
   setIsSubmitting(true);
 
   try {
+    // Combine date + time
+    const scheduledAt = new Date(selectedDate);
+    const [time, modifier] = selectedTime.split(" ");
+    let [hours, minutes] = time.split(":").map(Number);
+
+    if (modifier === "PM" && hours < 12) hours += 12;
+    if (modifier === "AM" && hours === 12) hours = 0;
+
+    scheduledAt.setHours(hours, minutes, 0, 0);
+
     const meetingData: any = {
-      date: selectedDate,
-      time: selectedTime,
       type: meetingType,
-      notes: notes
+      scheduledAt: scheduledAt.toISOString(),
+      notes,
     };
 
-    if (meetingType === "home" && selectedAddressId !== null && selectedAddressId > 0) {
-      meetingData.addressId = selectedAddressId;
+    if (meetingType === "HOME_VISIT") {
+      if (addressOption === "new" && selectedAddressId) {
+        meetingData.addressId = selectedAddressId;   // naya address id
+        meetingData.isExistingAddress = false;
+      } else if (addressOption === "existing") {
+        meetingData.addressId = selectedAddressId;   // existing address id
+        meetingData.isExistingAddress = true;
+      }
     }
 
     const response = await axios.post(
       `https://venstyler.armanshekh.com/api/meeting/orders/${orderId}/meetings`,
       meetingData,
-      {
-        withCredentials: true,
-      }
+      { withCredentials: true }
     );
 
     if (response.data.success) {
@@ -374,7 +393,7 @@ const handleSchedule = async () => {
               </Card>
 
               {/* Address Selection for Home Visit */}
-              {meetingType === "home" && (
+              {meetingType === "HOME_VISIT" && (
                 <Card className="mb-6">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
@@ -574,7 +593,7 @@ const handleSchedule = async () => {
               </Card>
 
               {/* Summary */}
-              {selectedDate && selectedTime && meetingType && (meetingType === "phone" || selectedAddressId !== null) && (
+              {selectedDate && selectedTime && meetingType && (meetingType === "PHONE_CALL" || selectedAddressId !== null) && (
                 <Card className="mb-6 bg-accent/50">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
@@ -595,7 +614,7 @@ const handleSchedule = async () => {
                       <span className="font-medium">Time:</span>
                       <span>{selectedTime}</span>
                     </div>
-                    {meetingType === "home" && selectedAddressId && (
+                    {meetingType === "HOME_VISIT" && selectedAddressId && (
                       <div className="pt-2 border-t">
                         <span className="font-medium">Address:</span>
                         {(() => {
@@ -631,7 +650,7 @@ const handleSchedule = async () => {
                 </Button>
                 <Button
                   onClick={handleSchedule}
-                  disabled={!selectedDate || !selectedTime || !meetingType || isSubmitting || (meetingType === "home" && selectedAddressId === null)}
+                  disabled={!selectedDate || !selectedTime || !meetingType || isSubmitting || (meetingType === "HOME_VISIT" && selectedAddressId === null)}
                   className="flex-1"
                 >
                   {isSubmitting ? "Scheduling..." : "Schedule Meeting"}
