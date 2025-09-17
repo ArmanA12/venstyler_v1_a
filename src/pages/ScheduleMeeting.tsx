@@ -178,7 +178,7 @@ const ScheduleMeeting = () => {
     setIsCreatingAddress(true);
     try {
       const response = await axios.post(
-        "https://venstyler.armanshekh.com/api/order/createAddress",
+        "https://venstyler.armanshekh.com/api/user/addresses/createAddress",
         newAddress,
         { withCredentials: true }
       );
