@@ -48,7 +48,7 @@ const ScheduleMeeting = () => {
   // Address related state
   const [addressOption, setAddressOption] = useState("existing");
   const [existingAddresses, setExistingAddresses] = useState<Address[]>([]);
-  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(7);
+  const [selectedAddressId, setSelectedAddressId] = useState<number | null>();
   const [isLoadingAddresses, setIsLoadingAddresses] = useState(false);
   const [isCreatingAddress, setIsCreatingAddress] = useState(false);
   
@@ -144,30 +144,42 @@ const ScheduleMeeting = () => {
     }
   };
 
-  const fetchExistingMeeting = async () => {
-    try {
-      const response = await axios.get(
-        `https://venstyler.armanshekh.com/api/meeting/orders/${orderId}/meetings`,
-        { withCredentials: true }
-      );
-      
-      if (response.data.success && response.data.meeting) {
-        const meeting = response.data.meeting;
-        setExistingMeeting(meeting);
-        setSelectedDate(new Date(meeting.date));
-        setSelectedTime(meeting.time);
-        setMeetingType(meeting.type);
-        setNotes(meeting.notes || "");
-        if (meeting.address) {
-          setSelectedAddressId(meeting.address.id);
-        }
+const fetchExistingMeeting = async () => {
+  try {
+    const response = await axios.get(
+      `https://venstyler.armanshekh.com/api/meeting/orders/${orderId}/meetings`,
+      { withCredentials: true }
+    );
+
+    console.log(response.data.data, "existing meeting data");
+
+    if (response.data.success && Array.isArray(response.data.data) && response.data.data.length > 0) {
+      const meeting = response.data.data[0]; // 👈 first meeting
+      const scheduledDate = new Date(meeting.scheduledAt);
+
+      setExistingMeeting({
+        id: meeting.id,
+        type: meeting.type,
+        date: scheduledDate.toISOString(),
+        time: scheduledDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        notes: meeting.notes || "",
+        address: meeting.address || null,
+      });
+
+      setSelectedDate(scheduledDate);
+      setSelectedTime(scheduledDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+      setMeetingType(meeting.type);
+      setNotes(meeting.notes || "");
+      if (meeting.address) {
+        setSelectedAddressId(meeting.address.id);
       }
-    } catch (error) {
-      console.error("Error fetching meeting:", error);
-    } finally {
-      setIsLoadingMeeting(false);
     }
-  };
+  } catch (error) {
+    console.error("Error fetching meeting:", error);
+  } finally {
+    setIsLoadingMeeting(false);
+  }
+};
 
   const handleCreateAddress = async () => {
     if (!newAddress.label || !newAddress.fullAddress || !newAddress.city || !newAddress.state || !newAddress.pincode) {
