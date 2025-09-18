@@ -39,20 +39,20 @@ interface ExistingMeeting {
 const ScheduleMeeting = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
-  
+
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = useState("");
   const [meetingType, setMeetingType] = useState("HOME_VISIT");
   const [notes, setNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Address related state
   const [addressOption, setAddressOption] = useState("existing");
   const [existingAddresses, setExistingAddresses] = useState<Address[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>();
   const [isLoadingAddresses, setIsLoadingAddresses] = useState(false);
   const [isCreatingAddress, setIsCreatingAddress] = useState(false);
-  
+
   // New address form state
   const [newAddress, setNewAddress] = useState({
     label: "",
@@ -63,7 +63,7 @@ const ScheduleMeeting = () => {
     country: "India",
     isDefault: false
   });
-  
+
   // Existing meeting state
   const [existingMeeting, setExistingMeeting] = useState<ExistingMeeting | null>(null);
   const [isLoadingMeeting, setIsLoadingMeeting] = useState(true);
@@ -109,7 +109,7 @@ const ScheduleMeeting = () => {
         "https://venstyler.armanshekh.com/api/order/current-user-shipping-address",
         { withCredentials: true }
       );
-      
+
       console.log(response.data, "fatching existing address");
 
       if (response.data?.success) {
@@ -146,43 +146,43 @@ const ScheduleMeeting = () => {
     }
   };
 
-const fetchExistingMeeting = async () => {
-  try {
-    const response = await axios.get(
-      `https://venstyler.armanshekh.com/api/meeting/orders/${orderId}/meetings`,
-      { withCredentials: true }
-    );
+  const fetchExistingMeeting = async () => {
+    try {
+      const response = await axios.get(
+        `https://venstyler.armanshekh.com/api/meeting/orders/${orderId}/meetings`,
+        { withCredentials: true }
+      );
 
-    console.log(response.data.data, "existing meeting data");
+      console.log(response.data.data, "existing meeting data");
 
-    if (response.data.success && Array.isArray(response.data.data) && response.data.data.length > 0) {
-      const meeting = response.data.data[0]; // 👈 first meeting
-      const scheduledDate = new Date(meeting.scheduledAt);
+      if (response.data.success && Array.isArray(response.data.data) && response.data.data.length > 0) {
+        const meeting = response.data.data[0]; // 👈 first meeting
+        const scheduledDate = new Date(meeting.scheduledAt);
 
-      setExistingMeeting({
-        id: meeting.id,
-        type: meeting.type,
-        status: meeting.status || "SCHEDULED",
-        date: scheduledDate.toISOString(),
-        time: scheduledDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        notes: meeting.notes || "",
-        address: meeting.address || null,
-      });
+        setExistingMeeting({
+          id: meeting.id,
+          type: meeting.type,
+          status: meeting.status || "SCHEDULED",
+          date: scheduledDate.toISOString(),
+          time: scheduledDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          notes: meeting.notes || "",
+          address: meeting.address || null,
+        });
 
-      setSelectedDate(scheduledDate);
-      setSelectedTime(scheduledDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
-      setMeetingType(meeting.type);
-      setNotes(meeting.notes || "");
-      if (meeting.address) {
-        setSelectedAddressId(meeting.address.id);
+        setSelectedDate(scheduledDate);
+        setSelectedTime(scheduledDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+        setMeetingType(meeting.type);
+        setNotes(meeting.notes || "");
+        if (meeting.address) {
+          setSelectedAddressId(meeting.address.id);
+        }
       }
+    } catch (error) {
+      console.error("Error fetching meeting:", error);
+    } finally {
+      setIsLoadingMeeting(false);
     }
-  } catch (error) {
-    console.error("Error fetching meeting:", error);
-  } finally {
-    setIsLoadingMeeting(false);
-  }
-};
+  };
 
   const handleCreateAddress = async () => {
     if (!newAddress.label || !newAddress.fullAddress || !newAddress.city || !newAddress.state || !newAddress.pincode) {
@@ -214,97 +214,104 @@ const fetchExistingMeeting = async () => {
     }
   };
 
-const handleSchedule = async () => {
-  if (!selectedDate || !selectedTime || !meetingType) {
-    toast.error("Please select date, time, and meeting type");
-    return;
-  }
-
-  if (meetingType === "HOME_VISIT") {
-    if (addressOption === "new" && !selectedAddressId) {
-      toast.error("Please create and save new address before scheduling");
+  const handleSchedule = async () => {
+    if (!selectedDate || !selectedTime || !meetingType) {
+      toast.error("Please select date, time, and meeting type");
       return;
     }
-    if (addressOption === "existing" && !selectedAddressId) {
-      toast.error("Please select an existing address");
-      return;
-    }
-  }
-
-  setIsSubmitting(true);
-
-  try {
-    // Combine date + time
-    const scheduledAt = new Date(selectedDate);
-    const [time, modifier] = selectedTime.split(" ");
-    let [hours, minutes] = time.split(":").map(Number);
-
-    if (modifier === "PM" && hours < 12) hours += 12;
-    if (modifier === "AM" && hours === 12) hours = 0;
-
-    scheduledAt.setHours(hours, minutes, 0, 0);
-
-    const meetingData: any = {
-      type: meetingType,
-      scheduledAt: scheduledAt.toISOString(),
-      notes,
-    };
 
     if (meetingType === "HOME_VISIT") {
-      if (addressOption === "new" && selectedAddressId) {
-        meetingData.addressId = selectedAddressId;   // naya address id
-        meetingData.isExistingAddress = false;
-      } else if (addressOption === "existing") {
-        meetingData.addressId = selectedAddressId;   // existing address id
-        meetingData.isExistingAddress = true;
+      if (addressOption === "new" && !selectedAddressId) {
+        toast.error("Please create and save new address before scheduling");
+        return;
+      }
+      if (addressOption === "existing" && !selectedAddressId) {
+        toast.error("Please select an existing address");
+        return;
       }
     }
 
-    const response = await axios.post(
-      `https://venstyler.armanshekh.com/api/meeting/orders/${orderId}/meetings`,
-      meetingData,
-      { withCredentials: true }
-    );
+    setIsSubmitting(true);
 
-    if (response.data.success) {
-      toast.success("Meeting scheduled successfully!");
-      navigate(`/order-processing/${orderId}`);
-    } else {
-      toast.error(response.data.message || "Failed to schedule meeting");
-    }
-  } catch (error) {
-    console.error("Error scheduling meeting:", error);
-    toast.error("Failed to schedule meeting. Please try again.");
-  } finally {
-    setIsSubmitting(false);
-  }
-  };
-
-  const handleMeetingStatusUpdate = async (status: 'COMPLETED' | 'CANCELLED') => {
-    if (!existingMeeting) return;
-    
-    setIsUpdatingStatus(true);
     try {
-      const endpoint = status === 'COMPLETED' ? 'complete' : 'cancel';
-      const response = await axios.put(
-        `https://venstyler.armanshekh.com/api/meeting/meetings/${existingMeeting.id}/${endpoint}`,
-        {},
+      // Combine date + time
+      const scheduledAt = new Date(selectedDate);
+      const [time, modifier] = selectedTime.split(" ");
+      let [hours, minutes] = time.split(":").map(Number);
+
+      if (modifier === "PM" && hours < 12) hours += 12;
+      if (modifier === "AM" && hours === 12) hours = 0;
+
+      scheduledAt.setHours(hours, minutes, 0, 0);
+
+      const meetingData: any = {
+        type: meetingType,
+        scheduledAt: scheduledAt.toISOString(),
+        notes,
+      };
+
+      if (meetingType === "HOME_VISIT") {
+        if (addressOption === "new" && selectedAddressId) {
+          meetingData.addressId = selectedAddressId;   // naya address id
+          meetingData.isExistingAddress = false;
+        } else if (addressOption === "existing") {
+          meetingData.addressId = selectedAddressId;   // existing address id
+          meetingData.isExistingAddress = true;
+        }
+      }
+
+      const response = await axios.post(
+        `https://venstyler.armanshekh.com/api/meeting/orders/${orderId}/meetings`,
+        meetingData,
         { withCredentials: true }
       );
 
       if (response.data.success) {
-        toast.success(`Meeting ${status.toLowerCase()} successfully!`);
-        setExistingMeeting(prev => prev ? { ...prev, status } : null);
+        toast.success("Meeting scheduled successfully!");
+        navigate(`/order-processing/${orderId}`);
       } else {
-        toast.error(response.data.message || `Failed to ${status.toLowerCase()} meeting`);
+        toast.error(response.data.message || "Failed to schedule meeting");
       }
     } catch (error) {
-      console.error(`Error ${status.toLowerCase()}ing meeting:`, error);
-      toast.error(`Failed to ${status.toLowerCase()} meeting`);
+      console.error("Error scheduling meeting:", error);
+      toast.error("Failed to schedule meeting. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  const handleMeetingStatusUpdate = async (status: 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED') => {
+    if (!existingMeeting) return;
+
+    setIsUpdatingStatus(true);
+    try {
+      const endpoint = status === 'CANCELLED'
+        ? `cancel`
+        : `complete`; // both IN_PROGRESS & COMPLETED use "complete"
+
+      const payload = status === 'CANCELLED' ? {} : { status };
+
+      console.log(payload, "payload")
+
+      const response = await axios.put(
+        `https://venstyler.armanshekh.com/api/meeting/meetings/${existingMeeting.id}/${endpoint}`,
+        payload,
+        { withCredentials: true }
+      );
+
+      if (response.data.success) {
+        toast.success(`Meeting ${status.toLowerCase().replace("_", " ")} successfully!`);
+        setExistingMeeting(prev => prev ? { ...prev, status } : null);
+      } else {
+        toast.error(response.data.message || `Failed to update meeting`);
+      }
+    } catch (error) {
+      console.error(`Error updating meeting to ${status}:`, error);
+      toast.error(`Failed to update meeting`);
     } finally {
       setIsUpdatingStatus(false);
     }
   };
+
 
   const getStatusConfig = (status: string) => {
     switch (status) {
@@ -316,6 +323,15 @@ const handleSchedule = async () => {
           textColor: 'text-blue-700',
           icon: <CalendarDays className="h-5 w-5" />,
           label: 'Scheduled'
+        };
+        case 'IN_PROGRESS':
+        return {
+          color: 'from-blue-500 to-cyan-500',
+          bgColor: 'bg-gradient-to-br from-blue-50 to-cyan-50',
+          borderColor: 'border-blue-200',
+          textColor: 'text-blue-700',
+          icon: <CalendarDays className="h-5 w-5" />,
+          label: 'IN_PROGRESS'
         };
       case 'COMPLETED':
         return {
@@ -351,7 +367,7 @@ const handleSchedule = async () => {
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    
+
     // Disable past dates and today
     return date < tomorrow;
   };
@@ -376,8 +392,8 @@ const handleSchedule = async () => {
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <div className="flex items-center gap-4 mb-6">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => navigate(`/order-processing/${orderId}`)}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -400,7 +416,7 @@ const handleSchedule = async () => {
                     {getStatusConfig(existingMeeting.status || 'SCHEDULED').icon}
                     Meeting {getStatusConfig(existingMeeting.status || 'SCHEDULED').label}
                   </CardTitle>
-                  <Badge 
+                  <Badge
                     className={`bg-gradient-to-r ${getStatusConfig(existingMeeting.status || 'SCHEDULED').color} text-white animate-pulse`}
                   >
                     {getStatusConfig(existingMeeting.status || 'SCHEDULED').label}
@@ -474,9 +490,22 @@ const handleSchedule = async () => {
                 )}
 
                 {/* Status Update Actions */}
+                {/* Status Update Actions */}
                 {existingMeeting.status === 'SCHEDULED' && (
                   <div className="pt-4 border-t border-white/30">
                     <div className="flex gap-3">
+                      {/* In Progress Button */}
+                      <Button
+                        onClick={() => handleMeetingStatusUpdate('IN_PROGRESS')}
+                        disabled={isUpdatingStatus}
+                        variant="outline"
+                        className="flex-1 border-yellow-200 text-yellow-600 hover:bg-yellow-50 hover:border-yellow-300 transition-all duration-300 hover-scale"
+                      >
+                        <Clock className="h-4 w-4 mr-2" />
+                        {isUpdatingStatus ? "Updating..." : "Mark In Progress"}
+                      </Button>
+
+                      {/* Mark Complete Button */}
                       <Button
                         onClick={() => handleMeetingStatusUpdate('COMPLETED')}
                         disabled={isUpdatingStatus}
@@ -485,6 +514,8 @@ const handleSchedule = async () => {
                         <CheckCircle className="h-4 w-4 mr-2" />
                         {isUpdatingStatus ? "Updating..." : "Mark Complete"}
                       </Button>
+
+                      {/* Cancel Button */}
                       <Button
                         onClick={() => handleMeetingStatusUpdate('CANCELLED')}
                         disabled={isUpdatingStatus}
@@ -497,6 +528,7 @@ const handleSchedule = async () => {
                     </div>
                   </div>
                 )}
+
               </CardContent>
             </Card>
           )}
@@ -606,7 +638,7 @@ const handleSchedule = async () => {
                               id="label"
                               placeholder="e.g. Home, Office"
                               value={newAddress.label}
-                              onChange={(e) => setNewAddress({...newAddress, label: e.target.value})}
+                              onChange={(e) => setNewAddress({ ...newAddress, label: e.target.value })}
                             />
                           </div>
                           <div>
@@ -614,7 +646,7 @@ const handleSchedule = async () => {
                             <Input
                               id="country"
                               value={newAddress.country}
-                              onChange={(e) => setNewAddress({...newAddress, country: e.target.value})}
+                              onChange={(e) => setNewAddress({ ...newAddress, country: e.target.value })}
                             />
                           </div>
                         </div>
@@ -624,7 +656,7 @@ const handleSchedule = async () => {
                             id="fullAddress"
                             placeholder="Enter complete address"
                             value={newAddress.fullAddress}
-                            onChange={(e) => setNewAddress({...newAddress, fullAddress: e.target.value})}
+                            onChange={(e) => setNewAddress({ ...newAddress, fullAddress: e.target.value })}
                           />
                         </div>
                         <div className="grid grid-cols-3 gap-4">
@@ -634,7 +666,7 @@ const handleSchedule = async () => {
                               id="city"
                               placeholder="City"
                               value={newAddress.city}
-                              onChange={(e) => setNewAddress({...newAddress, city: e.target.value})}
+                              onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
                             />
                           </div>
                           <div>
@@ -643,7 +675,7 @@ const handleSchedule = async () => {
                               id="state"
                               placeholder="State"
                               value={newAddress.state}
-                              onChange={(e) => setNewAddress({...newAddress, state: e.target.value})}
+                              onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
                             />
                           </div>
                           <div>
@@ -652,7 +684,7 @@ const handleSchedule = async () => {
                               id="pincode"
                               placeholder="Pincode"
                               value={newAddress.pincode}
-                              onChange={(e) => setNewAddress({...newAddress, pincode: e.target.value})}
+                              onChange={(e) => setNewAddress({ ...newAddress, pincode: e.target.value })}
                             />
                           </div>
                         </div>
@@ -660,12 +692,12 @@ const handleSchedule = async () => {
                           <Checkbox
                             id="isDefault"
                             checked={newAddress.isDefault}
-                            onCheckedChange={(checked) => setNewAddress({...newAddress, isDefault: !!checked})}
+                            onCheckedChange={(checked) => setNewAddress({ ...newAddress, isDefault: !!checked })}
                           />
                           <Label htmlFor="isDefault">Set as default address</Label>
                         </div>
-                        <Button 
-                          onClick={handleCreateAddress} 
+                        <Button
+                          onClick={handleCreateAddress}
                           disabled={isCreatingAddress}
                           className="w-full"
                         >
