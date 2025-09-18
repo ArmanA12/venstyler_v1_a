@@ -324,7 +324,7 @@ const ScheduleMeeting = () => {
           icon: <CalendarDays className="h-5 w-5" />,
           label: 'Scheduled'
         };
-        case 'IN_PROGRESS':
+      case 'IN_PROGRESS':
         return {
           color: 'from-blue-500 to-cyan-500',
           bgColor: 'bg-gradient-to-br from-blue-50 to-cyan-50',
@@ -491,21 +491,23 @@ const ScheduleMeeting = () => {
 
                 {/* Status Update Actions */}
                 {/* Status Update Actions */}
-                {existingMeeting.status === 'SCHEDULED' && (
+                {/* Status Update Actions */}
+                {(existingMeeting.status === 'SCHEDULED' || existingMeeting.status === 'IN_PROGRESS') && (
                   <div className="pt-4 border-t border-white/30">
                     <div className="flex gap-3">
-                      {/* In Progress Button */}
-                      <Button
-                        onClick={() => handleMeetingStatusUpdate('IN_PROGRESS')}
-                        disabled={isUpdatingStatus}
-                        variant="outline"
-                        className="flex-1 border-yellow-200 text-yellow-600 hover:bg-yellow-50 hover:border-yellow-300 transition-all duration-300 hover-scale"
-                      >
-                        <Clock className="h-4 w-4 mr-2" />
-                        {isUpdatingStatus ? "Updating..." : "Mark In Progress"}
-                      </Button>
+                      {existingMeeting.status === 'SCHEDULED' && (
+                        <Button
+                          onClick={() => handleMeetingStatusUpdate('IN_PROGRESS')}
+                          disabled={isUpdatingStatus}
+                          variant="outline"
+                          className="flex-1 border-yellow-200 text-yellow-600 hover:bg-yellow-50 hover:border-yellow-300 transition-all duration-300 hover-scale"
+                        >
+                          <Clock className="h-4 w-4 mr-2" />
+                          {isUpdatingStatus ? "Updating..." : "Mark In Progress"}
+                        </Button>
+                      )}
 
-                      {/* Mark Complete Button */}
+                      {/* Mark Complete Button (visible in both SCHEDULED and IN_PROGRESS) */}
                       <Button
                         onClick={() => handleMeetingStatusUpdate('COMPLETED')}
                         disabled={isUpdatingStatus}
@@ -515,19 +517,22 @@ const ScheduleMeeting = () => {
                         {isUpdatingStatus ? "Updating..." : "Mark Complete"}
                       </Button>
 
-                      {/* Cancel Button */}
-                      <Button
-                        onClick={() => handleMeetingStatusUpdate('CANCELLED')}
-                        disabled={isUpdatingStatus}
-                        variant="outline"
-                        className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-all duration-300 hover-scale"
-                      >
-                        <X className="h-4 w-4 mr-2" />
-                        Cancel Meeting
-                      </Button>
+                      {/* Cancel Button (optional: disable if already in progress) */}
+                      {existingMeeting.status === 'SCHEDULED' && (
+                        <Button
+                          onClick={() => handleMeetingStatusUpdate('CANCELLED')}
+                          disabled={isUpdatingStatus}
+                          variant="outline"
+                          className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-all duration-300 hover-scale"
+                        >
+                          <X className="h-4 w-4 mr-2" />
+                          Cancel Meeting
+                        </Button>
+                      )}
                     </div>
                   </div>
                 )}
+
 
               </CardContent>
             </Card>
