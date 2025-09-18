@@ -17,6 +17,7 @@ function Stars({ value }: { value: number }) {
   );
 }
 
+
 export function RatingsTab() {
   const { data, isLoading, isError } = useMyProductReviewsAndRatings();
   console.log(data, "data from API for review and rating");
