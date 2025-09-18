@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Package, MapPin, Calendar, CreditCard, User, CheckCircle, Loader2, Clock, Truck, Scissors, Home, Phone, AlertCircle, DollarSign, Settings } from "lucide-react";
+import { ArrowLeft, Package, MapPin, Calendar, CreditCard, User,Ruler , CheckCircle, Loader2, Clock, Truck, Scissors, Home, Phone, AlertCircle, DollarSign, Settings } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -58,22 +58,29 @@ const OrderDetails = () => {
     }
   };
 
-  const getProcessingSteps = (currentStatus: string) => {
-    const steps = [
-      { key: 'PENDING', label: 'Order Confirmed', icon: CheckCircle, description: 'Your order has been confirmed' },
-      { key: 'DESIGN_IN_PROGRESS', label: 'Master Measurement', icon: Scissors, description: 'Master will take measurements' },
-      { key: 'MEASUREMENT_SCHEDULED', label: 'Product Ready', icon: Package, description: 'Your product is being prepared' },
-      { key: 'READY_FOR_DELIVERY', label: 'Ready for Delivery', icon: Truck, description: 'Product ready for delivery' },
-      { key: 'DELIVERED', label: 'Delivered', icon: Home, description: 'Order delivered successfully' }
-    ];
+const getProcessingSteps = (currentStatus: string) => {
+  const steps = [
+    { key: 'PENDING', label: 'Pending', icon: Clock, description: 'Order placed and awaiting confirmation' },
+    { key: 'CONFIRMED', label: 'Confirmed', icon: CheckCircle, description: 'Order has been confirmed' },
+    { key: 'DESIGN_IN_PROGRESS', label: 'Design In Progress', icon: Scissors, description: 'Design work has started' },
+    { key: 'DESIGN_COMPLETED', label: 'Design Completed', icon: Package, description: 'Design is finalized' },
+    { key: 'MEASUREMENT_COMPLETED', label: 'Measurement Completed', icon: Ruler, description: 'Measurements taken successfully' },
+    { key: 'FINAL_PAYMENT_PENDING', label: 'Final Payment Pending', icon: DollarSign, description: 'Awaiting final payment from customer' },
+    { key: 'COMPLETED', label: 'Completed', icon: CheckCircle, description: 'Order production is completed' },
+    { key: 'SHIPPED', label: 'Shipped', icon: Truck, description: 'Order has been shipped' },
+    { key: 'DELIVERED', label: 'Delivered', icon: Home, description: 'Order delivered successfully' },
+    { key: 'CANCELLED', label: 'Cancelled', icon: AlertCircle, description: 'Order has been cancelled' },
+  ];
 
-    const currentIndex = steps.findIndex(step => step.key === currentStatus);
-    return steps.map((step, index) => ({
-      ...step,
-      completed: index <= currentIndex,
-      active: index === currentIndex
-    }));
-  };
+  const currentIndex = steps.findIndex(step => step.key === currentStatus);
+  
+  return steps.map((step, index) => ({
+    ...step,
+    completed: currentIndex > index,
+    active: currentIndex === index
+  }));
+};
+
 
   const handleStatusUpdate = async (newStatus: string) => {
     setIsUpdatingStatus(true);
@@ -279,7 +286,7 @@ const OrderDetails = () => {
                           <p className="text-sm text-muted-foreground">by {product.designer}</p>
                           <div className="flex justify-between items-center mt-2">
                             <span className="text-sm text-muted-foreground">Qty: {product.quantity}</span>
-                            <span className="font-semibold text-primary">${product.price}</span>
+                            <span className="font-semibold text-primary">₹{product.price}</span>
                           </div>
                         </div>
                       </div>
@@ -341,20 +348,20 @@ const OrderDetails = () => {
                 <CardContent className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span className="font-semibold">${orderData.totals.subtotal}</span>
+                    <span className="font-semibold">₹{orderData.totals.subtotal}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Shipping</span>
-                    <span className="font-semibold">${orderData.totals.shippingCost}</span>
+                    <span className="font-semibold">₹{orderData.totals.shippingCost}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Tax</span>
-                    <span className="font-semibold">${orderData.totals.tax}</span>
+                    <span className="font-semibold">₹{orderData.totals.tax}</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between text-lg">
                     <span className="font-bold">Total</span>
-                    <span className="font-bold text-primary">${orderData.totals.total}</span>
+                    <span className="font-bold text-primary">₹{orderData.totals.total}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -373,7 +380,7 @@ const OrderDetails = () => {
                       <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Initial Payment</span>
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold">${orderData.payments.initial.amount}</span>
+                          <span className="font-semibold">₹{orderData.payments.initial.amount}</span>
                           <Badge variant={orderData.payments.initial.paid ? "default" : "secondary"}>
                             {orderData.payments.initial.paid ? "Paid" : "Pending"}
                           </Badge>
@@ -383,7 +390,7 @@ const OrderDetails = () => {
                       <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Final Payment</span>
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold">${orderData.payments.final.amount}</span>
+                          <span className="font-semibold">₹{orderData.payments.final.amount}</span>
                           <Badge variant={orderData.payments.final.paid ? "default" : "secondary"}>
                             {orderData.payments.final.paid ? "Paid" : "Pending"}
                           </Badge>
@@ -421,7 +428,7 @@ const OrderDetails = () => {
                       ) : (
                         <>
                           <CreditCard className="h-4 w-4 mr-2" />
-                          Pay Remaining ${orderData.payments.final.amount}
+                          Pay Remaining ₹{orderData.payments.final.amount}
                         </>
                       )}
                     </Button>
@@ -442,11 +449,7 @@ const OrderDetails = () => {
                   <Button className="w-full" variant="outline">
                     Download Invoice
                   </Button>
-                  {type === 'purchase' && (
-                    <Button className="w-full" variant="outline">
-                      Track Order
-                    </Button>
-                  )}
+                  
                   <Button className="w-full" variant="outline">
                     Contact Support
                   </Button>
