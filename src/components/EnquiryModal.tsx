@@ -70,7 +70,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   try {
     // ✅ Use axios instead of fetch
-    const { data } = await axios.post("https://venstyler.armanshekh.com/api/enquiry/createEnquiry", formData);
+    const { data } = await axios.post("https://venstyler.armanshekh.com/api/enquiry/createEnquirys", formData);
 
     toast({
       title: "Enquiry Sent Successfully",
