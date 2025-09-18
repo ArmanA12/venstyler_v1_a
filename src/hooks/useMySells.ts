@@ -21,7 +21,7 @@ export function useMySells() {
       const sellData = await getMySells();
 
       // ✅ fix: use .data instead of .sells
-      return sellData.sells.map((sell: any): MySellItem => ({
+      return sellData.data.map((sell: any): MySellItem => ({
         id: sell.id,
         orderId: sell.id,
         buyerName: sell.user?.name ?? "Unknown",

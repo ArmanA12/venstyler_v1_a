@@ -248,10 +248,17 @@ interface ProductAnalyticsResponse {
     orderId: number;
     buyerName: string;
     buyerImage: string | null;
-    productTitle: string;
-    amount: number;
     status: string;
     date: string;
+    product: {
+      id: number;
+      title: string;
+      category: string;
+      price: number;
+      image: string;
+      quantity: number;
+      amount: number;
+    };
   }>;
 }
 
@@ -309,7 +316,7 @@ interface ApiContextType {
   getMyProductReviewsAndRatings: () => Promise<MyDesignRatings[]>;
   getMyUploadedProducts: () => Promise<MyUploadedProductResponse>;
   getMyOrders: () => Promise<{ success: boolean; orders: any[] }>;
-  getMySells: () => Promise<{ success: boolean; sells: any[] }>;
+  getMySells: () => Promise<{ success: boolean; data: any[] }>;
   getOrderDetails: (orderId: number) => Promise<{ success: boolean; orderData: any }>;
   getProductAnalytics: (productId: number) => Promise<ProductAnalyticsResponse>;
   getUserChats: () => Promise<any[]>;
@@ -615,7 +622,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
 
 
 const getMySells: ApiContextType["getMySells"] = async () => {
-  const { data } = await api.get<{ success: boolean; sells: any[] }>(
+  const { data } = await api.get<{ success: boolean; data: any[] }>(
     "/api/order/getMyProductOrdersSell",
     { withCredentials: true }
   );

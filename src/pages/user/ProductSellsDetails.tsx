@@ -171,7 +171,7 @@ export default function ProductSellsDetails() {
                         <span className="font-medium">{order.buyerName}</span>
                       </div>
                     </TableCell>
-                    <TableCell>₹ {order.amount.toLocaleString()}</TableCell>
+                    <TableCell>₹ {order.product.amount.toLocaleString()}</TableCell>
                     <TableCell>{getStatusBadge(order.status)}</TableCell>
                     <TableCell>
                       {new Date(order.date).toLocaleString("en-IN", {
