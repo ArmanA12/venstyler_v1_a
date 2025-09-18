@@ -48,7 +48,6 @@ const App = () => {
 
   const [userId, setUserId] = useState<number | null>(null);
 
-  // Fetch userId once on mount
   useEffect(() => {
     const fetchUser = async () => {
       const result = await checkUserAuth();
