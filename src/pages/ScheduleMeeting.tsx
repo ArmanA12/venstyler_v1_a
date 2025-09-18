@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CalendarDays, Clock, MapPin, Phone, ArrowLeft, CheckCircle, Plus, Home } from "lucide-react";
+import { CalendarDays, Clock, MapPin, Phone, ArrowLeft, CheckCircle, Plus, Home, X, Star, AlertTriangle } from "lucide-react";
 import { Header } from "@/components/Header";
 import { toast } from "sonner";
 import axios from "axios";
@@ -31,6 +31,7 @@ interface ExistingMeeting {
   date: string;
   time: string;
   type: string;
+  status?: string;
   address?: Address;
   notes?: string;
 }
@@ -66,6 +67,7 @@ const ScheduleMeeting = () => {
   // Existing meeting state
   const [existingMeeting, setExistingMeeting] = useState<ExistingMeeting | null>(null);
   const [isLoadingMeeting, setIsLoadingMeeting] = useState(true);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
   // Available time slots
   const timeSlots = [
@@ -160,6 +162,7 @@ const fetchExistingMeeting = async () => {
       setExistingMeeting({
         id: meeting.id,
         type: meeting.type,
+        status: meeting.status || "SCHEDULED",
         date: scheduledDate.toISOString(),
         time: scheduledDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         notes: meeting.notes || "",
@@ -275,7 +278,74 @@ const handleSchedule = async () => {
   } finally {
     setIsSubmitting(false);
   }
-};
+  };
+
+  const handleMeetingStatusUpdate = async (status: 'COMPLETED' | 'CANCELLED') => {
+    if (!existingMeeting) return;
+    
+    setIsUpdatingStatus(true);
+    try {
+      const endpoint = status === 'COMPLETED' ? 'complete' : 'cancel';
+      const response = await axios.put(
+        `https://venstyler.armanshekh.com/api/meeting/meetings/${existingMeeting.id}/${endpoint}`,
+        {},
+        { withCredentials: true }
+      );
+
+      if (response.data.success) {
+        toast.success(`Meeting ${status.toLowerCase()} successfully!`);
+        setExistingMeeting(prev => prev ? { ...prev, status } : null);
+      } else {
+        toast.error(response.data.message || `Failed to ${status.toLowerCase()} meeting`);
+      }
+    } catch (error) {
+      console.error(`Error ${status.toLowerCase()}ing meeting:`, error);
+      toast.error(`Failed to ${status.toLowerCase()} meeting`);
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
+
+  const getStatusConfig = (status: string) => {
+    switch (status) {
+      case 'SCHEDULED':
+        return {
+          color: 'from-blue-500 to-cyan-500',
+          bgColor: 'bg-gradient-to-br from-blue-50 to-cyan-50',
+          borderColor: 'border-blue-200',
+          textColor: 'text-blue-700',
+          icon: <CalendarDays className="h-5 w-5" />,
+          label: 'Scheduled'
+        };
+      case 'COMPLETED':
+        return {
+          color: 'from-green-500 to-emerald-500',
+          bgColor: 'bg-gradient-to-br from-green-50 to-emerald-50',
+          borderColor: 'border-green-200',
+          textColor: 'text-green-700',
+          icon: <CheckCircle className="h-5 w-5" />,
+          label: 'Completed'
+        };
+      case 'CANCELLED':
+        return {
+          color: 'from-red-500 to-rose-500',
+          bgColor: 'bg-gradient-to-br from-red-50 to-rose-50',
+          borderColor: 'border-red-200',
+          textColor: 'text-red-700',
+          icon: <X className="h-5 w-5" />,
+          label: 'Cancelled'
+        };
+      default:
+        return {
+          color: 'from-gray-500 to-slate-500',
+          bgColor: 'bg-gradient-to-br from-gray-50 to-slate-50',
+          borderColor: 'border-gray-200',
+          textColor: 'text-gray-700',
+          icon: <AlertTriangle className="h-5 w-5" />,
+          label: 'Unknown'
+        };
+    }
+  };
 
   const isDateDisabled = (date: Date) => {
     const today = new Date();
@@ -323,47 +393,108 @@ const handleSchedule = async () => {
 
           {/* Existing Meeting Details */}
           {existingMeeting && (
-            <Card className="mb-6 bg-green-50 border-green-200">
+            <Card className={`mb-6 ${getStatusConfig(existingMeeting.status || 'SCHEDULED').bgColor} ${getStatusConfig(existingMeeting.status || 'SCHEDULED').borderColor} animate-fade-in hover-scale transition-all duration-300`}>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-green-700">
-                  <CheckCircle className="h-5 w-5" />
-                  Meeting Scheduled
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className={`flex items-center gap-2 ${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor}`}>
+                    {getStatusConfig(existingMeeting.status || 'SCHEDULED').icon}
+                    Meeting {getStatusConfig(existingMeeting.status || 'SCHEDULED').label}
+                  </CardTitle>
+                  <Badge 
+                    className={`bg-gradient-to-r ${getStatusConfig(existingMeeting.status || 'SCHEDULED').color} text-white animate-pulse`}
+                  >
+                    {getStatusConfig(existingMeeting.status || 'SCHEDULED').label}
+                  </Badge>
+                </div>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <span className="font-medium text-sm text-green-600">Type:</span>
-                    <p className="text-green-800">
-                      {meetingOptions.find(opt => opt.value === existingMeeting.type)?.label}
-                    </p>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-white/50 backdrop-blur-sm border border-white/20">
+                    {meetingOptions.find(opt => opt.value === existingMeeting.type)?.icon}
+                    <div>
+                      <span className={`font-medium text-sm ${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor}/70`}>Type:</span>
+                      <p className={`${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor} font-semibold`}>
+                        {meetingOptions.find(opt => opt.value === existingMeeting.type)?.label}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <span className="font-medium text-sm text-green-600">Date:</span>
-                    <p className="text-green-800">{new Date(existingMeeting.date).toLocaleDateString()}</p>
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-white/50 backdrop-blur-sm border border-white/20">
+                    <CalendarDays className="h-5 w-5" />
+                    <div>
+                      <span className={`font-medium text-sm ${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor}/70`}>Date:</span>
+                      <p className={`${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor} font-semibold`}>
+                        {new Date(existingMeeting.date).toLocaleDateString()}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <span className="font-medium text-sm text-green-600">Time:</span>
-                    <p className="text-green-800">{existingMeeting.time}</p>
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-white/50 backdrop-blur-sm border border-white/20">
+                    <Clock className="h-5 w-5" />
+                    <div>
+                      <span className={`font-medium text-sm ${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor}/70`}>Time:</span>
+                      <p className={`${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor} font-semibold`}>
+                        {existingMeeting.time}
+                      </p>
+                    </div>
                   </div>
                 </div>
+
                 {existingMeeting.address && (
-                  <div className="pt-2 border-t border-green-200">
-                    <span className="font-medium text-sm text-green-600">Address:</span>
-                    <div className="bg-green-100 p-3 rounded-lg mt-1">
-                      <p className="font-medium text-green-800">{existingMeeting.address.label}</p>
-                      <p className="text-green-700">{existingMeeting.address.fullAddress}</p>
-                      <p className="text-green-700">
+                  <div className="pt-4 border-t border-white/30">
+                    <div className="flex items-center gap-2 mb-3">
+                      <MapPin className="h-5 w-5" />
+                      <span className={`font-medium text-sm ${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor}/70`}>Address:</span>
+                    </div>
+                    <div className="bg-white/60 p-4 rounded-lg border border-white/30 backdrop-blur-sm">
+                      <p className={`font-semibold ${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor} mb-1`}>
+                        {existingMeeting.address.label}
+                      </p>
+                      <p className={`${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor}/80`}>
+                        {existingMeeting.address.fullAddress}
+                      </p>
+                      <p className={`${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor}/80`}>
                         {existingMeeting.address.city}, {existingMeeting.address.state} {existingMeeting.address.pincode}
                       </p>
-                      <p className="text-green-700">{existingMeeting.address.country}</p>
+                      <p className={`${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor}/80`}>
+                        {existingMeeting.address.country}
+                      </p>
                     </div>
                   </div>
                 )}
+
                 {existingMeeting.notes && (
-                  <div className="pt-2 border-t border-green-200">
-                    <span className="font-medium text-sm text-green-600">Notes:</span>
-                    <p className="text-green-700 mt-1">{existingMeeting.notes}</p>
+                  <div className="pt-4 border-t border-white/30">
+                    <span className={`font-medium text-sm ${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor}/70 flex items-center gap-2 mb-2`}>
+                      <Star className="h-4 w-4" />
+                      Notes:
+                    </span>
+                    <p className={`${getStatusConfig(existingMeeting.status || 'SCHEDULED').textColor}/90 bg-white/60 p-3 rounded-lg border border-white/30`}>
+                      {existingMeeting.notes}
+                    </p>
+                  </div>
+                )}
+
+                {/* Status Update Actions */}
+                {existingMeeting.status === 'SCHEDULED' && (
+                  <div className="pt-4 border-t border-white/30">
+                    <div className="flex gap-3">
+                      <Button
+                        onClick={() => handleMeetingStatusUpdate('COMPLETED')}
+                        disabled={isUpdatingStatus}
+                        className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0 transition-all duration-300 hover-scale"
+                      >
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        {isUpdatingStatus ? "Updating..." : "Mark Complete"}
+                      </Button>
+                      <Button
+                        onClick={() => handleMeetingStatusUpdate('CANCELLED')}
+                        disabled={isUpdatingStatus}
+                        variant="outline"
+                        className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-all duration-300 hover-scale"
+                      >
+                        <X className="h-4 w-4 mr-2" />
+                        Cancel Meeting
+                      </Button>
+                    </div>
                   </div>
                 )}
               </CardContent>
