@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import axios from "axios"; // ✅ add this at the top
+
 import {
   Dialog,
   DialogContent,
@@ -12,89 +14,91 @@ import {
 } from "@/components/ui/dialog";
 import { Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
 
 interface EnquiryModalProps {
   isOpen: boolean;
   onClose: () => void;
   productId: string;
   productTitle?: string;
+  imageUrl: string; // 👈 image url from frontend
 }
 
-export function EnquiryModal({ 
-  isOpen, 
-  onClose, 
-  productId, 
-  productTitle 
+export function EnquiryModal({
+  isOpen,
+  onClose,
+  productId,
+  productTitle,
+  imageUrl,
 }: EnquiryModalProps) {
   const { toast } = useToast();
-  const { isAuthenticated } = useAuth();
-  
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    message: ""
+    message: "",
+    designId: productId,
+    imageUrl: imageUrl,
   });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!isAuthenticated) {
-      toast({
-        title: "Authentication Required",
-        description: "Please sign in to send an enquiry.",
-        variant: "destructive"
-      });
-      onClose();
-      return;
-    }
 
-    if (!formData.name || !formData.email || !formData.message) {
-      toast({
-        title: "Missing Information",
-        description: "Please fill in all required fields.",
-        variant: "destructive"
-      });
-      return;
-    }
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    setIsSubmitting(true);
-    
-    try {
-      // Simulate API call with product ID
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Here you would send the enquiry with productId to identify which product
-      console.log("Enquiry for product:", productId, formData);
-      
-      toast({
-        title: "Enquiry Sent Successfully",
-        description: "We'll get back to you soon!",
-      });
-      
-      // Reset form and close modal
-      setFormData({ name: "", email: "", phone: "", message: "" });
-      onClose();
-    } catch (error) {
-      toast({
-        title: "Failed to Send Enquiry",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  if (!formData.name || !formData.email || !formData.message) {
+    toast({
+      title: "Missing Information",
+      description: "Please fill in all required fields.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    // ✅ Use axios instead of fetch
+    const { data } = await axios.post("https://venstyler.armanshekh.com/api/enquiry/createEnquiry", formData);
+
+    toast({
+      title: "Enquiry Sent Successfully",
+      description: "We'll get back to you soon!",
+    });
+
+    // Reset form and close modal
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+      designId: productId,
+      imageUrl: imageUrl,
+    });
+    onClose();
+  } catch (error) {
+    toast({
+      title: "Failed to Send Enquiry",
+      description:
+        (error as any)?.response?.data?.message ||
+        "Something went wrong. Please try again.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -103,13 +107,16 @@ export function EnquiryModal({
           <DialogTitle className="text-2xl font-bold">Product Enquiry</DialogTitle>
           <DialogDescription>
             {productTitle ? (
-              <>Send us your enquiry about "{productTitle}" and we'll get back to you as soon as possible.</>
+              <>
+                Send us your enquiry about "<strong>{productTitle}</strong>" and
+                we'll get back to you as soon as possible.
+              </>
             ) : (
               <>Send us your enquiry and we'll get back to you as soon as possible.</>
             )}
           </DialogDescription>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -123,7 +130,7 @@ export function EnquiryModal({
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="email">Email Address *</Label>
               <Input
@@ -172,11 +179,7 @@ export function EnquiryModal({
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="flex-1"
-            >
+            <Button type="submit" disabled={isSubmitting} className="flex-1">
               {isSubmitting ? (
                 "Sending..."
               ) : (

@@ -17,6 +17,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
+  ShieldQuestion
 } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { useProductDetails } from "@/hooks/useProductDetail";
@@ -203,11 +204,10 @@ const ProductDetails = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentImageIndex(index)}
-                  className={`aspect-square rounded-lg overflow-hidden border-2 transition-colors ${
-                    currentImageIndex === index
-                      ? "border-primary"
-                      : "border-transparent hover:border-primary/50"
-                  }`}
+                  className={`aspect-square rounded-lg overflow-hidden border-2 transition-colors ${currentImageIndex === index
+                    ? "border-primary"
+                    : "border-transparent hover:border-primary/50"
+                    }`}
                 >
                   <img
                     src={image}
@@ -241,7 +241,7 @@ const ProductDetails = () => {
                   <span className="text-primary font-medium">
                     {product.designer.name}
                   </span>
-                  <span className="text-sm text-muted-foreground">Designer</span>
+                  <span className="text-sm text-muted-foreground"> Designer</span>
                 </span>
               </div>
             </div>
@@ -262,6 +262,22 @@ const ProductDetails = () => {
                 )}
               </div>
             </div>
+
+            <div className="space-y-2 flex items-center border border-purple-700/70 rounded-xl border-dotted gap-4 px-2 py-2">
+              <div className="flex items-center gap-3">
+                <span className="text-md font-bold text-primary flex gap-1">
+                  <ShieldQuestion className="w-5 h-5  text-primary font-extralight" />
+                  <span>Order Amount  :  ₹{product.price * 0.4}</span>
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-md font-bold text-primary">
+                  Final Amount : ₹{product.price * 0.6}
+                </span>
+              </div>
+
+            </div>
+
 
             {/* Description */}
             <div>
@@ -301,7 +317,7 @@ const ProductDetails = () => {
                 <Eye className="w-5 h-5 text-primary" />
                 <span className="text-sm">
                   <span className="font-medium">Completion Time:</span>{" "}
-                  {product.completionTime}
+                  {product.completionTime} Days
                 </span>
               </div>
             </div>
@@ -317,7 +333,7 @@ const ProductDetails = () => {
                   <ShoppingCart className="w-5 h-5 mr-2" />
                   {product.inStock ? "Order Now" : "Out of Stock"}
                 </Button>
-                
+
                 <Button
                   variant="outline"
                   onClick={() => setIsEnquiryModalOpen(true)}
@@ -398,9 +414,9 @@ const ProductDetails = () => {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-medium text-sm">
-                          <div className="flex gap-2">
-                            <div>{review.user.name}</div>
-                          </div>
+                            <div className="flex gap-2">
+                              <div>{review.user.name}</div>
+                            </div>
                             <div>
                               <div className="flex items-center gap-1">
                                 {Array.from({
@@ -429,12 +445,13 @@ const ProductDetails = () => {
       </div>
 
       <BottomNav />
-      
+
       <EnquiryModal
         isOpen={isEnquiryModalOpen}
         onClose={() => setIsEnquiryModalOpen(false)}
         productId={id?.toString() || ""}
         productTitle={product?.title}
+        imageUrl={product.images[currentImageIndex]}   // ✅ pass main image
       />
     </div>
   );
