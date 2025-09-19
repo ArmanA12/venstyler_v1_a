@@ -99,6 +99,25 @@ const getProcessingSteps = (currentStatus: string) => {
     }
   };
 
+  const getStatusUpdateOptions = () => {
+    if (type === 'purchase') {
+      return [
+        { value: 'DELIVERED', label: 'Mark as Delivered' },
+        { value: 'CANCELLED', label: 'Cancel Order' }
+      ];
+    } else {
+      return [
+        { value: 'DESIGN_IN_PROGRESS', label: 'Design In Progress' },
+        { value: 'DESIGN_COMPLETED', label: 'Design Completed' },
+        { value: 'MEASUREMENT_COMPLETED', label: 'Measurement Completed' },
+        { value: 'FINAL_PAYMENT_PENDING', label: 'Final Payment Pending' },
+        { value: 'COMPLETED', label: 'Production Completed' },
+        { value: 'SHIPPED', label: 'Shipped' },
+        { value: 'DELIVERED', label: 'Delivered' }
+      ];
+    }
+  };
+
   const handlePayment = async () => {
     setIsProcessingPayment(true);
     try {
@@ -200,21 +219,19 @@ const getProcessingSteps = (currentStatus: string) => {
                       <CheckCircle className="h-3 w-3 mr-1" />
                       {orderData.status.replace('_', ' ').charAt(0).toUpperCase() + orderData.status.replace('_', ' ').slice(1)}
                     </Badge>
-                    {type === 'sale' && (
-                      <Select onValueChange={handleStatusUpdate} disabled={isUpdatingStatus}>
-                        <SelectTrigger className="w-[180px]">
-                          <Settings className="h-4 w-4 mr-2" />
-                          <SelectValue placeholder="Update Status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="PENDING">Pending</SelectItem>
-                          <SelectItem value="DESIGN_IN_PROGRESS">Design in Progress</SelectItem>
-                          <SelectItem value="MEASUREMENT_SCHEDULED">Measurement Scheduled</SelectItem>
-                          <SelectItem value="READY_FOR_DELIVERY">Ready for Delivery</SelectItem>
-                          <SelectItem value="DELIVERED">Delivered</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    )}
+                    <Select onValueChange={handleStatusUpdate} disabled={isUpdatingStatus}>
+                      <SelectTrigger className="w-[180px] bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20 hover:from-primary/20 hover:to-primary/10 transition-all">
+                        <Settings className="h-4 w-4 mr-2" />
+                        <SelectValue placeholder="Update Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {getStatusUpdateOptions().map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <p className="text-sm text-muted-foreground flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
@@ -368,41 +385,75 @@ const getProcessingSteps = (currentStatus: string) => {
 
               {/* Payment Information */}
               {orderData.payments && (
-                <Card className=" border border-border-50 bg-gradient-to-br from-primary/5 to-card">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <DollarSign className="h-5 w-5 text-primary" />
+                <Card className="border border-border-50 bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 dark:from-amber-950/20 dark:via-yellow-950/20 dark:to-orange-950/20 shadow-lg shadow-amber-500/10">
+                  <CardHeader className="bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-t-lg">
+                    <CardTitle className="flex items-center gap-2 text-white">
+                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                        <DollarSign className="h-5 w-5" />
+                      </div>
                       Payment Details
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Initial Payment</span>
+                  <CardContent className="space-y-4 p-6">
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center p-4 rounded-lg bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 dark:from-green-950/30 dark:to-emerald-950/30 dark:border-green-800">
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                            <CheckCircle className="h-4 w-4 text-white" />
+                          </div>
+                          <span className="font-medium text-green-800 dark:text-green-200">Initial Payment</span>
+                        </div>
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold">₹{orderData.payments.initial.amount}</span>
-                          <Badge variant={orderData.payments.initial.paid ? "default" : "secondary"}>
+                          <span className="text-lg font-bold text-green-700 dark:text-green-300">₹{orderData.payments.initial.amount}</span>
+                          <Badge className="bg-green-500 text-white border-0 animate-pulse">
                             {orderData.payments.initial.paid ? "Paid" : "Pending"}
                           </Badge>
                         </div>
                       </div>
                       
-                      <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Final Payment</span>
+                      <div className={`flex justify-between items-center p-4 rounded-lg border ${
+                        orderData.payments.final.paid 
+                          ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 dark:from-green-950/30 dark:to-emerald-950/30 dark:border-green-800'
+                          : 'bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200 dark:from-yellow-950/30 dark:to-amber-950/30 dark:border-yellow-800'
+                      }`}>
+                        <div className="flex items-center gap-3">
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                            orderData.payments.final.paid ? 'bg-green-500' : 'bg-yellow-500 animate-pulse'
+                          }`}>
+                            {orderData.payments.final.paid ? 
+                              <CheckCircle className="h-4 w-4 text-white" /> : 
+                              <Clock className="h-4 w-4 text-white" />
+                            }
+                          </div>
+                          <span className={`font-medium ${
+                            orderData.payments.final.paid 
+                              ? 'text-green-800 dark:text-green-200' 
+                              : 'text-yellow-800 dark:text-yellow-200'
+                          }`}>Final Payment</span>
+                        </div>
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold">₹{orderData.payments.final.amount}</span>
-                          <Badge variant={orderData.payments.final.paid ? "default" : "secondary"}>
+                          <span className={`text-lg font-bold ${
+                            orderData.payments.final.paid 
+                              ? 'text-green-700 dark:text-green-300' 
+                              : 'text-yellow-700 dark:text-yellow-300'
+                          }`}>₹{orderData.payments.final.amount}</span>
+                          <Badge className={orderData.payments.final.paid ? "bg-green-500 text-white border-0" : "bg-yellow-500 text-white border-0 animate-pulse"}>
                             {orderData.payments.final.paid ? "Paid" : "Pending"}
                           </Badge>
                         </div>
                       </div>
 
                       {!orderData.payments.final.paid && orderData.payments.final.dueDate && (
-                        <div className="flex items-center gap-2 p-2 bg-yellow-50 rounded-lg border border-yellow-200">
-                          <AlertCircle className="h-4 w-4 text-yellow-600" />
-                          <span className="text-sm text-yellow-800">
-                            Due: {formatDate(orderData.payments.final.dueDate)}
-                          </span>
+                        <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-red-50 to-pink-50 rounded-lg border border-red-200 dark:from-red-950/30 dark:to-pink-950/30 dark:border-red-800 animate-fade-in">
+                          <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center animate-pulse">
+                            <AlertCircle className="h-4 w-4 text-white" />
+                          </div>
+                          <div>
+                            <span className="font-medium text-red-800 dark:text-red-200 block">Payment Due</span>
+                            <span className="text-sm text-red-600 dark:text-red-400">
+                              {formatDate(orderData.payments.final.dueDate)}
+                            </span>
+                          </div>
                         </div>
                       )}
                     </div>
