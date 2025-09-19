@@ -9,6 +9,7 @@ import { NotificationsProvider } from "./contexts/NotificationContext";
 
 const queryClient = new QueryClient();
 
+
 createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
