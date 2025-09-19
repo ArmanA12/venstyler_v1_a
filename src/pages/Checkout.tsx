@@ -506,7 +506,7 @@ const Checkout = () => {
                       </p>
                       <div className="flex items-center justify-between mt-1">
                         <span className="text-sm">Qty: {product.quantity}</span>
-                        <span className="font-semibold">${product.price}</span>
+                        <span className="font-semibold">₹{product.price}</span>
                       </div>
                     </div>
                   </div>
@@ -516,16 +516,16 @@ const Checkout = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>${subtotal.toFixed(2)}</span>
+                    <span>₹{subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Tax</span>
-                    <span>${tax.toFixed(2)}</span>
+                    <span>₹{tax.toFixed(2)}</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>₹{total.toFixed(2)}</span>
                   </div>
                 </div>
               </CardContent>
