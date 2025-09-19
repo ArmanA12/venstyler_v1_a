@@ -500,8 +500,8 @@ const Index = () => {
                           </div>
                         </div>
                       </div>
-                     </div>
-                   ))
+                    </div>
+                  ))
                 ) : (
                   <div className="p-6 text-center text-muted-foreground">
                     No designs found
@@ -544,123 +544,124 @@ const Index = () => {
                       </Button>
                     </Link>
                   </div>
-<div className="space-y-4">
-  {!loading &&
-    items.slice(0, 3).map((design, index) => (
-      <div
-        key={index}
-        className="flex items-center justify-between p-3 hover:bg-muted/30 transition-all duration-300 hover-lift"
-      >
-        <div className="flex items-center gap-3">
-          <div className="story-gradient">
-            <Avatar className="w-12 h-12">
-              {design.designerAvatar ? (
-                <AvatarImage src={design.designerAvatar} />
-              ) : (
-                <AvatarFallback>
-                  {design.designer?.[0] || "U"}
-                </AvatarFallback>
-              )}
-            </Avatar>
-          </div>
-          <div>
-            <p className="font-medium text-sm">{design.designer}</p>
-            <p className="text-xs text-muted-foreground">
-              {design.isVerified ? (
-                <>
-                  <VerificationBadge size="sm" /> Verified
-                </>
-              ) : (
-                "Non Verified"
-              )}
-            </p>
-          </div>
-        </div>
-        <Link to={`/publicProfile/${design.userId}`}>
-          <Button
-            variant="outline"
-            size="sm"
-            className="hover-glow border-primary/20 hover:border-primary/40 hover:bg-primary/5"
-          >
-            View
-          </Button>
-        </Link>
-      </div>
-    ))}
-</div> 
-                  {/* Enhanced Trending */}
-                <div className=" pt-4  animate-fade-in border-t border-border/50">
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="p-2 rounded-lg bg-gradient-to-r from-primary/20 to-secondary/20">
-                      <TrendingUp className="w-5 h-5 text-primary" />
-                    </div>
-                    <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                      Trending
-                    </h3>
+                  <div className="space-y-4">
+                    {!loading &&
+                      items.slice(0, 3).map((design, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 hover:bg-muted/30 transition-all duration-300 hover-lift"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="story-gradient">
+                              <Avatar className="w-12 h-12">
+                                {design.designerAvatar ? (
+                                  <AvatarImage src={design.designerAvatar} />
+                                ) : (
+                                  <AvatarFallback>
+                                    {design.designer?.[0] || "U"}
+                                  </AvatarFallback>
+                                )}
+                              </Avatar>
+                            </div>
+                            <div>
+                              <p className="font-medium text-sm">
+                                {design.designer}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {design.isVerified ? (
+                                  <>
+                                    <VerificationBadge size="sm" /> Verified
+                                  </>
+                                ) : (
+                                  "Non Verified"
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                          <Link to={`/publicProfile/${design.userId}`}>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="hover-glow border-primary/20 hover:border-primary/40 hover:bg-primary/5"
+                            >
+                              View
+                            </Button>
+                          </Link>
+                        </div>
+                      ))}
                   </div>
-                  <div className="space-y-3">
-                    <div className="p-4 rounded-xl bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/10 hover-lift cursor-pointer bg-image">
-                      <p className="font-medium text-sm text-primary">
-                        #SustainableFashion
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        1.2k posts today
-                      </p>
+                  {/* Enhanced Trending */}
+                  <div className=" pt-4  animate-fade-in border-t border-border/50">
+                    <div className="flex items-center gap-3 mb-5">
+                      <div className="p-2 rounded-lg bg-gradient-to-r from-primary/20 to-secondary/20">
+                        <TrendingUp className="w-5 h-5 text-primary" />
+                      </div>
+                      <h3 className="font-semibold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                        Trending
+                      </h3>
                     </div>
-                    <div className="p-4 rounded-xl bg-gradient-to-r from-secondary/5 to-accent/5 border border-secondary/10 hover-lift cursor-pointer bg-image">
-                      <p className="font-medium text-sm text-secondary">
-                        #IndianTextiles
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        890 posts today
-                      </p>
+                    <div className="space-y-3">
+                      <div className="p-4 rounded-xl bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/10 hover-lift cursor-pointer bg-image">
+                        <p className="font-medium text-sm text-primary">
+                          #SustainableFashion
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          1.2k posts today
+                        </p>
+                      </div>
+                      <div className="p-4 rounded-xl bg-gradient-to-r from-secondary/5 to-accent/5 border border-secondary/10 hover-lift cursor-pointer bg-image">
+                        <p className="font-medium text-sm text-secondary">
+                          #IndianTextiles
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          890 posts today
+                        </p>
+                      </div>
+                      <div className="p-4 rounded-xl bg-gradient-to-r from-accent/5 to-primary/5 border border-accent/10 hover-lift cursor-pointer bg-image">
+                        <p className="font-medium text-sm text-accent">
+                          #HandmadeDesigns
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          756 posts today
+                        </p>
+                      </div>
                     </div>
-                    <div className="p-4 rounded-xl bg-gradient-to-r from-accent/5 to-primary/5 border border-accent/10 hover-lift cursor-pointer bg-image">
-                      <p className="font-medium text-sm text-accent">
-                        #HandmadeDesigns
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        756 posts today
-                      </p>
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-6 p-4">
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      <a href="#" className="hover:underline">
+                        About
+                      </a>
+                      <a href="#" className="hover:underline">
+                        Help
+                      </a>
+                      <a href="#" className="hover:underline">
+                        Press
+                      </a>
+                      <a href="#" className="hover:underline">
+                        API
+                      </a>
+                      <a href="#" className="hover:underline">
+                        Jobs
+                      </a>
+                      <a href="#" className="hover:underline">
+                        Privacy
+                      </a>
+                      <a href="#" className="hover:underline">
+                        Terms
+                      </a>
                     </div>
+                    <p>© 2024 FashionHub from Syed Sameer</p>
                   </div>
                 </div>
-                          <div className="text-xs text-muted-foreground mt-6 p-4">
-            <div className="flex flex-wrap gap-2 mb-3">
-              <a href="#" className="hover:underline">
-                About
-              </a>
-              <a href="#" className="hover:underline">
-                Help
-              </a>
-              <a href="#" className="hover:underline">
-                Press
-              </a>
-              <a href="#" className="hover:underline">
-                API
-              </a>
-              <a href="#" className="hover:underline">
-                Jobs
-              </a>
-              <a href="#" className="hover:underline">
-                Privacy
-              </a>
-              <a href="#" className="hover:underline">
-                Terms
-              </a>
-            </div>
-            <p>© 2024 FashionHub from Syed Sameer</p>
-          </div>
-
               </div>
             </div>
           </div>
         </div>
+        <div className="relative z-10">
+          <BottomNav />
+        </div>
       </div>
-      <div className="relative z-10">
-        <BottomNav />
-      </div>
-    </div>
     </div>
   );
 };
