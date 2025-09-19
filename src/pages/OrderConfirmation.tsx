@@ -54,7 +54,6 @@ const OrderConfirmation = () => {
   const orderNumber = `ORD-${Date.now().toString().slice(-8)}`;
   const estimatedDelivery = new Date();
   estimatedDelivery.setDate(estimatedDelivery.getDate() + 7);
-
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
