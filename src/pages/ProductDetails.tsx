@@ -264,36 +264,85 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* Premium Order Amount Section */}
-            <div className="space-y-2">
-              <div className="bg-gradient-to-r from-primary/10 via-accent/5 to-primary/10 p-4 rounded-xl border border-primary/20 shadow-sm">
-                <div className="flex items-center gap-2 mb-3">
-                  <ShieldQuestion className="w-5 h-5 text-primary" />
-                  <span className="font-semibold text-primary">Payment Structure</span>
-                </div>
+            {/* Premium Payment Structure */}
+            <div className="relative">
+              {/* Premium Golden Container */}
+              <div className="relative bg-gradient-to-br from-yellow-400/90 via-amber-400/90 to-yellow-500/90 p-6 rounded-2xl shadow-2xl border border-yellow-300/30 overflow-hidden">
+                {/* Background Pattern */}
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-yellow-300/10 to-transparent"></div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="bg-white/60 dark:bg-black/30 p-3 rounded-lg border border-green-200 dark:border-green-800">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-green-700 dark:text-green-300">Order Amount</span>
+                {/* Header */}
+                <div className="relative flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-black/20 p-2 rounded-xl">
+                      <ShieldQuestion className="w-6 h-6 text-yellow-100" />
                     </div>
-                    <p className="text-lg font-bold text-green-600 dark:text-green-400">₹{Math.round(product.price * 0.4)}</p>
-                    <p className="text-xs text-green-600/70 dark:text-green-400/70">Pay now (40%)</p>
+                    <div>
+                      <h3 className="text-xl font-bold text-black/90">Premium</h3>
+                      <div className="inline-flex items-center bg-black/20 px-3 py-1 rounded-full">
+                        <span className="text-sm font-semibold text-yellow-100">SECURE PAYMENT</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-black/60">
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Payment Cards */}
+                <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  {/* Order Amount Card */}
+                  <div className="bg-black/80 backdrop-blur-sm p-5 rounded-xl border border-yellow-400/20 shadow-lg">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                      <span className="text-sm font-medium text-yellow-200">Order Amount</span>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-2xl font-bold text-white">₹{Math.round(product.price * 0.4)}</p>
+                      <p className="text-xs text-yellow-300/80">Pay now (40%)</p>
+                    </div>
                   </div>
                   
-                  <div className="bg-white/60 dark:bg-black/30 p-3 rounded-lg border border-amber-200 dark:border-amber-800">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-amber-700 dark:text-amber-300">Final Amount</span>
+                  {/* Final Amount Card */}
+                  <div className="bg-black/80 backdrop-blur-sm p-5 rounded-xl border border-yellow-400/20 shadow-lg">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-3 h-3 bg-amber-400 rounded-full animate-pulse"></div>
+                      <span className="text-sm font-medium text-yellow-200">Final Amount</span>
                     </div>
-                    <p className="text-lg font-bold text-amber-600 dark:text-amber-400">₹{Math.round(product.price * 0.6)}</p>
-                    <p className="text-xs text-amber-600/70 dark:text-amber-400/70">After completion (60%)</p>
+                    <div className="space-y-1">
+                      <p className="text-2xl font-bold text-white">₹{Math.round(product.price * 0.6)}</p>
+                      <p className="text-xs text-yellow-300/80">After completion (60%)</p>
+                    </div>
                   </div>
                 </div>
-                
-                <div className="text-center mt-3 pt-3 border-t border-primary/20">
-                  <p className="text-xs text-muted-foreground">
+
+                {/* Features Row */}
+                <div className="relative flex items-center justify-center gap-6 mb-4 text-black/80">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-black/20 rounded-lg flex items-center justify-center">
+                      <span className="text-xs font-bold text-yellow-100">✓</span>
+                    </div>
+                    <span className="text-sm font-medium">Secure Process</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-black/20 rounded-lg flex items-center justify-center">
+                      <span className="text-xs font-bold text-yellow-100">⚡</span>
+                    </div>
+                    <span className="text-sm font-medium">Fast Delivery</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-black/20 rounded-lg flex items-center justify-center">
+                      <span className="text-xs font-bold text-yellow-100">🛡️</span>
+                    </div>
+                    <span className="text-sm font-medium">Protected</span>
+                  </div>
+                </div>
+
+                {/* Bottom Info */}
+                <div className="relative text-center">
+                  <p className="text-sm text-black/70 font-medium">
                     Secure payment process - Pay 40% to start, 60% after design completion
                   </p>
                 </div>
