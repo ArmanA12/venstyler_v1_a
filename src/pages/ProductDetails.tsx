@@ -92,7 +92,7 @@ const ProductDetails = () => {
     },
     completionTime: prod?.completionTime ?? "—",
     inStock: true,
-    reviews: prod?.reviews ?? [],
+    reviews: prod?.latestReviews ?? [],
   };
 
   // carousel
@@ -441,14 +441,14 @@ const ProductDetails = () => {
                             </div>
                             <div>
                               <div className="flex items-center gap-1">
-                                {Array.from({
-                                  length: 5,
-                                }).map((_, idx) => (
-                                  <Star
-                                    key={idx}
-                                    className={`w-3 h-3 ${idx < (review.rating || 0) ? 'fill-primary text-primary' : 'text-muted-foreground'}`}
-                                  />
-                                ))}
+                                 {Array.from({
+                                   length: 5,
+                                 }).map((_, idx) => (
+                                   <Star
+                                     key={idx}
+                                     className={`w-3 h-3 ${idx < (review.user.rating || 0) ? 'fill-primary text-primary' : 'text-muted-foreground'}`}
+                                   />
+                                 ))}
                               </div>
                             </div>
                           </span>

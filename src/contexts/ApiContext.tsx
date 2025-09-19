@@ -70,10 +70,15 @@ export type ProductDetail = {
     rating: number;
     orders: number;
   };
-  reviews?: Array<{
+  latestReviews?: Array<{
     id: number;
-    user: { name: string; profileImage?: string };
-    rating: number;
+    user: { 
+      id: number;
+      name: string; 
+      profileImage?: string;
+      isVerified?: boolean;
+      rating: number;
+    };
     comment: string;
     images?: string[];
     createdAt: string;
