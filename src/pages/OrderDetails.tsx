@@ -486,14 +486,14 @@ const getProcessingSteps = (currentStatus: string) => {
                   )}
 
                   {/* Schedule Meeting Button */}
-                  {type === 'purchase' && orderData.status === 'DESIGN_IN_PROGRESS' && (
+                  {orderData.status === 'DESIGN_IN_PROGRESS' && (
                     <Button 
                       className="w-full" 
                       variant="outline"
                       onClick={() => navigate(`/schedule-meeting/${orderId}`)}
                     >
                       <Calendar className="h-4 w-4 mr-2" />
-                      Schedule Measurement
+                      {type === 'purchase' ? 'Schedule Measurement' : 'View Meeting Details'}
                     </Button>
                   )}
 

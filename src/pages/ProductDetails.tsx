@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Header } from "@/components/Header";
 import { EnquiryModal } from "@/components/EnquiryModal";
 import { useToast } from "@/hooks/use-toast";
@@ -263,19 +264,40 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            <div className="space-y-2 flex items-center border border-purple-700/70 rounded-xl border-dotted gap-4 px-2 py-2">
-              <div className="flex items-center gap-3">
-                <span className="text-md font-bold text-primary flex gap-1">
-                  <ShieldQuestion className="w-5 h-5  text-primary font-extralight" />
-                  <span>Order Amount  :  ₹{product.price * 0.4}</span>
-                </span>
+            {/* Premium Order Amount Section */}
+            <div className="space-y-2">
+              <div className="bg-gradient-to-r from-primary/10 via-accent/5 to-primary/10 p-4 rounded-xl border border-primary/20 shadow-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <ShieldQuestion className="w-5 h-5 text-primary" />
+                  <span className="font-semibold text-primary">Payment Structure</span>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="bg-white/60 dark:bg-black/30 p-3 rounded-lg border border-green-200 dark:border-green-800">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-sm font-medium text-green-700 dark:text-green-300">Order Amount</span>
+                    </div>
+                    <p className="text-lg font-bold text-green-600 dark:text-green-400">₹{Math.round(product.price * 0.4)}</p>
+                    <p className="text-xs text-green-600/70 dark:text-green-400/70">Pay now (40%)</p>
+                  </div>
+                  
+                  <div className="bg-white/60 dark:bg-black/30 p-3 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                      <span className="text-sm font-medium text-amber-700 dark:text-amber-300">Final Amount</span>
+                    </div>
+                    <p className="text-lg font-bold text-amber-600 dark:text-amber-400">₹{Math.round(product.price * 0.6)}</p>
+                    <p className="text-xs text-amber-600/70 dark:text-amber-400/70">After completion (60%)</p>
+                  </div>
+                </div>
+                
+                <div className="text-center mt-3 pt-3 border-t border-primary/20">
+                  <p className="text-xs text-muted-foreground">
+                    Secure payment process - Pay 40% to start, 60% after design completion
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
-                <span className="text-md font-bold text-primary">
-                  Final Amount : ₹{product.price * 0.6}
-                </span>
-              </div>
-
             </div>
 
 

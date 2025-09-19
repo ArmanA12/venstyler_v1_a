@@ -632,7 +632,7 @@ const getMySells: ApiContextType["getMySells"] = async () => {
 
 const getOrderDetails: ApiContextType["getOrderDetails"] = async (orderId: number) => {
   const { data } = await api.get<{ success: boolean; orderData: any }>(
-    `/orders/${orderId}/confirmation`,
+    `/api/order/orderDetailsForBuyerAndSeller/${orderId}`,
     { withCredentials: true }
   );
   return data;
