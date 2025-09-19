@@ -266,27 +266,31 @@ const ProductDetails = () => {
 
             {/* Premium Order Amount Section */}
             <div className="space-y-2">
-              <div className="bg-gradient-to-r from-primary/10 via-accent/5 to-primary/10 p-4 rounded-xl border border-primary/20 shadow-sm">
+              <div className="bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 p-4 rounded-xl border border-primary/5">
                 <div className="flex items-center gap-2 mb-3">
                   <ShieldQuestion className="w-5 h-5 text-primary" />
                   <span className="font-semibold text-primary">Payment Structure</span>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="bg-white/60 dark:bg-black/30 p-3 rounded-lg border border-green-200 dark:border-green-800">
+                  <div className="bg-white/60 dark:bg-black/30 rounded-lg border border-green-200 dark:border-green-700">
+                    <div className="relative  overflow-clip rounded-lg p-3">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                       <span className="text-sm font-medium text-green-700 dark:text-green-300">Order Amount</span>
                     </div>
+                    <div className="absolute blur-2xl -top-4 -left-4 w-full h-10 bg-green-500"></div>
                     <p className="text-lg font-bold text-green-600 dark:text-green-400">₹{Math.round(product.price * 0.4)}</p>
                     <p className="text-xs text-green-600/70 dark:text-green-400/70">Pay now (40%)</p>
                   </div>
+                  </div>
                   
-                  <div className="bg-white/60 dark:bg-black/30 p-3 rounded-lg border border-amber-200 dark:border-amber-800">
+                  <div className=" relative overflow-clip bg-white/60 dark:bg-black/30 p-3 rounded-lg border border-amber-200 dark:border-amber-400/50">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
                       <span className="text-sm font-medium text-amber-700 dark:text-amber-300">Final Amount</span>
                     </div>
+                    <div className="absolute blur-2xl -top-4 -left-4 w-full h-10 bg-amber-500"></div>
                     <p className="text-lg font-bold text-amber-600 dark:text-amber-400">₹{Math.round(product.price * 0.6)}</p>
                     <p className="text-xs text-amber-600/70 dark:text-amber-400/70">After completion (60%)</p>
                   </div>
