@@ -13,6 +13,7 @@ import { CalendarDays, Clock, MapPin, Phone, ArrowLeft, CheckCircle, Plus, Home,
 import { Header } from "@/components/Header";
 import { toast } from "sonner";
 import axios from "axios";
+import { useApi } from "@/contexts/ApiContext";
 
 
 interface Address {
@@ -39,6 +40,7 @@ interface ExistingMeeting {
 const ScheduleMeeting = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
+  const { getMeetingsByOrderId } = useApi();
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = useState("");
@@ -147,16 +149,17 @@ const ScheduleMeeting = () => {
   };
 
   const fetchExistingMeeting = async () => {
+    if (!orderId) return;
+    
     try {
-      const response = await axios.get(
-        `https://venstyler.armanshekh.com/api/meeting/orders/${orderId}/meetings`,
-        { withCredentials: true }
-      );
+      // Use the API context method that works for both buyers and sellers
+      const response = await getMeetingsByOrderId(parseInt(orderId));
+      
+      console.log(response, "existing meeting response from API context");
+      console.log(response.data, "existing meeting data from API context");
 
-      console.log(response.data.data, "existing meeting data");
-
-      if (response.data.success && Array.isArray(response.data.data) && response.data.data.length > 0) {
-        const meeting = response.data.data[0]; // 👈 first meeting
+      if (response.success && Array.isArray(response.data) && response.data.length > 0) {
+        const meeting = response.data[0]; // Get the first meeting
         const scheduledDate = new Date(meeting.scheduledAt);
 
         setExistingMeeting({
@@ -176,9 +179,18 @@ const ScheduleMeeting = () => {
         if (meeting.address) {
           setSelectedAddressId(meeting.address.id);
         }
+      } else {
+        console.log("No meetings found for this order");
+        setExistingMeeting(null);
       }
     } catch (error) {
       console.error("Error fetching meeting:", error);
+      // Log more details about the error
+      if (error.response) {
+        console.error("Error response:", error.response.data);
+        console.error("Error status:", error.response.status);
+      }
+      setExistingMeeting(null);
     } finally {
       setIsLoadingMeeting(false);
     }

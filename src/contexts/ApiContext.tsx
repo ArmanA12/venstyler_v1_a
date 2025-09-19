@@ -320,6 +320,7 @@ interface ApiContextType {
   getOrderDetails: (orderId: number) => Promise<{ success: boolean; orderData: any }>;
   getProductAnalytics: (productId: number) => Promise<ProductAnalyticsResponse>;
   getUserChats: () => Promise<any[]>;
+  getMeetingsByOrderId: (orderId: number) => Promise<{ success: boolean; data: any[] }>;
 }
 
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
@@ -632,7 +633,7 @@ const getMySells: ApiContextType["getMySells"] = async () => {
 
 const getOrderDetails: ApiContextType["getOrderDetails"] = async (orderId: number) => {
   const { data } = await api.get<{ success: boolean; orderData: any }>(
-    `/orders/${orderId}/confirmation`,
+    `/api/order/orderDetailsForBuyerAndSeller/${orderId}`,
     { withCredentials: true }
   );
   return data;
@@ -653,6 +654,14 @@ const getUserChats: ApiContextType["getUserChats"] = async () => {
     { withCredentials: true }
   );
   return data.chats;
+};
+
+const getMeetingsByOrderId: ApiContextType["getMeetingsByOrderId"] = async (orderId: number) => {
+  const { data } = await api.get<{ success: boolean; data: any[] }>(
+    `/api/meeting/orders/${orderId}/meetings`,
+    { withCredentials: true }
+  );
+  return data;
 };
 
 
@@ -680,7 +689,8 @@ const getUserChats: ApiContextType["getUserChats"] = async () => {
     getMySells,
     getOrderDetails,
     getProductAnalytics,
-    getUserChats
+    getUserChats,
+    getMeetingsByOrderId
   };
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
 };

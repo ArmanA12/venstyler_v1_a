@@ -3,211 +3,157 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Circle, Clock, Package, Ruler, Truck, Home } from "lucide-react";
+import { CheckCircle, Circle, Clock, Package, Ruler, Truck, Home, ArrowLeft, Scissors, DollarSign, AlertCircle } from "lucide-react";
 import { Header } from "@/components/Header";
-
-interface OrderStatus {
-  step: number;
-  label: string;
-  description: string;
-  icon: React.ReactNode;
-  completed: boolean;
-  active: boolean;
-}
+import { useOrderDetails } from "@/hooks/useOrderDetails";
+import { Loader2 } from "lucide-react";
 
 const OrderProcessing = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   
-  // Mock data - in real app, this would come from API based on order status
-  const [currentStep, setCurrentStep] = useState(2); // Current step (1-4)
-  
-  const steps: OrderStatus[] = [
-    {
-      step: 1,
-      label: "Order Confirmed",
-      description: "Your order has been received and confirmed",
-      icon: <CheckCircle className="h-6 w-6" />,
-      completed: currentStep > 1,
-      active: currentStep === 1
-    },
-    {
-      step: 2,
-      label: "Measurement Collection",
-      description: "Our master will collect your measurements for perfect fitting",
-      icon: <Ruler className="h-6 w-6" />,
-      completed: currentStep > 2,
-      active: currentStep === 2
-    },
-    {
-      step: 3,
-      label: "Product Preparation",
-      description: "Your custom product is being prepared by our expert tailors",
-      icon: <Package className="h-6 w-6" />,
-      completed: currentStep > 3,
-      active: currentStep === 3
-    },
-    {
-      step: 4,
-      label: "Ready for Delivery",
-      description: "Your order is ready and will be shipped soon",
-      icon: <Truck className="h-6 w-6" />,
-      completed: currentStep > 4,
-      active: currentStep === 4
-    }
-  ];
+  const { data: orderData, isLoading, error } = useOrderDetails(Number(orderId));
 
-  const getStepStatus = (step: OrderStatus) => {
-    if (step.completed) return "completed";
-    if (step.active) return "active";
-    return "pending";
+  const getProcessingSteps = (currentStatus: string) => {
+    const steps = [
+      { key: 'PENDING', label: 'Pending', icon: Clock, description: 'Order placed and awaiting confirmation' },
+      { key: 'CONFIRMED', label: 'Confirmed', icon: CheckCircle, description: 'Order has been confirmed' },
+      { key: 'DESIGN_IN_PROGRESS', label: 'Design In Progress', icon: Scissors, description: 'Design work has started' },
+      { key: 'DESIGN_COMPLETED', label: 'Design Completed', icon: Package, description: 'Design is finalized' },
+      { key: 'MEASUREMENT_COMPLETED', label: 'Measurement Completed', icon: Ruler, description: 'Measurements taken successfully' },
+      { key: 'FINAL_PAYMENT_PENDING', label: 'Final Payment Pending', icon: DollarSign, description: 'Awaiting final payment from customer' },
+      { key: 'COMPLETED', label: 'Completed', icon: CheckCircle, description: 'Order production is completed' },
+      { key: 'SHIPPED', label: 'Shipped', icon: Truck, description: 'Order has been shipped' },
+      { key: 'DELIVERED', label: 'Delivered', icon: Home, description: 'Order delivered successfully' },
+      { key: 'CANCELLED', label: 'Cancelled', icon: AlertCircle, description: 'Order has been cancelled' },
+    ];
+
+    const currentIndex = steps.findIndex(step => step.key === currentStatus);
+    
+    return steps.map((step, index) => ({
+      ...step,
+      completed: currentIndex > index,
+      active: currentIndex === index
+    }));
   };
 
-  const getStepColors = (status: string) => {
-    switch (status) {
-      case "completed":
-        return {
-          bg: "bg-green-100 dark:bg-green-900/30",
-          border: "border-green-500",
-          icon: "text-green-600 dark:text-green-400",
-          text: "text-green-800 dark:text-green-200"
-        };
-      case "active":
-        return {
-          bg: "bg-blue-100 dark:bg-blue-900/30",
-          border: "border-blue-500",
-          icon: "text-blue-600 dark:text-blue-400",
-          text: "text-blue-800 dark:text-blue-200"
-        };
-      default:
-        return {
-          bg: "bg-gray-100 dark:bg-gray-800",
-          border: "border-gray-300 dark:border-gray-600",
-          icon: "text-gray-400 dark:text-gray-500",
-          text: "text-gray-600 dark:text-gray-400"
-        };
-    }
-  };
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 p-4 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+          <p className="text-muted-foreground">Loading order details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !orderData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 p-4">
+        <div className="max-w-4xl mx-auto">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 hover:bg-primary/10 mb-6"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+          <Card className="border border-border bg-card">
+            <CardContent className="p-6 text-center">
+              <p className="text-muted-foreground">Order not found or failed to load.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2">Order Processing</h1>
-            <p className="text-muted-foreground">
-              Track the progress of your custom order #{orderId}
-            </p>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 p-4">
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 hover:bg-primary/10"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold">Order Processing</h1>
+            <p className="text-muted-foreground">Track the progress of order #{orderId}</p>
           </div>
+        </div>
 
-          {/* Progress Steps */}
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Order Status</CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="space-y-6">
-                {steps.map((step, index) => {
-                  const status = getStepStatus(step);
-                  const colors = getStepColors(status);
-                  
-                  return (
-                    <div key={step.step} className="flex items-start gap-4">
-                      {/* Step Icon */}
-                      <div className={`flex-shrink-0 w-12 h-12 rounded-full border-2 ${colors.bg} ${colors.border} flex items-center justify-center`}>
-                        {status === "completed" ? (
-                          <CheckCircle className={`h-6 w-6 ${colors.icon}`} />
-                        ) : status === "active" ? (
-                          <Clock className={`h-6 w-6 ${colors.icon}`} />
-                        ) : (
-                          <Circle className={`h-6 w-6 ${colors.icon}`} />
-                        )}
-                      </div>
-
-                      {/* Step Content */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className={`font-semibold ${colors.text}`}>
-                            {step.label}
-                          </h3>
-                          {status === "completed" && (
-                            <Badge variant="secondary" className="bg-green-100 text-green-800">
-                              Completed
-                            </Badge>
-                          )}
-                          {status === "active" && (
-                            <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                              In Progress
-                            </Badge>
-                          )}
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                          {step.description}
-                        </p>
-                        
-                        {step.step === 2 && status === "active" && (
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="mt-3"
-                            onClick={() => navigate(`/schedule-meeting/${orderId}`)}
-                          >
-                            <Ruler className="h-4 w-4 mr-2" />
-                            Schedule Measurement
-                          </Button>
-                        )}
-                      </div>
-
-                      {/* Connection Line */}
-                      {index < steps.length - 1 && (
-                        <div className="absolute left-6 mt-12 w-0.5 h-6 bg-gray-300 dark:bg-gray-600" />
-                      )}
+        {/* Processing Steps */}
+        <Card className="border border-border bg-card">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-primary" />
+              Order Progress
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {getProcessingSteps(orderData.orderData.status).map((step, index) => {
+                const Icon = step.icon;
+                return (
+                  <div key={step.key} className="flex items-center gap-4 animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                      step.completed ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 
+                      step.active ? 'bg-primary/20 text-primary border-2 border-primary animate-pulse' : 
+                      'bg-muted text-muted-foreground'
+                    }`}>
+                      <Icon className="h-5 w-5" />
                     </div>
-                  );
-                })}
+                    <div className="flex-1">
+                      <h4 className={`font-medium transition-colors ${step.completed ? 'text-foreground' : 'text-muted-foreground'}`}>
+                        {step.label}
+                      </h4>
+                      <p className="text-sm text-muted-foreground">{step.description}</p>
+                    </div>
+                    {step.completed && <CheckCircle className="h-5 w-5 text-green-600 animate-scale-in" />}
+                    {step.active && <Clock className="h-5 w-5 text-primary animate-pulse" />}
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Schedule Meeting Button */}
+        {orderData.orderData.status === 'DESIGN_IN_PROGRESS' && (
+          <Card className="border border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-primary mb-1">Ready for Measurement?</h3>
+                  <p className="text-sm text-muted-foreground">Schedule a meeting with our master for precise measurements</p>
+                </div>
+                <Button onClick={() => navigate(`/schedule-meeting/${orderId}`)} className="hover-scale">
+                  <Ruler className="h-4 w-4 mr-2" />
+                  Schedule Meeting
+                </Button>
               </div>
             </CardContent>
           </Card>
+        )}
 
-          {/* Estimated Timeline */}
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Estimated Timeline</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <p className="font-medium">Expected Completion</p>
-                  <p className="text-2xl font-bold text-primary">7-10 Days</p>
-                  <p className="text-sm text-muted-foreground">
-                    From measurement collection date
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <p className="font-medium">Current Status</p>
-                  <p className="text-lg font-semibold text-blue-600">
-                    {steps[currentStep - 1]?.label}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Step {currentStep} of 4
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Actions */}
-          <div className="flex gap-4 justify-center">
-            <Button onClick={() => navigate("/")} variant="outline">
-              <Home className="h-4 w-4 mr-2" />
-              Back to Home
-            </Button>
-            <Button onClick={() => navigate("/profile")}>
-              View All Orders
-            </Button>
-          </div>
+        {/* Actions */}
+        <div className="flex gap-4 justify-center">
+          <Button onClick={() => navigate("/")} variant="outline" className="hover-scale">
+            <Home className="h-4 w-4 mr-2" />
+            Back to Home
+          </Button>
+          <Button onClick={() => navigate("/profile")} className="hover-scale">
+            View All Orders
+          </Button>
         </div>
       </div>
     </div>
