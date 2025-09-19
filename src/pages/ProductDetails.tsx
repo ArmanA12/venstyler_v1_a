@@ -24,6 +24,7 @@ import {
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { useProductDetails } from "@/hooks/useProductDetail";
 import { useAuth } from "@/contexts/AuthContext";
+import { ImageMagnifier } from "@/components/ImageMagnifier";
 
 const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -174,13 +175,21 @@ const ProductDetails = () => {
           {/* Left - Images */}
           <div className="space-y-4">
             <div className="relative group">
-              <div className="aspect-square overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10">
+              {/* <div className="aspect-square overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10">
                 <img
                   src={product.images[currentImageIndex]}
                   alt={product.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
-              </div>
+              </div> */}
+
+              <div className="aspect-square overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10">
+  <ImageMagnifier
+    src={product.images[currentImageIndex]}
+    zoom={2.1}
+    lensSize={180}
+  />
+</div>
 
               {/* Nav */}
               <button
