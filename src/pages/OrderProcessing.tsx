@@ -11,7 +11,7 @@ import { Loader2 } from "lucide-react";
 const OrderProcessing = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
-  
+
   const { data: orderData, isLoading, error } = useOrderDetails(Number(orderId));
 
   const getProcessingSteps = (currentStatus: string) => {
@@ -29,7 +29,7 @@ const OrderProcessing = () => {
     ];
 
     const currentIndex = steps.findIndex(step => step.key === currentStatus);
-    
+
     return steps.map((step, index) => ({
       ...step,
       completed: currentIndex > index,
@@ -75,21 +75,25 @@ const OrderProcessing = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 p-4">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 hover:bg-primary/10"
+            className="flex items-center gap-2 hover:bg-primary/10 w-full sm:w-auto"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Dashboard
           </Button>
+
           <div>
-            <h1 className="text-2xl font-bold">Order Processing</h1>
-            <p className="text-muted-foreground">Track the progress of order #{orderId}</p>
+            <h1 className="text-xl sm:text-2xl font-bold">Order Processing</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">
+              Track the progress of order #{orderId}
+            </p>
           </div>
         </div>
+
 
         {/* Processing Steps */}
         <Card className="border border-border bg-card">
@@ -105,11 +109,10 @@ const OrderProcessing = () => {
                 const Icon = step.icon;
                 return (
                   <div key={step.key} className="flex items-center gap-4 animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
-                      step.completed ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 
-                      step.active ? 'bg-primary/20 text-primary border-2 border-primary animate-pulse' : 
-                      'bg-muted text-muted-foreground'
-                    }`}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${step.completed ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' :
+                        step.active ? 'bg-primary/20 text-primary border-2 border-primary animate-pulse' :
+                          'bg-muted text-muted-foreground'
+                      }`}>
                       <Icon className="h-5 w-5" />
                     </div>
                     <div className="flex-1">
@@ -131,16 +134,23 @@ const OrderProcessing = () => {
         {orderData.orderData.status === 'DESIGN_IN_PROGRESS' && (
           <Card className="border border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
             <CardContent className="p-6">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
                 <div>
                   <h3 className="font-semibold text-primary mb-1">Ready for Measurement?</h3>
-                  <p className="text-sm text-muted-foreground">Schedule a meeting with our master for precise measurements</p>
+                  <p className="text-sm text-muted-foreground">
+                    Schedule a meeting with our master for precise measurements
+                  </p>
                 </div>
-                <Button onClick={() => navigate(`/schedule-meeting/${orderId}`)} className="hover-scale">
+
+                <Button
+                  onClick={() => navigate(`/schedule-meeting/${orderId}`)}
+                  className="hover-scale w-full sm:w-auto"
+                >
                   <Ruler className="h-4 w-4 mr-2" />
                   Schedule Meeting
                 </Button>
               </div>
+
             </CardContent>
           </Card>
         )}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Package, MapPin, Calendar, CreditCard, User,Ruler , CheckCircle, Loader2, Clock, Truck, Scissors, Home, Phone, AlertCircle, DollarSign, Settings } from "lucide-react";
+import { ArrowLeft, Package, MapPin, Calendar, CreditCard, User, Ruler, CheckCircle, Loader2, Clock, Truck, Scissors, Home, Phone, AlertCircle, IndianRupee , Settings } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,7 @@ import { toast } from "sonner";
 const OrderDetails = () => {
   const { orderId, type } = useParams();
   const navigate = useNavigate();
-  
+
   const [orderData, setOrderData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -58,28 +58,28 @@ const OrderDetails = () => {
     }
   };
 
-const getProcessingSteps = (currentStatus: string) => {
-  const steps = [
-    { key: 'PENDING', label: 'Pending', icon: Clock, description: 'Order placed and awaiting confirmation' },
-    { key: 'CONFIRMED', label: 'Confirmed', icon: CheckCircle, description: 'Order has been confirmed' },
-    { key: 'DESIGN_IN_PROGRESS', label: 'Design In Progress', icon: Scissors, description: 'Design work has started' },
-    { key: 'DESIGN_COMPLETED', label: 'Design Completed', icon: Package, description: 'Design is finalized' },
-    { key: 'MEASUREMENT_COMPLETED', label: 'Measurement Completed', icon: Ruler, description: 'Measurements taken successfully' },
-    { key: 'FINAL_PAYMENT_PENDING', label: 'Final Payment Pending', icon: DollarSign, description: 'Awaiting final payment from customer' },
-    { key: 'COMPLETED', label: 'Completed', icon: CheckCircle, description: 'Order production is completed' },
-    { key: 'SHIPPED', label: 'Shipped', icon: Truck, description: 'Order has been shipped' },
-    { key: 'DELIVERED', label: 'Delivered', icon: Home, description: 'Order delivered successfully' },
-    { key: 'CANCELLED', label: 'Cancelled', icon: AlertCircle, description: 'Order has been cancelled' },
-  ];
+  const getProcessingSteps = (currentStatus: string) => {
+    const steps = [
+      { key: 'PENDING', label: 'Pending', icon: Clock, description: 'Order placed and awaiting confirmation' },
+      { key: 'CONFIRMED', label: 'Confirmed', icon: CheckCircle, description: 'Order has been confirmed' },
+      { key: 'DESIGN_IN_PROGRESS', label: 'Design In Progress', icon: Scissors, description: 'Design work has started' },
+      { key: 'DESIGN_COMPLETED', label: 'Design Completed', icon: Package, description: 'Design is finalized' },
+      { key: 'MEASUREMENT_COMPLETED', label: 'Measurement Completed', icon: Ruler, description: 'Measurements taken successfully' },
+      { key: 'FINAL_PAYMENT_PENDING', label: 'Final Payment Pending', icon: IndianRupee , description: 'Awaiting final payment from customer' },
+      { key: 'COMPLETED', label: 'Completed', icon: CheckCircle, description: 'Order production is completed' },
+      { key: 'SHIPPED', label: 'Shipped', icon: Truck, description: 'Order has been shipped' },
+      { key: 'DELIVERED', label: 'Delivered', icon: Home, description: 'Order delivered successfully' },
+      { key: 'CANCELLED', label: 'Cancelled', icon: AlertCircle, description: 'Order has been cancelled' },
+    ];
 
-  const currentIndex = steps.findIndex(step => step.key === currentStatus);
-  
-  return steps.map((step, index) => ({
-    ...step,
-    completed: currentIndex > index,
-    active: currentIndex === index
-  }));
-};
+    const currentIndex = steps.findIndex(step => step.key === currentStatus);
+
+    return steps.map((step, index) => ({
+      ...step,
+      completed: currentIndex > index,
+      active: currentIndex === index
+    }));
+  };
 
 
   const handleStatusUpdate = async (newStatus: string) => {
@@ -123,7 +123,7 @@ const getProcessingSteps = (currentStatus: string) => {
     try {
       // Mock payment process - replace with actual payment integration
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       setOrderData(prev => ({
         ...prev,
         payments: {
@@ -256,11 +256,10 @@ const getProcessingSteps = (currentStatus: string) => {
                   const Icon = step.icon;
                   return (
                     <div key={step.key} className="flex items-center gap-4">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        step.completed ? 'bg-primary text-primary-foreground' : 
-                        step.active ? 'bg-primary/20 text-primary border-2 border-primary' : 
-                        'bg-muted text-muted-foreground'
-                      }`}>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${step.completed ? 'bg-primary text-primary-foreground' :
+                          step.active ? 'bg-primary/20 text-primary border-2 border-primary' :
+                            'bg-muted text-muted-foreground'
+                        }`}>
                         <Icon className="h-5 w-5" />
                       </div>
                       <div className="flex-1">
@@ -331,16 +330,17 @@ const getProcessingSteps = (currentStatus: string) => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Name</p>
-                      <p className="font-semibold">{orderData.buyer.name}</p>
+                      <p className="font-semibold break-words">{orderData.buyer.name}</p>
                     </div>
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Email</p>
-                      <p className="font-semibold">{orderData.buyer.email}</p>
+                      <p className="font-semibold break-words">{orderData.buyer.email}</p>
                     </div>
                   </div>
+
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Address</p>
                     <p className="font-semibold">{orderData.shipping.address}</p>
@@ -389,14 +389,18 @@ const getProcessingSteps = (currentStatus: string) => {
                   <CardHeader className="bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-t-lg">
                     <CardTitle className="flex items-center gap-2 text-white">
                       <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                        <DollarSign className="h-5 w-5" />
+                        <IndianRupee  className="h-5 w-5" />
                       </div>
                       Payment Details
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4 p-6">
+                  <CardContent className="space-y-4 p-3">
                     <div className="space-y-4">
-                      <div className="flex justify-between items-center p-4 rounded-lg bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 dark:from-green-950/30 dark:to-emerald-950/30 dark:border-green-800">
+                      
+                      <div className="border border-green-200 dark:from-green-950/30 rounded-xl dark:to-emerald-950/30 dark:border-green-800">
+                        <div className="flex justify-between items-center p-4 rounded-lg relative overflow-clip ">
+                       
+                       <div className="absolute blur-2xl -top-4 -left-4 w-full h-10 bg-green-500"></div>
                         <div className="flex items-center gap-3">
                           <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
                             <CheckCircle className="h-4 w-4 text-white" />
@@ -410,33 +414,30 @@ const getProcessingSteps = (currentStatus: string) => {
                           </Badge>
                         </div>
                       </div>
-                      
-                      <div className={`flex justify-between items-center p-4 rounded-lg border ${
-                        orderData.payments.final.paid 
+                      </div>
+
+                      <div className={`flex justify-between items-center p-4 rounded-lg border ${orderData.payments.final.paid
                           ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 dark:from-green-950/30 dark:to-emerald-950/30 dark:border-green-800'
                           : 'bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200 dark:from-yellow-950/30 dark:to-amber-950/30 dark:border-yellow-800'
-                      }`}>
+                        }`}>
                         <div className="flex items-center gap-3">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                            orderData.payments.final.paid ? 'bg-green-500' : 'bg-yellow-500 animate-pulse'
-                          }`}>
-                            {orderData.payments.final.paid ? 
-                              <CheckCircle className="h-4 w-4 text-white" /> : 
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center ${orderData.payments.final.paid ? 'bg-green-500' : 'bg-yellow-500 animate-pulse'
+                            }`}>
+                            {orderData.payments.final.paid ?
+                              <CheckCircle className="h-4 w-4 text-white" /> :
                               <Clock className="h-4 w-4 text-white" />
                             }
                           </div>
-                          <span className={`font-medium ${
-                            orderData.payments.final.paid 
-                              ? 'text-green-800 dark:text-green-200' 
+                          <span className={`font-medium ${orderData.payments.final.paid
+                              ? 'text-green-800 dark:text-green-200'
                               : 'text-yellow-800 dark:text-yellow-200'
-                          }`}>Final Payment</span>
+                            }`}>Final Payment</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className={`text-lg font-bold ${
-                            orderData.payments.final.paid 
-                              ? 'text-green-700 dark:text-green-300' 
+                          <span className={`text-lg font-bold ${orderData.payments.final.paid
+                              ? 'text-green-700 dark:text-green-300'
                               : 'text-yellow-700 dark:text-yellow-300'
-                          }`}>₹{orderData.payments.final.amount}</span>
+                            }`}>₹{orderData.payments.final.amount}</span>
                           <Badge className={orderData.payments.final.paid ? "bg-green-500 text-white border-0" : "bg-yellow-500 text-white border-0 animate-pulse"}>
                             {orderData.payments.final.paid ? "Paid" : "Pending"}
                           </Badge>
@@ -466,8 +467,8 @@ const getProcessingSteps = (currentStatus: string) => {
                 <CardContent className="pt-6 space-y-3">
                   {/* Payment Button for Remaining Amount */}
                   {orderData.payments && !orderData.payments.final.paid && type === 'purchase' && (
-                    <Button 
-                      className="w-full" 
+                    <Button
+                      className="w-full"
                       onClick={handlePayment}
                       disabled={isProcessingPayment}
                     >
@@ -487,8 +488,8 @@ const getProcessingSteps = (currentStatus: string) => {
 
                   {/* Schedule Meeting Button */}
                   {orderData.status === 'DESIGN_IN_PROGRESS' && (
-                    <Button 
-                      className="w-full" 
+                    <Button
+                      className="w-full"
                       variant="outline"
                       onClick={() => navigate(`/schedule-meeting/${orderId}`)}
                     >
@@ -500,7 +501,7 @@ const getProcessingSteps = (currentStatus: string) => {
                   <Button className="w-full" variant="outline">
                     Download Invoice
                   </Button>
-                  
+
                   <Button className="w-full" variant="outline">
                     Contact Support
                   </Button>

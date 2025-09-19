@@ -18,7 +18,8 @@ import {
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
-  ShieldQuestion
+  ShieldQuestion,
+  CheckCircle
 } from "lucide-react";
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { useProductDetails } from "@/hooks/useProductDetail";
@@ -273,25 +274,28 @@ const ProductDetails = () => {
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="bg-white/60 dark:bg-black/30 rounded-lg border border-green-200 dark:border-green-700">
+                  <div className="bg-white/60 dark:bg-black/30 rounded-xl border border-green-200 dark:border-green-700">
                     <div className="relative  overflow-clip rounded-lg p-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <div><ShoppingCart className="w-5 h-5 text-green-700 dark:text-green-300" /></div>
+                    <div className="flex items-center gap-1 mb-1 mt-1">
+                      <p className="text-lg font-bold text-green-600 dark:text-green-400">₹{Math.round(product.price * 0.4)}</p>
                       <span className="text-sm font-medium text-green-700 dark:text-green-300">Order Amount</span>
+                      
                     </div>
                     <div className="absolute blur-2xl -top-4 -left-4 w-full h-10 bg-green-500"></div>
-                    <p className="text-lg font-bold text-green-600 dark:text-green-400">₹{Math.round(product.price * 0.4)}</p>
+                    
                     <p className="text-xs text-green-600/70 dark:text-green-400/70">Pay now (40%)</p>
                   </div>
                   </div>
                   
                   <div className=" relative overflow-clip bg-white/60 dark:bg-black/30 p-3 rounded-lg border border-amber-200 dark:border-amber-400/50">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                    <div><CheckCircle className="w-5 h-5 text-amber-700 dark:text-amber-300" /></div>
+                    <div className="flex items-center gap-2 mb-1 mt-1">
+                      <p className="text-lg font-bold text-amber-600 dark:text-amber-400">₹{Math.round(product.price * 0.6)}</p>
                       <span className="text-sm font-medium text-amber-700 dark:text-amber-300">Final Amount</span>
                     </div>
                     <div className="absolute blur-2xl -top-4 -left-4 w-full h-10 bg-amber-500"></div>
-                    <p className="text-lg font-bold text-amber-600 dark:text-amber-400">₹{Math.round(product.price * 0.6)}</p>
+                    
                     <p className="text-xs text-amber-600/70 dark:text-amber-400/70">After completion (60%)</p>
                   </div>
                 </div>

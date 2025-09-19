@@ -150,11 +150,11 @@ const ScheduleMeeting = () => {
 
   const fetchExistingMeeting = async () => {
     if (!orderId) return;
-    
+
     try {
       // Use the API context method that works for both buyers and sellers
       const response = await getMeetingsByOrderId(parseInt(orderId));
-      
+
       console.log(response, "existing meeting response from API context");
       console.log(response.data, "existing meeting data from API context");
 
@@ -506,13 +506,13 @@ const ScheduleMeeting = () => {
                 {/* Status Update Actions */}
                 {(existingMeeting.status === 'SCHEDULED' || existingMeeting.status === 'IN_PROGRESS') && (
                   <div className="pt-4 border-t border-white/30">
-                    <div className="flex gap-3">
-                      {existingMeeting.status === 'SCHEDULED' && (
+                    <div className="flex flex-col sm:flex-row gap-3 w-full">
+                      {existingMeeting.status === "SCHEDULED" && (
                         <Button
-                          onClick={() => handleMeetingStatusUpdate('IN_PROGRESS')}
+                          onClick={() => handleMeetingStatusUpdate("IN_PROGRESS")}
                           disabled={isUpdatingStatus}
                           variant="outline"
-                          className="flex-1 border-yellow-200 text-yellow-600 hover:bg-yellow-50 hover:border-yellow-300 transition-all duration-300 hover-scale"
+                          className="w-full sm:flex-1 border-yellow-200 text-yellow-600 hover:bg-yellow-50 hover:border-yellow-300 transition-all duration-300 hover-scale"
                         >
                           <Clock className="h-4 w-4 mr-2" />
                           {isUpdatingStatus ? "Updating..." : "Mark In Progress"}
@@ -521,27 +521,28 @@ const ScheduleMeeting = () => {
 
                       {/* Mark Complete Button (visible in both SCHEDULED and IN_PROGRESS) */}
                       <Button
-                        onClick={() => handleMeetingStatusUpdate('COMPLETED')}
+                        onClick={() => handleMeetingStatusUpdate("COMPLETED")}
                         disabled={isUpdatingStatus}
-                        className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0 transition-all duration-300 hover-scale"
+                        className="w-full sm:flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0 transition-all duration-300 hover-scale"
                       >
                         <CheckCircle className="h-4 w-4 mr-2" />
                         {isUpdatingStatus ? "Updating..." : "Mark Complete"}
                       </Button>
 
-                      {/* Cancel Button (optional: disable if already in progress) */}
-                      {existingMeeting.status === 'SCHEDULED' && (
+                      {/* Cancel Button (only if SCHEDULED) */}
+                      {existingMeeting.status === "SCHEDULED" && (
                         <Button
-                          onClick={() => handleMeetingStatusUpdate('CANCELLED')}
+                          onClick={() => handleMeetingStatusUpdate("CANCELLED")}
                           disabled={isUpdatingStatus}
                           variant="outline"
-                          className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-all duration-300 hover-scale"
+                          className="w-full sm:flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-all duration-300 hover-scale"
                         >
                           <X className="h-4 w-4 mr-2" />
                           Cancel Meeting
                         </Button>
                       )}
                     </div>
+
                   </div>
                 )}
 

@@ -190,26 +190,34 @@ export default function UserDashboard() {
                     <TabsContent value="products">
                         <Card>
                             <CardHeader>
-                                <div className="flex items-center justify-between">
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                                     <div>
                                         <CardTitle>My Products</CardTitle>
                                         <CardDescription>Manage your listed products</CardDescription>
                                     </div>
-                                    <Button onClick={() => { navigate('/upload-product') }}>
+                                    <Button
+                                        onClick={() => {
+                                            navigate("/upload-product");
+                                        }}
+                                        className="w-full sm:w-auto"
+                                    >
                                         <Plus className="h-4 w-4 mr-2" />
                                         Add Product
                                     </Button>
                                 </div>
-                                <div className="flex items-center space-x-2">
-                                    <Search className="h-4 w-4 text-muted-foreground" />
+
+                                {/* Search box */}
+                                <div className="relative mt-3 sm:mt-0 w-full sm:max-w-sm">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                     <Input
                                         placeholder="Search products..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="max-w-sm"
+                                        className="pl-9" // padding left for icon space
                                     />
                                 </div>
                             </CardHeader>
+
                             <CardContent>
                                 <Table>
                                     <TableHeader>
