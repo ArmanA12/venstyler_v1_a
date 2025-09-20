@@ -48,11 +48,12 @@ import ProductEdit from "./pages/user/ProductEdit";
 
 import ProductSellsDetails from "./pages/user/ProductSellsDetails";
 import PremiumHomepage from "./pages/PremiumHomepage";
+import Analytics from "./hooks/Analytics";
+// import Analytics from "../src/hooks/Analytics";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
 
-  
   useEffect(() => {
     (async () => {
       const result = await checkUserAuth();
@@ -79,6 +80,7 @@ export default function App() {
             <NotificationsSocketBridge userId={userId} />
 
             <BrowserRouter>
+              <Analytics />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/premium-home" element={<PremiumHomepage />} />
@@ -194,7 +196,7 @@ export default function App() {
 
                 <Route path="/explore" element={<ExplorePage />} />
                 {/* <Route path="/admin" element={<AdminDashboard />} /> */}
-       
+
                 <Route
                   path="/admin"
                   element={
@@ -212,7 +214,6 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
-
 
                 <Route
                   path="/admin/users/:userId"
@@ -247,52 +248,55 @@ export default function App() {
                   }
                 />
                 <Route path="/admin/orders/:orderId" element={<OrderView />} />
-                <Route 
-                  path="/admin/orders/:orderId/manage" 
+                <Route
+                  path="/admin/orders/:orderId/manage"
                   element={
                     <ProtectedRoute>
                       <OrderManagement />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
-                
-                <Route path="/publicProfile/:userId" element={<PublicProfilePage />} />
 
-                <Route 
-                  path="/complaints" 
+                <Route
+                  path="/publicProfile/:userId"
+                  element={<PublicProfilePage />}
+                />
+
+                <Route
+                  path="/complaints"
                   element={
                     <ProtectedRoute>
                       <Complaints />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
 
-                <Route 
-                  path="/order-details/:type/:orderId" 
+                <Route
+                  path="/order-details/:type/:orderId"
                   element={
                     <ProtectedRoute>
                       <OrderDetails />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
 
                 {/* User Product Routes */}
-                <Route 
-                  path="/user/products/:productId/edit" 
+                <Route
+                  path="/user/products/:productId/edit"
                   element={
                     <ProtectedRoute>
                       <ProductEdit />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
 
-                <Route 
-                  path="/user/products/:productId/sells-details" 
+                <Route
+                  path="/user/products/:productId/sells-details"
                   element={
                     <ProtectedRoute>
                       <ProductSellsDetails />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
 
                 <Route path="*" element={<NotFound />} />
