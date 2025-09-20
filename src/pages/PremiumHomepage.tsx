@@ -8,6 +8,8 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { ThreeDMarquee } from "@/components/ui/three-d-marquee";
 import { PremiumDesignShowcase } from "@/components/PremiumDesignShowcase";
 import { motion } from "framer-motion";
+import GradientButton from "@/components/GradientButton";
+import { BorderBeam } from "@/components/BorderBeam";
 import {
   Moon,
   Sun,
@@ -43,6 +45,7 @@ import {
   MessageCircle
 } from "lucide-react";
 
+
 const PremiumHomepage = () => {
   const { theme, setTheme } = useTheme();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -74,6 +77,57 @@ const PremiumHomepage = () => {
       src: "https://images.unsplash.com/photo-1571513722275-4b3ab092693b?w=400&h=600&fit=crop",
       alt: "Premium Designer Outfit 5",
       href: "/designs/5"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=600&fit=crop",
+      alt: "Premium Designer Outfit 6",
+      href: "/designs/6"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=600&fit=crop",
+      alt: "Premium Designer Outfit 6",
+      href: "/designs/6"
+    }
+    ,
+    {
+      src: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=600&fit=crop",
+      alt: "Premium Designer Outfit 6",
+      href: "/designs/6"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=600&fit=crop",
+      alt: "Premium Designer Outfit 6",
+      href: "/designs/6"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=600&fit=crop",
+      alt: "Premium Designer Outfit 6",
+      href: "/designs/6"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=600&fit=crop",
+      alt: "Premium Designer Outfit 6",
+      href: "/designs/6"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=600&fit=crop",
+      alt: "Premium Designer Outfit 6",
+      href: "/designs/6"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=600&fit=crop",
+      alt: "Premium Designer Outfit 6",
+      href: "/designs/6"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=600&fit=crop",
+      alt: "Premium Designer Outfit 6",
+      href: "/designs/6"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=600&fit=crop",
+      alt: "Premium Designer Outfit 6",
+      href: "/designs/6"
     },
     {
       src: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=600&fit=crop",
@@ -114,7 +168,7 @@ const PremiumHomepage = () => {
     {
       step: 2,
       icon: Calendar,
-      title: "Schedule Meeting", 
+      title: "Schedule Meeting",
       description: "Book exclusive consultation with your designer"
     },
     {
@@ -145,14 +199,14 @@ const PremiumHomepage = () => {
       count: "2,500+"
     },
     {
-      title: "Handwork Specialists", 
+      title: "Handwork Specialists",
       description: "Master artisans for intricate details",
       icon: <Star className="w-6 h-6" />,
       count: "1,200+"
     },
     {
       title: "Machine Workers",
-      description: "Precision crafting with modern techniques", 
+      description: "Precision crafting with modern techniques",
       icon: <Zap className="w-6 h-6" />,
       count: "800+"
     },
@@ -181,7 +235,7 @@ const PremiumHomepage = () => {
                 <Crown className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                DesignPro
+                venStyler
               </span>
             </Link>
 
@@ -259,32 +313,64 @@ const PremiumHomepage = () => {
         transition={{ duration: 0.8 }}
         className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
       >
-        {/* Sophisticated Background */}
+
         <div className="absolute inset-0">
-          {/* Grid Pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:72px_72px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
-          
-          {/* Floating Elements */}
-          <motion.div
-            animate={{ 
-              y: [0, -20, 0],
-              rotate: [0, 180, 360],
-            }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute top-20 left-10 w-32 h-32 rounded-full border border-primary/10 backdrop-blur-sm"
-          />
-          <motion.div
-            animate={{ 
-              y: [0, 20, 0],
-              rotate: [360, 180, 0],
-            }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-20 right-10 w-48 h-48 rounded-full border border-secondary/10 backdrop-blur-sm"
-          />
-          
-          {/* Subtle Glow */}
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
+
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
+
+
+          <div className=" left-[10%] top-[60%] absolute z-50 group p-1 w-12 h-12 rounded-xl  flex items-center justify-center">
+            {/* Glow Beam */}
+            {/* <BorderBeam
+    colorFrom="#f05c92"
+    colorTo="#f05c92"
+    glowIntensity={1}
+    duration={20}
+    size={10}
+  /> */}
+
+            {/* 4 side middle lines going outside */}
+            {/* Top */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-t from-[#f05c92] to-transparent" />
+            {/* Bottom */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-b from-[#f05c92] to-transparent" />
+            {/* Left */}
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-l from-[#f05c92] to-transparent" />
+            {/* Right */}
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-r from-[#f05c92] to-transparent" />
+
+            {/* Icon */}
+            <div className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10  rounded-full border border-border/10"><MessageCircle className="w-5 h-5 font-extralight text-primary" />
+              <div className="w-6 h-6 bg-[#f05c92] blur-xl absolute top-2 left-2"></div></div>
+          </div>
+
+
+          <div className=" right-[10%] top-[60%] absolute z-50 group p-1 w-12 h-12 rounded-xl  flex items-center justify-center">
+            {/* Glow Beam */}
+            {/* <BorderBeam
+    colorFrom="#f05c92"
+    colorTo="#f05c92"
+    glowIntensity={1}
+    duration={20}
+    size={10}
+  /> */}
+
+            {/* 4 side middle lines going outside */}
+            {/* Top */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-t from-[#f05c92] to-transparent" />
+            {/* Bottom */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-b from-[#f05c92] to-transparent" />
+            {/* Left */}
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-l from-[#f05c92] to-transparent" />
+            {/* Right */}
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-r from-[#f05c92] to-transparent" />
+
+            {/* Icon */}
+            <div className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10  rounded-full border border-border/10"><MessageCircle className="w-5 h-5 font-extralight text-primary" />
+              <div className="w-6 h-6 bg-[#f05c92] blur-xl absolute top-2 left-2"></div></div>
+          </div>
+
+
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
@@ -293,37 +379,37 @@ const PremiumHomepage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <Badge variant="outline" className="mb-8 px-6 py-3 text-sm font-medium border-primary/20 bg-card/50 backdrop-blur-sm shadow-lg">
+            <Badge variant="outline" className="mb-8 mt-16 px-6 py-3 text-sm font-medium border-primary/20 bg-card/50 backdrop-blur-sm shadow-lg">
               <Sparkles className="w-4 h-4 mr-2" />
               Redefining Fashion Technology
             </Badge>
-            
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-[0.9] tracking-tight">
+
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-[0.9] tracking-tight">
               <span className="block text-foreground mb-2">The Future of</span>
               <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
                 Designer Management
               </span>
             </h1>
-            
-            <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-light">
-              Where creativity meets technology. Connect with elite designers, master artisans, 
+
+            <p className="text-md md:text-xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-light">
+              Where creativity meets technology. Connect with elite designers, master artisans,
               <br className="hidden md:block" />
               and transform your vision into extraordinary fashion reality.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
               <Link to="/signup">
-                <Button 
-                  size="lg" 
-                  className="group px-10 py-6 text-lg font-semibold bg-foreground text-background hover:bg-foreground/90 rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+                <GradientButton
+                  size="lg"
+
                 >
                   Start Creating
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                </GradientButton>
               </Link>
               <Link to="/explore">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="lg"
                   className="group px-10 py-6 text-lg font-semibold border border-border/50 hover:border-primary/50 rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-xl backdrop-blur-sm"
                 >
@@ -347,8 +433,8 @@ const PremiumHomepage = () => {
               { number: "1M+", label: "Designs Crafted", icon: Palette },
               { number: "99.9%", label: "Success Rate", icon: Award },
             ].map((stat, index) => (
-              <motion.div 
-                key={index} 
+              <motion.div
+                key={index}
                 className="group text-center p-6 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/20 hover:border-primary/30 transition-all duration-500"
                 whileHover={{ y: -5, scale: 1.02 }}
               >
@@ -367,14 +453,14 @@ const PremiumHomepage = () => {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="py-32 relative overflow-hidden"
+        className="py-32 relative overflow-hidden border-b border-border/80"
       >
         {/* Background Elements */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.1),transparent_70%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,107,107,0.1),transparent_70%)]" />
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center mb-24">
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10 ">
+          <div className="text-center mb-20 ">
             <Badge variant="outline" className="mb-8 px-6 py-3 text-sm font-medium border-primary/20 bg-card/50 backdrop-blur-sm shadow-lg">
               <Zap className="w-4 h-4 mr-2" />
               Engineered Excellence
@@ -392,18 +478,18 @@ const PremiumHomepage = () => {
             </p>
           </div>
 
-          <div className="relative">              
+          <div className="relative">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
               {orderFlow.map((step, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 40, scale: 0.9 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ 
-                    duration: 0.7, 
+                  transition={{
+                    duration: 0.7,
                     delay: index * 0.15,
                     type: "spring",
-                    stiffness: 100 
+                    stiffness: 100
                   }}
                   viewport={{ once: true }}
                   className="group relative"
@@ -413,7 +499,7 @@ const PremiumHomepage = () => {
                   {index < orderFlow.length - 1 && (
                     <div className="hidden lg:block absolute top-12 left-full w-8 h-0.5 bg-border/30 z-0" />
                   )}
-                  
+
                   <Card className="relative text-center p-8 bg-card/60 backdrop-blur-xl border border-border/30 hover:border-primary/40 transition-all duration-700 shadow-lg hover:shadow-2xl">
                     {/* Step Number */}
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -421,21 +507,21 @@ const PremiumHomepage = () => {
                         {step.step}
                       </div>
                     </div>
-                    
+
                     {/* Icon Container */}
                     <div className="relative mb-8 mt-4">
                       <div className="w-20 h-20 mx-auto bg-card border border-border/20 rounded-3xl flex items-center justify-center group-hover:border-primary/40 transition-all duration-500 shadow-inner">
                         <step.icon className="w-10 h-10 text-primary group-hover:scale-110 transition-transform duration-300" />
                       </div>
                     </div>
-                    
+
                     <h3 className="text-xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">
                       {step.title}
                     </h3>
                     <p className="text-muted-foreground leading-relaxed font-medium">
                       {step.description}
                     </p>
-                    
+
                     {/* Hover Effect */}
                     <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg pointer-events-none" />
                   </Card>
@@ -452,32 +538,53 @@ const PremiumHomepage = () => {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="py-32 bg-gradient-to-b from-background to-muted/20"
+        className=" overflow-clip pb-20 relative bg-gradient-to-b from-background to-muted/20 border-b border-border/50"
       >
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
+
+        <div className="relative w-full h-full flex items-center justify-center">
+          {/* Parent radial gradient circle */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)] rounded-full" />
+
+          {/* Concentric circles */}
+          {[256, 512, 768, 1024, 1280].map((size, index) => (
+            <div
+              key={index}
+              className="absolute rounded-full border border-border/50"
+              style={{
+                width: `${size}px`,
+                height: `${size}px`,
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            ></div>
+          ))}
+        </div>
+
+
+        <div className="max-w-7xl mx-auto px-6 relative z-40 ">
+          <div className="text-center mb-8 mt-24">
             <Badge variant="outline" className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
               <Star className="w-4 h-4 mr-2 text-primary" />
               Featured Showcase
             </Badge>
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+            <h2 className="text-4xl z-30 md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 World's Best Designers
               </span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               Discover premium collections from our elite designer network
             </p>
           </div>
-          
-          <ThreeDMarquee 
+
+          <ThreeDMarquee
             images={fashionImages}
             cols={4}
-            className="max-w-6xl mx-auto"
-            onImageClick={(image, index) => {
-              console.log("Clicked image:", image, "at index:", index);
-            }}
+            className="max-w-6xl z-50 mx-auto border border-border/50"
+            onImageClick={(image, index) => console.log(image, index)}
           />
+
         </div>
       </motion.section>
 
@@ -562,7 +669,7 @@ const PremiumHomepage = () => {
               <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
                 Built-in chat system connecting designers, clients, and artisans for effortless collaboration throughout your project journey.
               </p>
-              
+
               <div className="space-y-6">
                 {[
                   { icon: <MessageSquare className="w-5 h-5" />, text: "Real-time messaging with all stakeholders" },
@@ -638,7 +745,7 @@ const PremiumHomepage = () => {
           <p className="text-xl text-muted-foreground mb-16 max-w-3xl mx-auto">
             Advanced security measures and quality assurance protocols protect every transaction and design.
           </p>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
@@ -694,7 +801,7 @@ const PremiumHomepage = () => {
           <p className="text-xl text-muted-foreground mb-12">
             Join thousands of satisfied clients who've transformed their fashion dreams into reality.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link to="/signup">
               <Button size="lg" className="text-lg px-12 py-6 rounded-full bg-gradient-to-r from-primary to-secondary hover:shadow-2xl hover:shadow-primary/25 transform hover-scale">
