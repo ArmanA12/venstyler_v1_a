@@ -149,6 +149,15 @@ const Index = () => {
                       <Home className="w-5 h-5" />
                       <span className="font-medium">Home</span>
                     </Button>
+                    <Link to="/premium-home">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start gap-4 h-12 text-left hover-lift border border-primary/20 bg-gradient-to-r from-primary/5 to-secondary/5"
+                      >
+                        <TrendingUp className="w-5 h-5 text-primary" />
+                        <span className="font-medium text-primary">Premium Home</span>
+                      </Button>
+                    </Link>
                     <Button
                       variant="ghost"
                       className="w-full justify-start gap-4 h-12 text-left hover-lift"

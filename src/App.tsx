@@ -47,6 +47,7 @@ import OrderManagement from "./pages/admin/OrderManagement";
 import ProductEdit from "./pages/user/ProductEdit";
 
 import ProductSellsDetails from "./pages/user/ProductSellsDetails";
+import PremiumHomepage from "./pages/PremiumHomepage";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -80,6 +81,7 @@ export default function App() {
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/premium-home" element={<PremiumHomepage />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
