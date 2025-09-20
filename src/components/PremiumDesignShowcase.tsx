@@ -203,7 +203,7 @@ export const PremiumDesignShowcase = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              <Card className="group overflow-hidden hover-scale bg-card/80 backdrop-blur-sm border-2 border-border/50 hover:border-primary/30 transition-all duration-500">
+              <Card className="group overflow-hidden hover-scale bg-card/60 backdrop-blur-xl border border-border/20 hover:border-primary/40 hover:shadow-2xl transition-all duration-700">
                 <div className="relative overflow-hidden">
                   <img
                     src={design.image}
@@ -217,25 +217,25 @@ export const PremiumDesignShowcase = () => {
                       <Button
                         size="icon"
                         variant="outline"
-                        className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border-white/20 hover:bg-white"
+                        className="w-9 h-9 rounded-xl bg-background/80 backdrop-blur-sm border-border/20 hover:bg-background hover:border-primary/30 shadow-lg"
                         onClick={() => toggleLike(design.id)}
                       >
-                        <Heart className={`w-4 h-4 ${design.isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
+                        <Heart className={`w-4 h-4 ${design.isLiked ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`} />
                       </Button>
                       <Button
                         size="icon"
                         variant="outline"
-                        className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border-white/20 hover:bg-white"
+                        className="w-9 h-9 rounded-xl bg-background/80 backdrop-blur-sm border-border/20 hover:bg-background hover:border-primary/30 shadow-lg"
                         onClick={() => toggleSave(design.id)}
                       >
-                        <BookmarkPlus className={`w-4 h-4 ${design.isSaved ? 'fill-primary text-primary' : 'text-gray-600'}`} />
+                        <BookmarkPlus className={`w-4 h-4 ${design.isSaved ? 'fill-primary text-primary' : 'text-muted-foreground'}`} />
                       </Button>
                       <Button
                         size="icon"
                         variant="outline"
-                        className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border-white/20 hover:bg-white"
+                        className="w-9 h-9 rounded-xl bg-background/80 backdrop-blur-sm border-border/20 hover:bg-background hover:border-primary/30 shadow-lg"
                       >
-                        <Share2 className="w-4 h-4 text-gray-600" />
+                        <Share2 className="w-4 h-4 text-muted-foreground" />
                       </Button>
                     </div>
                   </div>

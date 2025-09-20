@@ -46,7 +46,6 @@ import {
 const PremiumHomepage = () => {
   const { theme, setTheme } = useTheme();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   const [searchQuery, setSearchQuery] = useState("");
 
   // Dummy fashion images for marquee
@@ -105,70 +104,36 @@ const PremiumHomepage = () => {
     }
   };
 
-  const orderSteps = [
+  const orderFlow = [
     {
-      icon: <Users className="w-10 h-10 text-white" />,
+      step: 1,
+      icon: Users,
       title: "Place Order",
-      description: "Connect with elite designers & pay 40% upfront",
-      details: "Browse curated profiles, select your designer, and secure your order with premium payment protection"
+      description: "Connect with elite designers & pay 40% upfront"
     },
     {
-      icon: <Calendar className="w-10 h-10 text-white" />,
+      step: 2,
+      icon: Calendar,
       title: "Schedule Meeting", 
-      description: "Book exclusive consultation with your designer",
-      details: "Virtual or in-person meetings to discuss your vision, preferences, and custom requirements"
+      description: "Book exclusive consultation with your designer"
     },
     {
-      icon: <Scissors className="w-10 h-10 text-white" />,
+      step: 3,
+      icon: Scissors,
       title: "Precision Measurements",
-      description: "Perfect fitting with expert measurements",
-      details: "Professional measurement sessions ensuring flawless fit and comfort for your custom piece"
+      description: "Perfect fitting with expert measurements"
     },
     {
-      icon: <Palette className="w-10 h-10 text-white" />,
+      step: 4,
+      icon: Palette,
       title: "Design Progress",
-      description: "Watch your dream design come to life",
-      details: "Real-time updates, progress photos, and direct communication throughout the creation process"
+      description: "Watch your dream design come to life"
     },
     {
-      icon: <CheckCircle className="w-10 h-10 text-white" />,
+      step: 5,
+      icon: CheckCircle,
       title: "Premium Delivery",
-      description: "Receive masterpiece & pay remaining 60%",
-      details: "White-glove delivery service with quality guarantee and final payment upon satisfaction"
-    }
-  ];
-
-  const stats = [
-    { icon: <Crown className="w-6 h-6" />, label: "Elite Designers", value: "2,500+", color: "text-yellow-500" },
-    { icon: <TrendingUp className="w-6 h-6" />, label: "Orders Completed", value: "50,000+", color: "text-green-500" },
-    { icon: <Award className="w-6 h-6" />, label: "5-Star Reviews", value: "98%", color: "text-blue-500" },
-    { icon: <Globe className="w-6 h-6" />, label: "Cities Served", value: "200+", color: "text-purple-500" }
-  ];
-
-  const premiumFeatures = [
-    {
-      icon: <Smartphone className="w-8 h-8" />,
-      title: "Mobile-First Experience",
-      description: "Seamless design browsing and ordering on any device",
-      gradient: "from-blue-500 to-cyan-500"
-    },
-    {
-      icon: <Clock className="w-8 h-8" />,
-      title: "Real-Time Tracking",
-      description: "Live updates on your design progress from concept to completion",
-      gradient: "from-green-500 to-emerald-500"
-    },
-    {
-      icon: <DollarSign className="w-8 h-8" />,
-      title: "Secure Payments",
-      description: "Split payments with escrow protection and multiple payment options",
-      gradient: "from-yellow-500 to-orange-500"
-    },
-    {
-      icon: <Eye className="w-8 h-8" />,
-      title: "Quality Assurance",
-      description: "Multiple quality checkpoints ensuring premium craftsmanship",
-      gradient: "from-purple-500 to-pink-500"
+      description: "Receive masterpiece & pay remaining 60%"
     }
   ];
 
@@ -228,7 +193,7 @@ const PremiumHomepage = () => {
                 placeholder="Search designers, styles, collections..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 rounded-full border-2 border-border/50 focus:border-primary/30 bg-background/50 backdrop-blur-sm"
+                className="pl-10 pr-4 py-2 rounded-full border border-border/50 focus:border-primary/30 bg-background/50 backdrop-blur-sm"
               />
             </div>
 
@@ -239,7 +204,7 @@ const PremiumHomepage = () => {
                 onClick={toggleTheme}
                 variant="outline"
                 size="icon"
-                className="rounded-full border-2 hover-scale bg-background/80 backdrop-blur-md"
+                className="rounded-full border hover-scale bg-background/80 backdrop-blur-md"
               >
                 {getThemeIcon()}
               </Button>
@@ -247,7 +212,7 @@ const PremiumHomepage = () => {
               {/* Auth Buttons */}
               <div className="hidden sm:flex items-center gap-2">
                 <Link to="/signin">
-                  <Button variant="outline" size="sm" className="rounded-full border-2 hover:border-primary/30">
+                  <Button variant="outline" size="sm" className="rounded-full border hover:border-primary/30">
                     <LogIn className="w-4 h-4 mr-2" />
                     Sign In
                   </Button>
@@ -265,7 +230,7 @@ const PremiumHomepage = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="rounded-full border-2 hover-scale bg-background/80 backdrop-blur-md"
+                  className="rounded-full border hover-scale bg-background/80 backdrop-blur-md"
                 >
                   ← Original
                 </Button>
@@ -281,645 +246,472 @@ const PremiumHomepage = () => {
               placeholder="Search designers, styles..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 rounded-full border-2 border-border/50 focus:border-primary/30 bg-background/50 backdrop-blur-sm w-full"
+              className="pl-10 pr-4 py-2 rounded-full border border-border/50 focus:border-primary/30 bg-background/50 backdrop-blur-sm w-full"
             />
           </div>
         </div>
       </motion.nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        {/* Animated Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-secondary/20 animate-gradient-xy" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-primary/5 to-accent/10 animate-pulse" />
-        
-        {/* Floating Elements */}
-        <div className="absolute top-32 left-20 w-32 h-32 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-full blur-xl animate-float" />
-        <div className="absolute bottom-32 right-20 w-24 h-24 bg-gradient-to-bl from-accent/40 to-primary/40 rounded-full blur-lg animate-float delay-1000" />
-        <div className="absolute top-1/3 right-1/4 w-16 h-16 bg-gradient-to-br from-secondary/50 to-accent/50 rounded-full blur-md animate-float delay-2000" />
-
-        <div className="relative z-10 text-center max-w-6xl mx-auto px-6">
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+      >
+        {/* Sophisticated Background */}
+        <div className="absolute inset-0">
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:72px_72px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
+          
+          {/* Floating Elements */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mb-8 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 backdrop-blur-sm"
-          >
-            <Sparkles className="w-5 h-5 text-primary animate-pulse" />
-            <span className="text-sm font-medium text-primary">World's #1 Designer Platform</span>
-            <Badge variant="secondary" className="ml-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-black text-xs">
-              NEW
-            </Badge>
-          </motion.div>
+            animate={{ 
+              y: [0, -20, 0],
+              rotate: [0, 180, 360],
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="absolute top-20 left-10 w-32 h-32 rounded-full border border-primary/10 backdrop-blur-sm"
+          />
+          <motion.div
+            animate={{ 
+              y: [0, 20, 0],
+              rotate: [360, 180, 0],
+            }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="absolute bottom-20 right-10 w-48 h-48 rounded-full border border-secondary/10 backdrop-blur-sm"
+          />
+          
+          {/* Subtle Glow */}
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
+        </div>
 
-          <motion.h1
+        <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-6xl md:text-8xl font-bold mb-8 leading-tight"
           >
-            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient-x">
-              The Future of
-            </span>
-            <br />
-            <span className="text-foreground font-extrabold">Designer Management</span>
-          </motion.h1>
+            <Badge variant="outline" className="mb-8 px-6 py-3 text-sm font-medium border-primary/20 bg-card/50 backdrop-blur-sm shadow-lg">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Redefining Fashion Technology
+            </Badge>
+            
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-[0.9] tracking-tight">
+              <span className="block text-foreground mb-2">The Future of</span>
+              <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                Designer Management
+              </span>
+            </h1>
+            
+            <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-light">
+              Where creativity meets technology. Connect with elite designers, master artisans, 
+              <br className="hidden md:block" />
+              and transform your vision into extraordinary fashion reality.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
+              <Link to="/signup">
+                <Button 
+                  size="lg" 
+                  className="group px-10 py-6 text-lg font-semibold bg-foreground text-background hover:bg-foreground/90 rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+                >
+                  Start Creating
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+              <Link to="/explore">
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  className="group px-10 py-6 text-lg font-semibold border border-border/50 hover:border-primary/50 rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-xl backdrop-blur-sm"
+                >
+                  <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                  Watch Demo
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed"
-          >
-            Connect with elite designers, master artisans, and bring your dream designs to life through our premium platform. 
-            Experience the ultimate in custom fashion creation.
-          </motion.p>
-
+          {/* Elegant Stats */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-6 justify-center mb-16"
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto"
           >
-            <Link to="/signup">
-              <Button size="lg" className="text-lg px-10 py-4 rounded-full bg-gradient-to-r from-primary to-secondary hover:shadow-2xl hover:shadow-primary/25 transform hover-scale">
-                <Play className="w-5 h-5 mr-2" />
-                Start Creating
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-            <Link to="/explore">
-              <Button variant="outline" size="lg" className="text-lg px-10 py-4 rounded-full border-2 hover:bg-accent/5 hover-scale">
-                <Eye className="w-5 h-5 mr-2" />
-                Explore Designs
-              </Button>
-            </Link>
-          </motion.div>
-
-          {/* Stats Grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8"
-          >
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className={`${stat.color} mb-2 flex justify-center`}>
-                  {stat.icon}
-                </div>
-                <div className="text-2xl md:text-3xl font-bold mb-1">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </motion.div>
-
-          {/* Trust Indicators */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="flex flex-wrap justify-center gap-8 text-sm text-muted-foreground"
-          >
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-primary" />
-              <span>Bank-Level Security</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Star className="w-4 h-4 text-primary" />
-              <span>50,000+ Happy Clients</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-primary" />
-              <span>Premium Quality Guarantee</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Coffee className="w-4 h-4 text-primary" />
-              <span>24/7 Support</span>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Premium Features Section */}
-      <section className="py-24 bg-gradient-to-br from-muted/30 via-background to-muted/20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5" />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
-          >
-            <Badge variant="outline" className="mb-4 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
-              <Zap className="w-4 h-4 mr-2 text-primary" />
-              Premium Features
-            </Badge>
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Why Choose DesignPro?
-              </span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Experience unparalleled luxury and innovation in every aspect of your design journey
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-            {premiumFeatures.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
+            {[
+              { number: "10K+", label: "Elite Designers", icon: Users },
+              { number: "50K+", label: "Satisfied Clients", icon: Heart },
+              { number: "1M+", label: "Designs Crafted", icon: Palette },
+              { number: "99.9%", label: "Success Rate", icon: Award },
+            ].map((stat, index) => (
+              <motion.div 
+                key={index} 
+                className="group text-center p-6 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/20 hover:border-primary/30 transition-all duration-500"
+                whileHover={{ y: -5, scale: 1.02 }}
               >
-                <Card className="group h-full hover-scale bg-gradient-to-br from-card/80 to-muted/20 backdrop-blur-sm border-2 border-border/50 hover:border-primary/30 transition-all duration-500 overflow-hidden">
-                  <CardContent className="p-8 text-center relative">
-                    <div className={`mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br ${feature.gradient} group-hover:scale-110 transition-transform duration-300`}>
-                      <div className="text-white">
-                        {feature.icon}
-                      </div>
-                    </div>
-                    <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors">
-                      {feature.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                <stat.icon className="w-8 h-8 mx-auto mb-3 text-primary group-hover:scale-110 transition-transform" />
+                <div className="text-3xl md:text-4xl font-bold text-foreground mb-2">{stat.number}</div>
+                <div className="text-muted-foreground text-sm font-medium">{stat.label}</div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Seamless Order Flow */}
-      <section className="py-24 relative">
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="py-32 relative overflow-hidden"
+      >
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.1),transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,107,107,0.1),transparent_70%)]" />
+        
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-24">
+            <Badge variant="outline" className="mb-8 px-6 py-3 text-sm font-medium border-primary/20 bg-card/50 backdrop-blur-sm shadow-lg">
+              <Zap className="w-4 h-4 mr-2" />
+              Engineered Excellence
+            </Badge>
+            <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tight">
+              <span className="block text-foreground mb-2">Seamless</span>
+              <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                Order Experience
+              </span>
+            </h2>
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto font-light leading-relaxed">
+              A meticulously crafted journey from initial concept to final masterpiece,
+              <br className="hidden md:block" />
+              where every step is designed for perfection and transparency.
+            </p>
+          </div>
+
+          <div className="relative">              
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+              {orderFlow.map((step, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 40, scale: 0.9 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ 
+                    duration: 0.7, 
+                    delay: index * 0.15,
+                    type: "spring",
+                    stiffness: 100 
+                  }}
+                  viewport={{ once: true }}
+                  className="group relative"
+                  whileHover={{ y: -10, scale: 1.02 }}
+                >
+                  {/* Connection Line */}
+                  {index < orderFlow.length - 1 && (
+                    <div className="hidden lg:block absolute top-12 left-full w-8 h-0.5 bg-border/30 z-0" />
+                  )}
+                  
+                  <Card className="relative text-center p-8 bg-card/60 backdrop-blur-xl border border-border/30 hover:border-primary/40 transition-all duration-700 shadow-lg hover:shadow-2xl">
+                    {/* Step Number */}
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                      <div className="w-8 h-8 bg-foreground text-background rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
+                        {step.step}
+                      </div>
+                    </div>
+                    
+                    {/* Icon Container */}
+                    <div className="relative mb-8 mt-4">
+                      <div className="w-20 h-20 mx-auto bg-card border border-border/20 rounded-3xl flex items-center justify-center group-hover:border-primary/40 transition-all duration-500 shadow-inner">
+                        <step.icon className="w-10 h-10 text-primary group-hover:scale-110 transition-transform duration-300" />
+                      </div>
+                    </div>
+                    
+                    <h3 className="text-xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">
+                      {step.title}
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed font-medium">
+                      {step.description}
+                    </p>
+                    
+                    {/* Hover Effect */}
+                    <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg pointer-events-none" />
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* 3D Designer Marquee */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="py-32 bg-gradient-to-b from-background to-muted/20"
+      >
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
-          >
-            <Badge variant="outline" className="mb-4 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
-              <Clock className="w-4 h-4 mr-2 text-primary" />
-              Streamlined Process
+          <div className="text-center mb-16">
+            <Badge variant="outline" className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
+              <Star className="w-4 h-4 mr-2 text-primary" />
+              Featured Showcase
             </Badge>
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Premium Order Journey
-              </span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              From concept to creation - experience the most luxurious and seamless design journey with our elite craftsmen
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-            {orderSteps.map((step, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="relative group h-full hover-scale bg-gradient-to-br from-card/80 to-muted/20 backdrop-blur-sm border-2 border-border/50 hover:border-primary/30 transition-all duration-500 overflow-hidden">
-                  <CardContent className="p-8 text-center relative">
-                    {/* Gradient Background on Hover */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
-                    <div className="relative z-10">
-                      <div className="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary to-secondary group-hover:from-primary/80 group-hover:to-secondary/80 group-hover:scale-110 transition-all duration-300 shadow-lg">
-                        {step.icon}
-                      </div>
-                      <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors">
-                        {step.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
-                        {step.description}
-                      </p>
-                      <p className="text-xs text-muted-foreground/80 leading-relaxed">
-                        {step.details}
-                      </p>
-                    </div>
-                    
-                    {/* Step Number */}
-                    <div className="absolute -top-4 -right-4 w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:scale-110 transition-transform duration-300">
-                      {index + 1}
-                    </div>
-
-                    {/* Connection Line */}
-                    {index < orderSteps.length - 1 && (
-                      <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-primary/30 to-transparent" />
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 3D Marquee Section */}
-      <section className="py-24 bg-gradient-to-r from-background via-muted/20 to-background overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <Badge variant="outline" className="mb-4 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
-              <Crown className="w-4 h-4 mr-2 text-primary" />
-              Elite Showcase
-            </Badge>
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
-                World's Premier Designers
-              </span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Immerse yourself in a 3D showcase of extraordinary designs from the most talented creators worldwide
-            </p>
-          </motion.div>
-
-          {/* 3D Marquee Component */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <ThreeDMarquee 
-              images={fashionImages} 
-              cols={4}
-              className="mb-8"
-              onImageClick={(image, index) => {
-                console.log(`Clicked on design ${index + 1}:`, image);
-                // Handle click - navigate to design details
-              }}
-            />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
-            <Link to="/explore">
-              <Button size="lg" className="rounded-full bg-gradient-to-r from-primary to-secondary hover:shadow-2xl hover:shadow-primary/25 px-8 py-3">
-                <Eye className="w-5 h-5 mr-2" />
-                View All Designs
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Premium Design Showcase */}
-      <PremiumDesignShowcase />
-
-      {/* Ecosystem Section */}
-      <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
-                Complete Ecosystem
+                World's Best Designers
               </span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              More than just designers - a social network connecting every aspect of fashion creation
+              Discover premium collections from our elite designer network
+            </p>
+          </div>
+          
+          <ThreeDMarquee 
+            images={fashionImages}
+            cols={4}
+            className="max-w-6xl mx-auto"
+            onImageClick={(image, index) => {
+              console.log("Clicked image:", image, "at index:", index);
+            }}
+          />
+        </div>
+      </motion.section>
+
+      {/* Ecosystem Section */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="py-32 bg-gradient-to-br from-muted/20 via-background to-muted/30"
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <Badge variant="outline" className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
+              <Globe className="w-4 h-4 mr-2 text-primary" />
+              Complete Ecosystem
+            </Badge>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                Social Media for Designers
+              </span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Connecting designers, artisans, and buyers in one comprehensive platform
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {ecosystemCards.map((card, index) => (
-              <Card key={index} className="group hover-scale bg-gradient-to-br from-card/80 to-muted/20 backdrop-blur-sm border-2 border-border/50 hover:border-accent/30 transition-all duration-500">
-                <CardContent className="p-8 text-center">
-                  <div className="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-accent/20 to-primary/20 group-hover:from-accent/30 group-hover:to-primary/30 transition-all duration-300">
-                    {card.icon}
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="group text-center p-8 hover-scale bg-card/80 backdrop-blur-sm border-2 border-border/50 hover:border-primary/30 transition-all duration-500">
+                  <div className="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 group-hover:scale-110 transition-transform duration-300">
+                    <div className="text-primary">
+                      {card.icon}
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold mb-3">{card.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{card.description}</p>
-                  <div className="text-2xl font-bold bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
-                    {card.count}
-                  </div>
-                </CardContent>
-              </Card>
+                  <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors">
+                    {card.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                    {card.description}
+                  </p>
+                  <div className="text-2xl font-bold text-primary">{card.count}</div>
+                </Card>
+              </motion.div>
             ))}
           </div>
-
-          {/* Social Network Visualization */}
-          <Card className="bg-gradient-to-br from-primary/5 via-card/80 to-secondary/5 backdrop-blur-sm border-2 border-primary/20">
-            <CardContent className="p-12 text-center">
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <MessageSquare className="w-8 h-8 text-primary" />
-                <Heart className="w-6 h-6 text-red-500" />
-                <Users className="w-8 h-8 text-secondary" />
-                <Shirt className="w-8 h-8 text-accent" />
-              </div>
-              <h3 className="text-2xl font-bold mb-4">Social Media for Designers</h3>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Built-in chat, profiles, collaboration tools, and real-time communication between designers, clients, and artisans
-              </p>
-            </CardContent>
-          </Card>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Advanced Communication Suite */}
-      <section className="py-24 bg-gradient-to-br from-muted/30 via-background to-primary/5 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5" />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      {/* Chat & Social Features */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="py-32 bg-gradient-to-r from-primary/5 via-background to-secondary/5"
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <Badge variant="outline" className="mb-4 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
+              <Badge variant="outline" className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
                 <MessageCircle className="w-4 h-4 mr-2 text-primary" />
-                Communication Suite
+                Real-time Collaboration
               </Badge>
-              <h2 className="text-4xl md:text-5xl font-bold mb-8">
-                Real-time
-                <br />
-                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Collaboration Platform
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  Seamless Communication
                 </span>
               </h2>
               <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                Revolutionary communication tools connecting designers, clients, and artisans. 
-                Experience seamless collaboration with advanced features built for the fashion industry.
+                Built-in chat system connecting designers, clients, and artisans for effortless collaboration throughout your project journey.
               </p>
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                    <MessageSquare className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Instant Communication</h4>
-                    <p className="text-sm text-muted-foreground">Real-time messaging, file sharing, and voice notes for seamless collaboration</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                    <Video className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">HD Video Consultations</h4>
-                    <p className="text-sm text-muted-foreground">Crystal-clear video calls with screen sharing and design annotation tools</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                    <Eye className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Progress Tracking</h4>
-                    <p className="text-sm text-muted-foreground">Live updates, milestone notifications, and transparent progress monitoring</p>
-                  </div>
-                </div>
-              </div>
               
-              <div className="mt-8">
-                <Button className="rounded-full bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/25 px-6 py-3">
-                  <MessageSquare className="w-5 h-5 mr-2" />
-                  Try Communication Suite
-                </Button>
+              <div className="space-y-6">
+                {[
+                  { icon: <MessageSquare className="w-5 h-5" />, text: "Real-time messaging with all stakeholders" },
+                  { icon: <Video className="w-5 h-5" />, text: "Video consultations and progress reviews" },
+                  { icon: <Shirt className="w-5 h-5" />, text: "Share designs, photos, and feedback instantly" },
+                  { icon: <Clock className="w-5 h-5" />, text: "Track project timeline and milestones" }
+                ].map((feature, index) => (
+                  <div key={index} className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg flex items-center justify-center text-primary">
+                      {feature.icon}
+                    </div>
+                    <span className="text-foreground font-medium">{feature.text}</span>
+                  </div>
+                ))}
               </div>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.8 }}
               viewport={{ once: true }}
               className="relative"
             >
-              <Card className="bg-gradient-to-br from-card/80 to-muted/40 backdrop-blur-sm border-2 border-primary/20 hover-scale overflow-hidden">
-                <CardContent className="p-8">
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                          <MessageSquare className="w-5 h-5 text-white" />
-                        </div>
-                        <div>
-                          <p className="font-medium">Designer Updates</p>
-                          <p className="text-sm text-muted-foreground">New sketches shared</p>
-                        </div>
-                      </div>
-                      <Badge className="bg-green-500 text-white">Live</Badge>
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-secondary/10 to-accent/10 rounded-xl">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-secondary to-accent flex items-center justify-center">
-                          <Calendar className="w-5 h-5 text-white" />
-                        </div>
-                        <div>
-                          <p className="font-medium">Consultation Booked</p>
-                          <p className="text-sm text-muted-foreground">Tomorrow at 3:00 PM</p>
-                        </div>
-                      </div>
-                      <Badge variant="secondary">Confirmed</Badge>
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-accent/10 to-primary/10 rounded-xl">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-primary flex items-center justify-center">
-                          <CheckCircle className="w-5 h-5 text-white" />
-                        </div>
-                        <div>
-                          <p className="font-medium">Milestone Reached</p>
-                          <p className="text-sm text-muted-foreground">First draft completed</p>
-                        </div>
-                      </div>
-                      <Badge className="bg-blue-500 text-white">Complete</Badge>
-                    </div>
-
-                    <div className="p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-xl border border-yellow-500/20">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
-                          <Star className="w-4 h-4 text-white" />
-                        </div>
-                        <p className="font-medium text-sm">Payment Reminder</p>
-                      </div>
-                      <p className="text-xs text-muted-foreground mb-3">Final 60% payment due upon delivery</p>
-                      <Button size="sm" className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg">
-                        Pay Now
-                      </Button>
+              <div className="aspect-square bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl p-8 backdrop-blur-sm">
+                <div className="h-full bg-card rounded-2xl p-6 shadow-2xl">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full"></div>
+                    <div>
+                      <div className="text-sm font-semibold">Designer Chat</div>
+                      <div className="text-xs text-muted-foreground">Online now</div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="space-y-4">
+                    <div className="bg-primary/10 rounded-lg p-3 text-sm">
+                      "Your design concept looks amazing! I've started working on the initial sketches..."
+                    </div>
+                    <div className="bg-muted rounded-lg p-3 text-sm ml-8">
+                      "That's perfect! Could you adjust the neckline slightly?"
+                    </div>
+                    <div className="bg-primary/10 rounded-lg p-3 text-sm">
+                      "Absolutely! I'll have the updated version ready by tomorrow."
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Final CTA Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10" />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
-        <div className="relative z-10 max-w-5xl mx-auto text-center px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <Badge variant="outline" className="mb-6 px-6 py-3 text-sm font-medium border-primary/20 bg-primary/5">
-              <Crown className="w-4 h-4 mr-2 text-primary" />
-              Join the Elite Network
-            </Badge>
-            <h2 className="text-4xl md:text-6xl font-bold mb-8 leading-tight">
-              Ready to Create
-              <br />
-              <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                Your Masterpiece?
-              </span>
-            </h2>
-            <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
-              Join thousands of satisfied clients and top designers creating the future of custom fashion. 
-              Your dream design is just one click away.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
-              <Link to="/signup">
-                <Button size="lg" className="text-lg px-12 py-4 rounded-full bg-gradient-to-r from-primary to-secondary hover:shadow-2xl hover:shadow-primary/25 transform hover-scale">
-                  <Crown className="w-5 h-5 mr-2" />
-                  Start Your Journey
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-              <Link to="/explore">
-                <Button variant="outline" size="lg" className="text-lg px-12 py-4 rounded-full border-2 hover-scale hover:bg-accent/5">
-                  <Eye className="w-5 h-5 mr-2" />
-                  Browse Portfolio
-                </Button>
-              </Link>
-            </div>
+      {/* Premium Design Showcase */}
+      <PremiumDesignShowcase />
 
-            {/* Final Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
-              <div className="text-center">
-                <div className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">
-                  2500+
-                </div>
-                <div className="text-sm text-muted-foreground">Elite Designers</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent mb-1">
-                  50K+
-                </div>
-                <div className="text-sm text-muted-foreground">Happy Clients</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent mb-1">
-                  98%
-                </div>
-                <div className="text-sm text-muted-foreground">Satisfaction Rate</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-1">
-                  24/7
-                </div>
-                <div className="text-sm text-muted-foreground">Premium Support</div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Premium Footer */}
-      <footer className="py-16 border-t border-border/50 bg-gradient-to-br from-muted/30 via-background to-muted/20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            {/* Brand */}
-            <div className="md:col-span-1">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                  <Crown className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  DesignPro
-                </span>
-              </div>
-              <p className="text-sm text-muted-foreground mb-4">
-                The world's most premium designer management platform, connecting elite creators with discerning clients.
-              </p>
-              <div className="flex gap-2">
-                <Button size="icon" variant="outline" className="rounded-full">
-                  <MessageSquare className="w-4 h-4" />
-                </Button>
-                <Button size="icon" variant="outline" className="rounded-full">
-                  <Heart className="w-4 h-4" />
-                </Button>
-                <Button size="icon" variant="outline" className="rounded-full">
-                  <Star className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Platform */}
-            <div>
-              <h4 className="font-semibold mb-4">Platform</h4>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <div><Link to="/designers" className="hover:text-primary transition-colors">Find Designers</Link></div>
-                <div><Link to="/explore" className="hover:text-primary transition-colors">Browse Designs</Link></div>
-                <div><Link to="/categories" className="hover:text-primary transition-colors">Categories</Link></div>
-                <div><Link to="/pricing" className="hover:text-primary transition-colors">Pricing</Link></div>
-              </div>
-            </div>
-
-            {/* Support */}
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <div><Link to="/help" className="hover:text-primary transition-colors">Help Center</Link></div>
-                <div><Link to="/contact" className="hover:text-primary transition-colors">Contact Us</Link></div>
-                <div><Link to="/faq" className="hover:text-primary transition-colors">FAQ</Link></div>
-                <div><Link to="/guidelines" className="hover:text-primary transition-colors">Guidelines</Link></div>
-              </div>
-            </div>
-
-            {/* Company */}
-            <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <div><Link to="/about" className="hover:text-primary transition-colors">About Us</Link></div>
-                <div><Link to="/careers" className="hover:text-primary transition-colors">Careers</Link></div>
-                <div><Link to="/press" className="hover:text-primary transition-colors">Press</Link></div>
-                <div><Link to="/blog" className="hover:text-primary transition-colors">Blog</Link></div>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-muted-foreground">
-              © 2024 DesignPro. Crafted with ❤️ for the fashion community. All rights reserved.
-            </p>
-            <div className="flex gap-6 text-sm text-muted-foreground">
-              <Link to="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
-              <Link to="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
-              <Link to="/cookies" className="hover:text-primary transition-colors">Cookie Policy</Link>
-            </div>
+      {/* Trust and Security */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="py-32 bg-gradient-to-br from-background via-muted/10 to-background"
+      >
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <Badge variant="outline" className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
+            <Shield className="w-4 h-4 mr-2 text-primary" />
+            Trust & Security
+          </Badge>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6">
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Your Security, Our Priority
+            </span>
+          </h2>
+          <p className="text-xl text-muted-foreground mb-16 max-w-3xl mx-auto">
+            Advanced security measures and quality assurance protocols protect every transaction and design.
+          </p>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <Shield className="w-8 h-8" />,
+                title: "Bank-Level Security",
+                description: "256-bit SSL encryption protecting all your data and transactions"
+              },
+              {
+                icon: <CheckCircle className="w-8 h-8" />,
+                title: "Quality Guarantee",
+                description: "100% satisfaction guarantee with multiple quality checkpoints"
+              },
+              {
+                icon: <Coffee className="w-8 h-8" />,
+                title: "24/7 Support",
+                description: "Round-the-clock customer support for all your needs"
+              }
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+                viewport={{ once: true }}
+              >
+                <Card className="p-8 text-center hover-scale bg-card/80 backdrop-blur-sm border-2 border-border/50 hover:border-primary/30 transition-all duration-500">
+                  <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center text-primary">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                </Card>
+              </motion.div>
+            ))}
           </div>
         </div>
-      </footer>
+      </motion.section>
+
+      {/* CTA Section */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="py-32 bg-gradient-to-r from-primary/10 via-background to-secondary/10"
+      >
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-4xl md:text-6xl font-bold mb-6">
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Ready to Create Magic?
+            </span>
+          </h2>
+          <p className="text-xl text-muted-foreground mb-12">
+            Join thousands of satisfied clients who've transformed their fashion dreams into reality.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <Link to="/signup">
+              <Button size="lg" className="text-lg px-12 py-6 rounded-full bg-gradient-to-r from-primary to-secondary hover:shadow-2xl hover:shadow-primary/25 transform hover-scale">
+                <UserPlus className="w-5 h-5 mr-2" />
+                Start Your Journey
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+            <Link to="/explore">
+              <Button variant="outline" size="lg" className="text-lg px-12 py-6 rounded-full border-2 hover:bg-accent/5 hover-scale">
+                <Eye className="w-5 h-5 mr-2" />
+                Browse Portfolio
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </motion.section>
     </div>
   );
 };
