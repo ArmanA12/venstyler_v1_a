@@ -42,7 +42,8 @@ import {
   Eye,
   Coffee,
   Video,
-  MessageCircle
+  MessageCircle,
+  Phone, Send
 } from "lucide-react";
 
 
@@ -74,7 +75,7 @@ const PremiumHomepage = () => {
       href: "/designs/4"
     },
     {
-      src: "https://images.unsplash.com/photo-1571513722275-4b3ab092693b?w=400&h=600&fit=crop",
+      src: "https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?w=400&h=600&fit=crop",
       alt: "Premium Designer Outfit 5",
       href: "/designs/5"
     },
@@ -466,12 +467,12 @@ const PremiumHomepage = () => {
               Engineered Excellence
             </Badge>
             <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tight">
-              <span className="block text-foreground mb-2">Seamless</span>
+
               <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                Order Experience
+                Seamless  Order Experience
               </span>
             </h2>
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto font-light leading-relaxed">
+            <p className="text-xl md:text-xl text-muted-foreground max-w-4xl mx-auto font-light leading-relaxed">
               A meticulously crafted journey from initial concept to final masterpiece,
               <br className="hidden md:block" />
               where every step is designed for perfection and transparency.
@@ -541,25 +542,25 @@ const PremiumHomepage = () => {
         className=" overflow-clip pb-20 relative bg-gradient-to-b from-background to-muted/20 border-b border-border/50"
       >
 
-        <div className="relative w-full h-full flex items-center justify-center">
-          {/* Parent radial gradient circle */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)] rounded-full" />
+<div className="relative w-full h-full flex items-center justify-center">
+  {/* Parent radial gradient circle */}
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)] rounded-full" />
 
-          {/* Concentric circles */}
-          {[256, 512, 768, 1024, 1280].map((size, index) => (
-            <div
-              key={index}
-              className="absolute rounded-full border border-border/50"
-              style={{
-                width: `${size}px`,
-                height: `${size}px`,
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-              }}
-            ></div>
-          ))}
-        </div>
+  {/* Concentric circles (more + closer) */}
+  {[128, 256, 384, 512, 640, 768, 896, 1024, 1152, 1280].map((size, index) => (
+    <div
+      key={index}
+      className="absolute rounded-full border border-border/50"
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+      }}
+    ></div>
+  ))}
+</div>
 
 
         <div className="max-w-7xl mx-auto px-6 relative z-40 ">
@@ -651,6 +652,8 @@ const PremiumHomepage = () => {
       >
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
+
+            {/* Left side (same as original) */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -672,7 +675,7 @@ const PremiumHomepage = () => {
 
               <div className="space-y-6">
                 {[
-                  { icon: <MessageSquare className="w-5 h-5" />, text: "Real-time messaging with all stakeholders" },
+                  { icon: <MessageSquare className="w-5 h-5" />, text: "Real-time messaging with all designer" },
                   { icon: <Video className="w-5 h-5" />, text: "Video consultations and progress reviews" },
                   { icon: <Shirt className="w-5 h-5" />, text: "Share designs, photos, and feedback instantly" },
                   { icon: <Clock className="w-5 h-5" />, text: "Track project timeline and milestones" }
@@ -687,6 +690,7 @@ const PremiumHomepage = () => {
               </div>
             </motion.div>
 
+            {/* Right side (Chat box updated) */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -695,25 +699,65 @@ const PremiumHomepage = () => {
               className="relative"
             >
               <div className="aspect-square bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl p-8 backdrop-blur-sm">
-                <div className="h-full bg-card rounded-2xl p-6 shadow-2xl">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full"></div>
-                    <div>
-                      <div className="text-sm font-semibold">Designer Chat</div>
-                      <div className="text-xs text-muted-foreground">Online now</div>
+                <div className="h-full bg-card rounded-2xl p-6 shadow-2xl flex flex-col border-2 border-border/30">
+
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-6 ">
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <img
+                          src="https://capecoraltech.edu/wp-content/uploads/2016/01/tutor-8-3.jpg"
+                          alt="John Doe"
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                        <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold">John Doe</div>
+                        <div className="text-xs text-muted-foreground">Online</div>
+                      </div>
+                    </div>
+                    <div className="flex gap-5 text-muted-foreground">
+                      <Video className="w-4 h-4 cursor-pointer text-muted-foreground hover:text-primary transition" />
+                      <Phone className="w-4 h-4 cursor-pointer text-muted-foreground hover:text-primary transition" />
                     </div>
                   </div>
-                  <div className="space-y-4">
-                    <div className="bg-primary/10 rounded-lg p-3 text-sm">
-                      "Your design concept looks amazing! I've started working on the initial sketches..."
-                    </div>
-                    <div className="bg-muted rounded-lg p-3 text-sm ml-8">
-                      "That's perfect! Could you adjust the neckline slightly?"
-                    </div>
-                    <div className="bg-primary/10 rounded-lg p-3 text-sm">
-                      "Absolutely! I'll have the updated version ready by tomorrow."
-                    </div>
+
+                  {/* Messages */}
+                  <div className="flex-1 space-y-4 overflow-hidden">
+                    {[
+                      "Your design concept looks amazing! I've started working on the initial sketches...",
+                      "That's perfect! Could you adjust the neckline slightly?",
+                      "Absolutely! I'll have the updated version ready by tomorrow.",
+                    ].map((msg, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.3, duration: 0.6 }}
+                        viewport={{ once: true }}
+                        className={`p-3 text-sm rounded-lg max-w-xs ${index % 2 === 0
+                            ? "bg-primary/10 text-left"
+                            : "bg-muted ml-auto"
+                          }`}
+                      >
+                        {msg}
+                      </motion.div>
+                    ))}
                   </div>
+
+                  {/* Input */}
+                  <div className="mt-4 flex items-center gap-3">
+                    <input
+                      type="text"
+                      placeholder="Typing..."
+                      className="flex-1 px-4 py-2 text-sm bg-background border rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                    <button className="px-4 py-3 bg-primary text-white rounded-full hover:bg-primary/90 transition">
+                      <Send className="w-4 h-4" />
+                    </button>
+                  </div>
+
                 </div>
               </div>
             </motion.div>
@@ -725,64 +769,101 @@ const PremiumHomepage = () => {
       <PremiumDesignShowcase />
 
       {/* Trust and Security */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="py-32 bg-gradient-to-br from-background via-muted/10 to-background"
-      >
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <Badge variant="outline" className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
-            <Shield className="w-4 h-4 mr-2 text-primary" />
-            Trust & Security
-          </Badge>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Your Security, Our Priority
-            </span>
-          </h2>
-          <p className="text-xl text-muted-foreground mb-16 max-w-3xl mx-auto">
-            Advanced security measures and quality assurance protocols protect every transaction and design.
-          </p>
+<motion.section
+  initial={{ opacity: 0 }}
+  whileInView={{ opacity: 1 }}
+  transition={{ duration: 0.8 }}
+  viewport={{ once: true }}
+  className="pt-32 overflow-clip border-b border-border/80 bg-gradient-to-br from-background via-muted/10 to-background"
+>
+  <div className="max-w-7xl mx-auto px-6 text-center">
+    <Badge
+      variant="outline"
+      className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5"
+    >
+      <Shield className="w-4 h-4 mr-2 text-primary" />
+      Trust & Security
+    </Badge>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <Shield className="w-8 h-8" />,
-                title: "Bank-Level Security",
-                description: "256-bit SSL encryption protecting all your data and transactions"
-              },
-              {
-                icon: <CheckCircle className="w-8 h-8" />,
-                title: "Quality Guarantee",
-                description: "100% satisfaction guarantee with multiple quality checkpoints"
-              },
-              {
-                icon: <Coffee className="w-8 h-8" />,
-                title: "24/7 Support",
-                description: "Round-the-clock customer support for all your needs"
-              }
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                viewport={{ once: true }}
-              >
-                <Card className="p-8 text-center hover-scale bg-card/80 backdrop-blur-sm border-2 border-border/50 hover:border-primary/30 transition-all duration-500">
-                  <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center text-primary">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+    <h2 className="text-4xl md:text-6xl font-bold mb-6">
+      <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        Your Security, Our Priority
+      </span>
+    </h2>
+
+    <p className="text-xl text-muted-foreground mb-16 max-w-3xl mx-auto">
+      Advanced security measures and quality assurance protocols protect every
+      transaction and design.
+    </p>
+
+    {/* Wrapper */}
+    <div className="border border-border/50 -mb-8  rounded-xl bg-muted-foreground/5 p-2">
+      <div className="grid md:grid-cols-3 border border-border/50 -mb-8 rounded-xl bg-background  px-0">
+        
+        {/* Box 1 */}
+        <div className="border-r border-border/50 px-10 pt-20 pb-32">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0 }}
+            viewport={{ once: true }}
+          >
+            <Card className="p-8 text-center hover-scale bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-500">
+              <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center text-primary">
+                <Shield className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Top Level Security</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                256-bit SSL encryption protecting all your data and transactions
+              </p>
+            </Card>
+          </motion.div>
         </div>
-      </motion.section>
+
+        {/* Box 2 */}
+        <div className="border-r border-border/50 px-10 pt-20 pb-32">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <Card className="p-8 text-center hover-scale bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-500">
+              <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center text-primary">
+                <CheckCircle className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Quality Guarantee</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                100% satisfaction guarantee with multiple quality checkpoints
+              </p>
+            </Card>
+          </motion.div>
+        </div>
+
+        {/* Box 3 */}
+        <div className="px-10 pt-20 pb-32">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <Card className="p-8 text-center hover-scale bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-500">
+              <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center text-primary">
+                <Coffee className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-semibold mb-4">24/7 Support</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Round-the-clock customer support for all your needs
+              </p>
+            </Card>
+          </motion.div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</motion.section>
 
       {/* CTA Section */}
       <motion.section
@@ -811,10 +892,10 @@ const PremiumHomepage = () => {
               </Button>
             </Link>
             <Link to="/explore">
-              <Button variant="outline" size="lg" className="text-lg px-12 py-6 rounded-full border-2 hover:bg-accent/5 hover-scale">
+              <GradientButton variant="outline" size="xl" className="text-lg px-20 py-1 rounded-full border-2 hover:bg-accent/5 hover-scale">
                 <Eye className="w-5 h-5 mr-2" />
                 Browse Portfolio
-              </Button>
+              </GradientButton>
             </Link>
           </div>
         </div>

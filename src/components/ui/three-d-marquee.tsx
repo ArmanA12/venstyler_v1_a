@@ -50,9 +50,10 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
       >
         <div className="w-full overflow-hidden scale-90 sm:scale-100">
           <div
-            className={`relative grid h-full w-full origin-center 
-              grid-cols-2 sm:grid-cols-${cols} gap-4 transform 
-              `}
+            className="relative grid h-full w-full origin-center gap-4 transform"
+            style={{
+              gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+            }}
           >
             {imageGroups.map((imagesInGroup, idx) => (
               <motion.div
@@ -65,6 +66,7 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
                 }}
                 className="flex flex-col items-center gap-6 relative"
               >
+                {/* vertical divider */}
                 <div className="absolute left-0 top-0 h-full w-0.5 bg-gray-200 dark:bg-gray-700" />
                 {imagesInGroup.map((image, imgIdx) => {
                   const globalIndex = idx * groupSize + imgIdx;
@@ -72,6 +74,7 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
 
                   return (
                     <div key={`img-${imgIdx}`} className="relative">
+                      {/* horizontal divider */}
                       <div className="absolute top-0 left-0 w-full h-0.5 bg-gray-200 dark:bg-gray-700" />
                       <motion.img
                         whileHover={{ y: -10 }}

@@ -39,7 +39,7 @@ export function GradientButton({
     sm: "text-sm px-4 py-2 rounded-lg",
     md: "text-base px-6 py-2 rounded-lg",
     lg: "text-lg px-8 py-3 rounded-lg",
-    xl: "text-2xl px-10 py-4 rounded-lg",
+    xl: "text-2xl px-10 py-4 rounded-full",
   };
 
   // Border styles based on variant

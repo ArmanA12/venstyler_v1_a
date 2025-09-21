@@ -180,7 +180,7 @@ export const PremiumDesignShowcase = () => {
               className={`rounded-full px-6 py-2 transition-all duration-300 ${
                 selectedCategory === category
                   ? "bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/25"
-                  : "border-2 border-border/50 hover:border-primary/30 hover:bg-accent/5"
+                  : "border border-border/50 hover:border-primary/30 hover:bg-accent/5"
               }`}
             >
               <Filter className="w-4 h-4 mr-2" />
@@ -324,6 +324,27 @@ export const PremiumDesignShowcase = () => {
           </motion.div>
         )}
       </div>
+<div className="flex justify-center items-center relative">
+  {/* Animated outer glow */}
+  <div className="absolute w-72 h-16 rounded-3xl bg-gradient-to-r from-primary/40 via-secondary/40 to-primary/40 blur-3xl opacity-60 animate-pulse-slow"></div>
+
+  {/* Glassmorphism button */}
+  <button className="relative z-50 px-12 py-4 rounded-3xl 
+    bg-white/10 backdrop-blur-xl 
+    border border-white/10 
+    shadow-[0_8px_32px_rgba(0,0,0,0.25)] 
+    text-white font-bold text-lg tracking-wide
+    overflow-hidden
+    transition-all duration-500 
+    hover:scale-105 hover:bg-white/20 hover:shadow-[0_12px_48px_rgba(0,0,0,0.35)]">
+    
+    {/* Gradient border inner layer */}
+    <span className="absolute inset-0 rounded-3xl border-2 border-transparent bg-gradient-to-r from-primary to-secondary p-[2px] -z-10 blur-sm"></span>
+
+    {/* Button content */}
+    <span className="relative z-50">✨ View All Design ✨</span>
+  </button>
+</div>
     </section>
   );
 };
