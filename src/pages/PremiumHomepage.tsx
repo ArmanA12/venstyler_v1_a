@@ -928,77 +928,51 @@ const PremiumHomepage = () => {
       </motion.section>
 
       {/* Premium Footer */}
-      <footer className="bg-gradient-to-b from-background to-muted/20 border-t border-border/50">
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          {/* Main Footer Content */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-            {/* Brand Section */}
-            <div className="md:col-span-2">
-              <div className="mb-6">
-                <h2 
-                  className="text-6xl md:text-7xl font-black bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
-                  style={{
-                    textShadow: '0 10px 40px rgba(0,0,0,0.3), 0 20px 80px rgba(138,43,226,0.2)',
-                    filter: 'drop-shadow(0 8px 32px rgba(138,43,226,0.4))'
-                  }}
-                >
-                  venStyler
-                </h2>
-              </div>
-              <p className="text-muted-foreground text-lg leading-relaxed max-w-md">
-                Revolutionizing the fashion industry by connecting visionary designers with discerning clients through cutting-edge technology.
-              </p>
-              <div className="flex gap-4 mt-8">
-                {/* Social Links */}
-                <Button variant="outline" size="icon" className="rounded-full hover:bg-primary/10 hover:border-primary/50">
-                  <Globe className="w-5 h-5" />
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full hover:bg-primary/10 hover:border-primary/50">
-                  <MessageCircle className="w-5 h-5" />
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full hover:bg-primary/10 hover:border-primary/50">
-                  <Phone className="w-5 h-5" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h3 className="text-xl font-semibold mb-6 text-foreground">Platform</h3>
-              <ul className="space-y-4">
-                <li><Link to="/explore" className="text-muted-foreground hover:text-primary transition-colors">Browse Designs</Link></li>
-                <li><Link to="/designers" className="text-muted-foreground hover:text-primary transition-colors">Find Designers</Link></li>
-                <li><Link to="/artisans" className="text-muted-foreground hover:text-primary transition-colors">Meet Artisans</Link></li>
-                <li><Link to="/pricing" className="text-muted-foreground hover:text-primary transition-colors">Pricing</Link></li>
-              </ul>
-            </div>
-
-            {/* Legal */}
-            <div>
-              <h3 className="text-xl font-semibold mb-6 text-foreground">Legal</h3>
-              <ul className="space-y-4">
-                <li><Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">Terms & Conditions</Link></li>
-                <li><Link to="/return-policy" className="text-muted-foreground hover:text-primary transition-colors">Return Policy</Link></li>
-                <li><Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link></li>
-                <li><Link to="/support" className="text-muted-foreground hover:text-primary transition-colors">Support</Link></li>
-              </ul>
-            </div>
+      <footer className="relative bg-black text-white overflow-hidden">
+        {/* Large venStyler Text */}
+        <section className="relative px-4 max-w-[1080px] text-center text-gray-100 flex items-center justify-center gap-2 mx-auto pb-2 text-[9rem] sm:text-[14rem] md:text-[19rem] lg:text-[20rem] leading-[1] pointer-events-none font-bold -mb-[11%] sm:-mb-[7%] duration-200 ease-in-out">
+          <div className="text-white animate-[pulse_4s_infinite] drop-shadow-xl">
+            venStyler
           </div>
+          <div className="bg-gradient-to-b from-transparent via-black to-black h-[20%] w-full absolute bottom-0 left-0 z-20"></div>
+        </section>
 
-          {/* Bottom Bar */}
-          <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-muted-foreground text-sm">
-              © 2024 venStyler. All rights reserved.
+        <div className="relative py-20 px-6">
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-gray-900/50 to-transparent"></div>
+          
+          <div className="relative max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-12 text-center md:text-left">
+              <div>
+                <h3 className="text-xl font-semibold mb-4 text-white">Quick Links</h3>
+                <ul className="space-y-2 text-gray-300">
+                  <li><Link to="/explore" className="hover:text-white transition-colors">Browse Designs</Link></li>
+                  <li><Link to="/designers" className="hover:text-white transition-colors">Find Designers</Link></li>
+                  <li><Link to="/artisans" className="hover:text-white transition-colors">Meet Artisans</Link></li>
+                  <li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="text-xl font-semibold mb-4 text-white">Legal</h3>
+                <ul className="space-y-2 text-gray-300">
+                  <li><Link to="/terms" className="hover:text-white transition-colors">Terms and Conditions</Link></li>
+                  <li><Link to="/return-policy" className="hover:text-white transition-colors">Return Policy</Link></li>
+                  <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="text-xl font-semibold mb-4 text-white">Connect</h3>
+                <ul className="space-y-2 text-gray-300">
+                  <li><Link to="/support" className="hover:text-white transition-colors">Support</Link></li>
+                  <li><Link to="/community" className="hover:text-white transition-colors">Community</Link></li>
+                  <li><Link to="/newsletter" className="hover:text-white transition-colors">Newsletter</Link></li>
+                </ul>
+              </div>
             </div>
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <span className="flex items-center gap-2">
-                <Shield className="w-4 h-4" />
-                Secured Platform
-              </span>
-              <span className="flex items-center gap-2">
-                <Award className="w-4 h-4" />
-                Quality Guaranteed
-              </span>
+            
+            <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
+              <p>&copy; 2024 venStyler. All rights reserved.</p>
             </div>
           </div>
         </div>
