@@ -930,10 +930,65 @@ const PremiumHomepage = () => {
       {/* Premium Footer */}
       <footer className="relative bg-gradient-to-br from-muted/30 via-background to-muted/20 border-t border-border/50 overflow-hidden">
         {/* Large venStyler Text */}
-        <section className="relative px-4 max-w-[1080px] text-center flex items-center justify-center gap-2 mx-auto pb-2 text-[9rem] sm:text-[14rem] md:text-[19rem] lg:text-[20rem] leading-[1] pointer-events-none font-bold -mb-[11%] sm:-mb-[7%] duration-200 ease-in-out">
-          <div className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-[pulse_4s_infinite] drop-shadow-2xl">
+        <section className="relative px-4 max-w-[1080px] text-center flex flex-col items-center justify-center gap-2 mx-auto pb-2 text-[9rem] sm:text-[14rem] md:text-[19rem] lg:text-[20rem] leading-[1] pointer-events-none font-bold -mb-[11%] sm:-mb-[7%] duration-200 ease-in-out">
+          <motion.div 
+            initial={{ opacity: 0, rotateX: 90, y: 100 }}
+            whileInView={{ 
+              opacity: 1, 
+              rotateX: 0, 
+              y: 0,
+              transition: {
+                duration: 0.7,
+                ease: 'easeOut',
+                type: 'spring',
+                stiffness: 80,
+                damping: 12,
+              }
+            }}
+            viewport={{ once: true }}
+            className="text-foreground animate-[pulse_4s_infinite]"
+            style={{
+              textShadow: `
+                0 1px 0 hsl(var(--muted-foreground)),
+                0 2px 0 hsl(var(--muted-foreground) / 0.9),
+                0 3px 0 hsl(var(--muted-foreground) / 0.8),
+                0 4px 0 hsl(var(--muted-foreground) / 0.7),
+                0 5px 0 hsl(var(--muted-foreground) / 0.6),
+                0 6px 1px hsl(var(--foreground) / 0.1),
+                0 0 5px hsl(var(--primary) / 0.3),
+                0 1px 3px hsl(var(--primary) / 0.4),
+                0 3px 5px hsl(var(--primary) / 0.3),
+                0 10px 10px hsl(var(--primary) / 0.2)
+              `,
+            }}
+          >
             venStyler
-          </div>
+          </motion.div>
+          
+          {/* Copyright text directly below venStyler */}
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ 
+              opacity: 1, 
+              y: 0,
+              transition: {
+                delay: 0.3,
+                duration: 0.6,
+                ease: 'easeOut'
+              }
+            }}
+            viewport={{ once: true }}
+            className="text-sm md:text-base lg:text-lg text-muted-foreground font-medium tracking-wide mt-4"
+            style={{
+              textShadow: `
+                0 1px 2px hsl(var(--background) / 0.8),
+                0 2px 4px hsl(var(--primary) / 0.2)
+              `,
+            }}
+          >
+            © 2024 venStyler. All rights reserved.
+          </motion.div>
+          
           <div className="bg-gradient-to-b from-transparent via-background to-background h-[20%] w-full absolute bottom-0 left-0 z-20"></div>
         </section>
 
@@ -969,10 +1024,6 @@ const PremiumHomepage = () => {
                   <li><Link to="/newsletter" className="hover:text-primary transition-colors duration-300">Newsletter</Link></li>
                 </ul>
               </div>
-            </div>
-            
-            <div className="border-t border-border/30 mt-12 pt-8 text-center text-muted-foreground">
-              <p>&copy; 2024 venStyler. All rights reserved.</p>
             </div>
           </div>
         </div>
