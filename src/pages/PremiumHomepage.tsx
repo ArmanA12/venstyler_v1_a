@@ -10,6 +10,7 @@ import { PremiumDesignShowcase } from "@/components/PremiumDesignShowcase";
 import { motion } from "framer-motion";
 import GradientButton from "@/components/GradientButton";
 import { BorderBeam } from "@/components/BorderBeam";
+// import GridWithHighlights from "@/components/GridWithHighlights";
 import {
   Moon,
   Sun,
@@ -542,25 +543,25 @@ const PremiumHomepage = () => {
         className=" overflow-clip pb-20 relative bg-gradient-to-b from-background to-muted/20 border-b border-border/50"
       >
 
-<div className="relative w-full h-full flex items-center justify-center">
-  {/* Parent radial gradient circle */}
-  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)] rounded-full" />
+        <div className="relative w-full h-full flex items-center justify-center">
+          {/* Parent radial gradient circle */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)] rounded-full" />
 
-  {/* Concentric circles (more + closer) */}
-  {[128, 256, 384, 512, 640, 768, 896, 1024, 1152, 1280].map((size, index) => (
-    <div
-      key={index}
-      className="absolute rounded-full border border-border/50"
-      style={{
-        width: `${size}px`,
-        height: `${size}px`,
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-      }}
-    ></div>
-  ))}
-</div>
+          {/* Concentric circles (more + closer) */}
+          {[128, 256, 384, 512, 640, 768, 896, 1024, 1152, 1280].map((size, index) => (
+            <div
+              key={index}
+              className="absolute rounded-full border border-border/50"
+              style={{
+                width: `${size}px`,
+                height: `${size}px`,
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            ></div>
+          ))}
+        </div>
 
 
         <div className="max-w-7xl mx-auto px-6 relative z-40 ">
@@ -597,7 +598,28 @@ const PremiumHomepage = () => {
         viewport={{ once: true }}
         className="py-32 bg-gradient-to-br from-muted/20 via-background to-muted/30"
       >
-        <div className="max-w-7xl mx-auto px-6">
+
+        <div className="max-w-7xl mx-auto px-6 relative">
+     <div
+  className="w-[1000px] h-[400px] ml-28 mx-auto grid grid-cols-5 grid-rows-2 gap-0 absolute top-32"
+>
+  {/* Row 1 */}
+  <div className="w-[200px] border border-border/70 h-[200px] bg-transparent" />
+  <div className="w-[200px] border-t border-b border-border/70 h-[200px] bg-purple-400/5" />
+  <div className="w-[200px] border border-border/70 h-[200px] bg-transparent" />
+  <div className="w-[200px] border-t border-b border-border/70 h-[200px] bg-purple-400/5" />
+  <div className="w-[200px] border-t border-r border-b border-border/70 h-[200px]" />
+
+  {/* Row 2 */}
+  <div className="w-[200px] h-[200px] bg-purple-400/10 border-b border-l border-r border-border/70" />
+  <div className="w-[200px] h-[200px]" />
+  <div className="w-[200px] h-[200px] border-b border-border/70 bg-purple-400/10" />
+  <div className="w-[200px] h-[200px]" />
+  <div className="w-[200px] h-[200px] border-r border-b border-border/70 bg-purple-400/10" />
+</div>
+
+
+
           <div className="text-center mb-20">
             <Badge variant="outline" className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
               <Globe className="w-4 h-4 mr-2 text-primary" />
@@ -608,6 +630,9 @@ const PremiumHomepage = () => {
                 Social Media for Designers
               </span>
             </h2>
+            {/* <div >
+              <GridWithHighlights />
+            </div> */}
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Connecting designers, artisans, and buyers in one comprehensive platform
             </p>
@@ -622,7 +647,7 @@ const PremiumHomepage = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="group text-center p-8 hover-scale bg-card/80 backdrop-blur-sm border-2 border-border/50 hover:border-primary/30 transition-all duration-500">
+                <Card className="group text-center p-8 hover-scale bg-card/80 backdrop-blur-lg border border-border/50 hover:border-primary/30 transition-all duration-500">
                   <div className="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 group-hover:scale-110 transition-transform duration-300">
                     <div className="text-primary">
                       {card.icon}
@@ -737,8 +762,8 @@ const PremiumHomepage = () => {
                         transition={{ delay: index * 0.3, duration: 0.6 }}
                         viewport={{ once: true }}
                         className={`p-3 text-sm rounded-lg max-w-xs ${index % 2 === 0
-                            ? "bg-primary/10 text-left"
-                            : "bg-muted ml-auto"
+                          ? "bg-primary/10 text-left"
+                          : "bg-muted ml-auto"
                           }`}
                       >
                         {msg}
@@ -750,6 +775,7 @@ const PremiumHomepage = () => {
                   <div className="mt-4 flex items-center gap-3">
                     <input
                       type="text"
+                      readOnly
                       placeholder="Typing..."
                       className="flex-1 px-4 py-2 text-sm bg-background border rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
                     />
@@ -769,101 +795,101 @@ const PremiumHomepage = () => {
       <PremiumDesignShowcase />
 
       {/* Trust and Security */}
-<motion.section
-  initial={{ opacity: 0 }}
-  whileInView={{ opacity: 1 }}
-  transition={{ duration: 0.8 }}
-  viewport={{ once: true }}
-  className="pt-32 overflow-clip border-b border-border/80 bg-gradient-to-br from-background via-muted/10 to-background"
->
-  <div className="max-w-7xl mx-auto px-6 text-center">
-    <Badge
-      variant="outline"
-      className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5"
-    >
-      <Shield className="w-4 h-4 mr-2 text-primary" />
-      Trust & Security
-    </Badge>
-
-    <h2 className="text-4xl md:text-6xl font-bold mb-6">
-      <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-        Your Security, Our Priority
-      </span>
-    </h2>
-
-    <p className="text-xl text-muted-foreground mb-16 max-w-3xl mx-auto">
-      Advanced security measures and quality assurance protocols protect every
-      transaction and design.
-    </p>
-
-    {/* Wrapper */}
-    <div className="border border-border/50 -mb-8  rounded-xl bg-muted-foreground/5 p-2">
-      <div className="grid md:grid-cols-3 border border-border/50 -mb-8 rounded-xl bg-background  px-0">
-        
-        {/* Box 1 */}
-        <div className="border-r border-border/50 px-10 pt-20 pb-32">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0 }}
-            viewport={{ once: true }}
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="pt-32 overflow-clip border-b border-border/80 bg-gradient-to-br from-background via-muted/10 to-background"
+      >
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <Badge
+            variant="outline"
+            className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5"
           >
-            <Card className="p-8 text-center hover-scale bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-500">
-              <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center text-primary">
-                <Shield className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4">Top Level Security</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                256-bit SSL encryption protecting all your data and transactions
-              </p>
-            </Card>
-          </motion.div>
-        </div>
+            <Shield className="w-4 h-4 mr-2 text-primary" />
+            Trust & Security
+          </Badge>
 
-        {/* Box 2 */}
-        <div className="border-r border-border/50 px-10 pt-20 pb-32">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <Card className="p-8 text-center hover-scale bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-500">
-              <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center text-primary">
-                <CheckCircle className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4">Quality Guarantee</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                100% satisfaction guarantee with multiple quality checkpoints
-              </p>
-            </Card>
-          </motion.div>
-        </div>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6">
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Your Security, Our Priority
+            </span>
+          </h2>
 
-        {/* Box 3 */}
-        <div className="px-10 pt-20 pb-32">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-          >
-            <Card className="p-8 text-center hover-scale bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-500">
-              <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center text-primary">
-                <Coffee className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4">24/7 Support</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Round-the-clock customer support for all your needs
-              </p>
-            </Card>
-          </motion.div>
-        </div>
+          <p className="text-xl text-muted-foreground mb-16 max-w-3xl mx-auto">
+            Advanced security measures and quality assurance protocols protect every
+            transaction and design.
+          </p>
 
-      </div>
-    </div>
-  </div>
-</motion.section>
+          {/* Wrapper */}
+          <div className="border border-border/50 -mb-8  rounded-xl bg-muted-foreground/5 p-2">
+            <div className="grid md:grid-cols-3 border border-border/50 -mb-8 rounded-xl bg-background  px-0">
+
+              {/* Box 1 */}
+              <div className="border-r border-border/50 px-10 pt-20 pb-32">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="p-8 text-center hover-scale bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-500">
+                    <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center text-primary">
+                      <Shield className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-4">Top Level Security</h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      256-bit SSL encryption protecting all your data and transactions
+                    </p>
+                  </Card>
+                </motion.div>
+              </div>
+
+              {/* Box 2 */}
+              <div className="border-r border-border/50 px-10 pt-20 pb-32">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="p-8 text-center hover-scale bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-500">
+                    <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center text-primary">
+                      <CheckCircle className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-4">Quality Guarantee</h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      100% satisfaction guarantee with multiple quality checkpoints
+                    </p>
+                  </Card>
+                </motion.div>
+              </div>
+
+              {/* Box 3 */}
+              <div className="px-10 pt-20 pb-32">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="p-8 text-center hover-scale bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-500">
+                    <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center text-primary">
+                      <Coffee className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-4">24/7 Support</h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      Round-the-clock customer support for all your needs
+                    </p>
+                  </Card>
+                </motion.div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </motion.section>
 
       {/* CTA Section */}
       <motion.section
