@@ -930,7 +930,7 @@ const PremiumHomepage = () => {
 
       {/* Premium Footer */}
       <footer className="relative bg-gradient-to-br from-muted/30 via-background to-muted/20 border-t border-border/50 overflow-hidden">
-        <div className="relative py-20 px-6">
+        <div className="relative py-16 px-6">
           <div className="absolute inset-0 bg-gradient-to-t from-background via-muted/30 to-transparent"></div>
 
           <div className="relative max-w-6xl mx-auto">
@@ -965,12 +965,7 @@ const PremiumHomepage = () => {
             </div>
           </div>
         </div>
-
-        {/* Enhanced 3D venStyler Text with Spline effects */}
-        <SplineVenStyler />
-        
-        {/* Copyright text */}
-        <motion.div
+               <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{
             opacity: 1,
@@ -982,7 +977,7 @@ const PremiumHomepage = () => {
             }
           }}
           viewport={{ once: true }}
-          className="text-sm md:text-base lg:text-lg text-muted-foreground font-medium tracking-wide mt-8 relative z-30"
+          className="text-sm md:text-base lg:text-lg text-muted-foreground font-light text-center tracking-wide relative z-30"
           style={{
             textShadow: `
               0 1px 2px hsl(var(--background) / 0.8),
@@ -992,6 +987,15 @@ const PremiumHomepage = () => {
         >
           © 2024 venStyler. All rights reserved.
         </motion.div>
+        <p>&nbsp;</p>
+
+        {/* Enhanced 3D venStyler Text with Spline effects */}
+        <SplineVenStyler />
+        
+        {/* Copyright text */}
+        <p>&nbsp;</p>
+         <p>&nbsp;</p>
+ 
       </footer>
     </div>
   );

@@ -147,7 +147,7 @@ export default function SplineVenStyler() {
             variants={letterVariants}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
-            className="font-black text-[9rem] sm:text-[14rem] md:text-[19rem] lg:text-[17rem] leading-[1] select-none"
+            className=" text-[9rem] sm:text-[14rem] md:text-[19rem] lg:text-[17rem] leading-[1] select-none"
             style={{
               color: 'hsl(var(--foreground))',
               letterSpacing: '0.02em',
