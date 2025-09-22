@@ -75,8 +75,6 @@ const App = () => {
   );
 
 
-
-  
   const handleNewNotification = useCallback(
     (data: any) => {
       addNotification({
