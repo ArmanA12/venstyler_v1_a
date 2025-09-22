@@ -928,50 +928,50 @@ const PremiumHomepage = () => {
       </motion.section>
 
       {/* Premium Footer */}
-      <footer className="relative bg-black text-white overflow-hidden">
+      <footer className="relative bg-gradient-to-br from-muted/30 via-background to-muted/20 border-t border-border/50 overflow-hidden">
         {/* Large venStyler Text */}
-        <section className="relative px-4 max-w-[1080px] text-center text-gray-100 flex items-center justify-center gap-2 mx-auto pb-2 text-[9rem] sm:text-[14rem] md:text-[19rem] lg:text-[20rem] leading-[1] pointer-events-none font-bold -mb-[11%] sm:-mb-[7%] duration-200 ease-in-out">
-          <div className="text-white animate-[pulse_4s_infinite] drop-shadow-xl">
+        <section className="relative px-4 max-w-[1080px] text-center flex items-center justify-center gap-2 mx-auto pb-2 text-[9rem] sm:text-[14rem] md:text-[19rem] lg:text-[20rem] leading-[1] pointer-events-none font-bold -mb-[11%] sm:-mb-[7%] duration-200 ease-in-out">
+          <div className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-[pulse_4s_infinite] drop-shadow-2xl">
             venStyler
           </div>
-          <div className="bg-gradient-to-b from-transparent via-black to-black h-[20%] w-full absolute bottom-0 left-0 z-20"></div>
+          <div className="bg-gradient-to-b from-transparent via-background to-background h-[20%] w-full absolute bottom-0 left-0 z-20"></div>
         </section>
 
         <div className="relative py-20 px-6">
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-gray-900/50 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-muted/30 to-transparent"></div>
           
           <div className="relative max-w-6xl mx-auto">
             <div className="grid md:grid-cols-3 gap-12 text-center md:text-left">
               <div>
-                <h3 className="text-xl font-semibold mb-4 text-white">Quick Links</h3>
-                <ul className="space-y-2 text-gray-300">
-                  <li><Link to="/explore" className="hover:text-white transition-colors">Browse Designs</Link></li>
-                  <li><Link to="/designers" className="hover:text-white transition-colors">Find Designers</Link></li>
-                  <li><Link to="/artisans" className="hover:text-white transition-colors">Meet Artisans</Link></li>
-                  <li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                <h3 className="text-xl font-semibold mb-4 text-foreground">Quick Links</h3>
+                <ul className="space-y-2 text-muted-foreground">
+                  <li><Link to="/explore" className="hover:text-primary transition-colors duration-300">Browse Designs</Link></li>
+                  <li><Link to="/designers" className="hover:text-primary transition-colors duration-300">Find Designers</Link></li>
+                  <li><Link to="/artisans" className="hover:text-primary transition-colors duration-300">Meet Artisans</Link></li>
+                  <li><Link to="/pricing" className="hover:text-primary transition-colors duration-300">Pricing</Link></li>
                 </ul>
               </div>
               
               <div>
-                <h3 className="text-xl font-semibold mb-4 text-white">Legal</h3>
-                <ul className="space-y-2 text-gray-300">
-                  <li><Link to="/terms" className="hover:text-white transition-colors">Terms and Conditions</Link></li>
-                  <li><Link to="/return-policy" className="hover:text-white transition-colors">Return Policy</Link></li>
-                  <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <h3 className="text-xl font-semibold mb-4 text-foreground">Legal</h3>
+                <ul className="space-y-2 text-muted-foreground">
+                  <li><Link to="/terms" className="hover:text-primary transition-colors duration-300">Terms and Conditions</Link></li>
+                  <li><Link to="/return-policy" className="hover:text-primary transition-colors duration-300">Return Policy</Link></li>
+                  <li><Link to="/privacy" className="hover:text-primary transition-colors duration-300">Privacy Policy</Link></li>
                 </ul>
               </div>
               
               <div>
-                <h3 className="text-xl font-semibold mb-4 text-white">Connect</h3>
-                <ul className="space-y-2 text-gray-300">
-                  <li><Link to="/support" className="hover:text-white transition-colors">Support</Link></li>
-                  <li><Link to="/community" className="hover:text-white transition-colors">Community</Link></li>
-                  <li><Link to="/newsletter" className="hover:text-white transition-colors">Newsletter</Link></li>
+                <h3 className="text-xl font-semibold mb-4 text-foreground">Connect</h3>
+                <ul className="space-y-2 text-muted-foreground">
+                  <li><Link to="/support" className="hover:text-primary transition-colors duration-300">Support</Link></li>
+                  <li><Link to="/community" className="hover:text-primary transition-colors duration-300">Community</Link></li>
+                  <li><Link to="/newsletter" className="hover:text-primary transition-colors duration-300">Newsletter</Link></li>
                 </ul>
               </div>
             </div>
             
-            <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
+            <div className="border-t border-border/30 mt-12 pt-8 text-center text-muted-foreground">
               <p>&copy; 2024 venStyler. All rights reserved.</p>
             </div>
           </div>
