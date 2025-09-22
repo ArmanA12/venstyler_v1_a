@@ -10,6 +10,7 @@ import { PremiumDesignShowcase } from "@/components/PremiumDesignShowcase";
 import { motion } from "framer-motion";
 import GradientButton from "@/components/GradientButton";
 import { BorderBeam } from "@/components/BorderBeam";
+import SplineVenStyler from "@/components/SplineVenStyler";
 // import GridWithHighlights from "@/components/GridWithHighlights";
 import {
   Moon,
@@ -965,57 +966,32 @@ const PremiumHomepage = () => {
           </div>
         </div>
 
-        {/* Large venStyler Text - At the very bottom */}
-        <section className="relative px-4 max-w-[1080px] text-center flex flex-col items-center justify-center gap-2 mx-auto pb-2 text-[9rem] sm:text-[14rem] md:text-[19rem] lg:text-[17rem] leading-[1] pointer-events-none font-bold -mb-[11%] sm:-mb-[7%] duration-200 ease-in-out">
-          <div
-            className="text-[#fffefe] dark:text-gray-900 animate-[pulse_4s_infinite]"
-            style={{
-              textShadow: `
-      0 1px 0 rgba(0,0,0,0.03),
-      0 2px 0 rgba(0,0,0,0.03),
-      0 3px 0 rgba(0,0,0,0.03),
-      0 4px 0 rgba(0,0,0,0.03),
-      0 5px 0 rgba(0,0,0,0.03),
-      0 6px 1px rgba(0,0,0,0.03),
-      0 0 15px rgba(255,255,255,0.06),
-      0 1px 3px rgba(255,255,255,0.06),
-      0 3px 5px rgba(255,255,255,0.03),
-      0 10px 10px rgba(255,255,255,0.03)
-    `,
-            }}
-          >
-            venStyler
-          </div>
-
-
-
-
-          {/* Copyright text directly below venStyler */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-              transition: {
-                delay: 0.3,
-                duration: 0.6,
-                ease: 'easeOut'
-              }
-            }}
-            viewport={{ once: true }}
-            className="text-sm md:text-base lg:text-lg text-muted-foreground font-medium tracking-wide mt-4"
-            style={{
-              textShadow: `
-                0 1px 2px hsl(var(--background) / 0.8),
-                0 2px 4px hsl(var(--primary) / 0.2)
-              `,
-            }}
-          >
-            © 2024 venStyler. All rights reserved.
-          </motion.div>
-
-          <div className="bg-gradient-to-b from-transparent via-background to-background h-[20%] w-full absolute bottom-0 left-0 z-20"></div>
-        </section>
+        {/* Enhanced 3D venStyler Text with Spline effects */}
+        <SplineVenStyler />
+        
+        {/* Copyright text */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+            transition: {
+              delay: 1.5,
+              duration: 0.6,
+              ease: 'easeOut'
+            }
+          }}
+          viewport={{ once: true }}
+          className="text-sm md:text-base lg:text-lg text-muted-foreground font-medium tracking-wide mt-8 relative z-30"
+          style={{
+            textShadow: `
+              0 1px 2px hsl(var(--background) / 0.8),
+              0 2px 4px hsl(var(--primary) / 0.2)
+            `,
+          }}
+        >
+          © 2024 venStyler. All rights reserved.
+        </motion.div>
       </footer>
     </div>
   );
