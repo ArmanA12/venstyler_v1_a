@@ -929,69 +929,6 @@ const PremiumHomepage = () => {
 
       {/* Premium Footer */}
       <footer className="relative bg-gradient-to-br from-muted/30 via-background to-muted/20 border-t border-border/50 overflow-hidden">
-        {/* Large venStyler Text */}
-        <section className="relative px-4 max-w-[1080px] text-center flex flex-col items-center justify-center gap-2 mx-auto pb-2 text-[9rem] sm:text-[14rem] md:text-[19rem] lg:text-[20rem] leading-[1] pointer-events-none font-bold -mb-[11%] sm:-mb-[7%] duration-200 ease-in-out">
-          <motion.div 
-            initial={{ opacity: 0, rotateX: 90, y: 100 }}
-            whileInView={{ 
-              opacity: 1, 
-              rotateX: 0, 
-              y: 0,
-              transition: {
-                duration: 0.7,
-                ease: 'easeOut',
-                type: 'spring',
-                stiffness: 80,
-                damping: 12,
-              }
-            }}
-            viewport={{ once: true }}
-            className="text-foreground animate-[pulse_4s_infinite]"
-            style={{
-              textShadow: `
-                0 1px 0 hsl(var(--muted-foreground)),
-                0 2px 0 hsl(var(--muted-foreground) / 0.9),
-                0 3px 0 hsl(var(--muted-foreground) / 0.8),
-                0 4px 0 hsl(var(--muted-foreground) / 0.7),
-                0 5px 0 hsl(var(--muted-foreground) / 0.6),
-                0 6px 1px hsl(var(--foreground) / 0.1),
-                0 0 5px hsl(var(--primary) / 0.3),
-                0 1px 3px hsl(var(--primary) / 0.4),
-                0 3px 5px hsl(var(--primary) / 0.3),
-                0 10px 10px hsl(var(--primary) / 0.2)
-              `,
-            }}
-          >
-            venStyler
-          </motion.div>
-          
-          {/* Copyright text directly below venStyler */}
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ 
-              opacity: 1, 
-              y: 0,
-              transition: {
-                delay: 0.3,
-                duration: 0.6,
-                ease: 'easeOut'
-              }
-            }}
-            viewport={{ once: true }}
-            className="text-sm md:text-base lg:text-lg text-muted-foreground font-medium tracking-wide mt-4"
-            style={{
-              textShadow: `
-                0 1px 2px hsl(var(--background) / 0.8),
-                0 2px 4px hsl(var(--primary) / 0.2)
-              `,
-            }}
-          >
-            © 2024 venStyler. All rights reserved.
-          </motion.div>
-          
-          <div className="bg-gradient-to-b from-transparent via-background to-background h-[20%] w-full absolute bottom-0 left-0 z-20"></div>
-        </section>
-
         <div className="relative py-20 px-6">
           <div className="absolute inset-0 bg-gradient-to-t from-background via-muted/30 to-transparent"></div>
           
@@ -1027,6 +964,69 @@ const PremiumHomepage = () => {
             </div>
           </div>
         </div>
+
+        {/* Large venStyler Text - At the very bottom */}
+        <section className="relative px-4 max-w-[1080px] text-center flex flex-col items-center justify-center gap-2 mx-auto pb-2 text-[9rem] sm:text-[14rem] md:text-[19rem] lg:text-[20rem] leading-[1] pointer-events-none font-bold -mb-[11%] sm:-mb-[7%] duration-200 ease-in-out">
+          <motion.div 
+            initial={{ opacity: 0, rotateX: 90, y: 100 }}
+            whileInView={{ 
+              opacity: 1, 
+              rotateX: 0, 
+              y: 0,
+              transition: {
+                duration: 0.7,
+                ease: 'easeOut',
+                type: 'spring',
+                stiffness: 80,
+                damping: 12,
+              }
+            }}
+            viewport={{ once: true }}
+            className="text-white dark:text-gray-800 animate-[pulse_4s_infinite]"
+            style={{
+              textShadow: `
+                0 1px 0 rgba(0,0,0,0.3),
+                0 2px 0 rgba(0,0,0,0.25),
+                0 3px 0 rgba(0,0,0,0.2),
+                0 4px 0 rgba(0,0,0,0.15),
+                0 5px 0 rgba(0,0,0,0.1),
+                0 6px 1px rgba(0,0,0,0.1),
+                0 0 15px rgba(255,255,255,0.3),
+                0 1px 3px rgba(255,255,255,0.2),
+                0 3px 5px rgba(255,255,255,0.15),
+                0 10px 10px rgba(255,255,255,0.1)
+              `,
+            }}
+          >
+            venStyler
+          </motion.div>
+          
+          {/* Copyright text directly below venStyler */}
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ 
+              opacity: 1, 
+              y: 0,
+              transition: {
+                delay: 0.3,
+                duration: 0.6,
+                ease: 'easeOut'
+              }
+            }}
+            viewport={{ once: true }}
+            className="text-sm md:text-base lg:text-lg text-muted-foreground font-medium tracking-wide mt-4"
+            style={{
+              textShadow: `
+                0 1px 2px hsl(var(--background) / 0.8),
+                0 2px 4px hsl(var(--primary) / 0.2)
+              `,
+            }}
+          >
+            © 2024 venStyler. All rights reserved.
+          </motion.div>
+          
+          <div className="bg-gradient-to-b from-transparent via-background to-background h-[20%] w-full absolute bottom-0 left-0 z-20"></div>
+        </section>
       </footer>
     </div>
   );
