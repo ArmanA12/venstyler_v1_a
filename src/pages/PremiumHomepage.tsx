@@ -600,23 +600,23 @@ const PremiumHomepage = () => {
       >
 
         <div className="max-w-7xl mx-auto px-6 relative">
-     <div
-  className="w-[1000px] h-[400px] ml-28 mx-auto grid grid-cols-5 grid-rows-2 gap-0 absolute top-32"
->
-  {/* Row 1 */}
-  <div className="w-[200px] border border-border/70 h-[200px] bg-transparent" />
-  <div className="w-[200px] border-t border-b border-border/70 h-[200px] bg-purple-400/5" />
-  <div className="w-[200px] border border-border/70 h-[200px] bg-transparent" />
-  <div className="w-[200px] border-t border-b border-border/70 h-[200px] bg-purple-400/5" />
-  <div className="w-[200px] border-t border-r border-b border-border/70 h-[200px]" />
+          <div
+            className="w-[1000px] h-[400px] ml-28 mx-auto grid grid-cols-5 grid-rows-2 gap-0 absolute top-32"
+          >
+            {/* Row 1 */}
+            <div className="w-[200px] border border-border/70 h-[200px] bg-transparent" />
+            <div className="w-[200px] border-t border-b border-border/70 h-[200px] bg-purple-400/5" />
+            <div className="w-[200px] border border-border/70 h-[200px] bg-transparent" />
+            <div className="w-[200px] border-t border-b border-border/70 h-[200px] bg-purple-400/5" />
+            <div className="w-[200px] border-t border-r border-b border-border/70 h-[200px]" />
 
-  {/* Row 2 */}
-  <div className="w-[200px] h-[200px] bg-purple-400/10 border-b border-l border-r border-border/70" />
-  <div className="w-[200px] h-[200px]" />
-  <div className="w-[200px] h-[200px] border-b border-border/70 bg-purple-400/10" />
-  <div className="w-[200px] h-[200px]" />
-  <div className="w-[200px] h-[200px] border-r border-b border-border/70 bg-purple-400/10" />
-</div>
+            {/* Row 2 */}
+            <div className="w-[200px] h-[200px] bg-purple-400/10 border-b border-l border-r border-border/70" />
+            <div className="w-[200px] h-[200px]" />
+            <div className="w-[200px] h-[200px] border-b border-border/70 bg-purple-400/10" />
+            <div className="w-[200px] h-[200px]" />
+            <div className="w-[200px] h-[200px] border-r border-b border-border/70 bg-purple-400/10" />
+          </div>
 
 
 
@@ -931,7 +931,7 @@ const PremiumHomepage = () => {
       <footer className="relative bg-gradient-to-br from-muted/30 via-background to-muted/20 border-t border-border/50 overflow-hidden">
         <div className="relative py-20 px-6">
           <div className="absolute inset-0 bg-gradient-to-t from-background via-muted/30 to-transparent"></div>
-          
+
           <div className="relative max-w-6xl mx-auto">
             <div className="grid md:grid-cols-3 gap-12 text-center md:text-left">
               <div>
@@ -943,7 +943,7 @@ const PremiumHomepage = () => {
                   <li><Link to="/pricing" className="hover:text-primary transition-colors duration-300">Pricing</Link></li>
                 </ul>
               </div>
-              
+
               <div>
                 <h3 className="text-xl font-semibold mb-4 text-foreground">Legal</h3>
                 <ul className="space-y-2 text-muted-foreground">
@@ -952,7 +952,7 @@ const PremiumHomepage = () => {
                   <li><Link to="/privacy" className="hover:text-primary transition-colors duration-300">Privacy Policy</Link></li>
                 </ul>
               </div>
-              
+
               <div>
                 <h3 className="text-xl font-semibold mb-4 text-foreground">Connect</h3>
                 <ul className="space-y-2 text-muted-foreground">
@@ -966,46 +966,35 @@ const PremiumHomepage = () => {
         </div>
 
         {/* Large venStyler Text - At the very bottom */}
-        <section className="relative px-4 max-w-[1080px] text-center flex flex-col items-center justify-center gap-2 mx-auto pb-2 text-[9rem] sm:text-[14rem] md:text-[19rem] lg:text-[20rem] leading-[1] pointer-events-none font-bold -mb-[11%] sm:-mb-[7%] duration-200 ease-in-out">
-          <motion.div 
-            initial={{ opacity: 0, rotateX: 90, y: 100 }}
-            whileInView={{ 
-              opacity: 1, 
-              rotateX: 0, 
-              y: 0,
-              transition: {
-                duration: 0.7,
-                ease: 'easeOut',
-                type: 'spring',
-                stiffness: 80,
-                damping: 12,
-              }
-            }}
-            viewport={{ once: true }}
-            className="text-white dark:text-gray-800 animate-[pulse_4s_infinite]"
+        <section className="relative px-4 max-w-[1080px] text-center flex flex-col items-center justify-center gap-2 mx-auto pb-2 text-[9rem] sm:text-[14rem] md:text-[19rem] lg:text-[17rem] leading-[1] pointer-events-none font-bold -mb-[11%] sm:-mb-[7%] duration-200 ease-in-out">
+          <div
+            className="text-[#fffefe] dark:text-gray-900 animate-[pulse_4s_infinite]"
             style={{
               textShadow: `
-                0 1px 0 rgba(0,0,0,0.3),
-                0 2px 0 rgba(0,0,0,0.25),
-                0 3px 0 rgba(0,0,0,0.2),
-                0 4px 0 rgba(0,0,0,0.15),
-                0 5px 0 rgba(0,0,0,0.1),
-                0 6px 1px rgba(0,0,0,0.1),
-                0 0 15px rgba(255,255,255,0.3),
-                0 1px 3px rgba(255,255,255,0.2),
-                0 3px 5px rgba(255,255,255,0.15),
-                0 10px 10px rgba(255,255,255,0.1)
-              `,
+      0 1px 0 rgba(0,0,0,0.03),
+      0 2px 0 rgba(0,0,0,0.03),
+      0 3px 0 rgba(0,0,0,0.03),
+      0 4px 0 rgba(0,0,0,0.03),
+      0 5px 0 rgba(0,0,0,0.03),
+      0 6px 1px rgba(0,0,0,0.03),
+      0 0 15px rgba(255,255,255,0.06),
+      0 1px 3px rgba(255,255,255,0.06),
+      0 3px 5px rgba(255,255,255,0.03),
+      0 10px 10px rgba(255,255,255,0.03)
+    `,
             }}
           >
             venStyler
-          </motion.div>
-          
+          </div>
+
+
+
+
           {/* Copyright text directly below venStyler */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
-            whileInView={{ 
-              opacity: 1, 
+            whileInView={{
+              opacity: 1,
               y: 0,
               transition: {
                 delay: 0.3,
@@ -1024,7 +1013,7 @@ const PremiumHomepage = () => {
           >
             © 2024 venStyler. All rights reserved.
           </motion.div>
-          
+
           <div className="bg-gradient-to-b from-transparent via-background to-background h-[20%] w-full absolute bottom-0 left-0 z-20"></div>
         </section>
       </footer>
