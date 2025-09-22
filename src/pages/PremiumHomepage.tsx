@@ -12,6 +12,7 @@ import GradientButton from "@/components/GradientButton";
 import { BorderBeam } from "@/components/BorderBeam";
 import SplineVenStyler from "@/components/SplineVenStyler";
 // import GridWithHighlights from "@/components/GridWithHighlights";
+import SplineWave from "@/components/Spline";
 import {
   Moon,
   Sun,
@@ -450,6 +451,7 @@ const PremiumHomepage = () => {
         </div>
       </motion.section>
 
+
       {/* Seamless Order Flow */}
       <motion.section
         initial={{ opacity: 0 }}
@@ -531,6 +533,9 @@ const PremiumHomepage = () => {
                 </motion.div>
               ))}
             </div>
+                      {/* <div className="absolute inset-0 -z-10">      <SplineWave />
+</div> */}
+
           </div>
         </div>
       </motion.section>
