@@ -4,8 +4,10 @@ export default function SplineWave() {
   return (
     <main>
       <Spline
-        scene="https://prod.spline.design/fJyfok0aOxD5RToL/scene.splinecode" 
+        scene="https://prod.spline.design/JEEY-whUDk-y-l4e/scene.splinecode" 
       />
     </main>
   );
 }
+
+

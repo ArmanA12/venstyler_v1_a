@@ -458,11 +458,11 @@ const PremiumHomepage = () => {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="py-32 relative overflow-hidden border-b border-border/80"
+        className="py-32 relative overflow-hidden border-b border-border/80 bg-black"
       >
         {/* Background Elements */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.1),transparent_70%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,107,107,0.1),transparent_70%)]" />
+        {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.1),transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,107,107,0.1),transparent_70%)]" /> */}
 
         <div className="max-w-7xl mx-auto px-6 relative z-10 ">
           <div className="text-center mb-20 ">
@@ -505,10 +505,10 @@ const PremiumHomepage = () => {
                     <div className="hidden lg:block absolute top-12 left-full w-8 h-0.5 bg-border/30 z-0" />
                   )}
 
-                  <Card className="relative text-center p-8 bg-card/60 backdrop-blur-xl border border-border/30 hover:border-primary/40 transition-all duration-700 shadow-lg hover:shadow-2xl">
+                  <div className="relative text-center p-8  backdrop-blur-sm  border rounded-sm border-border/10 hover:border-primary/40 transition-all duration-700 shadow-lg hover:shadow-2xl">
                     {/* Step Number */}
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <div className="w-8 h-8 bg-foreground text-background rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
+                      <div className="w-8 h-8  text-background rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
                         {step.step}
                       </div>
                     </div>
@@ -529,12 +529,12 @@ const PremiumHomepage = () => {
 
                     {/* Hover Effect */}
                     <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg pointer-events-none" />
-                  </Card>
+                  </div>
                 </motion.div>
               ))}
             </div>
-                      {/* <div className="absolute inset-0 -z-10">      <SplineWave />
-</div> */}
+                      <div className="absolute  -z-10 -top-[130px] ">      <SplineWave />
+</div>
 
           </div>
         </div>
