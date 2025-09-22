@@ -325,15 +325,63 @@ export const PremiumDesignShowcase = () => {
         )}
       </div>
 <div className="flex justify-center items-center relative">
-  {/* Animated outer glow */}
-  <div className="absolute w-72 h-16  bg-gradient-to-r from-primary/80 via-secondary/80 to-primary/80 blur-lg opacity-60 animate-pulse-slow"></div>
-
-  {/* Glassmorphism button */}
-  <button className=" relative z-10 border border-[rgba(255,255,255,0.05)]  rounded-full px-10 py-4">
+  {/* Enhanced 3D Button */}
+  <motion.div
+    whileHover={{ 
+      y: -8,
+      rotateX: 15,
+      scale: 1.05
+    }}
+    whileTap={{ 
+      y: -2,
+      scale: 0.98
+    }}
+    transition={{ 
+      type: "spring", 
+      stiffness: 400, 
+      damping: 20,
+      duration: 0.2
+    }}
+    className="relative group cursor-pointer"
+    style={{ transformStyle: "preserve-3d" }}
+  >
+    {/* Multiple layer shadows for 3D depth */}
+    <div className="absolute inset-0 bg-gradient-to-r from-primary/40 via-secondary/40 to-primary/40 rounded-full blur-xl opacity-60 group-hover:opacity-80 transition-opacity duration-300" 
+         style={{ transform: "translateZ(-20px) translateY(10px)" }}></div>
+    <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-secondary/30 to-primary/30 rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-300" 
+         style={{ transform: "translateZ(-40px) translateY(20px)" }}></div>
     
+    {/* Main button with 3D effect */}
+    <button className="relative z-50 
+      bg-gradient-to-r from-primary via-secondary to-primary 
+      hover:from-primary/90 hover:via-secondary/90 hover:to-primary/90
+      text-white font-bold text-lg
+      px-12 py-5 rounded-full
+      border border-white/20
+      shadow-[0_8px_30px_rgba(0,0,0,0.3),0_20px_60px_rgba(138,43,226,0.4),inset_0_2px_4px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.2)]
+      hover:shadow-[0_12px_40px_rgba(0,0,0,0.4),0_30px_80px_rgba(138,43,226,0.5),inset_0_2px_8px_rgba(255,255,255,0.3),inset_0_-2px_8px_rgba(0,0,0,0.3)]
+      transition-all duration-300 ease-out
+      group-hover:scale-105
+      before:content-[''] before:absolute before:inset-0 before:rounded-full
+      before:bg-gradient-to-r before:from-white/10 before:via-transparent before:to-white/10
+      before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-300"
+      style={{
+        transform: "translateZ(0px)",
+        textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+      }}
+    >
+      <span className="relative z-10 flex items-center gap-2">
+        ✨ View All Design ✨
+      </span>
+      
+      {/* Inner glow effect */}
+      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    </button>
     
-    <span className="relative z-50">✨ View All Design ✨</span>
-  </button>
+    {/* Additional depth layers */}
+    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 opacity-60" 
+         style={{ transform: "translateZ(-10px) translateY(5px)" }}></div>
+  </motion.div>
 </div>
     </section>
   );

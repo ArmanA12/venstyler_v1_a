@@ -926,6 +926,83 @@ const PremiumHomepage = () => {
           </div>
         </div>
       </motion.section>
+
+      {/* Premium Footer */}
+      <footer className="bg-gradient-to-b from-background to-muted/20 border-t border-border/50">
+        <div className="max-w-7xl mx-auto px-6 py-16">
+          {/* Main Footer Content */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            {/* Brand Section */}
+            <div className="md:col-span-2">
+              <div className="mb-6">
+                <h2 
+                  className="text-6xl md:text-7xl font-black bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
+                  style={{
+                    textShadow: '0 10px 40px rgba(0,0,0,0.3), 0 20px 80px rgba(138,43,226,0.2)',
+                    filter: 'drop-shadow(0 8px 32px rgba(138,43,226,0.4))'
+                  }}
+                >
+                  venStyler
+                </h2>
+              </div>
+              <p className="text-muted-foreground text-lg leading-relaxed max-w-md">
+                Revolutionizing the fashion industry by connecting visionary designers with discerning clients through cutting-edge technology.
+              </p>
+              <div className="flex gap-4 mt-8">
+                {/* Social Links */}
+                <Button variant="outline" size="icon" className="rounded-full hover:bg-primary/10 hover:border-primary/50">
+                  <Globe className="w-5 h-5" />
+                </Button>
+                <Button variant="outline" size="icon" className="rounded-full hover:bg-primary/10 hover:border-primary/50">
+                  <MessageCircle className="w-5 h-5" />
+                </Button>
+                <Button variant="outline" size="icon" className="rounded-full hover:bg-primary/10 hover:border-primary/50">
+                  <Phone className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h3 className="text-xl font-semibold mb-6 text-foreground">Platform</h3>
+              <ul className="space-y-4">
+                <li><Link to="/explore" className="text-muted-foreground hover:text-primary transition-colors">Browse Designs</Link></li>
+                <li><Link to="/designers" className="text-muted-foreground hover:text-primary transition-colors">Find Designers</Link></li>
+                <li><Link to="/artisans" className="text-muted-foreground hover:text-primary transition-colors">Meet Artisans</Link></li>
+                <li><Link to="/pricing" className="text-muted-foreground hover:text-primary transition-colors">Pricing</Link></li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h3 className="text-xl font-semibold mb-6 text-foreground">Legal</h3>
+              <ul className="space-y-4">
+                <li><Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">Terms & Conditions</Link></li>
+                <li><Link to="/return-policy" className="text-muted-foreground hover:text-primary transition-colors">Return Policy</Link></li>
+                <li><Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/support" className="text-muted-foreground hover:text-primary transition-colors">Support</Link></li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-muted-foreground text-sm">
+              © 2024 venStyler. All rights reserved.
+            </div>
+            <div className="flex items-center gap-6 text-sm text-muted-foreground">
+              <span className="flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                Secured Platform
+              </span>
+              <span className="flex items-center gap-2">
+                <Award className="w-4 h-4" />
+                Quality Guaranteed
+              </span>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
