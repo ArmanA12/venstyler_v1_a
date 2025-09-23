@@ -3,6 +3,7 @@ import React from 'react'
 function Chat() {
   return (
     <div>Chat</div>
+    <p>This component is invisible</p>
   )
 }
 
