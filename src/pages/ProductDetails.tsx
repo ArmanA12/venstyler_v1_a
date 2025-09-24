@@ -490,7 +490,7 @@ const ProductDetails = () => {
         onClose={() => setIsEnquiryModalOpen(false)}
         productId={id?.toString() || ""}
         productTitle={product?.title}
-        imageUrl={product.images[currentImageIndex]}   // ✅ pass main image
+        imageUrl={product.images[0]}   // ✅ Always first/primary product image
       />
     </div>
   );
