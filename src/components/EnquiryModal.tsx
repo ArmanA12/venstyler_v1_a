@@ -31,7 +31,7 @@ export function EnquiryModal({
   imageUrl,
 }: EnquiryModalProps) {
   const { toast } = useToast();
-
+   console.log(imageUrl, "image URL")
   const [formData, setFormData] = useState({
     name: "",
     email: "",
