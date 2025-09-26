@@ -545,7 +545,7 @@ const OrderDetails = () => {
                   {orderData.payments && !orderData.payments.final.paid && type === 'purchase' && (
                     <Button
                       className="w-full"
-                      onClick={handlePayment}
+                      onClick={() => handlePayment(orderId)}
                       disabled={isProcessingPayment}
                     >
                       {isProcessingPayment ? (
