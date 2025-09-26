@@ -162,7 +162,7 @@ const OrderDetails = () => {
 
 
 
-  const handlePayment = async (orderId) => {
+  const handlePayment = async () => {
     try {
       // Step 1: Create Razorpay Order
       const { data } = await axios.post(
@@ -545,7 +545,7 @@ const OrderDetails = () => {
                   {orderData.payments && !orderData.payments.final.paid && type === 'purchase' && (
                     <Button
                       className="w-full"
-                      onClick={() => handlePayment(orderId)}
+                      onClick={() => handlePayment}
                       disabled={isProcessingPayment}
                     >
                       {isProcessingPayment ? (
