@@ -163,12 +163,12 @@ const orderNumber = `ORD-${Date.now().toString().slice(-8)}-${orderId}`;
                     <div className="bg-muted/50 p-4 rounded-lg space-y-2">
                       <h4 className="font-medium">Payment Information</h4>
                       <div className="flex justify-between text-sm">
-                        <span>Initial Payment (Paid)</span>&nsbp;&nsbp;
-                        <span className="text-green-600 px-3 py-1 rounded-full ">₹{paymentInfo.initialAmount}</span>
+                        <span>Initial Payment</span>
+                        <span className="text-green-600 px-3 py-1 rounded-full font-semibold">₹ {paymentInfo.initialAmount}</span><span className="px-3 py-1 bg-green-600 rounded-full text-green-300">Paid</span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span>Remaining Amount</span>&nsbp;&nsbp;
-                        <span className="text-orange-600 px-3 py-1 rounded-full">₹{paymentInfo.remainingAmount}</span>
+                        <span>Remaining Amount</span>
+                        <span className="text-orange-600 px-3 py-1 rounded-full font-semibold">₹ {paymentInfo.remainingAmount}</span><span className="px-3 py-1 bg-red-600 rounded-full text-red-300">Pending</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span>Due Date</span>
