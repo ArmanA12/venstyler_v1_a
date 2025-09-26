@@ -166,7 +166,7 @@ const OrderDetails = () => {
     try {
       // Step 1: Create Razorpay Order
       const { data } = await axios.post(
-        "https://venstyler.armanshekh.com/api/payment/createFinalPayment",
+        "https://venstyler.armanshekh.com/api/order/createFinalPayment",
         { orderId },
         { withCredentials: true } // ✅ Send cookies/session
       );
@@ -187,7 +187,7 @@ const OrderDetails = () => {
           try {
             // Step 2: Verify Payment
             const verifyRes = await axios.post(
-              "https://venstyler.armanshekh.com/api/payment/verifyFinalPayment",
+              "https://venstyler.armanshekh.com/api/order/verifyFinalPayment",
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
