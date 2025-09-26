@@ -156,6 +156,8 @@ const ProductDetails = () => {
     navigate(`/chat?receiverId=${product.designer.id}`);
   };
 
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20">
       <Header />

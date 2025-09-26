@@ -53,6 +53,8 @@ export function EnquiryModal({
     }));
   };
 
+  console.log("render issue");
+  console.log(formData, "formData");
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -69,7 +71,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   setIsSubmitting(true);
 
   try {
-    // ✅ Use axios instead of fetch
+    console.log(formData, "form data")
     const { data } = await axios.post("https://venstyler.armanshekh.com/api/enquiry/createEnquiry", formData);
 
     toast({
