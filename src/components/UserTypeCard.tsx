@@ -34,7 +34,6 @@ export function UserTypeCard({
           <h3 className="text-xl font-semibold mb-2">{title}</h3>
           <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
         </div>
-        
         <ul className="space-y-2 text-sm">
           {features.map((feature, index) => (
             <li key={index} className="flex items-center gap-2 text-muted-foreground">
@@ -42,8 +41,7 @@ export function UserTypeCard({
               {feature}
             </li>
           ))}
-        </ul>
-        
+        </ul>        
         <Button 
           variant={primary ? "hero" : "outline"}
           size="lg"
