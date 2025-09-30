@@ -42,7 +42,6 @@ export function UserTypeCard({
             </li>
           ))}
         </ul>  
-        
         <Button 
           variant={primary ? "hero" : "outline"}
           size="lg"
