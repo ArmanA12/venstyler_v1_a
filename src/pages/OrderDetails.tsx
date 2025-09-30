@@ -162,6 +162,7 @@ const OrderDetails = () => {
 
 
 
+
   const handlePayment = async () => {
     try {
       // Step 1: Create Razorpay Order
@@ -176,6 +177,7 @@ const OrderDetails = () => {
         return;
       }
 
+  console.log(data, "Razorpay order Data")
       const options = {
         key: data.razorpayKey,
         amount: data.amount * 100, // Razorpay expects paise
