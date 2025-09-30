@@ -196,13 +196,15 @@ const handlePayment = async () => {
           );
 
           if (verifyRes.data.success) {
-            alert("✅ Final Payment successful! Order Completed.");
+        
+            toast.success("✅ Final Payment successful! Order Completed.");
           } else {
-            alert("❌ Payment verification failed.");
+            
+            toast.error("❌ Final Payment verification failed.");
           }
         } catch (err) {
           console.error(err);
-          alert("Something went wrong while verifying payment.");
+          toast.error("❌ Something went wrong while verifying payment.");
         }
       },
       prefill: {
@@ -216,7 +218,7 @@ const handlePayment = async () => {
     razorpay.open();
   } catch (error) {
     console.error("Payment error:", error);
-    alert("Something went wrong while creating final payment order.");
+    toast.error("❌ Something went wrong while creating final payment order.");
   } finally {
     setIsProcessingPayment(false);
   }
