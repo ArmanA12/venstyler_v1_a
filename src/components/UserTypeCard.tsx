@@ -41,13 +41,15 @@ export function UserTypeCard({
               {feature}
             </li>
           ))}
-        </ul>        
+        </ul>  
+        
         <Button 
           variant={primary ? "hero" : "outline"}
           size="lg"
           className="w-full"
           onClick={onClick}
         >
+          
           Join as {title}
         </Button>
       </div>
