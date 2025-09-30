@@ -165,10 +165,9 @@ const OrderDetails = () => {
 const handlePayment = async () => {
   setIsProcessingPayment(true);
   try {
-    // Step 1: Create Final Payment Order
     const { data } = await axios.post(
       "https://venstyler.armanshekh.com/api/order/createFinalPayment",
-      { orderId }, // use param from URL
+      { orderId },
       { withCredentials: true }
     );
 
@@ -179,45 +178,31 @@ const handlePayment = async () => {
     }
 
     const options = {
-      key: data.razorpayKey,
-      amount: data.amount, // backend already provides amount in paise
+      key: data.razorpayKey,          // Now exists
+      amount: data.amount * 100,
       currency: data.currency,
-      name: "VenStyler",
-      description: "Final Payment",
-      order_id: data.razorpayOrderId,
-      handler: async function (response: any) {
+      order_id: data.razorpayOrderId, // Now exists
+      handler: async (response) => {
         try {
-          // Step 2: Verify Payment
           const verifyRes = await axios.post(
             "https://venstyler.armanshekh.com/api/order/verifyFinalPayment",
             {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-              orderId, // use correct orderId
+              orderId: data.orderId,
             },
             { withCredentials: true }
           );
 
           if (verifyRes.data.success) {
             alert("✅ Final Payment successful! Order Completed.");
-            // Update UI
-            setOrderData((prev) => ({
-              ...prev,
-              payments: {
-                ...prev.payments,
-                final: { ...prev.payments.final, paid: true },
-              },
-              status: "COMPLETED",
-            }));
           } else {
             alert("❌ Payment verification failed.");
           }
         } catch (err) {
-          console.error("Verification error:", err);
+          console.error(err);
           alert("Something went wrong while verifying payment.");
-        } finally {
-          setIsProcessingPayment(false);
         }
       },
       prefill: {
@@ -232,9 +217,11 @@ const handlePayment = async () => {
   } catch (error) {
     console.error("Payment error:", error);
     alert("Something went wrong while creating final payment order.");
+  } finally {
     setIsProcessingPayment(false);
   }
 };
+
 
 
 
