@@ -162,69 +162,80 @@ const OrderDetails = () => {
 
 
 
+const handlePayment = async () => {
+  setIsProcessingPayment(true);
+  try {
+    // Step 1: Create Final Payment Order
+    const { data } = await axios.post(
+      "https://venstyler.armanshekh.com/api/order/createFinalPayment",
+      { orderId }, // use param from URL
+      { withCredentials: true }
+    );
 
-  const handlePayment = async () => {
-    try {
-      // Step 1: Create Razorpay Order
-      const { data } = await axios.post(
-        "https://venstyler.armanshekh.com/api/order/createFinalPayment",
-        { orderId },
-        { withCredentials: true } // ✅ Send cookies/session
-      );
-
-      if (!data.success) {
-        alert(data.message);
-        return;
-      }
-
-  console.log(data, "Razorpay order Data")
-      const options = {
-        key: data.razorpayKey,
-        amount: data.amount * 100, // Razorpay expects paise
-        currency: data.currency,
-        name: "VenStyler",
-        description: "Final Payment",
-        order_id: data.razorpayOrderId,
-        handler: async function (response) {
-          try {
-            // Step 2: Verify Payment
-            const verifyRes = await axios.post(
-              "https://venstyler.armanshekh.com/api/order/verifyFinalPayment",
-              {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                orderId: data.orderId,
-              },
-              { withCredentials: true } // ✅ Important here too
-            );
-
-            if (verifyRes.data.success) {
-              alert("✅ Final Payment successful! Order Completed.");
-              // Refresh page or update order status
-            } else {
-              alert("❌ Payment verification failed.");
-            }
-          } catch (err) {
-            console.error("Verification error:", err);
-            alert("Something went wrong while verifying payment.");
-          }
-        },
-        prefill: {
-          name: orderData.buyer.name || "",
-          email: orderData.buyer.email || "",
-
-        },
-        theme: { color: "#3399cc" },
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
-    } catch (error) {
-      console.error("Payment error:", error);
-      alert("Something went wrong while creating final payment order.");
+    if (!data.success) {
+      alert(data.message);
+      setIsProcessingPayment(false);
+      return;
     }
-  };
+
+    const options = {
+      key: data.razorpayKey,
+      amount: data.amount, // backend already provides amount in paise
+      currency: data.currency,
+      name: "VenStyler",
+      description: "Final Payment",
+      order_id: data.razorpayOrderId,
+      handler: async function (response: any) {
+        try {
+          // Step 2: Verify Payment
+          const verifyRes = await axios.post(
+            "https://venstyler.armanshekh.com/api/order/verifyFinalPayment",
+            {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              orderId, // use correct orderId
+            },
+            { withCredentials: true }
+          );
+
+          if (verifyRes.data.success) {
+            alert("✅ Final Payment successful! Order Completed.");
+            // Update UI
+            setOrderData((prev) => ({
+              ...prev,
+              payments: {
+                ...prev.payments,
+                final: { ...prev.payments.final, paid: true },
+              },
+              status: "COMPLETED",
+            }));
+          } else {
+            alert("❌ Payment verification failed.");
+          }
+        } catch (err) {
+          console.error("Verification error:", err);
+          alert("Something went wrong while verifying payment.");
+        } finally {
+          setIsProcessingPayment(false);
+        }
+      },
+      prefill: {
+        name: orderData.buyer.name || "",
+        email: orderData.buyer.email || "",
+      },
+      theme: { color: "#3399cc" },
+    };
+
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
+  } catch (error) {
+    console.error("Payment error:", error);
+    alert("Something went wrong while creating final payment order.");
+    setIsProcessingPayment(false);
+  }
+};
+
 
 
   if (isLoading) {
