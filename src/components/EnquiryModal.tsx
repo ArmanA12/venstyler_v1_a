@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,7 +33,17 @@ export function EnquiryModal({
   imageUrl,
 }: EnquiryModalProps) {
   const { toast } = useToast();
-   console.log(imageUrl, "image URL")
+
+  useEffect(() => {
+  setFormData(prev => ({
+    ...prev,
+    userId: userId,
+    designId: productId,
+    imageUrl: imageUrl,
+  }));
+}, [userId, productId, imageUrl]);
+
+   console.log(userId, "userId in modal")
   const [formData, setFormData] = useState({
     name: "",
     email: "",
