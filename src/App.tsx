@@ -49,6 +49,14 @@ import ProductEdit from "./pages/user/ProductEdit";
 import ProductSellsDetails from "./pages/user/ProductSellsDetails";
 import PremiumHomepage from "./pages/PremiumHomepage";
 import Analytics from "./hooks/Analytics";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ReturnPolicy from "./pages/ReturnPolicy";
+import FindDesigners from "./pages/FindDesigners";
+import MeetArtisans from "./pages/MeetArtisans";
+import Pricing from "./pages/Pricing";
+import EnquiryManagement from "./pages/EnquiryManagement";
+import EnquiryDetail from "./pages/EnquiryDetail";
 // import Analytics from "../src/hooks/Analytics";
 
 export default function App() {
@@ -87,6 +95,15 @@ export default function App() {
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/terms" element={<TermsAndConditions />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/return-policy" element={<ReturnPolicy />} />
+                <Route path="/find-designers" element={<FindDesigners />} />
+                <Route path="/meet-artisans" element={<MeetArtisans />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/enquiry-management" element={<ProtectedRoute><EnquiryManagement /></ProtectedRoute>} />
+                <Route path="/enquiry/:enquiryId" element={<ProtectedRoute><EnquiryDetail /></ProtectedRoute>} />
+
 
                 <Route
                   path="/verify-otp"

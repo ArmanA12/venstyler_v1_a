@@ -20,7 +20,8 @@ interface EnquiryModalProps {
   onClose: () => void;
   productId: string;
   productTitle?: string;
-  imageUrl: string; // 👈 image url from frontend
+  imageUrl: string;
+  userId: string;
 }
 
 export function EnquiryModal({
@@ -28,6 +29,7 @@ export function EnquiryModal({
   onClose,
   productId,
   productTitle,
+  userId,
   imageUrl,
 }: EnquiryModalProps) {
   const { toast } = useToast();
@@ -39,6 +41,7 @@ export function EnquiryModal({
     message: "",
     designId: productId,
     imageUrl: imageUrl,
+    userId:userId,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -87,6 +90,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       message: "",
       designId: productId,
       imageUrl: imageUrl,
+      userId:userId
     });
     onClose();
   } catch (error) {

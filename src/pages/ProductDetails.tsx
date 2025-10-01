@@ -491,6 +491,7 @@ const ProductDetails = () => {
         isOpen={isEnquiryModalOpen}
         onClose={() => setIsEnquiryModalOpen(false)}
         productId={id?.toString() || ""}
+        userId={product?.designer.id.toString() || ""}
         productTitle={product?.title}
         imageUrl={product.images[0]}   // ✅ Always first/primary product image
       />

@@ -883,8 +883,8 @@ const fashionImages = [
                 <h3 className="text-xl font-semibold mb-4 text-foreground">Quick Links</h3>
                 <ul className="space-y-2 text-muted-foreground">
                   <li><Link to="/explore" className="hover:text-primary transition-colors duration-300">Browse Designs</Link></li>
-                  <li><Link to="/designers" className="hover:text-primary transition-colors duration-300">Find Designers</Link></li>
-                  <li><Link to="/artisans" className="hover:text-primary transition-colors duration-300">Meet Artisans</Link></li>
+                  <li><Link to="/find-designers" className="hover:text-primary transition-colors duration-300">Find Designers</Link></li>
+                  <li><Link to="/meet-artisans" className="hover:text-primary transition-colors duration-300">Meet Artisans</Link></li>
                   <li><Link to="/pricing" className="hover:text-primary transition-colors duration-300">Pricing</Link></li>
                 </ul>
               </div>

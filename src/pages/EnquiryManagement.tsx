@@ -42,8 +42,21 @@ export default function EnquiryManagement() {
   const { data: enquiries, isLoading } = useQuery<Enquiry[]>({
     queryKey: ["enquiries"],
     queryFn: async () => {
-      const { data } = await api.get("/api/enquiry/getEnquiriesForSellerProducts");
-      return data;
+      const { data } = await api.get("https://venstyler.armanshekh.com/api/enquiry/getEnquiriesForSellerProducts");
+      console.log(data, "enquiry data")
+
+  return (data.data || []).map((e: any) => ({
+    id: e.id,
+    message: e.message,
+    status: e.status,
+    createdAt: e.createdAt,
+    user: {
+      id: e.userId || 0,        // fallback since API doesn’t send id
+      name: e.name,
+      email: e.email,
+    },
+    design: e.design,
+  }));
     },
   });
 
