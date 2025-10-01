@@ -179,11 +179,11 @@ export default function UserDashboard() {
 
                 {/* Main Content */}
                 <Tabs defaultValue="products" className="w-full">
-                    <TabsList className="grid w-full grid-cols-3">
+                  <TabsList className="grid w-full grid-cols-4">
                         <TabsTrigger value="products">Products</TabsTrigger>
                         <TabsTrigger value="orders"> My Purchase</TabsTrigger>
                         <TabsTrigger value="sales">My Sales</TabsTrigger>
-                        {/* <TabsTrigger value="analytics">Analytics</TabsTrigger> */}
+                        <TabsTrigger value="enquiries">Enquiries</TabsTrigger>
                     </TabsList>
 
                     {/* Products Tab */}
@@ -481,6 +481,21 @@ export default function UserDashboard() {
                             </Card>
                         </div>
                     </TabsContent> */}
+
+                    {/* Enquiries Tab */}
+                    <TabsContent value="enquiries">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Product Enquiries</CardTitle>
+                                <CardDescription>View and manage customer enquiries about your products</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <Button onClick={() => navigate('/enquiry-management')}>
+                                    View All Enquiries
+                                </Button>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
                 </Tabs>
             </div>
 

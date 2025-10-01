@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Index from "./pages/Index";
+import PremiumHomepage from "./pages/PremiumHomepage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -27,6 +28,14 @@ import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/routes/ProtectedRoutes";
 import ExplorePage from "./pages/explore/Explore";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ReturnPolicy from "./pages/ReturnPolicy";
+import FindDesigners from "./pages/FindDesigners";
+import MeetArtisans from "./pages/MeetArtisans";
+import Pricing from "./pages/Pricing";
+import EnquiryManagement from "./pages/EnquiryManagement";
+import EnquiryDetail from "./pages/EnquiryDetail";
 import socket from "@/lib/socket";
 import { useCallback, useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -155,9 +164,18 @@ const App = () => {
               <BrowserRouter>
                 <Routes>
                   <Route path="/" element={<Index />} />
+                  <Route path="/premium" element={<PremiumHomepage />} />
                   <Route path="/signin" element={<SignIn />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/terms" element={<TermsAndConditions />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/return-policy" element={<ReturnPolicy />} />
+                  <Route path="/find-designers" element={<FindDesigners />} />
+                  <Route path="/meet-artisans" element={<MeetArtisans />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/enquiry-management" element={<ProtectedRoute><EnquiryManagement /></ProtectedRoute>} />
+                  <Route path="/enquiry/:enquiryId" element={<ProtectedRoute><EnquiryDetail /></ProtectedRoute>} />
                   <Route
                     path="/verify-otp"
                     element={

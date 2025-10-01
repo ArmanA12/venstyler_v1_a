@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import GradientButton from "@/components/GradientButton";
 import { BorderBeam } from "@/components/BorderBeam";
 import SplineVenStyler from "@/components/SplineVenStyler";
+import { Header } from "@/components/navbar/Header";
 // import GridWithHighlights from "@/components/GridWithHighlights";
 import SplineWave from "@/components/Spline";
 import {
@@ -49,6 +50,8 @@ import {
   Phone, Send
 } from "lucide-react";
 
+
+import { useAuth } from "@/contexts/AuthContext";
 
 const PremiumHomepage = () => {
   const { theme, setTheme } = useTheme();
@@ -243,91 +246,8 @@ const fashionImages = [
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
-      {/* Premium Navigation Bar */}
-      <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50"
-      >
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                <Crown className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                venStyler
-              </span>
-            </Link>
-
-            {/* Search Bar */}
-            <div className="hidden md:flex flex-1 max-w-md mx-8 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-              <Input
-                type="text"
-                placeholder="Search designers, styles, collections..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 rounded-full border border-border/50 focus:border-primary/30 bg-background/50 backdrop-blur-sm"
-              />
-            </div>
-
-            {/* Right Section */}
-            <div className="flex items-center gap-3">
-              {/* Theme Toggle */}
-              <Button
-                onClick={toggleTheme}
-                variant="outline"
-                size="icon"
-                className="rounded-full border hover-scale bg-background/80 backdrop-blur-md"
-              >
-                {getThemeIcon()}
-              </Button>
-
-              {/* Auth Buttons */}
-              <div className="hidden sm:flex items-center gap-2">
-                <Link to="/signin">
-                  <Button variant="outline" size="sm" className="rounded-full border hover:border-primary/30">
-                    <LogIn className="w-4 h-4 mr-2" />
-                    Sign In
-                  </Button>
-                </Link>
-                <Link to="/signup">
-                  <Button size="sm" className="rounded-full bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/25">
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Sign Up
-                  </Button>
-                </Link>
-              </div>
-
-              {/* Back to Original */}
-              <Link to="/">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full border hover-scale bg-background/80 backdrop-blur-md"
-                >
-                  ← Original
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          {/* Mobile Search */}
-          <div className="md:hidden mt-4 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-            <Input
-              type="text"
-              placeholder="Search designers, styles..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 rounded-full border border-border/50 focus:border-primary/30 bg-background/50 backdrop-blur-sm w-full"
-            />
-          </div>
-        </div>
-      </motion.nav>
+      {/* Header */}
+      <Header />
 
       {/* Hero Section */}
       <motion.section
@@ -339,7 +259,7 @@ const fashionImages = [
 
         <div className="absolute inset-0">
 
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
 
 
           <div className=" left-[10%] top-[60%] absolute z-50 group p-1 w-12 h-12 rounded-xl  flex items-center justify-center">
