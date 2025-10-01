@@ -264,6 +264,7 @@ const App = () => {
                       </ProtectedRoute>
                     }
                   />
+                  
                   <Route
                     path="/admin/products/:productId/edit"
                     element={
@@ -272,6 +273,8 @@ const App = () => {
                       </ProtectedRoute>
                     }
                   />
+
+                  
                   <Route
                     path="/admin/orders/:orderId"
                     element={<OrderView />}
