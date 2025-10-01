@@ -169,7 +169,7 @@ export default function EnquiryManagement() {
                     <TableRow key={enquiry.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <Avatar className="h-8 w-8">
+                          <Avatar className="h-8 w-8 border border-muted-foreground/10">
                             <AvatarFallback>{enquiry.user.name.charAt(0)}</AvatarFallback>
                           </Avatar>
                           <div>

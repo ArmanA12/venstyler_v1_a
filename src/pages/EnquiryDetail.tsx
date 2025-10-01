@@ -3,34 +3,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Mail, Phone, MapPin, Calendar, Package } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { ArrowLeft, Mail, Calendar, Package } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-
-type EnquiryDetail = {
-  id: number;
-  message: string;
-  status: "PENDING" | "IN_PROGRESS" | "RESPONDED" | "CLOSED";
-  createdAt: string;
-  user: {
-    id: number;
-    name: string;
-    email: string;
-  };
-  design: {
-    id: number;
-    title: string;
-    description: string | null;
-    images: Array<{ url: string }>;
-    price: number;
-    discount: number;
-  };
-};
 
 export default function EnquiryDetail() {
   const { enquiryId } = useParams<{ enquiryId: string }>();
@@ -38,28 +18,34 @@ export default function EnquiryDetail() {
   const queryClient = useQueryClient();
   const [response, setResponse] = useState("");
 
-  const { data: enquiry, isLoading } = useQuery<EnquiryDetail>({
+  // Fetch enquiry details
+  const { data, isLoading } = useQuery({
     queryKey: ["enquiry", enquiryId],
     queryFn: async () => {
-      const { data } = await api.get(`/api/enquiry/${enquiryId}`);
-      return data;
+      const { data } = await api.get(`/api/enquiry/getEnquiry/${enquiryId}`);
+      return data.data;
     },
     enabled: !!enquiryId,
   });
 
+  const enquiry = data;
+
+  // Update enquiry status
   const updateStatusMutation = useMutation({
     mutationFn: async ({ status }: { status: string }) => {
-      const { data } = await api.patch(`/api/enquiry/updateStatus/${enquiryId}`, { status });
+      const { data } = await api.patch(`/api/enquiry/sendEnquiryResponsebuyer/${enquiryId}`, {
+        responseMessage: response,
+        status,
+      });
       return data;
     },
     onSuccess: () => {
-      toast.success("Status updated successfully");
+      toast.success("Response sent and status updated successfully");
+      setResponse(""); // clear textarea
       queryClient.invalidateQueries({ queryKey: ["enquiry", enquiryId] });
       queryClient.invalidateQueries({ queryKey: ["enquiries"] });
     },
-    onError: () => {
-      toast.error("Failed to update status");
-    },
+    onError: () => toast.error("Failed to send response"),
   });
 
   const getStatusBadge = (status: string) => {
@@ -73,42 +59,19 @@ export default function EnquiryDetail() {
     return <Badge variant={config.variant} className={config.color}>{status}</Badge>;
   };
 
-  const handleStatusChange = (newStatus: string) => {
-    updateStatusMutation.mutate({ status: newStatus });
-  };
-
   const handleSendResponse = () => {
-    // This would integrate with your chat/messaging system
-    toast.success("Response sent to customer");
-    setResponse("");
+    if (!response.trim()) return toast.error("Please type a response first");
+    // Keep status as RESPONDED by default when sending response
+    updateStatusMutation.mutate({ status: "RESPONDED" });
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="container mx-auto px-6 py-8">
-          <div className="text-center py-12">Loading enquiry details...</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!enquiry) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="container mx-auto px-6 py-8">
-          <div className="text-center py-12">Enquiry not found</div>
-        </div>
-      </div>
-    );
-  }
+  if (isLoading) return <div className="min-h-screen"><Header /><div className="text-center py-12">Loading enquiry details...</div></div>;
+  if (!enquiry) return <div className="min-h-screen"><Header /><div className="text-center py-12">Enquiry not found</div></div>;
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <div className="border-b bg-card">
         <div className="flex h-16 items-center px-6 gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
@@ -120,9 +83,9 @@ export default function EnquiryDetail() {
 
       <div className="container mx-auto px-6 py-8">
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Main Content */}
+          {/* Main */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Enquiry Message */}
+            {/* Enquiry message */}
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -130,13 +93,7 @@ export default function EnquiryDetail() {
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">
-                      {new Date(enquiry.createdAt).toLocaleString("en-IN", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {new Date(enquiry.createdAt).toLocaleString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
                     </span>
                   </div>
                 </div>
@@ -146,77 +103,52 @@ export default function EnquiryDetail() {
               </CardContent>
             </Card>
 
-            {/* Product Details */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Package className="h-5 w-5" />
-                  Product Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex gap-4">
-                  {enquiry.design.images[0] && (
-                    <img
-                      src={enquiry.design.images[0].url}
-                      alt={enquiry.design.title}
-                      className="h-32 w-32 rounded-lg object-cover"
-                    />
-                  )}
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-lg mb-2">{enquiry.design.title}</h3>
-                    {enquiry.design.description && (
-                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                        {enquiry.design.description}
-                      </p>
+            {/* Product details */}
+            {enquiry.design && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Package className="h-5 w-5" />
+                    Product Details
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex gap-4">
+                    {enquiry.design.images?.[0] && (
+                      <img src={enquiry.design.images[0].url} alt={enquiry.design.title} className="h-32 w-32 rounded-lg object-cover" />
                     )}
-                    <div className="flex items-center gap-4">
-                      <div>
-                        <span className="text-2xl font-bold">₹{enquiry.design.price}</span>
-                        {enquiry.design.discount > 0 && (
-                          <Badge variant="secondary" className="ml-2">
-                            {enquiry.design.discount}% OFF
-                          </Badge>
-                        )}
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg mb-2">{enquiry.design.title}</h3>
+                      {enquiry.design.description && <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{enquiry.design.description}</p>}
+                      <div className="flex items-center gap-4">
+                        <div>
+                          <span className="text-2xl font-bold">₹{enquiry.design.price}</span>
+                          {enquiry.design.discount > 0 && <Badge variant="secondary" className="ml-2">{enquiry.design.discount}% OFF</Badge>}
+                        </div>
                       </div>
+                      <Button variant="outline" className="mt-4" onClick={() => navigate(`/product/${enquiry.design.id}`)}>View Product</Button>
                     </div>
-                    <Button
-                      variant="outline"
-                      className="mt-4"
-                      onClick={() => navigate(`/product/${enquiry.design.id}`)}
-                    >
-                      View Product
-                    </Button>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
 
-            {/* Response Section */}
+            {/* Response */}
             <Card>
               <CardHeader>
                 <CardTitle>Send Response</CardTitle>
-                <CardDescription>
-                  Respond to the customer's enquiry
-                </CardDescription>
+                <CardDescription>Respond to the customer's enquiry</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Textarea
-                  placeholder="Type your response here..."
-                  value={response}
-                  onChange={(e) => setResponse(e.target.value)}
-                  rows={6}
-                />
-                <Button onClick={handleSendResponse} disabled={!response.trim()}>
-                  Send Response
-                </Button>
+                <Textarea placeholder="Type your response here..." value={response} onChange={(e) => setResponse(e.target.value)} rows={6} />
+                <Button onClick={handleSendResponse} disabled={!response.trim()}>Send Response</Button>
               </CardContent>
             </Card>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Status Management */}
+            {/* Status */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Status Management</CardTitle>
@@ -224,10 +156,8 @@ export default function EnquiryDetail() {
               <CardContent className="space-y-4">
                 <div>
                   <label className="text-sm font-medium mb-2 block">Current Status</label>
-                  <Select value={enquiry.status} onValueChange={handleStatusChange}>
-                    <SelectTrigger>
-                      {getStatusBadge(enquiry.status)}
-                    </SelectTrigger>
+                  <Select value={enquiry.status} onValueChange={(newStatus) => updateStatusMutation.mutate({ status: newStatus })}>
+                    <SelectTrigger>{getStatusBadge(enquiry.status)}</SelectTrigger>
                     <SelectContent>
                       <SelectItem value="PENDING">Pending</SelectItem>
                       <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
@@ -236,45 +166,32 @@ export default function EnquiryDetail() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="pt-4 border-t space-y-2 text-sm text-muted-foreground">
-                  <p><strong>Pending:</strong> New enquiry, not yet reviewed</p>
-                  <p><strong>In Progress:</strong> Actively working on response</p>
-                  <p><strong>Responded:</strong> Response sent to customer</p>
-                  <p><strong>Closed:</strong> Enquiry resolved</p>
-                </div>
               </CardContent>
             </Card>
 
-            {/* Customer Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Customer Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-12 w-12">
-                    <AvatarFallback className="text-lg">
-                      {enquiry.user.name.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="font-semibold">{enquiry.user.name}</div>
-                    <div className="text-sm text-muted-foreground">Customer</div>
+            {/* Customer */}
+            {enquiry.user && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Customer Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-12 w-12"><AvatarFallback>{enquiry.user.name.charAt(0)}</AvatarFallback></Avatar>
+                    <div>
+                      <div className="font-semibold">{enquiry.user.name}</div>
+                      <div className="text-sm text-muted-foreground">Customer</div>
+                    </div>
                   </div>
-                </div>
-                <div className="space-y-3 pt-4 border-t">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">{enquiry.user.email}</span>
+                  <div className="space-y-3 pt-4 border-t">
+                    <div className="flex items-center gap-2 text-sm">
+                      <Mail className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-muted-foreground">{enquiry.user.email}</span>
+                    </div>
                   </div>
-                </div>
-                <div className="pt-4 border-t">
-                  <Button variant="outline" className="w-full">
-                    Message Customer
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>
