@@ -73,7 +73,10 @@ const Support = () => {
       <Header />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
+      <section className="pt-32 pb-20 px-6 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5"
+      
+      
+      >
         <div className="max-w-7xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -138,8 +141,8 @@ const Support = () => {
                 <p className="text-muted-foreground mb-4">
                   Mon-Sat, 9AM-6PM IST
                 </p>
-                <a href="tel:+911234567890" className="text-primary hover:underline">
-                  +91 123 456 7890
+                <a href="tel:+917091554628" className="text-primary hover:underline">
+                  +91 7091554628
                 </a>
               </Card>
             </motion.div>

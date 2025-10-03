@@ -47,7 +47,7 @@ import {
   Coffee,
   Video,
   MessageCircle,
-  Phone, Send
+  Phone, Send, Home
 } from "lucide-react";
 
 
@@ -254,12 +254,12 @@ const fashionImages = [
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16"
       >
 
         <div className="absolute inset-0">
 
-          <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_5%,transparent_100%)]" />
 
 
           <div className=" left-[10%] top-[60%] absolute z-50 group p-1 w-12 h-12 rounded-xl  flex items-center justify-center">
@@ -909,6 +909,7 @@ const fashionImages = [
             </div>
           </div>
         </div>
+           <p>&nbsp;</p>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{

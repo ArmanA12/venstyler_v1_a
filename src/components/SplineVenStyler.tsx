@@ -54,7 +54,7 @@ export default function SplineVenStyler() {
       variants={containerVariants}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      className="relative px-4 max-w-[1080px] text-center flex flex-col items-center justify-center gap-2 mx-auto pb-2 pointer-events-none -mb-[11%] sm:-mb-[7%] duration-200 ease-in-out perspective-1000"
+      className="relative border-t border-primary/50 border-dotted px-4 max-w-[1080px] text-center flex flex-col items-center justify-center gap-2 mx-auto pb-2 pointer-events-none -mb-[11%] sm:-mb-[7%] duration-200 ease-in-out perspective-1000"
       style={{ 
         perspective: '1000px',
         transformStyle: 'preserve-3d'

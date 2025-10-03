@@ -58,6 +58,7 @@ import Pricing from "./pages/Pricing";
 import EnquiryManagement from "./pages/EnquiryManagement";
 import EnquiryDetail from "./pages/EnquiryDetail";
 // import Analytics from "../src/hooks/Analytics";
+import Support from "./pages/Support";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -103,7 +104,7 @@ export default function App() {
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/enquiry-management" element={<ProtectedRoute><EnquiryManagement /></ProtectedRoute>} />
                 <Route path="/enquiry/:enquiryId" element={<ProtectedRoute><EnquiryDetail /></ProtectedRoute>} />
-
+                <Route path="/support" element={<Support />} />
 
                 <Route
                   path="/verify-otp"

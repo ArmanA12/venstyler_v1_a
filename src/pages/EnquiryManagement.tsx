@@ -76,7 +76,7 @@ export default function EnquiryManagement() {
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; color: string }> = {
-      PENDING: { variant: "secondary", color: "text-yellow-600" },
+      PENDING: { variant: "secondary", color: "text-white" },
       IN_PROGRESS: { variant: "default", color: "text-blue-600" },
       RESPONDED: { variant: "outline", color: "text-green-600" },
       CLOSED: { variant: "destructive", color: "text-gray-600" },

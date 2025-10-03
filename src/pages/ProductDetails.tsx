@@ -186,12 +186,12 @@ const ProductDetails = () => {
               </div> */}
 
               <div className="aspect-square overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10">
-  <ImageMagnifier
-    src={product.images[currentImageIndex]}
-    zoom={2.1}
-    lensSize={180}
-  />
-</div>
+                <ImageMagnifier
+                  src={product.images[currentImageIndex]}
+                  zoom={2.1}
+                  lensSize={180}
+                />
+              </div>
 
               {/* Nav */}
               <button
@@ -283,22 +283,22 @@ const ProductDetails = () => {
                   <ShieldQuestion className="w-5 h-5 text-primary" />
                   <span className="font-semibold text-primary">Payment Structure</span>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="bg-white/60 dark:bg-black/30 rounded-xl border border-green-200 dark:border-green-700">
                     <div className="relative  overflow-clip rounded-lg p-3">
                       <div><ShoppingCart className="w-5 h-5 text-green-700 dark:text-green-300" /></div>
-                    <div className="flex items-center gap-1 mb-1 mt-1">
-                      <p className="text-lg font-bold text-green-600 dark:text-green-400">₹{Math.round(product.price * 0.4)}</p>
-                      <span className="text-sm font-medium text-green-700 dark:text-green-300">Order Amount</span>
-                      
+                      <div className="flex items-center gap-1 mb-1 mt-1">
+                        <p className="text-lg font-bold text-green-600 dark:text-green-400">₹{Math.round(product.price * 0.4)}</p>
+                        <span className="text-sm font-medium text-green-700 dark:text-green-300">Order Amount</span>
+
+                      </div>
+                      <div className="absolute blur-2xl -top-4 -left-4 w-full h-10 bg-green-500"></div>
+
+                      <p className="text-xs text-green-600/70 dark:text-green-400/70">Pay now (40%)</p>
                     </div>
-                    <div className="absolute blur-2xl -top-4 -left-4 w-full h-10 bg-green-500"></div>
-                    
-                    <p className="text-xs text-green-600/70 dark:text-green-400/70">Pay now (40%)</p>
                   </div>
-                  </div>
-                  
+
                   <div className=" relative overflow-clip bg-white/60 dark:bg-black/30 p-3 rounded-lg border border-amber-200 dark:border-amber-400/50">
                     <div><CheckCircle className="w-5 h-5 text-amber-700 dark:text-amber-300" /></div>
                     <div className="flex items-center gap-2 mb-1 mt-1">
@@ -306,11 +306,11 @@ const ProductDetails = () => {
                       <span className="text-sm font-medium text-amber-700 dark:text-amber-300">Final Amount</span>
                     </div>
                     <div className="absolute blur-2xl -top-4 -left-4 w-full h-10 bg-amber-500"></div>
-                    
+
                     <p className="text-xs text-amber-600/70 dark:text-amber-400/70">After completion (60%)</p>
                   </div>
                 </div>
-                
+
                 <div className="text-center mt-3 pt-3 border-t border-primary/20">
                   <p className="text-xs text-muted-foreground">
                     Secure payment process - Pay 40% to start, 60% after design completion
@@ -378,9 +378,9 @@ const ProductDetails = () => {
                 <Button
                   variant="outline"
                   onClick={() => {
-    if (prod?.designer?.id) setIsEnquiryModalOpen(true);
-    else toast({ title: "Loading designer info..." });
-  }}
+                    if (prod?.designer?.id) setIsEnquiryModalOpen(true);
+                    else toast({ title: "Loading designer info..." });
+                  }}
                   className="text-lg py-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
@@ -463,14 +463,14 @@ const ProductDetails = () => {
                             </div>
                             <div>
                               <div className="flex items-center gap-1">
-                                 {Array.from({
-                                   length: 5,
-                                 }).map((_, idx) => (
-                                   <Star
-                                     key={idx}
-                                     className={`w-3 h-3 ${idx < (review.user.rating || 0) ? 'fill-primary text-primary' : 'text-muted-foreground'}`}
-                                   />
-                                 ))}
+                                {Array.from({
+                                  length: 5,
+                                }).map((_, idx) => (
+                                  <Star
+                                    key={idx}
+                                    className={`w-3 h-3 ${idx < (review.user.rating || 0) ? 'fill-primary text-primary' : 'text-muted-foreground'}`}
+                                  />
+                                ))}
                               </div>
                             </div>
                           </span>
