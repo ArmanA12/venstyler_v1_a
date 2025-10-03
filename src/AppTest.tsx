@@ -36,6 +36,7 @@ import MeetArtisans from "./pages/MeetArtisans";
 import Pricing from "./pages/Pricing";
 import EnquiryManagement from "./pages/EnquiryManagement";
 import EnquiryDetail from "./pages/EnquiryDetail";
+import Support from "./pages/Support";
 import socket from "@/lib/socket";
 import { useCallback, useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -174,6 +175,7 @@ const App = () => {
                   <Route path="/find-designers" element={<FindDesigners />} />
                   <Route path="/meet-artisans" element={<MeetArtisans />} />
                   <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/support" element={<Support />} />
                   <Route path="/enquiry-management" element={<ProtectedRoute><EnquiryManagement /></ProtectedRoute>} />
                   <Route path="/enquiry/:enquiryId" element={<ProtectedRoute><EnquiryDetail /></ProtectedRoute>} />
                   <Route

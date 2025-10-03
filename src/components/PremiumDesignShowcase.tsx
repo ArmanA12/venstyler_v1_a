@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Heart, Share2, BookmarkPlus, Star, Eye, ArrowRight, Filter } from "lucide-react";
+import { useFeed } from "@/hooks/useFeed";
+import { useToggleLike } from "@/hooks/useToggleLike";
+import { useToggleSave } from "@/hooks/useToggleSave";
+import { Link } from "react-router-dom";
 
 interface Design {
   id: number;
@@ -110,31 +114,32 @@ const dummyDesigns: Design[] = [
 const categories = ["All", "Bridal", "Casual", "Festive", "Party", "Wedding"];
 
 export const PremiumDesignShowcase = () => {
-  const [designs, setDesigns] = useState(dummyDesigns);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useFeed(page);
+  const { mutate: toggleLike } = useToggleLike();
+  const { mutate: toggleSave } = useToggleSave();
+
+  const designs = data?.items || [];
+  const totalItems = data?.total || 0;
   const designsPerPage = 6;
+  
+  // Extract unique categories from feed data
+  const categories = ["All", ...Array.from(new Set(designs.map(d => d.category).filter(Boolean)))];
 
   const filteredDesigns = selectedCategory === "All" 
     ? designs 
     : designs.filter(design => design.category === selectedCategory);
 
-  const totalPages = Math.ceil(filteredDesigns.length / designsPerPage);
-  const currentDesigns = filteredDesigns.slice(
-    (currentPage - 1) * designsPerPage,
-    currentPage * designsPerPage
-  );
+  const totalPages = Math.ceil(totalItems / designsPerPage);
+  const currentDesigns = filteredDesigns.slice(0, designsPerPage);
 
-  const toggleLike = (id: number) => {
-    setDesigns(prev => prev.map(design => 
-      design.id === id ? { ...design, isLiked: !design.isLiked } : design
-    ));
+  const handleToggleLike = (id: string) => {
+    toggleLike(Number(id));
   };
 
-  const toggleSave = (id: number) => {
-    setDesigns(prev => prev.map(design => 
-      design.id === id ? { ...design, isSaved: !design.isSaved } : design
-    ));
+  const handleToggleSave = (id: string) => {
+    toggleSave(Number(id));
   };
 
   return (
@@ -175,7 +180,7 @@ export const PremiumDesignShowcase = () => {
               variant={selectedCategory === category ? "default" : "outline"}
               onClick={() => {
                 setSelectedCategory(category);
-                setCurrentPage(1);
+                setPage(1);
               }}
               className={`rounded-full px-6 py-2 transition-all duration-300 ${
                 selectedCategory === category
@@ -196,106 +201,124 @@ export const PremiumDesignShowcase = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
         >
-          {currentDesigns.map((design, index) => (
-            <motion.div
-              key={design.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-            >
-              <Card className="group overflow-hidden hover-scale bg-card/60 backdrop-blur-xl border border-border/20 hover:border-primary/40 hover:shadow-2xl transition-all duration-700">
-                <div className="relative overflow-hidden">
-                  <img
-                    src={design.image}
-                    alt={design.title}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  
-                  {/* Overlay Actions */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="absolute top-4 right-4 flex gap-2">
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="w-9 h-9 rounded-xl bg-background/80 backdrop-blur-sm border-border/20 hover:bg-background hover:border-primary/30 shadow-lg"
-                        onClick={() => toggleLike(design.id)}
-                      >
-                        <Heart className={`w-4 h-4 ${design.isLiked ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`} />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="w-9 h-9 rounded-xl bg-background/80 backdrop-blur-sm border-border/20 hover:bg-background hover:border-primary/30 shadow-lg"
-                        onClick={() => toggleSave(design.id)}
-                      >
-                        <BookmarkPlus className={`w-4 h-4 ${design.isSaved ? 'fill-primary text-primary' : 'text-muted-foreground'}`} />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="w-9 h-9 rounded-xl bg-background/80 backdrop-blur-sm border-border/20 hover:bg-background hover:border-primary/30 shadow-lg"
-                      >
-                        <Share2 className="w-4 h-4 text-muted-foreground" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Category Badge */}
-                  <Badge className="absolute top-4 left-4 bg-gradient-to-r from-primary/90 to-secondary/90 text-white border-0">
-                    {design.category}
-                  </Badge>
-
-                  {/* Views Counter */}
-                  <div className="absolute bottom-4 left-4 flex items-center gap-1 bg-black/50 rounded-full px-2 py-1 text-white text-xs">
-                    <Eye className="w-3 h-3" />
-                    {design.views}
-                  </div>
-                </div>
-
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="flex items-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < Math.floor(design.rating)
-                              ? 'fill-yellow-400 text-yellow-400'
-                              : 'text-gray-300'
-                          }`}
+          {isLoading ? (
+            <p className="text-center col-span-3 text-muted-foreground">Loading designs...</p>
+          ) : currentDesigns.length === 0 ? (
+            <p className="text-center col-span-3 text-muted-foreground">No designs found</p>
+          ) : (
+            currentDesigns.map((design, index) => {
+              const discountedPrice = design.discount 
+                ? design.price - (design.price * design.discount) / 100 
+                : design.price;
+              
+              return (
+                <motion.div
+                  key={design.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <Card className="group overflow-hidden hover-scale bg-card/60 backdrop-blur-xl border border-border/20 hover:border-primary/40 hover:shadow-2xl transition-all duration-700">
+                    <Link to={`/products/${design.id}`}>
+                      <div className="relative overflow-hidden">
+                        <img
+                          src={design.imageUrl || design.images?.[0] || "/placeholder.svg"}
+                          alt={design.title}
+                          className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
                         />
-                      ))}
-                    </div>
-                    <span className="text-sm text-muted-foreground">
-                      {design.rating} ({design.reviews} reviews)
-                    </span>
-                  </div>
+                        
+                        {/* Overlay Actions */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="absolute top-4 right-4 flex gap-2">
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              className="w-9 h-9 rounded-xl bg-background/80 backdrop-blur-sm border-border/20 hover:bg-background hover:border-primary/30 shadow-lg"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleToggleLike(design.id);
+                              }}
+                            >
+                              <Heart className={`w-4 h-4 ${design.isLiked ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`} />
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              className="w-9 h-9 rounded-xl bg-background/80 backdrop-blur-sm border-border/20 hover:bg-background hover:border-primary/30 shadow-lg"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleToggleSave(design.id);
+                              }}
+                            >
+                              <BookmarkPlus className={`w-4 h-4 ${design.isSaved ? 'fill-primary text-primary' : 'text-muted-foreground'}`} />
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              className="w-9 h-9 rounded-xl bg-background/80 backdrop-blur-sm border-border/20 hover:bg-background hover:border-primary/30 shadow-lg"
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <Share2 className="w-4 h-4 text-muted-foreground" />
+                            </Button>
+                          </div>
+                        </div>
 
-                  <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-                    {design.title}
-                  </h3>
-                  
-                  <p className="text-sm text-muted-foreground mb-3">
-                    by {design.designer}
-                  </p>
+                        {/* Category Badge */}
+                        {design.category && (
+                          <Badge className="absolute top-4 left-4 bg-gradient-to-r from-primary/90 to-secondary/90 text-white border-0">
+                            {design.category}
+                          </Badge>
+                        )}
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl font-bold text-primary">{design.price}</span>
-                      <span className="text-sm text-muted-foreground line-through">{design.originalPrice}</span>
-                    </div>
-                    <Button
-                      size="sm"
-                      className="bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/25 rounded-full"
-                    >
-                      View Details
-                      <ArrowRight className="w-4 h-4 ml-1" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                        {/* Likes Counter */}
+                        <div className="absolute bottom-4 left-4 flex items-center gap-1 bg-black/50 rounded-full px-2 py-1 text-white text-xs">
+                          <Heart className="w-3 h-3" />
+                          {design.likes || 0}
+                        </div>
+                      </div>
+                    </Link>
+
+                    <CardContent className="p-6">
+                      <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+                        {design.title}
+                      </h3>
+                      
+                      <p className="text-sm text-muted-foreground mb-3 flex items-center gap-2">
+                        by {design.designer}
+                        {design.isVerified && (
+                          <Badge variant="outline" className="text-xs px-1 py-0">
+                            ✓
+                          </Badge>
+                        )}
+                      </p>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xl font-bold text-primary">
+                            ₹{discountedPrice.toLocaleString()}
+                          </span>
+                          {design.discount > 0 && (
+                            <span className="text-sm text-muted-foreground line-through">
+                              ₹{design.price.toLocaleString()}
+                            </span>
+                          )}
+                        </div>
+                        <Link to={`/products/${design.id}`}>
+                          <Button
+                            size="sm"
+                            className="bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/25 rounded-full"
+                          >
+                            View Details
+                            <ArrowRight className="w-4 h-4 ml-1" />
+                          </Button>
+                        </Link>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })
+          )}
         </motion.div>
 
         {/* Pagination */}
@@ -306,14 +329,14 @@ export const PremiumDesignShowcase = () => {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="flex justify-center gap-2"
           >
-            {[...Array(totalPages)].map((_, index) => (
+            {[...Array(Math.min(totalPages, 5))].map((_, index) => (
               <Button
                 key={index}
-                variant={currentPage === index + 1 ? "default" : "outline"}
+                variant={page === index + 1 ? "default" : "outline"}
                 size="icon"
-                onClick={() => setCurrentPage(index + 1)}
+                onClick={() => setPage(index + 1)}
                 className={`w-10 h-10 rounded-full ${
-                  currentPage === index + 1
+                  page === index + 1
                     ? "bg-gradient-to-r from-primary to-secondary"
                     : "border-2 border-border/50 hover:border-primary/30"
                 }`}
