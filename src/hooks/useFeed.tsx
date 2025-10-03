@@ -50,6 +50,7 @@ export function useFeed(page: number) {
         category: p.category,
         likes: p.meta?.likesCount ?? 0,
         comments: p.meta?.commentCount ?? 0,
+        views: Math.floor(Math.random() * (3000 - 500 + 1)) + 500, // Hardcoded views for now
         isLiked: !!p.isLiked, // <-- normalize here
         isSaved: !!p.isSaved,
       })),

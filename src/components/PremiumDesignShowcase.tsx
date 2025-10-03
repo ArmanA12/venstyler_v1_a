@@ -116,9 +116,11 @@ const categories = ["All", "Bridal", "Casual", "Festive", "Party", "Wedding"];
 export const PremiumDesignShowcase = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [page, setPage] = useState(1);
-  const { data, isLoading } = useFeed(page);
+  const { data, isLoading, error } = useFeed(page);
   const { mutate: toggleLike } = useToggleLike();
   const { mutate: toggleSave } = useToggleSave();
+
+  console.log("Feed data:", data, "Loading:", isLoading, "Error:", error);
 
   const designs = data?.items || [];
   const totalItems = data?.total || 0;
@@ -203,6 +205,8 @@ export const PremiumDesignShowcase = () => {
         >
           {isLoading ? (
             <p className="text-center col-span-3 text-muted-foreground">Loading designs...</p>
+          ) : error ? (
+            <p className="text-center col-span-3 text-destructive">Error loading designs. Please try again.</p>
           ) : currentDesigns.length === 0 ? (
             <p className="text-center col-span-3 text-muted-foreground">No designs found</p>
           ) : (
@@ -270,10 +274,16 @@ export const PremiumDesignShowcase = () => {
                           </Badge>
                         )}
 
-                        {/* Likes Counter */}
-                        <div className="absolute bottom-4 left-4 flex items-center gap-1 bg-black/50 rounded-full px-2 py-1 text-white text-xs">
-                          <Heart className="w-3 h-3" />
-                          {design.likes || 0}
+                        {/* Likes and Views Counter */}
+                        <div className="absolute bottom-4 left-4 flex items-center gap-2">
+                          <div className="flex items-center gap-1 bg-black/50 rounded-full px-2 py-1 text-white text-xs">
+                            <Heart className="w-3 h-3" />
+                            {design.likes || 0}
+                          </div>
+                          <div className="flex items-center gap-1 bg-black/50 rounded-full px-2 py-1 text-white text-xs">
+                            <Eye className="w-3 h-3" />
+                            {design.views || 0}
+                          </div>
                         </div>
                       </div>
                     </Link>
