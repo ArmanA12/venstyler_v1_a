@@ -3,11 +3,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { Heart, Share2, BookmarkPlus, Star, Eye, ArrowRight, Filter } from "lucide-react";
+import { Heart, BookmarkPlus, Star, Eye, ArrowRight, Filter, MessageCircle } from "lucide-react";
 import { useFeed } from "@/hooks/useFeed";
 import { useToggleLike } from "@/hooks/useToggleLike";
 import { useToggleSave } from "@/hooks/useToggleSave";
 import { Link } from "react-router-dom";
+import { ShareMenu } from "@/components/shareMenu/ShareMenu";
+import CommentsPanel from "@/components/comments/commentPanle";
+import { useShareDesign } from "@/hooks/useShareDesign";
+import { useAuthGate } from "@/hooks/useAuthGate";
+import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface Design {
   id: number;
@@ -116,9 +122,13 @@ const categories = ["All", "Bridal", "Casual", "Festive", "Party", "Wedding"];
 export const PremiumDesignShowcase = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [page, setPage] = useState(1);
+  const [openCommentsFor, setOpenCommentsFor] = useState<string | null>(null);
+  
   const { data, isLoading, error } = useFeed(page);
-  const { mutate: toggleLike } = useToggleLike();
-  const { mutate: toggleSave } = useToggleSave();
+  const { mutate: toggleLike } = useToggleLike(page);
+  const { mutate: toggleSave } = useToggleSave(page);
+  const { mutate: shareMutate } = useShareDesign(page);
+  const { gate } = useAuthGate();
 
   console.log("Feed data:", data, "Loading:", isLoading, "Error:", error);
 
@@ -136,12 +146,48 @@ export const PremiumDesignShowcase = () => {
   const totalPages = Math.ceil(totalItems / designsPerPage);
   const currentDesigns = filteredDesigns.slice(0, designsPerPage);
 
-  const handleToggleLike = (id: string) => {
-    toggleLike(Number(id));
+  const handleToggleLike = (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    gate("like this design", () => {
+      toggleLike(Number(id), {
+        onError: (err) =>
+          toast.error("Couldn't update like", {
+            description: err instanceof Error ? err.message : "Please try again.",
+          }),
+      });
+    });
   };
 
-  const handleToggleSave = (id: string) => {
-    toggleSave(Number(id));
+  const handleToggleSave = (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    gate("save this design", () => {
+      toggleSave(Number(id), {
+        onError: (err) =>
+          toast.error("Couldn't update save", {
+            description: err instanceof Error ? err.message : "Please try again.",
+          }),
+      });
+    });
+  };
+
+  const handleShare = (designId: number) => {
+    shareMutate(designId);
+  };
+
+  const handleShareClose = (status: "success" | "error") => {
+    if (status === "success") {
+      toast.success("Shared successfully!");
+    } else if (status === "error") {
+      toast.error("Sharing failed!");
+    }
+  };
+
+  const handleCommentClick = (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    gate("comment", () => setOpenCommentsFor(id));
   };
 
   return (
@@ -223,6 +269,25 @@ export const PremiumDesignShowcase = () => {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
                   <Card className="group overflow-hidden hover-scale bg-card/60 backdrop-blur-xl border border-border/20 hover:border-primary/40 hover:shadow-2xl transition-all duration-700">
+                    {/* Designer Info - Clickable */}
+                    <Link to={`/publicProfile/${design.userId}`}>
+                      <div className="p-4 flex items-center gap-3 hover:bg-muted/20 transition-colors">
+                        <Avatar className="w-10 h-10 border-2 border-primary/20">
+                          {design.designerAvatar ? (
+                            <AvatarImage src={design.designerAvatar} alt={design.designer} />
+                          ) : (
+                            <AvatarFallback>{design.designer?.[0] || "U"}</AvatarFallback>
+                          )}
+                        </Avatar>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-sm">{design.designer}</h4>
+                          {design.city && (
+                            <p className="text-xs text-muted-foreground">{design.city}</p>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+
                     <Link to={`/products/${design.id}`}>
                       <div className="relative overflow-hidden">
                         <img
@@ -231,42 +296,6 @@ export const PremiumDesignShowcase = () => {
                           className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
                         />
                         
-                        {/* Overlay Actions */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <div className="absolute top-4 right-4 flex gap-2">
-                            <Button
-                              size="icon"
-                              variant="outline"
-                              className="w-9 h-9 rounded-xl bg-background/80 backdrop-blur-sm border-border/20 hover:bg-background hover:border-primary/30 shadow-lg"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handleToggleLike(design.id);
-                              }}
-                            >
-                              <Heart className={`w-4 h-4 ${design.isLiked ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`} />
-                            </Button>
-                            <Button
-                              size="icon"
-                              variant="outline"
-                              className="w-9 h-9 rounded-xl bg-background/80 backdrop-blur-sm border-border/20 hover:bg-background hover:border-primary/30 shadow-lg"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handleToggleSave(design.id);
-                              }}
-                            >
-                              <BookmarkPlus className={`w-4 h-4 ${design.isSaved ? 'fill-primary text-primary' : 'text-muted-foreground'}`} />
-                            </Button>
-                            <Button
-                              size="icon"
-                              variant="outline"
-                              className="w-9 h-9 rounded-xl bg-background/80 backdrop-blur-sm border-border/20 hover:bg-background hover:border-primary/30 shadow-lg"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <Share2 className="w-4 h-4 text-muted-foreground" />
-                            </Button>
-                          </div>
-                        </div>
-
                         {/* Category Badge */}
                         {design.category && (
                           <Badge className="absolute top-4 left-4 bg-gradient-to-r from-primary/90 to-secondary/90 text-white border-0">
@@ -274,13 +303,17 @@ export const PremiumDesignShowcase = () => {
                           </Badge>
                         )}
 
-                        {/* Likes and Views Counter */}
+                        {/* Likes, Comments and Views Counter */}
                         <div className="absolute bottom-4 left-4 flex items-center gap-2">
-                          <div className="flex items-center gap-1 bg-black/50 rounded-full px-2 py-1 text-white text-xs">
+                          <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-2 py-1 text-white text-xs">
                             <Heart className="w-3 h-3" />
                             {design.likes || 0}
                           </div>
-                          <div className="flex items-center gap-1 bg-black/50 rounded-full px-2 py-1 text-white text-xs">
+                          <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-2 py-1 text-white text-xs">
+                            <MessageCircle className="w-3 h-3" />
+                            {design.comments || 0}
+                          </div>
+                          <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-2 py-1 text-white text-xs">
                             <Eye className="w-3 h-3" />
                             {design.views || 0}
                           </div>
@@ -289,6 +322,42 @@ export const PremiumDesignShowcase = () => {
                     </Link>
 
                     <CardContent className="p-6">
+                      {/* Action Buttons */}
+                      <div className="flex items-center gap-2 mb-4 pb-4 border-b border-border/30">
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="hover-glow"
+                          onClick={(e) => handleToggleLike(design.id, e)}
+                        >
+                          <Heart className={`w-5 h-5 transition ${design.isLiked ? 'fill-red-500 text-red-500' : ''}`} />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="hover-glow"
+                          onClick={(e) => handleCommentClick(design.id, e)}
+                        >
+                          <MessageCircle className="w-5 h-5" />
+                        </Button>
+                        <ShareMenu
+                          url={`https://venstyler.armanshekh.com/product/${design.id}`}
+                          title={design.title}
+                          onShared={() => handleShare(Number(design.id))}
+                          onClose={handleShareClose}
+                          className="hover-glow"
+                        />
+                        <div className="flex-1" />
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="hover-glow ml-auto"
+                          onClick={(e) => handleToggleSave(design.id, e)}
+                        >
+                          <BookmarkPlus className={`w-5 h-5 transition ${design.isSaved ? 'fill-primary text-primary' : ''}`} />
+                        </Button>
+                      </div>
+
                       <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
                         {design.title}
                       </h3>
@@ -458,6 +527,18 @@ export const PremiumDesignShowcase = () => {
                  style={{ transform: "translateZ(-40px) translateY(16px)" }}></div>
           </motion.div>
         </div>
-    </section>
-  );
-};
+
+        {/* Comments Panel */}
+        {openCommentsFor && (
+          <CommentsPanel
+            designId={Number(openCommentsFor)}
+            open={!!openCommentsFor}
+            onClose={() => setOpenCommentsFor(null)}
+            onPosted={() => {
+              // Optionally refresh feed to update comment count
+            }}
+          />
+        )}
+      </section>
+    );
+  };
