@@ -12,7 +12,6 @@ import { NotificationsProvider } from "./contexts/NotificationContext";
 import { NotificationsSocketBridge } from "./bridge/NotificationBridge";
 import { checkUserAuth } from "./lib/getCurrentUserDetails";
 // pages
-import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -59,9 +58,11 @@ import EnquiryManagement from "./pages/EnquiryManagement";
 import EnquiryDetail from "./pages/EnquiryDetail";
 // import Analytics from "../src/hooks/Analytics";
 import Support from "./pages/Support";
+import PremiumLoader from "./components/PremiumLoader";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -77,6 +78,10 @@ export default function App() {
     })();
   }, []);
 
+  if (isLoading) {
+    return <PremiumLoader onLoadingComplete={() => setIsLoading(false)} />;
+  }
+
   return (
     <ThemeProvider>
       <AuthProvider>
@@ -91,8 +96,8 @@ export default function App() {
             <BrowserRouter>
               <Analytics />
               <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/premium-home" element={<PremiumHomepage />} />
+                <Route path="/" element={<PremiumHomepage />} />
+                <Route path="/feed" element={<PremiumHomepage />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />

@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import Index from "./pages/Index";
 import PremiumHomepage from "./pages/PremiumHomepage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
@@ -164,8 +163,8 @@ const App = () => {
               <NotificationsSocketBridge userId={userId} />
               <BrowserRouter>
                 <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/premium" element={<PremiumHomepage />} />
+                  <Route path="/" element={<PremiumHomepage />} />
+                  <Route path="/feed" element={<PremiumHomepage />} />
                   <Route path="/signin" element={<SignIn />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
