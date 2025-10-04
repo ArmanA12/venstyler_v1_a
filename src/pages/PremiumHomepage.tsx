@@ -262,55 +262,83 @@ const fashionImages = [
           <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_5%,transparent_100%)]" />
 
 
-          <div className=" left-[10%] top-[60%] absolute z-50 group p-1 w-12 h-12 rounded-xl  flex items-center justify-center">
-            {/* Glow Beam */}
-            {/* <BorderBeam
-    colorFrom="#f05c92"
-    colorTo="#f05c92"
-    glowIntensity={1}
-    duration={20}
-    size={10}
-  /> */}
+          {/* Left Hexagon */}
+          <div className="left-[10%] top-[60%] absolute z-50 group">
+            {/* Connecting Lines */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[50px] w-[1px] h-[50px] bg-gradient-to-t from-primary via-primary/50 to-transparent" />
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[50px] w-[1px] h-[50px] bg-gradient-to-b from-primary via-primary/50 to-transparent" />
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[50px] h-[1px] w-[50px] bg-gradient-to-l from-primary via-primary/50 to-transparent" />
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[50px] h-[1px] w-[50px] bg-gradient-to-r from-primary via-primary/50 to-transparent" />
 
-            {/* 4 side middle lines going outside */}
-            {/* Top */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-t from-[#f05c92] to-transparent" />
-            {/* Bottom */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-b from-[#f05c92] to-transparent" />
-            {/* Left */}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-l from-[#f05c92] to-transparent" />
-            {/* Right */}
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-r from-[#f05c92] to-transparent" />
-
-            {/* Icon */}
-            <div className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10  rounded-full border border-border/10"><MessageCircle className="w-5 h-5 font-extralight text-primary" />
-              <div className="w-6 h-6 bg-[#f05c92] blur-xl absolute top-2 left-2"></div></div>
+            {/* Hexagon Container */}
+            <div className="relative w-16 h-16 flex items-center justify-center group-hover:scale-110 transition-all duration-500">
+              <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full animate-pulse">
+                <defs>
+                  <linearGradient id="hexGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
+                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
+                  </linearGradient>
+                  <filter id="glow1">
+                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                    <feMerge>
+                      <feMergeNode in="coloredBlur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+                <polygon 
+                  points="50 2, 95 27.5, 95 72.5, 50 98, 5 72.5, 5 27.5" 
+                  fill="url(#hexGrad1)"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth="1"
+                  filter="url(#glow1)"
+                  className="drop-shadow-2xl"
+                />
+              </svg>
+              <div className="relative z-10 backdrop-blur-md flex justify-center items-center">
+                <MessageCircle className="w-6 h-6 text-primary group-hover:rotate-12 transition-transform duration-500" />
+              </div>
+            </div>
           </div>
 
 
-          <div className=" right-[10%] top-[60%] absolute z-50 group p-1 w-12 h-12 rounded-xl  flex items-center justify-center">
-            {/* Glow Beam */}
-            {/* <BorderBeam
-    colorFrom="#f05c92"
-    colorTo="#f05c92"
-    glowIntensity={1}
-    duration={20}
-    size={10}
-  /> */}
+          {/* Right Hexagon */}
+          <div className="right-[10%] top-[60%] absolute z-50 group">
+            {/* Connecting Lines */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[50px] w-[1px] h-[50px] bg-gradient-to-t from-primary via-primary/50 to-transparent" />
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[50px] w-[1px] h-[50px] bg-gradient-to-b from-primary via-primary/50 to-transparent" />
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[50px] h-[1px] w-[50px] bg-gradient-to-l from-primary via-primary/50 to-transparent" />
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[50px] h-[1px] w-[50px] bg-gradient-to-r from-primary via-primary/50 to-transparent" />
 
-            {/* 4 side middle lines going outside */}
-            {/* Top */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-t from-[#f05c92] to-transparent" />
-            {/* Bottom */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-b from-[#f05c92] to-transparent" />
-            {/* Left */}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-l from-[#f05c92] to-transparent" />
-            {/* Right */}
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-r from-[#f05c92] to-transparent" />
-
-            {/* Icon */}
-            <div className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10  rounded-full border border-border/10"><MessageCircle className="w-5 h-5 font-extralight text-primary" />
-              <div className="w-6 h-6 bg-[#f05c92] blur-xl absolute top-2 left-2"></div></div>
+            {/* Hexagon Container */}
+            <div className="relative w-16 h-16 flex items-center justify-center group-hover:scale-110 transition-all duration-500">
+              <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full animate-pulse" style={{ animationDelay: "0.5s" }}>
+                <defs>
+                  <linearGradient id="hexGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
+                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
+                  </linearGradient>
+                  <filter id="glow2">
+                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                    <feMerge>
+                      <feMergeNode in="coloredBlur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+                <polygon 
+                  points="50 2, 95 27.5, 95 72.5, 50 98, 5 72.5, 5 27.5" 
+                  fill="url(#hexGrad2)"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth="1"
+                  filter="url(#glow2)"
+                  className="drop-shadow-2xl"
+                />
+              </svg>
+              <div className="relative z-10 backdrop-blur-md flex justify-center items-center">
+                <Video className="w-6 h-6 text-primary group-hover:rotate-12 transition-transform duration-500" />
+              </div>
+            </div>
           </div>
 
 

@@ -6,8 +6,16 @@
 
 /* Fashion Social Platform Design System */
 
-@layer base {
-  :root {
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+:root {
     --background: 0 0% 100%;
     --foreground: 220 13% 9%;
 
@@ -142,7 +150,6 @@
     --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)));
     --gradient-hero: linear-gradient(135deg, hsl(var(--primary)/0.1), hsl(var(--secondary)/0.1), hsl(var(--accent)/0.1));
   }
-}
 
 @layer base {
   * {
