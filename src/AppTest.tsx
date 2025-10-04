@@ -178,6 +178,7 @@ const App = () => {
                   <Route path="/support" element={<Support />} />
                   <Route path="/enquiry-management" element={<ProtectedRoute><EnquiryManagement /></ProtectedRoute>} />
                   <Route path="/enquiry/:enquiryId" element={<ProtectedRoute><EnquiryDetail /></ProtectedRoute>} />
+                  
                   <Route
                     path="/verify-otp"
                     element={
@@ -186,6 +187,7 @@ const App = () => {
                       </ProtectedRoute>
                     }
                   />
+                  
                   <Route
                     path="/ResetPassword"
                     element={
