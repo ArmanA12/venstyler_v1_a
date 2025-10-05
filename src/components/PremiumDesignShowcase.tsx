@@ -382,7 +382,7 @@ export const PremiumDesignShowcase = () => {
                             </span>
                           )}
                         </div>
-                        <Link to={`/products/${design.id}`}>
+                        <Link to={`/product/${design.id}`}>
                           <Button
                             size="sm"
                             className="bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/25 rounded-full"
