@@ -47,6 +47,7 @@ import {
 
 import { checkUserAuth } from "./lib/getCurrentUserDetails";
 import { NotificationsSocketBridge } from "./bridge/NotificationBridge";
+import AllDesigns from "./pages/AllDesigns";
 
 const queryClient = new QueryClient();
 
@@ -165,6 +166,7 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<PremiumHomepage />} />
                   <Route path="/feed" element={<PremiumHomepage />} />
+                  <Route path="/designs" element={<AllDesigns />} />
                   <Route path="/signin" element={<SignIn />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />

@@ -59,6 +59,7 @@ import EnquiryDetail from "./pages/EnquiryDetail";
 // import Analytics from "../src/hooks/Analytics";
 import Support from "./pages/Support";
 import PremiumLoader from "./components/PremiumLoader";
+import AllDesigns from "./pages/AllDesigns";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -98,6 +99,7 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<PremiumHomepage />} />
                 <Route path="/feed" element={<PremiumHomepage />} />
+                <Route path="/designs" element={<AllDesigns />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />

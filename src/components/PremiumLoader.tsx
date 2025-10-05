@@ -3,6 +3,7 @@ import { Shirt, Scissors, TruckIcon, Package, Sparkles, Heart } from "lucide-rea
 
 const PremiumLoader = ({ onLoadingComplete }: { onLoadingComplete: () => void }) => {
   const [currentIcon, setCurrentIcon] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   const icons = [
     { Icon: Shirt, label: "Designs" },
@@ -18,24 +19,31 @@ const PremiumLoader = ({ onLoadingComplete }: { onLoadingComplete: () => void })
       setCurrentIcon((prev) => (prev + 1) % icons.length);
     }, 400);
 
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => Math.min(prev + 2, 100));
+    }, 50);
+
     const timer = setTimeout(() => {
       onLoadingComplete();
     }, 2800);
 
     return () => {
       clearInterval(iconInterval);
+      clearInterval(progressInterval);
       clearTimeout(timer);
     };
   }, [onLoadingComplete]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="relative flex flex-col items-center gap-8">
-        {/* Animated Icons Circle */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border)/0.3)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border)/0.3)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_80%)]" />
+      
+      <div className="relative flex flex-col items-center gap-12">
+        {/* Clean Icon Display */}
         <div className="relative h-32 w-32">
           {icons.map((item, index) => {
             const Icon = item.Icon;
-            const angle = (index / icons.length) * 360;
             const isActive = index === currentIcon;
             
             return (
@@ -43,48 +51,39 @@ const PremiumLoader = ({ onLoadingComplete }: { onLoadingComplete: () => void })
                 key={index}
                 className="absolute inset-0 flex items-center justify-center transition-all duration-500"
                 style={{
-                  transform: `rotate(${angle}deg) translateY(-60px) rotate(-${angle}deg)`,
-                  opacity: isActive ? 1 : 0.2,
-                  scale: isActive ? 1.2 : 0.8,
+                  opacity: isActive ? 1 : 0,
+                  transform: isActive ? 'scale(1)' : 'scale(0.8)',
                 }}
               >
-                <div className={`rounded-full p-4 transition-all duration-500 ${
-                  isActive 
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/50" 
-                    : "bg-muted text-muted-foreground"
-                }`}>
-                  <Icon className="h-8 w-8" />
+                <div className="rounded-full p-6 bg-card border border-border/50 shadow-lg">
+                  <Icon className="h-12 w-12 text-foreground" />
                 </div>
               </div>
             );
           })}
-          
-          {/* Center Logo/Text */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="rounded-full bg-background/80 backdrop-blur-sm p-4 border-2 border-primary/20">
-              <Sparkles className="h-6 w-6 text-primary animate-pulse" />
-            </div>
-          </div>
         </div>
 
-        {/* Loading Text */}
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
+        {/* Brand Name */}
+        <div className="text-center space-y-3">
+          <h2 className="text-3xl font-bold text-foreground tracking-tight">
             VenStyler
           </h2>
-          <p className="text-sm text-muted-foreground animate-pulse">
-            {icons[currentIcon].label}...
+          <p className="text-sm text-muted-foreground font-medium">
+            {icons[currentIcon].label}
           </p>
         </div>
 
-        {/* Progress Bar */}
-        <div className="w-64 h-1 bg-muted rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-primary via-primary/80 to-primary rounded-full transition-all duration-300"
-            style={{
-              width: `${((currentIcon + 1) / icons.length) * 100}%`,
-            }}
-          />
+        {/* Clean Progress Bar */}
+        <div className="w-64 space-y-2">
+          <div className="h-1 bg-muted rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-foreground rounded-full transition-all duration-100 ease-linear"
+              style={{
+                width: `${progress}%`,
+              }}
+            />
+          </div>
+          <p className="text-xs text-center text-muted-foreground">{progress}%</p>
         </div>
       </div>
     </div>

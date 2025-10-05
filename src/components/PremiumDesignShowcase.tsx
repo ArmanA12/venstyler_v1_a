@@ -428,104 +428,39 @@ export const PremiumDesignShowcase = () => {
       </div>
         <div className="flex justify-center items-center relative mt-16">
           {/* 3D Spline-inspired Button with Enhanced Effects */}
-          <motion.div
-            whileHover={{ 
-              y: -12,
-              rotateX: 20,
-              rotateY: 5,
-              scale: 1.08,
-            }}
-            whileTap={{ 
-              y: -4,
-              scale: 0.95,
-              rotateX: 10
-            }}
-            transition={{ 
-              type: "spring", 
-              stiffness: 300, 
-              damping: 15,
-              mass: 0.8
-            }}
-            className="relative group cursor-pointer perspective-1000"
-            style={{ 
-              transformStyle: "preserve-3d",
-              perspective: "1000px"
-            }}
-          >
-            {/* 3D Depth Shadows - Multiple Layers */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/50 via-secondary/60 to-accent/50 rounded-full blur-2xl opacity-70 group-hover:opacity-90 transition-all duration-500" 
-                 style={{ transform: "translateZ(-60px) translateY(25px) rotateX(45deg)" }}></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/40 via-secondary/50 to-accent/40 rounded-full blur-3xl opacity-50 group-hover:opacity-70 transition-all duration-500" 
-                 style={{ transform: "translateZ(-80px) translateY(35px) rotateX(60deg)" }}></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-secondary/40 to-accent/30 rounded-full blur-[40px] opacity-30 group-hover:opacity-50 transition-all duration-500" 
-                 style={{ transform: "translateZ(-100px) translateY(45px) rotateX(75deg)" }}></div>
-            
-            {/* Floating 3D Elements */}
-            <div className="absolute -top-8 -left-8 w-4 h-4 bg-gradient-to-r from-accent to-primary rounded-full opacity-60 group-hover:opacity-100 animate-float" 
-                 style={{ transform: "translateZ(30px)" }}></div>
-            <div className="absolute -top-6 -right-10 w-3 h-3 bg-gradient-to-r from-secondary to-accent rounded-full opacity-40 group-hover:opacity-80 animate-float" 
-                 style={{ transform: "translateZ(20px)", animationDelay: "0.5s" }}></div>
-            <div className="absolute -bottom-6 -left-10 w-5 h-5 bg-gradient-to-r from-primary to-secondary rounded-full opacity-50 group-hover:opacity-90 animate-float" 
-                 style={{ transform: "translateZ(25px)", animationDelay: "1s" }}></div>
-            
-            {/* Main 3D Button */}
-            <button className="relative z-50 
-              bg-gradient-to-r from-primary via-secondary to-accent 
-              hover:from-primary/95 hover:via-secondary/95 hover:to-accent/95
-              text-primary-foreground font-bold text-xl
-              px-16 py-6 rounded-full
-              border-2 border-primary-foreground/20
-              shadow-[0_15px_50px_rgba(0,0,0,0.4),0_25px_80px_hsl(var(--primary)/0.5),inset_0_3px_6px_rgba(255,255,255,0.3),inset_0_-3px_6px_rgba(0,0,0,0.3)]
-              hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),0_35px_100px_hsl(var(--primary)/0.6),inset_0_4px_12px_rgba(255,255,255,0.4),inset_0_-4px_12px_rgba(0,0,0,0.4)]
-              transition-all duration-500 ease-out
-              group-hover:scale-110
-              before:content-[''] before:absolute before:inset-0 before:rounded-full
-              before:bg-gradient-to-r before:from-primary-foreground/20 before:via-transparent before:to-primary-foreground/20
-              before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-500
-              after:content-[''] after:absolute after:inset-[-2px] after:rounded-full
-              after:bg-gradient-to-r after:from-primary after:via-secondary after:to-accent
-              after:opacity-0 group-hover:after:opacity-30 after:blur-sm after:transition-all after:duration-500
-              after:-z-10"
-              style={{
-                transform: "translateZ(0px)",
-                textShadow: "0 3px 6px rgba(0,0,0,0.4)",
+          <Link to="/designs">
+            <motion.div
+              whileHover={{ 
+                y: -12,
+                rotateX: 20,
+                rotateY: 5,
+                scale: 1.08,
+              }}
+              whileTap={{ 
+                y: -4,
+                scale: 0.95,
+                rotateX: 10
+              }}
+              transition={{ 
+                type: "spring", 
+                stiffness: 300, 
+                damping: 15,
+                mass: 0.8
+              }}
+              className="relative group cursor-pointer perspective-1000"
+              style={{ 
+                transformStyle: "preserve-3d",
+                perspective: "1000px"
               }}
             >
-              <span className="relative z-20 flex items-center gap-3 group-hover:scale-105 transition-transform duration-300">
-                <span className="animate-pulse text-2xl">✨</span>
-                View All Design
-                <span className="animate-pulse text-2xl">✨</span>
-              </span>
-              
-              {/* Inner animated glow */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-primary-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
-              
-              {/* Orbiting particles */}
-              <div className="absolute inset-0 rounded-full overflow-hidden">
-                <div className="absolute w-2 h-2 bg-primary-foreground/60 rounded-full animate-spin" 
-                     style={{ 
-                       top: '20%', 
-                       left: '50%', 
-                       transformOrigin: '0 40px',
-                       animationDuration: '3s'
-                     }}></div>
-                <div className="absolute w-1.5 h-1.5 bg-primary-foreground/40 rounded-full animate-spin" 
-                     style={{ 
-                       top: '80%', 
-                       left: '50%', 
-                       transformOrigin: '0 -40px',
-                       animationDuration: '4s',
-                       animationDirection: 'reverse'
-                     }}></div>
-              </div>
-            </button>
-            
-            {/* Additional 3D depth layers */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/25 via-secondary/25 to-accent/25 opacity-70 group-hover:opacity-90 transition-all duration-500" 
-                 style={{ transform: "translateZ(-20px) translateY(8px)" }}></div>
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/15 via-secondary/15 to-accent/15 opacity-50 group-hover:opacity-70 transition-all duration-500" 
-                 style={{ transform: "translateZ(-40px) translateY(16px)" }}></div>
-          </motion.div>
+...
+              {/* Additional 3D depth layers */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/25 via-secondary/25 to-accent/25 opacity-70 group-hover:opacity-90 transition-all duration-500" 
+                   style={{ transform: "translateZ(-20px) translateY(8px)" }}></div>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/15 via-secondary/15 to-accent/15 opacity-50 group-hover:opacity-70 transition-all duration-500" 
+                   style={{ transform: "translateZ(-40px) translateY(16px)" }}></div>
+            </motion.div>
+          </Link>
         </div>
 
         {/* Comments Panel */}
