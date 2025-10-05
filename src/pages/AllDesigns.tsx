@@ -15,6 +15,7 @@ import { useAuthGate } from "@/hooks/useAuthGate";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Header } from "@/components/navbar/Header";
+import PremiumLoader from "@/components/PremiumLoader";
 
 const AllDesigns = () => {
   const navigate = useNavigate();
@@ -129,16 +130,8 @@ const AllDesigns = () => {
 
           {/* Loading State */}
           {isLoading && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {[...Array(12)].map((_, i) => (
-                <Card key={i} className="overflow-hidden animate-pulse">
-                  <div className="aspect-[3/4] bg-muted" />
-                  <CardContent className="p-4 space-y-2">
-                    <div className="h-4 bg-muted rounded w-3/4" />
-                    <div className="h-3 bg-muted rounded w-1/2" />
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="fixed inset-0 z-50">
+              <PremiumLoader />
             </div>
           )}
 
