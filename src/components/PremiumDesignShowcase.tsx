@@ -457,7 +457,7 @@ export const PremiumDesignShowcase = () => {
             >
               <Button
                 size="lg"
-                className="relative z-10 px-12 py-6 text-lg font-bold bg-gradient-to-r from-primary via-secondary to-accent text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 border-2 border-white/20"
+                className="relative tracking-wider z-10 px-12 py-6 text-lg font-bold bg-gradient-to-r from-primary via-secondary to-accent text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 border-2 border-white/20"
               >
                 View All Designs
                 <ArrowRight className="w-5 h-5 ml-2" />

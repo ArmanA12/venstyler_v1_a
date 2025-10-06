@@ -309,7 +309,7 @@ const fashionImages = [
             <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-r from-[#f05c92] to-transparent" />
 
             {/* Icon */}
-            <div className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10  rounded-full border border-border/10"><MessageCircle className="w-5 h-5 font-extralight text-primary" />
+            <div className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10  rounded-full border border-border/10"><Award className="w-5 h-5 font-extralight text-primary" />
               <div className="w-6 h-6 bg-[#f05c92] blur-xl absolute top-2 left-2"></div></div>
           </div>
 
@@ -517,7 +517,7 @@ const fashionImages = [
             </Badge>
             <h2 className="text-4xl z-30 md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                World's Best Designers
+                World's Best Wedding Design
               </span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
@@ -947,3 +947,5 @@ const fashionImages = [
 };
 
 export default PremiumHomepage;
+
+
