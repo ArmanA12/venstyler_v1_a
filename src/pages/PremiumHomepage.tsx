@@ -423,58 +423,75 @@ const fashionImages = [
           </div>
 
           <div className="relative">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-              {orderFlow.map((step, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 40, scale: 0.9 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    duration: 0.7,
-                    delay: index * 0.15,
-                    type: "spring",
-                    stiffness: 100
-                  }}
-                  viewport={{ once: true }}
-                  className="group relative"
-                  whileHover={{ y: -10, scale: 1.02 }}
-                >
-                  {/* Connection Line */}
-                  {index < orderFlow.length - 1 && (
-                    <div className="hidden lg:block absolute top-12 left-full w-8 h-0.5 bg-border/30 z-0" />
-                  )}
+            {/* Bento Grid Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-10 gap-4 auto-rows-[minmax(200px,auto)]">
+              {orderFlow.map((step, index) => {
+                // Define unique bento grid spans for each card
+                const gridSpans = [
+                  "md:col-span-3 lg:col-span-4 md:row-span-2", // First card - large
+                  "md:col-span-3 lg:col-span-3 md:row-span-1", // Second card
+                  "md:col-span-3 lg:col-span-3 md:row-span-1", // Third card
+                  "md:col-span-3 lg:col-span-6 md:row-span-1", // Fourth card - wide
+                  "md:col-span-3 lg:col-span-4 md:row-span-1", // Fifth card
+                ];
 
-                  <div className="relative text-center p-8 bg-card/80  backdrop-blur-sm  border rounded-sm border-border/10 hover:border-primary/40 transition-all duration-700 shadow-lg hover:shadow-2xl">
-                    {/* Step Number */}
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <div className="w-8 h-8 bg-foreground text-background rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
-                        {step.step}
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{
+                      duration: 0.6,
+                      delay: index * 0.1,
+                      ease: [0.25, 0.46, 0.45, 0.94]
+                    }}
+                    viewport={{ once: true }}
+                    className={`group relative ${gridSpans[index]}`}
+                    whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
+                  >
+                    <div className="relative h-full p-8 bg-gradient-to-br from-card/90 to-card/50 backdrop-blur-xl border border-border/20 rounded-3xl hover:border-primary/50 transition-all duration-700 shadow-xl hover:shadow-2xl overflow-hidden">
+                      {/* Gradient Overlay on Hover */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl" />
+                      
+                      {/* Glow Effect */}
+                      <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-all duration-700" />
+                      
+                      {/* Step Number Badge */}
+                      <div className="absolute top-6 right-6">
+                        <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-accent/20 backdrop-blur-sm border border-primary/30 rounded-2xl flex items-center justify-center text-sm font-bold text-primary shadow-lg group-hover:scale-110 transition-transform duration-300">
+                          {step.step}
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Icon Container */}
-                    <div className="relative mb-8 mt-4">
-                      <div className="w-20 h-20 mx-auto bg-card border border-border/20 rounded-3xl flex items-center justify-center group-hover:border-primary/40 transition-all duration-500 shadow-inner">
-                        <step.icon className="w-10 h-10 text-primary group-hover:scale-110 transition-transform duration-300" />
+                      {/* Icon Container */}
+                      <div className="relative mb-6 mt-2">
+                        <div className="relative inline-flex">
+                          {/* Icon Background Glow */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-700" />
+                          
+                          <div className="relative w-16 h-16 bg-gradient-to-br from-card to-background border border-border/30 rounded-2xl flex items-center justify-center group-hover:border-primary/50 transition-all duration-500 shadow-inner">
+                            <step.icon className="w-8 h-8 text-primary group-hover:scale-110 group-hover:rotate-6 transition-all duration-500" />
+                          </div>
+                        </div>
                       </div>
+
+                      {/* Content */}
+                      <div className="relative z-10">
+                        <h3 className="text-2xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors duration-300">
+                          {step.title}
+                        </h3>
+                        <p className="text-sm md:text-base text-muted-foreground leading-relaxed font-light">
+                          {step.description}
+                        </p>
+                      </div>
+
+                      {/* Decorative Corner Elements */}
+                      <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-primary/5 to-transparent rounded-tl-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     </div>
-
-                    <h3 className="text-xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">
-                      {step.title}
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed font-medium">
-                      {step.description}
-                    </p>
-
-                    {/* Hover Effect */}
-                    <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg pointer-events-none" />
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
-            {/* <div className="absolute  -z-10 -top-[130px] ">      <SplineWave />
-            </div> */}
-
           </div>
         </div>
       </motion.section>
