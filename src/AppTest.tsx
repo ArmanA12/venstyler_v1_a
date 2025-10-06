@@ -84,7 +84,6 @@ const App = () => {
     [toast]
   );
 
-
   const handleNewNotification = useCallback(
     (data: any) => {
       addNotification({
