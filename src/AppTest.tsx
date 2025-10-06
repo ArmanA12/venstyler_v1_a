@@ -277,15 +277,12 @@ const App = () => {
                       </ProtectedRoute>
                     }
                   />
-
-                  
                   <Route
                     path="/admin/orders/:orderId"
                     element={<OrderView />}
                   />
                   
                   <Route path="*" element={<NotFound />} />
-                  
                 </Routes>
               </BrowserRouter>
             </TooltipProvider>
