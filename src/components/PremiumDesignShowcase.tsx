@@ -14,6 +14,7 @@ import { useShareDesign } from "@/hooks/useShareDesign";
 import { useAuthGate } from "@/hooks/useAuthGate";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import PremiumLoader from "@/components/PremiumLoader";
 
 interface Design {
   id: number;
@@ -250,7 +251,7 @@ export const PremiumDesignShowcase = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
         >
           {isLoading ? (
-            <p className="text-center col-span-3 text-muted-foreground">Loading designs...</p>
+            <div className="col-span-3"><PremiumLoader onLoadingComplete={() => {}} /></div>
           ) : error ? (
             <p className="text-center col-span-3 text-destructive">Error loading designs. Please try again.</p>
           ) : currentDesigns.length === 0 ? (
@@ -425,7 +426,8 @@ export const PremiumDesignShowcase = () => {
             ))}
           </motion.div>
         )}
-      </div>
+
+        {/* View All Designs Button */}
         <div className="flex justify-center items-center relative mt-16">
           {/* 3D Spline-inspired Button with Enhanced Effects */}
           <Link to="/designs">
@@ -453,7 +455,14 @@ export const PremiumDesignShowcase = () => {
                 perspective: "1000px"
               }}
             >
-...
+              <Button
+                size="lg"
+                className="relative z-10 px-12 py-6 text-lg font-bold bg-gradient-to-r from-primary via-secondary to-accent text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 border-2 border-white/20"
+              >
+                View All Designs
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+              
               {/* Additional 3D depth layers */}
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/25 via-secondary/25 to-accent/25 opacity-70 group-hover:opacity-90 transition-all duration-500" 
                    style={{ transform: "translateZ(-20px) translateY(8px)" }}></div>
@@ -462,18 +471,19 @@ export const PremiumDesignShowcase = () => {
             </motion.div>
           </Link>
         </div>
+      </div>
 
-        {/* Comments Panel */}
-        {openCommentsFor && (
-          <CommentsPanel
-            designId={Number(openCommentsFor)}
-            open={!!openCommentsFor}
-            onClose={() => setOpenCommentsFor(null)}
-            onPosted={() => {
-              // Optionally refresh feed to update comment count
-            }}
-          />
-        )}
-      </section>
-    );
-  };
+      {/* Comments Panel */}
+      {openCommentsFor && (
+        <CommentsPanel
+          designId={Number(openCommentsFor)}
+          open={!!openCommentsFor}
+          onClose={() => setOpenCommentsFor(null)}
+          onPosted={() => {
+            // Optionally refresh feed to update comment count
+          }}
+        />
+      )}
+    </section>
+  );
+};

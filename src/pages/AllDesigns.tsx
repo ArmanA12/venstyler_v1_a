@@ -15,6 +15,7 @@ import { useAuthGate } from "@/hooks/useAuthGate";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Header } from "@/components/navbar/Header";
+import PremiumLoader from "@/components/PremiumLoader";
 
 const AllDesigns = () => {
   const navigate = useNavigate();
@@ -128,19 +129,7 @@ const AllDesigns = () => {
           </div>
 
           {/* Loading State */}
-          {isLoading && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {[...Array(12)].map((_, i) => (
-                <Card key={i} className="overflow-hidden animate-pulse">
-                  <div className="aspect-[3/4] bg-muted" />
-                  <CardContent className="p-4 space-y-2">
-                    <div className="h-4 bg-muted rounded w-3/4" />
-                    <div className="h-3 bg-muted rounded w-1/2" />
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+          {isLoading && <PremiumLoader onLoadingComplete={() => {}} />}
 
           {/* Design Grid */}
           {!isLoading && (
@@ -264,16 +253,23 @@ const AllDesigns = () => {
                         </div>
                       </div>
 
-                      {/* Price */}
-                      <div className="flex items-center gap-2 pt-2">
-                        <span className="text-lg font-bold text-foreground">
-                          ₹{design.price?.toLocaleString()}
-                        </span>
-                        {design.discount && design.discount > 0 && (
-                          <span className="text-sm text-muted-foreground line-through">
-                            ₹{(design.price / (1 - design.discount / 100)).toLocaleString()}
+                      {/* Price & View Details Button */}
+                      <div className="flex items-center justify-between pt-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg font-bold text-foreground">
+                            ₹{design.price?.toLocaleString()}
                           </span>
-                        )}
+                          {design.discount && design.discount > 0 && (
+                            <span className="text-sm text-muted-foreground line-through">
+                              ₹{(design.price / (1 - design.discount / 100)).toLocaleString()}
+                            </span>
+                          )}
+                        </div>
+                        <Link to={`/product/${design.id}`}>
+                          <Button size="sm" className="rounded-full">
+                            View Details
+                          </Button>
+                        </Link>
                       </div>
                     </CardContent>
                   </Card>
