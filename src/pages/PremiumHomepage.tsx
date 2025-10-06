@@ -249,144 +249,223 @@ const fashionImages = [
       {/* Header */}
       <Header />
 
-      {/* Hero Section */}
+      {/* Hero Section with Bento Grid */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16"
+        className="relative min-h-screen pt-24 pb-20 px-6"
       >
-
-        <div className="absolute inset-0">
-
-          <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_5%,transparent_100%)]" />
-
-
-          <div className=" left-[10%] top-[60%] absolute z-50 group p-1 w-12 h-12 rounded-xl  flex items-center justify-center">
-            {/* Glow Beam */}
-            {/* <BorderBeam
-    colorFrom="#f05c92"
-    colorTo="#f05c92"
-    glowIntensity={1}
-    duration={20}
-    size={10}
-  /> */}
-
-            {/* 4 side middle lines going outside */}
-            {/* Top */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-t from-[#f05c92] to-transparent" />
-            {/* Bottom */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-b from-[#f05c92] to-transparent" />
-            {/* Left */}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-l from-[#f05c92] to-transparent" />
-            {/* Right */}
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-r from-[#f05c92] to-transparent" />
-
-            {/* Icon */}
-            <div className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10  rounded-full border border-border/10"><MessageCircle className="w-5 h-5 font-extralight text-primary" />
-              <div className="w-6 h-6 bg-[#f05c92] blur-xl absolute top-2 left-2"></div></div>
-          </div>
-
-
-          <div className=" right-[10%] top-[60%] absolute z-50 group p-1 w-12 h-12 rounded-xl  flex items-center justify-center">
-            {/* Glow Beam */}
-            {/* <BorderBeam
-    colorFrom="#f05c92"
-    colorTo="#f05c92"
-    glowIntensity={1}
-    duration={20}
-    size={10}
-  /> */}
-
-            {/* 4 side middle lines going outside */}
-            {/* Top */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-t from-[#f05c92] to-transparent" />
-            {/* Bottom */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-b from-[#f05c92] to-transparent" />
-            {/* Left */}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-l from-[#f05c92] to-transparent" />
-            {/* Right */}
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-r from-[#f05c92] to-transparent" />
-
-            {/* Icon */}
-            <div className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10  rounded-full border border-border/10"><MessageCircle className="w-5 h-5 font-extralight text-primary" />
-              <div className="w-6 h-6 bg-[#f05c92] blur-xl absolute top-2 left-2"></div></div>
-          </div>
-
-
-        </div>
-
-        <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+        <div className="max-w-7xl mx-auto">
+          {/* Hero Text */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-center mb-16"
           >
-            <Badge variant="outline" className="mb-8 mt-16 px-6 py-3 text-sm font-medium border-primary/20 bg-card/50 backdrop-blur-sm shadow-lg">
+            <Badge variant="outline" className="mb-8 px-6 py-3 text-sm font-medium border-primary/20 bg-card/50 backdrop-blur-sm">
               <Sparkles className="w-4 h-4 mr-2" />
               Redefining Fashion Technology
             </Badge>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-[0.9] tracking-tight">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-[0.9] tracking-tight">
               <span className="block text-foreground mb-2">The Future of</span>
               <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
                 Designer Management
               </span>
             </h1>
 
-            <p className="text-md md:text-xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-light">
-              Where creativity meets technology. Connect with elite designers, master artisans,
-              <br className="hidden md:block" />
-              and transform your vision into extraordinary fashion reality.
+            <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed font-light">
+              Where creativity meets technology. Connect with elite designers and transform your vision into reality.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/signup">
-                <GradientButton
-                  size="lg"
-
-                >
+                <GradientButton size="lg">
                   Start Creating
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 ml-2" />
                 </GradientButton>
               </Link>
               <Link to="/explore">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="group px-10 py-6 text-lg font-semibold border border-border/50 hover:border-primary/50 rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-xl backdrop-blur-sm"
-                >
-                  <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                <Button variant="outline" size="lg" className="group">
+                  <Play className="w-5 h-5 mr-2" />
                   Watch Demo
                 </Button>
               </Link>
             </div>
           </motion.div>
 
-          {/* Elegant Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto"
-          >
-            {[
-              { number: "10K+", label: "Elite Designers", icon: Users },
-              { number: "50K+", label: "Satisfied Clients", icon: Heart },
-              { number: "1M+", label: "Designs Crafted", icon: Palette },
-              { number: "99.9%", label: "Success Rate", icon: Award },
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                className="group text-center p-6 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/20 hover:border-primary/30 transition-all duration-500"
-                whileHover={{ y: -5, scale: 1.02 }}
-              >
-                <stat.icon className="w-8 h-8 mx-auto mb-3 text-primary group-hover:scale-110 transition-transform" />
-                <div className="text-3xl md:text-4xl font-bold text-foreground mb-2">{stat.number}</div>
-                <div className="text-muted-foreground text-sm font-medium">{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
+          {/* Premium Bento Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-7xl mx-auto">
+            {/* Large Featured Card - Spans 2 columns and 2 rows */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-3xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-500"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
+              <div className="relative p-8 h-full flex flex-col justify-between min-h-[400px]">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+                    <Crown className="w-4 h-4" />
+                    Featured
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+                    Elite Designer Network
+                  </h3>
+                  <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
+                    Connect with 10,000+ verified designers and artisans. Your vision, their expertise.
+                  </p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="flex -space-x-3">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary border-2 border-background" />
+                    ))}
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-foreground">10K+</div>
+                    <div className="text-sm text-muted-foreground">Designers</div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Stats Card 1 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="group relative overflow-hidden rounded-3xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-500"
+            >
+              <div className="p-6 h-full flex flex-col justify-between min-h-[190px]">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Heart className="w-7 h-7 text-primary" />
+                </div>
+                <div>
+                  <div className="text-4xl font-bold mb-2 text-foreground">50K+</div>
+                  <p className="text-muted-foreground">Happy Clients</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Stats Card 2 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.45 }}
+              className="group relative overflow-hidden rounded-3xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-500"
+            >
+              <div className="p-6 h-full flex flex-col justify-between min-h-[190px]">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Award className="w-7 h-7 text-accent" />
+                </div>
+                <div>
+                  <div className="text-4xl font-bold mb-2 text-foreground">99.9%</div>
+                  <p className="text-muted-foreground">Success Rate</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Feature Card 1 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="group relative overflow-hidden rounded-3xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-500"
+            >
+              <div className="p-6 h-full flex flex-col justify-between min-h-[190px]">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-secondary/20 to-accent/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <MessageCircle className="w-7 h-7 text-secondary" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold mb-2 text-foreground">Real-time Chat</h4>
+                  <p className="text-sm text-muted-foreground">Instant collaboration</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Feature Card 2 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.55 }}
+              className="group relative overflow-hidden rounded-3xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-500"
+            >
+              <div className="p-6 h-full flex flex-col justify-between min-h-[190px]">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Video className="w-7 h-7 text-primary" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold mb-2 text-foreground">Video Meetings</h4>
+                  <p className="text-sm text-muted-foreground">Face-to-face consultations</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Wide Feature Card - Spans 2 columns */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="md:col-span-2 group relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 border border-border/50 hover:border-primary/30 transition-all duration-500"
+            >
+              <div className="p-8 h-full flex items-center justify-between min-h-[200px]">
+                <div className="max-w-md">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background/50 backdrop-blur-sm text-sm font-medium mb-4">
+                    <Zap className="w-4 h-4 text-primary" />
+                    Lightning Fast
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold mb-3 text-foreground">
+                    Seamless Order Process
+                  </h3>
+                  <p className="text-muted-foreground mb-6">
+                    From concept to delivery in 5 simple steps. Pay 40% upfront, 60% on completion.
+                  </p>
+                  <Link to="/explore">
+                    <Button variant="outline" className="group">
+                      Learn More
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </Link>
+                </div>
+                <div className="hidden lg:flex flex-col gap-2">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div key={i} className="w-12 h-12 rounded-xl bg-background/50 backdrop-blur-sm border border-border/50 flex items-center justify-center">
+                      <span className="text-lg font-bold text-primary">{i}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Ecosystem Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.65 }}
+              className="md:col-span-2 group relative overflow-hidden rounded-3xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-500"
+            >
+              <div className="p-8">
+                <h3 className="text-2xl font-bold mb-6 text-foreground">Complete Ecosystem</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {ecosystemCards.slice(0, 4).map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center flex-shrink-0">
+                        {item.icon}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-sm text-foreground">{item.count}</div>
+                        <div className="text-xs text-muted-foreground">{item.title}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </motion.section>
 
