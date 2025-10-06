@@ -59,108 +59,108 @@ const PremiumHomepage = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Dummy fashion images for marquee
-const fashionImages = [
-  {
-    src: "https://i.pinimg.com/1200x/83/3f/6a/833f6afcff34c6bacb5637dead11bb06.jpg",
-    alt: "Fashion Image 1",
-    href: "/designers/fashion-image-1"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/24/fc/66/24fc667f93ec1cc3fdb49e069790b9a8.jpg",
-    alt: "Fashion Image 2",
-    href: "/designers/fashion-image-2"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/21/d3/d5/21d3d5fe5f53d4280e7590c9f7cf79d4.jpg",
-    alt: "Fashion Image 3",
-    href: "/designers/fashion-image-3"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/ca/87/e3/ca87e33af6f384499b2b9d2c93963cd1.jpg",
-    alt: "Fashion Image 4",
-    href: "/designers/fashion-image-4"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/27/53/0f/27530f8ea31f28f58fa3a34d0fa46701.jpg",
-    alt: "Fashion Image 5",
-    href: "/designers/fashion-image-5"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/b4/7f/ae/b47fae93801b46971ab8b77a40c34d32.jpg",
-    alt: "Fashion Image 6",
-    href: "/designers/fashion-image-6"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/20/b5/d4/20b5d48ffa33bfebd7b7e33b9a4b5d22.jpg",
-    alt: "Fashion Image 7",
-    href: "/designers/fashion-image-7"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/f7/67/4f/f7674f6f3f232b3b01765f81cebbe706.jpg",
-    alt: "Fashion Image 8",
-    href: "/designers/fashion-image-8"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/e0/e3/cb/e0e3cbecd18fe0c8884bd6b796a6f5ad.jpg",
-    alt: "Fashion Image 9",
-    href: "/designers/fashion-image-9"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/ab/3f/3f/ab3f3f66410d7b2301ddcb4396280e2f.jpg",
-    alt: "Fashion Image 10",
-    href: "/designers/fashion-image-10"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/b1/08/85/b108854cb720c565fc1e8d7c76e74256.jpg",
-    alt: "Fashion Image 11",
-    href: "/designers/fashion-image-11"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/75/f5/80/75f580f90ad4d8e3261e043a34248951.jpg",
-    alt: "Fashion Image 12",
-    href: "/designers/fashion-image-12"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/07/d1/a5/07d1a57ec8231eff589181c1f7f0f7b9.jpg",
-    alt: "Fashion Image 13",
-    href: "/designers/fashion-image-13"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/1e/ce/23/1ece232f6fadeec6109262133e06e96c.jpg",
-    alt: "Fashion Image 14",
-    href: "/designers/fashion-image-14"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/ce/08/00/ce0800d60cfe8f0b3f26cd50aa5b4198.jpg",
-    alt: "Fashion Image 15",
-    href: "/designers/fashion-image-15"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/4d/4f/0e/4d4f0e9ad8a9a195a018071be4101925.jpg",
-    alt: "Fashion Image 16",
-    href: "/designers/fashion-image-16"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/56/43/fd/5643fd8114815d97900916ec3362e0b3.jpg",
-    alt: "Fashion Image 17",
-    href: "/designers/fashion-image-17"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/92/f2/d2/92f2d254933808a59149478ddf776f4d.jpg",
-    alt: "Fashion Image 18",
-    href: "/designers/fashion-image-18"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/f1/48/d6/f148d6b8d66c0934514508e2e8d253d6.jpg",
-    alt: "Fashion Image 19",
-    href: "/designers/fashion-image-19"
-  },
-  {
-    src: "https://i.pinimg.com/1200x/f1/48/d6/f148d6b8d66c0934514508e2e8d253d6.jpg",
-    alt: "Fashion Image 20",
-    href: "/designers/fashion-image-20"
-  }
-];
+  const fashionImages = [
+    {
+      src: "https://i.pinimg.com/1200x/83/3f/6a/833f6afcff34c6bacb5637dead11bb06.jpg",
+      alt: "Fashion Image 1",
+      href: "/designers/fashion-image-1"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/24/fc/66/24fc667f93ec1cc3fdb49e069790b9a8.jpg",
+      alt: "Fashion Image 2",
+      href: "/designers/fashion-image-2"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/21/d3/d5/21d3d5fe5f53d4280e7590c9f7cf79d4.jpg",
+      alt: "Fashion Image 3",
+      href: "/designers/fashion-image-3"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/ca/87/e3/ca87e33af6f384499b2b9d2c93963cd1.jpg",
+      alt: "Fashion Image 4",
+      href: "/designers/fashion-image-4"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/27/53/0f/27530f8ea31f28f58fa3a34d0fa46701.jpg",
+      alt: "Fashion Image 5",
+      href: "/designers/fashion-image-5"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/b4/7f/ae/b47fae93801b46971ab8b77a40c34d32.jpg",
+      alt: "Fashion Image 6",
+      href: "/designers/fashion-image-6"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/20/b5/d4/20b5d48ffa33bfebd7b7e33b9a4b5d22.jpg",
+      alt: "Fashion Image 7",
+      href: "/designers/fashion-image-7"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/f7/67/4f/f7674f6f3f232b3b01765f81cebbe706.jpg",
+      alt: "Fashion Image 8",
+      href: "/designers/fashion-image-8"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/e0/e3/cb/e0e3cbecd18fe0c8884bd6b796a6f5ad.jpg",
+      alt: "Fashion Image 9",
+      href: "/designers/fashion-image-9"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/ab/3f/3f/ab3f3f66410d7b2301ddcb4396280e2f.jpg",
+      alt: "Fashion Image 10",
+      href: "/designers/fashion-image-10"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/b1/08/85/b108854cb720c565fc1e8d7c76e74256.jpg",
+      alt: "Fashion Image 11",
+      href: "/designers/fashion-image-11"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/75/f5/80/75f580f90ad4d8e3261e043a34248951.jpg",
+      alt: "Fashion Image 12",
+      href: "/designers/fashion-image-12"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/07/d1/a5/07d1a57ec8231eff589181c1f7f0f7b9.jpg",
+      alt: "Fashion Image 13",
+      href: "/designers/fashion-image-13"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/1e/ce/23/1ece232f6fadeec6109262133e06e96c.jpg",
+      alt: "Fashion Image 14",
+      href: "/designers/fashion-image-14"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/ce/08/00/ce0800d60cfe8f0b3f26cd50aa5b4198.jpg",
+      alt: "Fashion Image 15",
+      href: "/designers/fashion-image-15"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/4d/4f/0e/4d4f0e9ad8a9a195a018071be4101925.jpg",
+      alt: "Fashion Image 16",
+      href: "/designers/fashion-image-16"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/56/43/fd/5643fd8114815d97900916ec3362e0b3.jpg",
+      alt: "Fashion Image 17",
+      href: "/designers/fashion-image-17"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/92/f2/d2/92f2d254933808a59149478ddf776f4d.jpg",
+      alt: "Fashion Image 18",
+      href: "/designers/fashion-image-18"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/f1/48/d6/f148d6b8d66c0934514508e2e8d253d6.jpg",
+      alt: "Fashion Image 19",
+      href: "/designers/fashion-image-19"
+    },
+    {
+      src: "https://i.pinimg.com/1200x/f1/48/d6/f148d6b8d66c0934514508e2e8d253d6.jpg",
+      alt: "Fashion Image 20",
+      href: "/designers/fashion-image-20"
+    }
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -264,13 +264,7 @@ const fashionImages = [
 
           <div className=" left-[10%] top-[60%] absolute z-50 group p-1 w-12 h-12 rounded-xl  flex items-center justify-center">
             {/* Glow Beam */}
-            {/* <BorderBeam
-    colorFrom="#f05c92"
-    colorTo="#f05c92"
-    glowIntensity={1}
-    duration={20}
-    size={10}
-  /> */}
+ 
 
             {/* 4 side middle lines going outside */}
             {/* Top */}
@@ -290,13 +284,7 @@ const fashionImages = [
 
           <div className=" right-[10%] top-[60%] absolute z-50 group p-1 w-12 h-12 rounded-xl  flex items-center justify-center">
             {/* Glow Beam */}
-            {/* <BorderBeam
-    colorFrom="#f05c92"
-    colorTo="#f05c92"
-    glowIntensity={1}
-    duration={20}
-    size={10}
-  /> */}
+    
 
             {/* 4 side middle lines going outside */}
             {/* Top */}
@@ -371,9 +359,9 @@ const fashionImages = [
             className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto"
           >
             {[
-              { number: "10K+", label: "Elite Designers", icon: Users },
-              { number: "50K+", label: "Satisfied Clients", icon: Heart },
-              { number: "1M+", label: "Designs Crafted", icon: Palette },
+              { number: "1.0K+", label: "Elite Designers", icon: Users },
+              { number: "5.0K+", label: "Satisfied Clients", icon: Heart },
+              { number: "10K+", label: "Designs Crafted", icon: Palette },
               { number: "99.9%", label: "Success Rate", icon: Award },
             ].map((stat, index) => (
               <motion.div
@@ -909,7 +897,7 @@ const fashionImages = [
             </div>
           </div>
         </div>
-           <p>&nbsp;</p>
+        <p>&nbsp;</p>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{
