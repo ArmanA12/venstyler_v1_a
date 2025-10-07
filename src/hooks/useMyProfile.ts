@@ -7,6 +7,6 @@ export function useMyProfile() {
   return useQuery({
     queryKey: ["myProfile"],
     queryFn: getMyProfile,
-    staleTime: 120_000,
+    staleTime: 60_000,
   });
 }

@@ -95,7 +95,6 @@ const Profile = () => {
 
   const { data: myProfile, isLoading } = useMyProfile();
   const updateMut = useUpdateProfile();
-  console.log(myProfile, "myProfile console")
 
   const { inputRef, inputAttrs, openPicker, previewUrl, uploading, remove } =
     useProfileImage({

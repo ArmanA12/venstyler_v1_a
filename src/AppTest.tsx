@@ -84,6 +84,7 @@ const App = () => {
     [toast]
   );
 
+
   const handleNewNotification = useCallback(
     (data: any) => {
       addNotification({
@@ -277,12 +278,15 @@ const App = () => {
                       </ProtectedRoute>
                     }
                   />
+
+                  
                   <Route
                     path="/admin/orders/:orderId"
                     element={<OrderView />}
                   />
                   
                   <Route path="*" element={<NotFound />} />
+                  
                 </Routes>
               </BrowserRouter>
             </TooltipProvider>
