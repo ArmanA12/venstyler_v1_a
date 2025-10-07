@@ -350,6 +350,24 @@
   }
 }
 
+@keyframes spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
 /* Hide scrollbar for chat messages */
 .scrollbar-hide {
   -ms-overflow-style: none;  /* Internet Explorer 10+ */

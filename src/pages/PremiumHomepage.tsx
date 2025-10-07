@@ -249,113 +249,238 @@ const PremiumHomepage = () => {
       {/* Header */}
       <Header />
 
-      {/* Hero Section */}
+      {/* Hero Section with Amazing Animations */}
       <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2 }}
         className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16"
       >
-
+        {/* Animated Background Elements */}
         <div className="absolute inset-0">
+          {/* Animated gradient orbs */}
+          <motion.div
+            animate={{
+              scale: [1, 1.2, 1],
+              rotate: [0, 180, 360],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-gradient-to-r from-primary/30 to-secondary/30 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{
+              scale: [1, 1.3, 1],
+              rotate: [360, 180, 0],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-gradient-to-l from-accent/30 to-primary/30 rounded-full blur-3xl"
+          />
 
-          <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_5%,transparent_100%)]" />
+          {/* Animated grid */}
+          <motion.div
+            animate={{ opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="absolute inset-0 bg-[linear-gradient(hsl(var(--border))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_5%,transparent_100%)]"
+          />
 
+          {/* Floating animated icons */}
+          {[
+            { Icon: MessageCircle, left: "10%", top: "20%", delay: 0 },
+            { Icon: Award, right: "10%", top: "25%", delay: 1 },
+            { Icon: Heart, left: "15%", bottom: "30%", delay: 2 },
+            { Icon: Star, right: "15%", bottom: "35%", delay: 1.5 },
+            { Icon: Crown, left: "8%", top: "50%", delay: 2.5 },
+            { Icon: Sparkles, right: "8%", top: "45%", delay: 3 },
+          ].map((item, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{
+                opacity: [0, 1, 1, 0],
+                scale: [0, 1, 1, 0],
+                y: [0, -20, 0],
+                rotate: [0, 360],
+              }}
+              transition={{
+                duration: 4,
+                delay: item.delay,
+                repeat: Infinity,
+                repeatDelay: 5,
+                ease: "easeInOut"
+              }}
+              style={{ left: item.left, right: item.right, top: item.top, bottom: item.bottom }}
+              className="absolute z-10 p-1 w-12 h-12 rounded-xl flex items-center justify-center"
+            >
+              {/* Glowing lines */}
+              <motion.div
+                animate={{ scaleY: [0, 1], opacity: [1, 0] }}
+                transition={{ duration: 1, delay: item.delay + 0.5 }}
+                className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-t from-primary to-transparent"
+              />
+              <motion.div
+                animate={{ scaleY: [0, 1], opacity: [1, 0] }}
+                transition={{ duration: 1, delay: item.delay + 0.7 }}
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-b from-primary to-transparent"
+              />
+              <motion.div
+                animate={{ scaleX: [0, 1], opacity: [1, 0] }}
+                transition={{ duration: 1, delay: item.delay + 0.6 }}
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-l from-primary to-transparent"
+              />
+              <motion.div
+                animate={{ scaleX: [0, 1], opacity: [1, 0] }}
+                transition={{ duration: 1, delay: item.delay + 0.8 }}
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-r from-primary to-transparent"
+              />
 
-          <div className=" left-[10%] top-[60%] absolute z-50 group p-1 w-12 h-12 rounded-xl  flex items-center justify-center">
-            {/* Glow Beam */}
- 
-
-            {/* 4 side middle lines going outside */}
-            {/* Top */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-t from-[#f05c92] to-transparent" />
-            {/* Bottom */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-b from-[#f05c92] to-transparent" />
-            {/* Left */}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-l from-[#f05c92] to-transparent" />
-            {/* Right */}
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-r from-[#f05c92] to-transparent" />
-
-            {/* Icon */}
-            <div className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10  rounded-full border border-border/10"><MessageCircle className="w-5 h-5 font-extralight text-primary" />
-              <div className="w-6 h-6 bg-[#f05c92] blur-xl absolute top-2 left-2"></div></div>
-          </div>
-
-
-          <div className=" right-[10%] top-[60%] absolute z-50 group p-1 w-12 h-12 rounded-xl  flex items-center justify-center">
-            {/* Glow Beam */}
-    
-
-            {/* 4 side middle lines going outside */}
-            {/* Top */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-t from-[#f05c92] to-transparent" />
-            {/* Bottom */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[40px] w-[1px] h-[40px] bg-gradient-to-b from-[#f05c92] to-transparent" />
-            {/* Left */}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-l from-[#f05c92] to-transparent" />
-            {/* Right */}
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-r from-[#f05c92] to-transparent" />
-
-            {/* Icon */}
-            <div className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10  rounded-full border border-border/10"><Award className="w-5 h-5 font-extralight text-primary" />
-              <div className="w-6 h-6 bg-[#f05c92] blur-xl absolute top-2 left-2"></div></div>
-          </div>
-
-
+              <motion.div
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10 rounded-full border border-primary/20"
+              >
+                <item.Icon className="w-5 h-5 font-extralight text-primary" />
+                <div className="w-6 h-6 bg-primary blur-xl absolute top-2 left-2" />
+              </motion.div>
+            </motion.div>
+          ))}
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 1, delay: 0.3 }}
           >
-            <Badge variant="outline" className="mb-8 mt-16 px-6 py-3 text-sm font-medium border-primary/20 bg-card/50 backdrop-blur-sm shadow-lg">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Redefining Fashion Technology
-            </Badge>
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              <Badge variant="outline" className="mb-8 mt-16 px-6 py-3 text-sm font-medium border-primary/20 bg-card/50 backdrop-blur-sm shadow-lg">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                  className="inline-block"
+                >
+                  <Sparkles className="w-4 h-4 mr-2" />
+                </motion.div>
+                Redefining Fashion Technology
+              </Badge>
+            </motion.div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-[0.9] tracking-tight">
-              <span className="block text-foreground mb-2">The Future of</span>
-              <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                Designer Management
-              </span>
-            </h1>
+            <motion.h1
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.6 }}
+              className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-[0.9] tracking-tight"
+            >
+              <motion.span
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.7 }}
+                className="block text-foreground mb-2"
+              >
+                The Future of
+              </motion.span>
+              <motion.span
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.9 }}
+                className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
+                style={{
+                  backgroundSize: "200% auto",
+                }}
+              >
+                <motion.div
+                  animate={{
+                    backgroundPosition: ["0% center", "200% center"],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                  style={{
+                    backgroundImage: "linear-gradient(to right, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--accent)), hsl(var(--primary)))",
+                    backgroundSize: "200% auto",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    color: "transparent",
+                  }}
+                >
+                  Designer Management
+                </motion.div>
+              </motion.span>
+            </motion.h1>
 
-            <p className="text-md md:text-xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-light">
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.1 }}
+              className="text-md md:text-xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-light"
+            >
               Where creativity meets technology. Connect with elite designers, master artisans,
               <br className="hidden md:block" />
               and transform your vision into extraordinary fashion reality.
-            </p>
+            </motion.p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.3 }}
+              className="flex flex-col sm:flex-row gap-6 justify-center mb-16"
+            >
               <Link to="/signup">
-                <GradientButton
-                  size="lg"
-
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400 }}
                 >
-                  Start Creating
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </GradientButton>
+                  <GradientButton size="lg" className="group">
+                    Start Creating
+                    <motion.div
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                      className="inline-block ml-2"
+                    >
+                      <ArrowRight className="w-5 h-5" />
+                    </motion.div>
+                  </GradientButton>
+                </motion.div>
               </Link>
               <Link to="/explore">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="group px-10 py-6 text-lg font-semibold border border-border/50 hover:border-primary/50 rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-xl backdrop-blur-sm"
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-                  Watch Demo
-                </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="group px-10 py-6 text-lg font-semibold border border-border/50 hover:border-primary/50 rounded-2xl transition-all duration-500 backdrop-blur-sm"
+                  >
+                    <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                    Watch Demo
+                  </Button>
+                </motion.div>
               </Link>
-            </div>
+            </motion.div>
           </motion.div>
 
-          {/* Elegant Stats */}
+          {/* Animated Stats */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 1.5 }}
             className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto"
           >
             {[
@@ -366,12 +491,57 @@ const PremiumHomepage = () => {
             ].map((stat, index) => (
               <motion.div
                 key={index}
-                className="group text-center p-6 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/20 hover:border-primary/30 transition-all duration-500"
-                whileHover={{ y: -5, scale: 1.02 }}
+                initial={{ opacity: 0, scale: 0.5, rotateY: -180 }}
+                animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                transition={{
+                  duration: 0.6,
+                  delay: 1.7 + index * 0.1,
+                  type: "spring",
+                  stiffness: 200
+                }}
+                whileHover={{
+                  y: -10,
+                  scale: 1.05,
+                  rotateY: 10,
+                  transition: { duration: 0.3 }
+                }}
+                className="group text-center p-6 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/20 hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 cursor-pointer"
               >
-                <stat.icon className="w-8 h-8 mx-auto mb-3 text-primary group-hover:scale-110 transition-transform" />
-                <div className="text-3xl md:text-4xl font-bold text-foreground mb-2">{stat.number}</div>
+                <motion.div
+                  animate={{
+                    rotate: [0, 10, -10, 0],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    delay: index * 0.2
+                  }}
+                >
+                  <stat.icon className="w-8 h-8 mx-auto mb-3 text-primary" />
+                </motion.div>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.5, delay: 1.9 + index * 0.1 }}
+                  className="text-3xl md:text-4xl font-bold text-foreground mb-2"
+                >
+                  {stat.number}
+                </motion.div>
                 <div className="text-muted-foreground text-sm font-medium">{stat.label}</div>
+                
+                {/* Glow effect on hover */}
+                <motion.div
+                  className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  animate={{
+                    x: ["-100%", "100%"],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                />
               </motion.div>
             ))}
           </motion.div>
@@ -379,7 +549,7 @@ const PremiumHomepage = () => {
       </motion.section>
 
 
-      {/* Seamless Order Flow */}
+      {/* Seamless Order Flow with Amazing Animations */}
       <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -387,103 +557,294 @@ const PremiumHomepage = () => {
         viewport={{ once: true }}
         className="py-32 relative overflow-hidden border-b border-border/80"
       >
-        {/* Background Elements */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.1),transparent_70%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,107,107,0.1),transparent_70%)]" />
+        {/* Animated Background Elements */}
+        <motion.div
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.1, 0.15, 0.1],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.1),transparent_70%)]"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.1, 0.15, 0.1],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+          className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,107,107,0.1),transparent_70%)]"
+        />
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10 ">
-          <div className="text-center mb-20 ">
-            <Badge variant="outline" className="mb-8 px-6 py-3 text-sm font-medium border-primary/20 bg-card/50 backdrop-blur-sm shadow-lg">
-              <Zap className="w-4 h-4 mr-2" />
-              Engineered Excellence
-            </Badge>
-            <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tight">
+        {/* Floating particles */}
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              opacity: [0, 1, 0],
+              scale: [0, 1, 0],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 5,
+            }}
+          />
+        ))}
 
-              <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                Seamless  Order Experience
-              </span>
-            </h2>
-            <p className="text-xl md:text-xl text-muted-foreground max-w-4xl mx-auto font-light leading-relaxed">
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              whileInView={{ scale: 1, rotate: 0 }}
+              transition={{ duration: 0.6, type: "spring" }}
+              viewport={{ once: true }}
+            >
+              <Badge variant="outline" className="mb-8 px-6 py-3 text-sm font-medium border-primary/20 bg-card/50 backdrop-blur-sm shadow-lg">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  className="inline-block"
+                >
+                  <Zap className="w-4 h-4 mr-2" />
+                </motion.div>
+                Engineered Excellence
+              </Badge>
+            </motion.div>
+            
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="text-5xl md:text-7xl font-black mb-8 tracking-tight"
+            >
+              <motion.span
+                className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
+                animate={{
+                  backgroundPosition: ["0% center", "200% center"],
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+                style={{
+                  backgroundImage: "linear-gradient(to right, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--accent)), hsl(var(--primary)))",
+                  backgroundSize: "200% auto",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                }}
+              >
+                Seamless Order Experience
+              </motion.span>
+            </motion.h2>
+            
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="text-xl md:text-xl text-muted-foreground max-w-4xl mx-auto font-light leading-relaxed"
+            >
               A meticulously crafted journey from initial concept to final masterpiece,
               <br className="hidden md:block" />
               where every step is designed for perfection and transparency.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           <div className="relative">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
               {orderFlow.map((step, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 40, scale: 0.9 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  initial={{ opacity: 0, y: 100, rotateX: -90 }}
+                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   transition={{
-                    duration: 0.7,
+                    duration: 0.8,
                     delay: index * 0.15,
                     type: "spring",
                     stiffness: 100
                   }}
                   viewport={{ once: true }}
                   className="group relative"
-                  whileHover={{ y: -10, scale: 1.02 }}
+                  whileHover={{
+                    y: -15,
+                    scale: 1.05,
+                    rotateY: 5,
+                    transition: { duration: 0.3 }
+                  }}
                 >
-                  {/* Connection Line */}
+                  {/* Animated Connection Line */}
                   {index < orderFlow.length - 1 && (
-                    <div className="hidden lg:block absolute top-12 left-full w-8 h-0.5 bg-border/30 z-0" />
+                    <motion.div
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      transition={{ duration: 0.5, delay: index * 0.15 + 0.5 }}
+                      viewport={{ once: true }}
+                      className="hidden lg:block absolute top-12 left-full w-8 h-0.5 bg-gradient-to-r from-primary to-transparent z-0 origin-left"
+                    />
                   )}
 
-                  <div className="relative text-center p-8 bg-card/80  backdrop-blur-sm  border rounded-sm border-border/10 hover:border-primary/40 transition-all duration-700 shadow-lg hover:shadow-2xl">
-                    {/* Step Number */}
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <div className="w-8 h-8 bg-foreground text-background rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
+                  <motion.div
+                    className="relative text-center p-8 bg-card/80 backdrop-blur-sm border rounded-xl border-border/10 hover:border-primary/40 transition-all duration-700 shadow-lg hover:shadow-2xl overflow-hidden"
+                    whileHover={{
+                      boxShadow: "0 20px 60px -15px hsl(var(--primary) / 0.4)",
+                    }}
+                  >
+                    {/* Animated Step Number */}
+                    <motion.div
+                      initial={{ scale: 0, rotate: -180 }}
+                      whileInView={{ scale: 1, rotate: 0 }}
+                      transition={{
+                        duration: 0.5,
+                        delay: index * 0.15 + 0.3,
+                        type: "spring",
+                        stiffness: 200
+                      }}
+                      viewport={{ once: true }}
+                      className="absolute -top-4 left-1/2 transform -translate-x-1/2"
+                    >
+                      <motion.div
+                        animate={{
+                          boxShadow: [
+                            "0 0 0 0 hsl(var(--primary) / 0.4)",
+                            "0 0 0 8px hsl(var(--primary) / 0)",
+                          ],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                        }}
+                        className="w-8 h-8 bg-foreground text-background rounded-full flex items-center justify-center text-sm font-bold shadow-lg"
+                      >
                         {step.step}
-                      </div>
-                    </div>
+                      </motion.div>
+                    </motion.div>
 
-                    {/* Icon Container */}
+                    {/* Animated Icon Container */}
                     <div className="relative mb-8 mt-4">
-                      <div className="w-20 h-20 mx-auto bg-card border border-border/20 rounded-3xl flex items-center justify-center group-hover:border-primary/40 transition-all duration-500 shadow-inner">
-                        <step.icon className="w-10 h-10 text-primary group-hover:scale-110 transition-transform duration-300" />
-                      </div>
+                      <motion.div
+                        animate={{
+                          rotate: [0, 5, -5, 0],
+                        }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          delay: index * 0.3
+                        }}
+                        className="w-20 h-20 mx-auto bg-gradient-to-br from-card via-primary/5 to-card border border-border/20 rounded-3xl flex items-center justify-center group-hover:border-primary/40 transition-all duration-500 shadow-inner relative overflow-hidden"
+                      >
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+                          animate={{
+                            x: ["-100%", "200%"],
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            repeatDelay: 1,
+                          }}
+                        />
+                        <motion.div
+                          whileHover={{ rotate: 360, scale: 1.2 }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          <step.icon className="w-10 h-10 text-primary relative z-10" />
+                        </motion.div>
+                      </motion.div>
                     </div>
 
-                    <h3 className="text-xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">
+                    <motion.h3
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ delay: index * 0.15 + 0.6 }}
+                      viewport={{ once: true }}
+                      className="text-xl font-bold mb-4 group-hover:text-primary transition-colors duration-300"
+                    >
                       {step.title}
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed font-medium">
+                    </motion.h3>
+                    
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ delay: index * 0.15 + 0.7 }}
+                      viewport={{ once: true }}
+                      className="text-muted-foreground leading-relaxed font-medium"
+                    >
                       {step.description}
-                    </p>
+                    </motion.p>
 
-                    {/* Hover Effect */}
-                    <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg pointer-events-none" />
-                  </div>
+                    {/* Animated Hover Effect */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl pointer-events-none"
+                      animate={{
+                        backgroundPosition: ["0% 0%", "100% 100%"],
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        repeatType: "reverse"
+                      }}
+                    />
+                  </motion.div>
                 </motion.div>
               ))}
             </div>
-            {/* <div className="absolute  -z-10 -top-[130px] ">      <SplineWave />
-            </div> */}
-
           </div>
         </div>
       </motion.section>
 
-      {/* 3D Designer Marquee */}
+      {/* 3D Designer Marquee with Animated Rings */}
       <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className=" overflow-clip pb-20 relative bg-gradient-to-b from-background to-muted/20 border-b border-border/50"
+        className="overflow-clip pb-20 relative bg-gradient-to-b from-background to-muted/20 border-b border-border/50"
       >
-
         <div className="relative w-full h-full flex items-center justify-center">
-          {/* Parent radial gradient circle */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)] rounded-full" />
+          {/* Parent radial gradient circle with pulse */}
+          <motion.div
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.05, 0.1, 0.05],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)] rounded-full"
+          />
 
-          {/* Concentric circles (more + closer) */}
+          {/* Animated Concentric circles */}
           {[128, 256, 384, 512, 640, 768, 896, 1024, 1152, 1280].map((size, index) => (
-            <div
+            <motion.div
               key={index}
+              initial={{ scale: 0, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
               className="absolute rounded-full border border-border/50"
               style={{
                 width: `${size}px`,
@@ -491,108 +852,265 @@ const PremiumHomepage = () => {
                 top: "50%",
                 left: "50%",
                 transform: "translate(-50%, -50%)",
+                animation: `spin ${20 + index * 2}s linear infinite ${index % 2 === 0 ? 'normal' : 'reverse'}`,
               }}
-            ></div>
+            />
           ))}
         </div>
 
-
-        <div className="max-w-7xl mx-auto px-6 relative z-40 ">
-          <div className="text-center mb-8 mt-24">
-            <Badge variant="outline" className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
-              <Star className="w-4 h-4 mr-2 text-primary" />
-              Featured Showcase
-            </Badge>
-            <h2 className="text-4xl z-30 md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        <div className="max-w-7xl mx-auto px-6 relative z-40">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-8 mt-24"
+          >
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              whileInView={{ scale: 1, rotate: 0 }}
+              transition={{ duration: 0.6, type: "spring" }}
+              viewport={{ once: true }}
+            >
+              <Badge variant="outline" className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
+                <motion.div
+                  animate={{ rotate: 360, scale: [1, 1.2, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                  className="inline-block"
+                >
+                  <Star className="w-4 h-4 mr-2 text-primary" />
+                </motion.div>
+                Featured Showcase
+              </Badge>
+            </motion.div>
+            
+            <motion.h2
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="text-4xl z-30 md:text-6xl font-bold mb-6"
+            >
+              <motion.span
+                className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+                animate={{
+                  backgroundPosition: ["0% center", "200% center"],
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+                style={{
+                  backgroundImage: "linear-gradient(to right, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--primary)))",
+                  backgroundSize: "200% auto",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                }}
+              >
                 World's Best Wedding Design
-              </span>
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              </motion.span>
+            </motion.h2>
+            
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="text-lg text-muted-foreground max-w-3xl mx-auto"
+            >
               Discover premium collections from our elite designer network
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
-          <ThreeDMarquee
-            images={fashionImages}
-            cols={4}
-            className="max-w-6xl z-50 mx-auto border border-border/50"
-            onImageClick={(image, index) => console.log(image, index)}
-          />
-
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <ThreeDMarquee
+              images={fashionImages}
+              cols={4}
+              className="max-w-6xl z-50 mx-auto border border-border/50"
+              onImageClick={(image, index) => console.log(image, index)}
+            />
+          </motion.div>
         </div>
       </motion.section>
 
-      {/* Ecosystem Section */}
+      {/* Ecosystem Section with Grid Animation */}
       <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="py-32 bg-gradient-to-br from-muted/20 via-background to-muted/30"
+        className="py-32 bg-gradient-to-br from-muted/20 via-background to-muted/30 relative overflow-hidden"
       >
-
+        {/* Animated background grid */}
         <div className="max-w-7xl mx-auto px-6 relative">
-          <div
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            viewport={{ once: true }}
             className="w-[1000px] h-[400px] ml-28 mx-auto grid grid-cols-5 grid-rows-2 gap-0 absolute top-32"
           >
-            {/* Row 1 */}
-            <div className="w-[200px] border border-border/70 h-[200px] bg-transparent" />
-            <div className="w-[200px] border-t border-b border-border/70 h-[200px] bg-purple-400/5" />
-            <div className="w-[200px] border border-border/70 h-[200px] bg-transparent" />
-            <div className="w-[200px] border-t border-b border-border/70 h-[200px] bg-purple-400/5" />
-            <div className="w-[200px] border-t border-r border-b border-border/70 h-[200px]" />
+            {/* Animated grid cells */}
+            {[
+              { bg: "bg-transparent", border: "border border-border/70" },
+              { bg: "bg-purple-400/5", border: "border-t border-b border-border/70" },
+              { bg: "bg-transparent", border: "border border-border/70" },
+              { bg: "bg-purple-400/5", border: "border-t border-b border-border/70" },
+              { bg: "", border: "border-t border-r border-b border-border/70" },
+              { bg: "bg-purple-400/10", border: "border-b border-l border-r border-border/70" },
+              { bg: "", border: "" },
+              { bg: "bg-purple-400/10", border: "border-b border-border/70" },
+              { bg: "", border: "" },
+              { bg: "bg-purple-400/10", border: "border-r border-b border-border/70" },
+            ].map((cell, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className={`w-[200px] h-[200px] ${cell.bg} ${cell.border}`}
+                style={{
+                  animation: cell.bg.includes("purple") ? `pulse ${3 + index * 0.2}s ease-in-out infinite` : 'none'
+                }}
+              />
+            ))}
+          </motion.div>
 
-            {/* Row 2 */}
-            <div className="w-[200px] h-[200px] bg-purple-400/10 border-b border-l border-r border-border/70" />
-            <div className="w-[200px] h-[200px]" />
-            <div className="w-[200px] h-[200px] border-b border-border/70 bg-purple-400/10" />
-            <div className="w-[200px] h-[200px]" />
-            <div className="w-[200px] h-[200px] border-r border-b border-border/70 bg-purple-400/10" />
-          </div>
-
-
-
-          <div className="text-center mb-20">
-            <Badge variant="outline" className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
-              <Globe className="w-4 h-4 mr-2 text-primary" />
-              Complete Ecosystem
-            </Badge>
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              whileInView={{ scale: 1, rotate: 0 }}
+              transition={{ duration: 0.6, type: "spring" }}
+              viewport={{ once: true }}
+            >
+              <Badge variant="outline" className="mb-6 px-4 py-2 text-sm font-medium border-primary/20 bg-primary/5">
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                  className="inline-block"
+                >
+                  <Globe className="w-4 h-4 mr-2 text-primary" />
+                </motion.div>
+                Complete Ecosystem
+              </Badge>
+            </motion.div>
+            
+            <motion.h2
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="text-4xl md:text-6xl font-bold mb-6"
+            >
+              <motion.span
+                className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+                animate={{
+                  backgroundPosition: ["0% center", "200% center"],
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+                style={{
+                  backgroundImage: "linear-gradient(to right, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--primary)))",
+                  backgroundSize: "200% auto",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                }}
+              >
                 Social Media for Designers
-              </span>
-            </h2>
-            {/* <div >
-              <GridWithHighlights />
-            </div> */}
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              </motion.span>
+            </motion.h2>
+            
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="text-xl text-muted-foreground max-w-3xl mx-auto"
+            >
               Connecting designers, artisans, and buyers in one comprehensive platform
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {ecosystemCards.map((card, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                initial={{ opacity: 0, y: 50, rotateX: -30 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                transition={{
+                  duration: 0.6,
+                  delay: index * 0.1,
+                  type: "spring",
+                  stiffness: 100
+                }}
                 viewport={{ once: true }}
+                whileHover={{
+                  y: -10,
+                  scale: 1.05,
+                  rotateY: 5,
+                  transition: { duration: 0.3 }
+                }}
               >
-                <Card className="group text-center p-8 hover-scale bg-card/80 backdrop-blur-lg border border-border/50 hover:border-primary/30 transition-all duration-500">
-                  <div className="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 group-hover:scale-110 transition-transform duration-300">
+                <Card className="group text-center p-8 bg-card/80 backdrop-blur-lg border border-border/50 hover:border-primary/50 transition-all duration-500 relative overflow-hidden">
+                  {/* Animated background gradient */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    animate={{
+                      backgroundPosition: ["0% 0%", "100% 100%"],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      repeatType: "reverse"
+                    }}
+                  />
+                  
+                  <motion.div
+                    animate={{
+                      rotate: [0, 10, -10, 0],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      delay: index * 0.5
+                    }}
+                    className="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 relative z-10"
+                  >
                     <div className="text-primary">
                       {card.icon}
                     </div>
-                  </div>
-                  <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors">
+                  </motion.div>
+                  
+                  <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors relative z-10">
                     {card.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed relative z-10">
                     {card.description}
                   </p>
-                  <div className="text-2xl font-bold text-primary">{card.count}</div>
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    whileInView={{ scale: 1 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
+                    viewport={{ once: true }}
+                    className="text-2xl font-bold text-primary relative z-10"
+                  >
+                    {card.count}
+                  </motion.div>
                 </Card>
               </motion.div>
             ))}
