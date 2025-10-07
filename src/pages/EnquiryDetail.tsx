@@ -11,6 +11,7 @@ import { api } from "@/lib/api";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
+import PremiumLoader from "@/components/PremiumLoader";
 
 export default function EnquiryDetail() {
   const { enquiryId } = useParams<{ enquiryId: string }>();
@@ -65,7 +66,7 @@ export default function EnquiryDetail() {
     updateStatusMutation.mutate({ status: "RESPONDED" });
   };
 
-  if (isLoading) return <div className="min-h-screen"><Header /><div className="text-center py-12">Loading enquiry details...</div></div>;
+  if (isLoading) return <PremiumLoader onLoadingComplete={() => {}} />;
   if (!enquiry) return <div className="min-h-screen"><Header /><div className="text-center py-12">Enquiry not found</div></div>;
 
   return (

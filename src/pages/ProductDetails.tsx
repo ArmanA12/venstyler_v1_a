@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Header } from "@/components/Header";
 import { EnquiryModal } from "@/components/EnquiryModal";
 import { useToast } from "@/hooks/use-toast";
+import PremiumLoader from "@/components/PremiumLoader";
 import {
   ArrowLeft,
   Star,
@@ -156,7 +157,9 @@ const ProductDetails = () => {
     navigate(`/chat?receiverId=${product.designer.id}`);
   };
 
-
+  if (isLoading) {
+    return <PremiumLoader onLoadingComplete={() => {}} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-muted/20">

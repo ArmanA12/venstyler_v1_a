@@ -54,6 +54,7 @@ import { useSavedDesigns } from "@/hooks/useSaveDesign";
 import { useLikedDesigns } from "@/hooks/useLikeDesign";
 import { RatingsTab } from "@/tab/RatingTab";
 import { ChatTab } from "@/tab/ChatTab";
+import PremiumLoader from "@/components/PremiumLoader";
 
 const personalInfoSchema = z.object({
   name: z.string().min(1, "First name is required"),
@@ -630,14 +631,7 @@ const Profile = () => {
             </h3>
 
             {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="animate-pulse h-64 rounded-lg bg-muted/40"
-                  />
-                ))}
-              </div>
+              <PremiumLoader onLoadingComplete={() => {}} />
             ) : items.length === 0 ? (
               <div className="text-sm text-muted-foreground">
                 {isSaved

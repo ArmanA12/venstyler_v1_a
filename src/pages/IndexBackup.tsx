@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import designerAvatar from "@/assets/designer-avatar-1.jpg";
 import { Header } from "@/components/navbar/Header";
-import { FeedSkeleton } from "@/components/FeedSkeleton";
+import PremiumLoader from "@/components/PremiumLoader";
 import { BottomNav } from "@/components/navbar/bottomNav";
 import { Link } from "react-router-dom";
 import { useApi } from "@/contexts/ApiContext";
@@ -292,7 +292,7 @@ const Index = () => {
               {/* Enhanced Design Feed */}
               <div>
                 {isLoading ? (
-                  <FeedSkeleton />
+                  <PremiumLoader onLoadingComplete={() => {}} />
                 ) : items.length > 0 ? (
                   items.map((design, index) => (
                     <div

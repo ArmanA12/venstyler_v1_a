@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { CheckCircle, Package, Truck, Home, Mail } from "lucide-react";
 import axios from "axios";
+import PremiumLoader from "@/components/PremiumLoader";
 
 const OrderConfirmation = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const OrderConfirmation = () => {
     fetchOrder();
   }, [orderId]);
 
-  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  if (loading) return <PremiumLoader onLoadingComplete={() => {}} />;
   if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
   if (!orderData) return null;
 
