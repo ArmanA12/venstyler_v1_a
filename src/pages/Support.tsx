@@ -120,11 +120,10 @@ const Support = () => {
                   Send us an email anytime
                 </p>
                 <a
-                  href="mailto:support@venstyler.com"
+                  href="mailto:itsarmanshekh@gmail.com"
                   className="text-primary hover:underline"
                 >
-                  support@venstyler.com
-                </a>
+itsarmanshekh@gmail.com                </a>
               </Card>
             </motion.div>
 
@@ -160,7 +159,9 @@ const Support = () => {
                 <p className="text-muted-foreground mb-4">
                   Chat with our team
                 </p>
-                <Button variant="outline" className="hover:bg-accent/5">
+                <Button variant="outline" className="hover:bg-accent/5"
+                  onClick={() => window.open("https://wa.me/917091554628", "_blank")}
+                >
                   Start Chat
                 </Button>
               </Card>

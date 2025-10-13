@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { Heart, BookmarkPlus, Star, Eye, ArrowRight, Filter, MessageCircle } from "lucide-react";
+import { Heart, BookmarkPlus, Phone, Star, Eye, ArrowRight, Filter, MessageCircle } from "lucide-react";
 import { useFeed } from "@/hooks/useFeed";
 import { useToggleLike } from "@/hooks/useToggleLike";
 import { useToggleSave } from "@/hooks/useToggleSave";
@@ -124,7 +124,7 @@ export const PremiumDesignShowcase = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [page, setPage] = useState(1);
   const [openCommentsFor, setOpenCommentsFor] = useState<string | null>(null);
-  
+
   const { data, isLoading, error } = useFeed(page);
   const { mutate: toggleLike } = useToggleLike(page);
   const { mutate: toggleSave } = useToggleSave(page);
@@ -136,12 +136,12 @@ export const PremiumDesignShowcase = () => {
   const designs = data?.items || [];
   const totalItems = data?.total || 0;
   const designsPerPage = 6;
-  
+
   // Extract unique categories from feed data
   const categories = ["All", ...Array.from(new Set(designs.map(d => d.category).filter(Boolean)))];
 
-  const filteredDesigns = selectedCategory === "All" 
-    ? designs 
+  const filteredDesigns = selectedCategory === "All"
+    ? designs
     : designs.filter(design => design.category === selectedCategory);
 
   const totalPages = Math.ceil(totalItems / designsPerPage);
@@ -231,11 +231,10 @@ export const PremiumDesignShowcase = () => {
                 setSelectedCategory(category);
                 setPage(1);
               }}
-              className={`rounded-full px-6 py-2 transition-all duration-300 ${
-                selectedCategory === category
+              className={`rounded-full px-6 py-2 transition-all duration-300 ${selectedCategory === category
                   ? "bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/25"
                   : "border border-border/50 hover:border-primary/30 hover:bg-accent/5"
-              }`}
+                }`}
             >
               <Filter className="w-4 h-4 mr-2" />
               {category}
@@ -251,17 +250,17 @@ export const PremiumDesignShowcase = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
         >
           {isLoading ? (
-            <div className="col-span-3"><PremiumLoader onLoadingComplete={() => {}} /></div>
+            <div className="col-span-3"><PremiumLoader onLoadingComplete={() => { }} /></div>
           ) : error ? (
             <p className="text-center col-span-3 text-destructive">Error loading designs. Please try again.</p>
           ) : currentDesigns.length === 0 ? (
             <p className="text-center col-span-3 text-muted-foreground">No designs found</p>
           ) : (
             currentDesigns.map((design, index) => {
-              const discountedPrice = design.discount 
-                ? design.price - (design.price * design.discount) / 100 
+              const discountedPrice = design.discount
+                ? design.price - (design.price * design.discount) / 100
                 : design.price;
-              
+
               return (
                 <motion.div
                   key={design.id}
@@ -296,7 +295,7 @@ export const PremiumDesignShowcase = () => {
                           alt={design.title}
                           className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
                         />
-                        
+
                         {/* Category Badge */}
                         {design.category && (
                           <Badge className="absolute top-4 left-4 bg-gradient-to-r from-primary/90 to-secondary/90 text-white border-0">
@@ -348,7 +347,6 @@ export const PremiumDesignShowcase = () => {
                           onClose={handleShareClose}
                           className="hover-glow"
                         />
-                        <div className="flex-1" />
                         <Button
                           size="icon"
                           variant="ghost"
@@ -357,12 +355,22 @@ export const PremiumDesignShowcase = () => {
                         >
                           <BookmarkPlus className={`w-5 h-5 transition ${design.isSaved ? 'fill-primary text-primary' : ''}`} />
                         </Button>
+
+                        <div className="flex-1" />
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="ml-auto bg-green-500/20 hover:bg-green-600 text-green-800 rounded-full"
+                          onClick={() => (window.location.href = "tel:+919876543210")}
+                        >
+                          <Phone className="w-5 h-5" />
+                        </Button>
                       </div>
 
                       <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
                         {design.title}
                       </h3>
-                      
+
                       <p className="text-sm text-muted-foreground mb-3 flex items-center gap-2">
                         by {design.designer}
                         {design.isVerified && (
@@ -415,11 +423,10 @@ export const PremiumDesignShowcase = () => {
                 variant={page === index + 1 ? "default" : "outline"}
                 size="icon"
                 onClick={() => setPage(index + 1)}
-                className={`w-10 h-10 rounded-full ${
-                  page === index + 1
+                className={`w-10 h-10 rounded-full ${page === index + 1
                     ? "bg-gradient-to-r from-primary to-secondary"
                     : "border-2 border-border/50 hover:border-primary/30"
-                }`}
+                  }`}
               >
                 {index + 1}
               </Button>
@@ -432,25 +439,25 @@ export const PremiumDesignShowcase = () => {
           {/* 3D Spline-inspired Button with Enhanced Effects */}
           <Link to="/designs">
             <motion.div
-              whileHover={{ 
+              whileHover={{
                 y: -12,
                 rotateX: 20,
                 rotateY: 5,
                 scale: 1.08,
               }}
-              whileTap={{ 
+              whileTap={{
                 y: -4,
                 scale: 0.95,
                 rotateX: 10
               }}
-              transition={{ 
-                type: "spring", 
-                stiffness: 300, 
+              transition={{
+                type: "spring",
+                stiffness: 300,
                 damping: 15,
                 mass: 0.8
               }}
               className="relative group cursor-pointer perspective-1000"
-              style={{ 
+              style={{
                 transformStyle: "preserve-3d",
                 perspective: "1000px"
               }}
@@ -462,12 +469,12 @@ export const PremiumDesignShowcase = () => {
                 View All Designs
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-              
+
               {/* Additional 3D depth layers */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/25 via-secondary/25 to-accent/25 opacity-70 group-hover:opacity-90 transition-all duration-500" 
-                   style={{ transform: "translateZ(-20px) translateY(8px)" }}></div>
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/15 via-secondary/15 to-accent/15 opacity-50 group-hover:opacity-70 transition-all duration-500" 
-                   style={{ transform: "translateZ(-40px) translateY(16px)" }}></div>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/25 via-secondary/25 to-accent/25 opacity-70 group-hover:opacity-90 transition-all duration-500"
+                style={{ transform: "translateZ(-20px) translateY(8px)" }}></div>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/15 via-secondary/15 to-accent/15 opacity-50 group-hover:opacity-70 transition-all duration-500"
+                style={{ transform: "translateZ(-40px) translateY(16px)" }}></div>
             </motion.div>
           </Link>
         </div>

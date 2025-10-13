@@ -222,13 +222,13 @@ const fashionImages = [
       title: "Fashion Designers",
       description: "Elite creators crafting bespoke designs",
       icon: <Brush className="w-6 h-6" />,
-      count: "2,500+"
+      count: "1100+"
     },
     {
       title: "Handwork Specialists",
       description: "Master artisans for intricate details",
       icon: <Star className="w-6 h-6" />,
-      count: "1,200+"
+      count: "900+"
     },
     {
       title: "Machine Workers",
@@ -240,7 +240,7 @@ const fashionImages = [
       title: "Dyers & Masters",
       description: "Color experts bringing vibrancy to life",
       icon: <Palette className="w-6 h-6" />,
-      count: "600+"
+      count: "200+"
     }
   ];
 
@@ -309,7 +309,7 @@ const fashionImages = [
             <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[40px] h-[1px] w-[40px] bg-gradient-to-r from-[#f05c92] to-transparent" />
 
             {/* Icon */}
-            <div className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10  rounded-full border border-border/10"><MessageCircle className="w-5 h-5 font-extralight text-primary" />
+            <div className="z-50 overflow-clip relative backdrop-blur-md flex justify-center items-center w-10 h-10  rounded-full border border-border/10"><Video className="w-5 h-5 font-extralight text-primary" />
               <div className="w-6 h-6 bg-[#f05c92] blur-xl absolute top-2 left-2"></div></div>
           </div>
 
@@ -371,9 +371,9 @@ const fashionImages = [
             className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto"
           >
             {[
-              { number: "10K+", label: "Elite Designers", icon: Users },
-              { number: "50K+", label: "Satisfied Clients", icon: Heart },
-              { number: "1M+", label: "Designs Crafted", icon: Palette },
+              { number: "1.0K+", label: "Elite Designers", icon: Users },
+              { number: "5.0K+", label: "Satisfied Clients", icon: Heart },
+              { number: "10K+", label: "Designs Crafted", icon: Palette },
               { number: "99.9%", label: "Success Rate", icon: Award },
             ].map((stat, index) => (
               <motion.div
@@ -517,7 +517,7 @@ const fashionImages = [
             </Badge>
             <h2 className="text-4xl z-30 md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                World's Best Designers
+                World's Best Wedding Designs
               </span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
