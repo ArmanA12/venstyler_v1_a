@@ -95,8 +95,7 @@ export default function ProductSellsDetails() {
             </CardContent>
           </Card>
         </div>
-
-        {/* Order Status Summary */}
+        
         <div className="grid gap-4 md:grid-cols-3 mb-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
