@@ -93,12 +93,6 @@
 // export default PremiumLoader;
 
 
-
-
-
-
-
-
 import { useEffect, useState } from "react";
 import { Shirt, Scissors, TruckIcon, Package, Sparkles, Heart } from "lucide-react";
 
@@ -117,33 +111,32 @@ const PremiumLoader = ({ onLoadingComplete }: { onLoadingComplete: () => void })
   ];
 
   useEffect(() => {
-    if (!hasLoaded) {
-      // If it's the first time loading the page in the session, show the loader
-      const iconInterval = setInterval(() => {
-        setCurrentIcon((prev) => (prev + 1) % icons.length);
-      }, 400);
-
-      const progressInterval = setInterval(() => {
-        setProgress((prev) => Math.min(prev + 2, 100));
-      }, 50);
-
-      // After the loader completes, mark that the loader has been shown
-      const timer = setTimeout(() => {
-        setHasLoaded(true); // Mark that the loader has been shown
-        onLoadingComplete(); // Trigger the completion callback
-      }, 2800);
-
-      // Cleanup the intervals and timeout
-      return () => {
-        clearInterval(iconInterval);
-        clearInterval(progressInterval);
-        clearTimeout(timer);
-      };
-    } else {
-      // If already visited, complete the loader immediately
-      onLoadingComplete();
+    if (hasLoaded) {
+      return; // If it's already loaded, do nothing
     }
-  }, [hasLoaded, onLoadingComplete]);
+
+    // If it's the first time loading the page in the session, show the loader
+    const iconInterval = setInterval(() => {
+      setCurrentIcon((prev) => (prev + 1) % icons.length);
+    }, 400);
+
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => Math.min(prev + 2, 100));
+    }, 50);
+
+    // After the loader completes, mark that the loader has been shown
+    const timer = setTimeout(() => {
+      setHasLoaded(true); // Mark that the loader has been shown
+      onLoadingComplete(); // Trigger the completion callback
+    }, 2800); // Duration for the loader
+
+    // Cleanup the intervals and timeout after the component unmounts
+    return () => {
+      clearInterval(iconInterval);
+      clearInterval(progressInterval);
+      clearTimeout(timer);
+    };
+  }, [hasLoaded, onLoadingComplete]); // Only trigger if `hasLoaded` is false initially
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
