@@ -2,6 +2,7 @@
 import React, { createContext, useContext } from "react";
 import { useAuth } from "./AuthContext";
 import { api } from "@/lib/api";
+import posthog from '../lib/posthog'
 
 interface UploadDesignInput {
   title: string;
@@ -427,6 +428,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
       `/api/design/getCommentsByDesign/${designId}`,
       { params: { page, limit }, withCredentials: true }
     );
+    posthog.capture('User View Comment')
     return data;
   };
 
@@ -436,6 +438,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
       {}, // IMPORTANT: send {} (not null) to avoid body-parser error
       { withCredentials: true }
     );
+    posthog.capture('Design Liked/Unliked')
     return data;
   };
 
@@ -445,6 +448,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
       {}, // IMPORTANT: send {} not null
       { withCredentials: true }
     );
+    posthog.capture('Design getting shared by user')
     return data;
   };
 
@@ -465,6 +469,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
         withCredentials: true,
       }
     );
+     posthog.capture('Design getting reviewed by user')
     return data;
   };
 
@@ -482,6 +487,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
       withCredentials: true,
     });
     return data.data.imageUrl; // ← grab it from data.data
+     posthog.capture('User uplaoding  there profile image')
   };
 
   const getMe: ApiContextType["getMe"] = async () => {
@@ -490,6 +496,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
       message: string;
       data: AppUser;
     }>("/api/users/me", { withCredentials: true });
+     posthog.capture('Profile view by user')
     return data.data;
   };
 
@@ -499,6 +506,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
       message: string;
       data: { profileImage: string | null };
     }>("/api/users/profile-image", { withCredentials: true });
+    posthog.capture('User Profile calling')
     return data.data.profileImage;
   };
 
@@ -508,6 +516,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
       message: string;
       data: MyProfile;
     }>("/api/users/profile", { withCredentials: true });
+    posthog.capture('User Viewing their profile image')
     return data.data;
   };
 
@@ -517,6 +526,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
       message: string;
       data: MyProfile;
     }>("/api/users/updateProfile", payload, { withCredentials: true });
+    posthog.capture('User Updating their profile')
     return data.data;
   };
 
@@ -527,6 +537,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
         { withCredentials: true }
       );
       // data.designs is already [{ userName, images: string[] }]
+      posthog.capture('User Saved a design')
       return data.designs ?? [];
     };
 
@@ -613,6 +624,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
         "/api/users/getMyUploadedProducts",
         { withCredentials: true }
       );
+      posthog.capture('User uploading their product')
       // console.log(data, "user uploaded product")
       return data;
     };
@@ -623,6 +635,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
       "/api/order/my-orders",
       { withCredentials: true }
     );
+    posthog.capture('User Viewing there order')
     return data;
   };
 
@@ -632,7 +645,7 @@ const getMySells: ApiContextType["getMySells"] = async () => {
     "/api/order/getMyProductOrdersSell",
     { withCredentials: true }
   );
-  console.log(data, "Product Sell insight the context")
+  posthog.capture('Product sells report by user')
   return data;
 };
 
@@ -641,6 +654,7 @@ const getOrderDetails: ApiContextType["getOrderDetails"] = async (orderId: numbe
     `/api/order/orderDetailsForBuyerAndSeller/${orderId}`,
     { withCredentials: true }
   );
+  posthog.capture('Order summery opened by user')
   return data;
 };
 
@@ -650,6 +664,7 @@ const getProductAnalytics: ApiContextType["getProductAnalytics"] = async (produc
     `/api/order/getProductAnalytics/${productId}`,
     { withCredentials: true }
   );
+  posthog.capture('Product Analytics')
   return data;
 };
 
@@ -658,6 +673,7 @@ const getUserChats: ApiContextType["getUserChats"] = async () => {
     "/api/chat/userChats",
     { withCredentials: true }
   );
+  posthog.capture('Chating between buyer and seller')
   return data.chats;
 };
 
@@ -666,6 +682,7 @@ const getMeetingsByOrderId: ApiContextType["getMeetingsByOrderId"] = async (orde
     `/api/meeting/orders/${orderId}/meetings`,
     { withCredentials: true }
   );
+  posthog.capture('User view there meeting details')
   return data;
 };
 
