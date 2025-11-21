@@ -25,9 +25,9 @@ export function UserTypeCard({
     }`}>
       <div className="text-center space-y-4">
         <div className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center ${
-          primary ? 'gradient-primary' : 'bg-muted'
+          primary ? 'bg-primary' : 'bg-primary'
         }`}>
-          <Icon className={`w-8 h-8 ${primary ? 'text-white' : 'text-foreground'}`} />
+          <Icon className={`w-8 h-8 text-white`} />
         </div>
         
         <div>
