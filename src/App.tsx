@@ -91,7 +91,7 @@ export default function App() {
             <Toaster />
             <Sonner />
 
-            {/* socket + toast + notification write lives **inside** providers */}
+           
             <NotificationsSocketBridge userId={userId} />
 
             <BrowserRouter>
