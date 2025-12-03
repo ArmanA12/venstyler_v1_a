@@ -14,7 +14,6 @@ import { useShareDesign } from "@/hooks/useShareDesign";
 import { useAuthGate } from "@/hooks/useAuthGate";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import PremiumLoader from "@/components/PremiumLoader";
 
 interface Design {
   id: number;
@@ -250,7 +249,9 @@ export const PremiumDesignShowcase = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
         >
           {isLoading ? (
-            <div className="col-span-3"><PremiumLoader onLoadingComplete={() => { }} /></div>
+            <div className="col-span-3 flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
           ) : error ? (
             <p className="text-center col-span-3 text-destructive">Error loading designs. Please try again.</p>
           ) : currentDesigns.length === 0 ? (
