@@ -58,12 +58,10 @@ import EnquiryManagement from "./pages/EnquiryManagement";
 import EnquiryDetail from "./pages/EnquiryDetail";
 // import Analytics from "../src/hooks/Analytics";
 import Support from "./pages/Support";
-import PremiumLoader from "./components/PremiumLoader";
 import AllDesigns from "./pages/AllDesigns";
 
 export default function App() {
   const [userId, setUserId] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -78,10 +76,6 @@ export default function App() {
       }
     })();
   }, []);
-
-  if (isLoading) {
-    return <PremiumLoader onLoadingComplete={() => setIsLoading(false)} />;
-  }
 
   return (
     <ThemeProvider>
