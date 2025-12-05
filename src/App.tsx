@@ -47,7 +47,8 @@ import OrderManagement from "./pages/admin/OrderManagement";
 import ProductEdit from "./pages/user/ProductEdit";
 
 import ProductSellsDetails from "./pages/user/ProductSellsDetails";
-import PremiumHomepage from "./pages/PremiumHomepage";
+// import PremiumHomepage from "./pages/PremiumHomepage";
+import SecondIndex from "./pages/SecondIndex";
 import Analytics from "./hooks/Analytics";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -92,8 +93,9 @@ export default function App() {
             <BrowserRouter>
               <Analytics />
               <Routes>
-                <Route path="/" element={<PremiumHomepage />} />
-                <Route path="/feed" element={<PremiumHomepage />} />
+                <Route path="/" element={<SecondIndex />} />
+                {/* <Route path="/feed" element={<PremiumHomepage />} /> */}
+                <Route path="/feed" element={<SecondIndex />} />
                 <Route path="/designs" element={<AllDesigns />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />

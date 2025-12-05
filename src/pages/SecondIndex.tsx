@@ -1,7 +1,6 @@
 
 
-import React, { useState, useEffect, useRef, memo, Suspense } from 'react';
-import ReactDOM from 'react-dom/client';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { 
   motion, 
   useScroll, 
@@ -729,7 +728,7 @@ const Footer: React.FC = memo(() => {
 
 // --- APP COMPONENT ---
 
-const App: React.FC = () => {
+const SecondIndex: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -761,7 +760,4 @@ const App: React.FC = () => {
   );
 };
 
-const rootElement = document.getElementById('root');
-if (!rootElement) throw new Error("Could not find root element to mount to");
-const root = ReactDOM.createRoot(rootElement);
-root.render(<React.StrictMode><App /></React.StrictMode>);
+export default SecondIndex;
