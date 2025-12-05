@@ -1,6 +1,7 @@
 
 
 import React, { useState, useEffect, useRef, memo } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   motion, 
   useScroll, 
@@ -148,6 +149,12 @@ const MagneticButton = ({ children, className }: { children?: React.ReactNode, c
 
 // --- SECTIONS ---
 
+const navLinks = [
+  { label: 'Designers', path: '/find-designers' },
+  { label: 'Designs', path: '/designs' },
+  { label: 'Explore', path: '/explore' },
+];
+
 const Navbar: React.FC = memo(() => {
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
@@ -171,26 +178,26 @@ const Navbar: React.FC = memo(() => {
       className={`fixed top-0 left-0 right-0 z-50 border-b border-white/5 ${isScrolled ? 'bg-black/80 backdrop-blur-lg py-4 shadow-lg' : 'bg-transparent py-6'}`}
     >
       <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex items-center justify-between">
-        <div className="flex items-center gap-2 z-50 cursor-pointer group">
+        <Link to="/" className="flex items-center gap-2 z-50 cursor-pointer group">
           <div className="w-8 h-8 bg-pink-600 flex items-center justify-center font-bold text-black text-xl group-hover:rotate-180 transition-transform duration-500">V</div>
           <span className="text-2xl font-bold tracking-tighter uppercase group-hover:tracking-widest transition-all duration-300">Venstyler</span>
-        </div>
+        </Link>
         <div className="hidden md:flex items-center gap-12">
-           {['Designers', 'Collections', 'Studio'].map(item => (
-             <a key={item} href="#" className="text-sm font-bold uppercase tracking-widest hover:text-pink-500 transition-colors">{item}</a>
+           {navLinks.map(item => (
+             <Link key={item.label} to={item.path} className="text-sm font-bold uppercase tracking-widest hover:text-pink-500 transition-colors">{item.label}</Link>
            ))}
         </div>
         <div className="hidden md:flex items-center gap-6">
-           <div className="relative group">
-              <input type="text" placeholder="SEARCH" className="bg-transparent border-b border-white/20 px-2 py-1 w-32 text-[10px] uppercase focus:border-pink-500 focus:outline-none transition-all placeholder:text-gray-600 focus:w-48 font-mono" />
+           <Link to="/explore" className="relative group">
+              <input type="text" placeholder="SEARCH" className="bg-transparent border-b border-white/20 px-2 py-1 w-32 text-[10px] uppercase focus:border-pink-500 focus:outline-none transition-all placeholder:text-gray-600 focus:w-48 font-mono cursor-pointer" readOnly />
               <Search className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-500 group-hover:text-pink-500 transition-colors" />
-           </div>
-          <button className="hover:text-pink-500 transition-colors relative group"><Bell className="w-5 h-5" /><span className="absolute top-0 right-0 w-2 h-2 bg-pink-500 rounded-full scale-0 group-hover:scale-100 transition-transform" /></button>
-          <button className="hover:text-pink-500 transition-colors"><User className="w-5 h-5" /></button>
-          <button className="relative px-6 py-2 overflow-hidden group border border-white/20">
+           </Link>
+          <Link to="/profile" className="hover:text-pink-500 transition-colors relative group"><Bell className="w-5 h-5" /><span className="absolute top-0 right-0 w-2 h-2 bg-pink-500 rounded-full scale-0 group-hover:scale-100 transition-transform" /></Link>
+          <Link to="/profile" className="hover:text-pink-500 transition-colors"><User className="w-5 h-5" /></Link>
+          <Link to="/signup" className="relative px-6 py-2 overflow-hidden group border border-white/20">
             <span className="relative z-10 text-xs uppercase tracking-widest font-bold group-hover:text-black transition-colors duration-300">Start Creating</span>
             <div className="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out z-0" />
-          </button>
+          </Link>
         </div>
         <button className="md:hidden z-50" onClick={() => setIsMobileOpen(!isMobileOpen)}>{isMobileOpen ? <X /> : <Menu />}</button>
       </div>
@@ -699,19 +706,66 @@ const CTA: React.FC = () => {
   );
 };
 
+const platformLinks = [
+  { label: 'Browse Designs', path: '/designs' },
+  { label: 'Find Designers', path: '/find-designers' },
+  { label: 'Meet Artisans', path: '/meet-artisans' },
+  { label: 'Pricing', path: '/pricing' },
+];
+
+const companyLinks = [
+  { label: 'Support', path: '/support' },
+  { label: 'Explore', path: '/explore' },
+];
+
+const legalLinks = [
+  { label: 'Terms & Conditions', path: '/terms' },
+  { label: 'Return Policy', path: '/return-policy' },
+  { label: 'Privacy Policy', path: '/privacy' },
+];
+
 const Footer: React.FC = memo(() => {
   return (
     <footer className="bg-black border-t border-white/10 pt-24 pb-0 relative overflow-hidden flex flex-col justify-between min-h-[80vh]">
       <div className="container mx-auto px-6 relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-24">
             <div className="col-span-1 md:col-span-1">
-                <div className="flex items-center gap-2 mb-6"><div className="w-8 h-8 bg-pink-600 flex items-center justify-center font-bold text-black text-xl">V</div><span className="text-2xl font-bold tracking-tighter uppercase text-white">Venstyler</span></div>
+                <Link to="/" className="flex items-center gap-2 mb-6"><div className="w-8 h-8 bg-pink-600 flex items-center justify-center font-bold text-black text-xl">V</div><span className="text-2xl font-bold tracking-tighter uppercase text-white">Venstyler</span></Link>
                 <p className="text-gray-500 text-sm leading-relaxed mb-6">Orchestrating the future of fashion production through technology and artisanal craftsmanship.</p>
                 <div className="flex gap-4">{[React.Fragment, React.Fragment, React.Fragment, React.Fragment].map((Icon, i) => (<a key={i} href="#" className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-pink-500 hover:bg-pink-500/10 transition-all"><div className="w-4 h-4 bg-current" /></a>))}</div>
             </div>
-            <div><h4 className="text-xs uppercase tracking-[0.2em] text-white font-bold mb-6">Platform</h4><ul className="space-y-4">{['Browse Designs', 'Find Designers', 'Meet Artisans', 'Pricing'].map(item => (<li key={item}><a href="#" className="text-gray-400 text-sm hover:text-pink-500 transition-colors flex items-center gap-2 group">{item} <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" /></a></li>))}</ul></div>
-            <div><h4 className="text-xs uppercase tracking-[0.2em] text-white font-bold mb-6">Company</h4><ul className="space-y-4">{['About Us', 'Careers', 'Blog', 'Press'].map(item => (<li key={item}><a href="#" className="text-gray-400 text-sm hover:text-pink-500 transition-colors">{item}</a></li>))}</ul></div>
-            <div><h4 className="text-xs uppercase tracking-[0.2em] text-white font-bold mb-6">Legal</h4><ul className="space-y-4">{['Terms & Conditions', 'Return Policy', 'Privacy Policy'].map(item => (<li key={item}><a href="#" className="text-gray-400 text-sm hover:text-pink-500 transition-colors">{item}</a></li>))}</ul></div>
+            <div>
+              <h4 className="text-xs uppercase tracking-[0.2em] text-white font-bold mb-6">Platform</h4>
+              <ul className="space-y-4">
+                {platformLinks.map(item => (
+                  <li key={item.label}>
+                    <Link to={item.path} className="text-gray-400 text-sm hover:text-pink-500 transition-colors flex items-center gap-2 group">
+                      {item.label} <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-xs uppercase tracking-[0.2em] text-white font-bold mb-6">Company</h4>
+              <ul className="space-y-4">
+                {companyLinks.map(item => (
+                  <li key={item.label}>
+                    <Link to={item.path} className="text-gray-400 text-sm hover:text-pink-500 transition-colors">{item.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-xs uppercase tracking-[0.2em] text-white font-bold mb-6">Legal</h4>
+              <ul className="space-y-4">
+                {legalLinks.map(item => (
+                  <li key={item.label}>
+                    <Link to={item.path} className="text-gray-400 text-sm hover:text-pink-500 transition-colors">{item.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
         </div>
         <div className="border-t border-white/10 py-8 flex flex-col md:flex-row items-center justify-between gap-4"><p className="text-[10px] text-gray-600 uppercase tracking-widest">© 2024 VenStyler. All rights reserved.</p></div>
       </div>
